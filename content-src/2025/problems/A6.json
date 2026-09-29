@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "code": "A6",
+  "ordinal": 6,
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A6" }] },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "b_0=0" }, { "type": "text", "text": " and, for " }, { "type": "inlineMath", "tex": "n\\ge0" }, { "type": "text", "text": ", define " }, { "type": "inlineMath", "tex": "b_{n+1}=2b_n^2+b_n+1" }, { "type": "text", "text": ". For each " }, { "type": "inlineMath", "tex": "k\\ge1" }, { "type": "text", "text": ", show that " }, { "type": "inlineMath", "tex": "b_{2^{k+1}}-2b_{2^k}" }, { "type": "text", "text": " is divisible by " }, { "type": "inlineMath", "tex": "2^{2k+2}" }, { "type": "text", "text": " but not by " }, { "type": "inlineMath", "tex": "2^{2k+3}" }, { "type": "text", "text": "." }
+        ]
+      }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "title": "Track powers of two",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "The recurrence alternates parity. Work with congruences modulo successive powers of 2, not with a closed form for " }, { "type": "inlineMath", "tex": "b_n" }, { "type": "text", "text": "." }] }] }
+    },
+    {
+      "order": 2,
+      "title": "Introduce finite differences",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Set " }, { "type": "inlineMath", "tex": "c_{n,k}=b_{n+2^k}-b_n" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "d_{n,k}=b_{n+2^{k+1}}-2b_{n+2^k}+b_n" }, { "type": "text", "text": ". The target is " }, { "type": "inlineMath", "tex": "d_{0,k}" }, { "type": "text", "text": "." }] }] }
+    },
+    {
+      "order": 3,
+      "title": "Subtract two recurrences",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "From the recurrence derive " }, { "type": "inlineMath", "tex": "c_{n+1,k}-c_{n,k}=4b_nc_{n,k}+2c_{n,k}^2" }, { "type": "text", "text": ". This makes the congruence class of " }, { "type": "inlineMath", "tex": "c_{n,k}" }, { "type": "text", "text": " nearly independent of " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": "." }] }] }
+    },
+    {
+      "order": 4,
+      "title": "Prove two congruence lemmas",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Show c_{n,k} is congruent to 2^{k+1} modulo 2^{k+2}." }],
+        [{ "type": "text", "text": "Use the same difference identity to show d_{n,k} is congruent to 2^{2k+2} modulo 2^{2k+3}." }],
+        [{ "type": "text", "text": "Apply the second lemma at n=0." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Divisibility and congruences",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "The statement that an integer has exact power-of-two valuation " }, { "type": "inlineMath", "tex": "r" }, { "type": "text", "text": " is equivalent to being congruent to " }, { "type": "inlineMath", "tex": "2^r" }, { "type": "text", "text": " modulo " }, { "type": "inlineMath", "tex": "2^{r+1}" }, { "type": "text", "text": "." }] }] }
+    },
+    {
+      "order": 2,
+      "title": "Induction with a uniform parameter",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "When a congruence is needed for every " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": ", prove the whole family simultaneously; then a difference formula can propagate the congruence from one index to the next." }] }] }
+    },
+    {
+      "order": 3,
+      "title": "Parity of the recurrence",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Modulo 2, the recurrence is " }, { "type": "inlineMath", "tex": "b_{n+1}\\equiv b_n+1" }, { "type": "text", "text": ", so the sequence alternates even and odd values." }] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "Define " }, { "type": "inlineMath", "tex": "c_{n,k}=b_{n+2^k}-b_n" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "d_{n,k}=b_{n+2^{k+1}}-2b_{n+2^k}+b_n" }, { "type": "text", "text": ". The desired integer is " }, { "type": "inlineMath", "tex": "d_{0,k}" }, { "type": "text", "text": ". We prove, for all " }, { "type": "inlineMath", "tex": "n,k\\ge1" }, { "type": "text", "text": ", the congruences " }, { "type": "inlineMath", "tex": "c_{n,k}\\equiv2^{k+1}\\pmod{2^{k+2}}" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "d_{n,k}\\equiv2^{2k+2}\\pmod{2^{2k+3}}" }, { "type": "text", "text": "." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "First note that " }, { "type": "inlineMath", "tex": "b_{n+1}\\equiv b_n+1\\pmod2" }, { "type": "text", "text": ", so " }, { "type": "inlineMath", "tex": "b_n" }, { "type": "text", "text": " alternates parity. Subtracting two instances of the recurrence gives, for " }, { "type": "inlineMath", "tex": "c=c_{n,k}" }, { "type": "text", "text": ", " }, { "type": "inlineMath", "tex": "c_{n+1,k}-c_{n,k}=4b_nc+2c^2" }, { "type": "text", "text": ". We will use this identity twice." }] 
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "We prove the first congruence by induction on " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": ". For " }, { "type": "inlineMath", "tex": "k=1" }, { "type": "text", "text": ", " }, { "type": "inlineMath", "tex": "c_{n,1}=2(b_n^2+b_{n+1}^2+1)\\equiv4\\pmod8" }, { "type": "text", "text": " because one of " }, { "type": "inlineMath", "tex": "b_n,b_{n+1}" }, { "type": "text", "text": " is even and the other odd. If the claim holds for " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": ", the difference identity shows that " }, { "type": "inlineMath", "tex": "c_{n+1,k}-c_{n,k}" }, { "type": "text", "text": " is divisible by " }, { "type": "inlineMath", "tex": "2^{k+3}" }, { "type": "text", "text": ". Thus " }, { "type": "inlineMath", "tex": "c_{n,k}" }, { "type": "text", "text": " is constant modulo " }, { "type": "inlineMath", "tex": "2^{k+3}" }, { "type": "text", "text": " as " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " varies, and " }, { "type": "inlineMath", "tex": "c_{n,k+1}=c_{n,k}+c_{n+2^k,k}\\equiv2c_{n,k}\\equiv2^{k+2}\\pmod{2^{k+3}}" }, { "type": "text", "text": "." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "For the second congruence, begin with " }, { "type": "inlineMath", "tex": "k=1" }, { "type": "text", "text": ". Using the difference identity twice and " }, { "type": "inlineMath", "tex": "c_{n,1}\\equiv4\\pmod8" }, { "type": "text", "text": ", we get " }, { "type": "inlineMath", "tex": "d_{n,1}\\equiv16(b_n+b_{n+1})\\equiv16\\pmod{32}" }, { "type": "text", "text": " because the parenthesized sum is odd." }] 
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "Assume " }, { "type": "inlineMath", "tex": "d_{n,k}\\equiv2^{2k+2}\\pmod{2^{2k+3}}" }, { "type": "text", "text": " for every " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": ". Write " }, { "type": "inlineMath", "tex": "c=c_{n,k}" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "d=d_{n,k}=c_{n+2^k,k}-c" }, { "type": "text", "text": ". Expanding the difference identity at " }, { "type": "inlineMath", "tex": "n+2^k" }, { "type": "text", "text": " and at " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " gives " }, { "type": "inlineMath", "tex": "d_{n+1,k}-d_{n,k}=4c_{n,k}c_{n+2^k,k}+4b_nd_{n,k}+4c_{n,k}d_{n,k}+2d_{n,k}^2" }, { "type": "text", "text": ". By the first congruence, the last two terms vanish modulo " }, { "type": "inlineMath", "tex": "2^{2k+5}" }, { "type": "text", "text": ", while the first two give " }, { "type": "inlineMath", "tex": "d_{n+1,k}-d_{n,k}\\equiv2^{2k+4}(1+b_n)\\pmod{2^{2k+5}}" }, { "type": "text", "text": "." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "Now " }, { "type": "inlineMath", "tex": "d_{n,k+1}=d_{n+2^{k+1},k}+2d_{n+2^k,k}+d_{n,k}" }, { "type": "text", "text": ". Telescope the successive differences from " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " to " }, { "type": "inlineMath", "tex": "n+2^{k+1}" }, { "type": "text", "text": " and from " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " to " }, { "type": "inlineMath", "tex": "n+2^k" }, { "type": "text", "text": ". The first telescoped sum contains " }, { "type": "inlineMath", "tex": "2^k" }, { "type": "text", "text": " odd terms among the alternating values of " }, { "type": "inlineMath", "tex": "1+b_\\ell" }, { "type": "text", "text": ", hence is even; the second sum is multiplied by 2. Thus the telescoped differences vanish modulo " }, { "type": "inlineMath", "tex": "2^{2k+5}" }, { "type": "text", "text": ". Therefore " }, { "type": "inlineMath", "tex": "d_{n,k+1}\\equiv4d_{n,k}\\equiv2^{2k+4}\\pmod{2^{2k+5}}" }, { "type": "text", "text": ". This proves the second congruence by induction. Taking " }, { "type": "inlineMath", "tex": "n=0" }, { "type": "text", "text": " yields " }, { "type": "inlineMath", "tex": "b_{2^{k+1}}-2b_{2^k}\\equiv2^{2k+2}\\pmod{2^{2k+3}}" }, { "type": "text", "text": ", which is exactly the required divisibility and nondivisibility." }]
+      }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2025 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2025-Putnam-Problems-for-Sessions-A-and-B.pdf" },
+    { "kind": "solution", "label": "MAA official 2025 solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf" }
+  ],
+  "originalPdf": { "path": "original/2025-problems.pdf", "pageIndex": 0 }
+}

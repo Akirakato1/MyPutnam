@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "code": "A4",
+  "ordinal": 4,
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A4" }] },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Find the minimal value of " },
+          { "type": "inlineMath", "tex": "k" },
+          { "type": "text", "text": " such that there exist " },
+          { "type": "inlineMath", "tex": "k\\times k" },
+          { "type": "text", "text": " real matrices " },
+          { "type": "inlineMath", "tex": "A_1,\\ldots,A_{2025}" },
+          { "type": "text", "text": " with the property that " },
+          { "type": "inlineMath", "tex": "A_iA_j=A_jA_i" },
+          { "type": "text", "text": " if and only if " },
+          { "type": "inlineMath", "tex": "|i-j|\\in\\{0,1,2024\\}" },
+          { "type": "text", "text": "." }
+        ]
+      }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "title": "Read the commutation graph",
+      "document": { "blocks": [{
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "The required commuting pairs are exactly the edges of a cycle on 2025 vertices (together with the trivial pairs " },
+          { "type": "inlineMath", "tex": "i=j" },
+          { "type": "text", "text": "). First rule out scalar and two-by-two matrices, then look for a three-dimensional construction." }
+        ]
+      }] }
+    },
+    {
+      "order": 2,
+      "title": "Use the commutant in dimension two",
+      "document": { "blocks": [{
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Put " },
+          { "type": "inlineMath", "tex": "A_1" },
+          { "type": "text", "text": " in complex Jordan form. A nontrivial Jordan block has only scalar-upper-triangular matrices in its commutant; a diagonal matrix with two distinct eigenvalues has only diagonal matrices in its commutant. In either case, commuting successively with " },
+          { "type": "inlineMath", "tex": "A_2" },
+          { "type": "text", "text": " forces " },
+          { "type": "inlineMath", "tex": "A_3" },
+          { "type": "text", "text": " to commute with " },
+          { "type": "inlineMath", "tex": "A_1" },
+          { "type": "text", "text": "." }
+        ]
+      }] }
+    },
+    {
+      "order": 3,
+      "title": "Try rank-one matrices",
+      "document": { "blocks": [{
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "For unit vectors " },
+          { "type": "inlineMath", "tex": "u_i\\in\\mathbb R^3" },
+          { "type": "text", "text": ", set " },
+          { "type": "inlineMath", "tex": "A_i=u_iu_i^T" },
+          { "type": "text", "text": ". Orthogonal vectors give zero products, while for nonorthogonal nonparallel vectors the two rank-one products are different." }
+        ]
+      }] }
+    },
+    {
+      "order": 4,
+      "title": "Assemble the proof",
+      "document": { "blocks": [{
+        "type": "list",
+        "ordered": true,
+        "items": [
+          [{ "type": "text", "text": "Rule out k=1 because all scalars commute." }],
+          [{ "type": "text", "text": "Rule out k=2 by the Jordan-form commutant argument." }],
+          [{ "type": "text", "text": "Choose 2025 unit vectors in R^3 orthogonal exactly for consecutive indices on the cycle and with no unwanted parallel pairs." }],
+          [{ "type": "text", "text": "Verify directly that A_iA_j=A_jA_i exactly for the required index differences." }]
+        ]
+      }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Commutants and Jordan form",
+      "document": { "blocks": [{
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "The commutant of a non-scalar two-by-two Jordan block consists of matrices of the form " }, { "type": "inlineMath", "tex": "\\alpha I+\\beta N" }, { "type": "text", "text": ". A diagonal matrix with two distinct eigenvalues has diagonal commutant." }]
+      }] }
+    },
+    {
+      "order": 2,
+      "title": "Rank-one products",
+      "document": { "blocks": [{
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "For column vectors " }, { "type": "inlineMath", "tex": "u,v" }, { "type": "text", "text": ", one has " }, { "type": "inlineMath", "tex": "(uu^T)(vv^T)=(u^Tv)uv^T" }, { "type": "text", "text": ". If " }, { "type": "inlineMath", "tex": "u^Tv\\ne0" }, { "type": "text", "text": ", equality with the reversed product forces " }, { "type": "inlineMath", "tex": "u,v" }, { "type": "text", "text": " to be parallel." }]
+      }] }
+    },
+    {
+      "order": 3,
+      "title": "Generic choices avoid finitely many conditions",
+      "document": { "blocks": [{
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "A circle of unit vectors in a plane cannot be covered by finitely many forbidden directions. More generally, a generic choice avoids a finite union of proper algebraic conditions such as orthogonality or parallelism." }]
+      }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "The minimum is " }, { "type": "inlineMath", "tex": "k=3" }, { "type": "text", "text": ". We first prove that dimensions one and two are impossible, then construct the required cycle in " }, { "type": "inlineMath", "tex": "\\mathbb R^3" }, { "type": "text", "text": "." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "k=1" }, { "type": "text", "text": ", every matrix is a scalar and every pair commutes, contrary to the required noncommutation of, for example, " }, { "type": "inlineMath", "tex": "A_1" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "A_3" }, { "type": "text", "text": "." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "Suppose " }, { "type": "inlineMath", "tex": "k=2" }, { "type": "text", "text": " and regard the real matrices as complex matrices. No " }, { "type": "inlineMath", "tex": "A_i" }, { "type": "text", "text": " can be scalar, since a scalar would commute with every matrix. Put " }, { "type": "inlineMath", "tex": "A_1" }, { "type": "text", "text": " in Jordan form. If it has a single eigenvalue and is not diagonalizable, its commutant is " }, { "type": "inlineMath", "tex": "\\{\\alpha I+\\beta N\\}" }, { "type": "text", "text": " for a nonzero nilpotent Jordan block " }, { "type": "inlineMath", "tex": "N" }, { "type": "text", "text": ". Since " }, { "type": "inlineMath", "tex": "A_2" }, { "type": "text", "text": " commutes with " }, { "type": "inlineMath", "tex": "A_1" }, { "type": "text", "text": " and is not scalar, it has " }, { "type": "inlineMath", "tex": "\\beta\\ne0" }, { "type": "text", "text": " and has the same commutant. Thus " }, { "type": "inlineMath", "tex": "A_3" }, { "type": "text", "text": " commutes with " }, { "type": "inlineMath", "tex": "A_2" }, { "type": "text", "text": " and hence with " }, { "type": "inlineMath", "tex": "A_1" }, { "type": "text", "text": ", contradicting the distance-two requirement." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "A_1" }, { "type": "text", "text": " is diagonalizable, it cannot be scalar, so it has two distinct eigenvalues and its commutant is the diagonal matrices. The non-scalar matrix " }, { "type": "inlineMath", "tex": "A_2" }, { "type": "text", "text": " is therefore diagonal with two distinct eigenvalues; its commutant is again diagonal. Hence " }, { "type": "inlineMath", "tex": "A_3" }, { "type": "text", "text": " commutes with " }, { "type": "inlineMath", "tex": "A_1" }, { "type": "text", "text": ", the same contradiction. Thus " }, { "type": "inlineMath", "tex": "k\\ge3" }, { "type": "text", "text": "." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "For the construction, choose unit vectors " }, { "type": "inlineMath", "tex": "u_1,\\ldots,u_{2024}" }, { "type": "text", "text": " successively so that " }, { "type": "inlineMath", "tex": "u_{i+1}\\perp u_i" }, { "type": "text", "text": " and every other pair chosen so far is neither orthogonal nor parallel. At each step the unit circle in " }, { "type": "inlineMath", "tex": "u_i^\\perp" }, { "type": "text", "text": " has only finitely many forbidden points. Make these choices generically, and then choose a unit vector " }, { "type": "inlineMath", "tex": "u_{2025}\\perp u_{2024},u_1" }, { "type": "text", "text": " on the final line while avoiding the finitely many remaining forbidden algebraic conditions. We obtain orthogonality exactly for the cycle edges " }, { "type": "inlineMath", "tex": "|i-j|\\in\\{1,2024\\}" }, { "type": "text", "text": ", and no nonadjacent pair is parallel." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "Set " }, { "type": "inlineMath", "tex": "A_i=u_iu_i^T" }, { "type": "text", "text": ". Then " }, { "type": "inlineMath", "tex": "A_iA_j=(u_i^Tu_j)u_iu_j^T" }, { "type": "text", "text": ". For adjacent indices the dot product is zero, so both products vanish. For a nonadjacent pair the dot product is nonzero; equality of the two products would imply " }, { "type": "inlineMath", "tex": "u_iu_j^T=u_ju_i^T" }, { "type": "text", "text": ", forcing the vectors to be parallel, which was excluded. Therefore exactly the required pairs commute, and " }, { "type": "inlineMath", "tex": "\\boxed{k=3}" }, { "type": "text", "text": "." }]
+      }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2025 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2025-Putnam-Problems-for-Sessions-A-and-B.pdf" },
+    { "kind": "solution", "label": "MAA official 2025 solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf" }
+  ],
+  "originalPdf": { "path": "original/2025-problems.pdf", "pageIndex": 0 }
+}

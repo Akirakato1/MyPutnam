@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "code": "A5",
+  "ordinal": 5,
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A5" }] },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "n\\ge2" },
+          { "type": "text", "text": " be an integer. For a sequence " }, { "type": "inlineMath", "tex": "s=(s_1,\\ldots,s_{n-1})" },
+          { "type": "text", "text": " with each " }, { "type": "inlineMath", "tex": "s_i=\\pm1" },
+          { "type": "text", "text": ", let " }, { "type": "inlineMath", "tex": "f(s)" },
+          { "type": "text", "text": " be the number of permutations " }, { "type": "inlineMath", "tex": "(a_1,\\ldots,a_n)" },
+          { "type": "text", "text": " of " }, { "type": "inlineMath", "tex": "(1,2,\\ldots,n)" },
+          { "type": "text", "text": " such that " }, { "type": "inlineMath", "tex": "s_i(a_{i+1}-a_i)>0" },
+          { "type": "text", "text": " for all " }, { "type": "inlineMath", "tex": "i" },
+          { "type": "text", "text": ". For each " }, { "type": "inlineMath", "tex": "n" },
+          { "type": "text", "text": ", determine the sequences " }, { "type": "inlineMath", "tex": "s" },
+          { "type": "text", "text": " for which " }, { "type": "inlineMath", "tex": "f(s)" },
+          { "type": "text", "text": " is maximal." }
+        ]
+      }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "title": "Interpret the signs",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "A permutation has a unique descent pattern: the sign is + when the next entry rises and - when it falls. The problem asks which descent patterns occur most often." }] }] }
+    },
+    {
+      "order": 2,
+      "title": "Use value complementation",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "The map " }, { "type": "inlineMath", "tex": "a_i\\mapsto n+1-a_i" }, { "type": "text", "text": " sends the pattern " }, { "type": "inlineMath", "tex": "s" }, { "type": "text", "text": " to " }, { "type": "inlineMath", "tex": "-s" }, { "type": "text", "text": " and preserves the count. Thus the two orientations of an argument are equivalent." }] }] }
+    },
+    {
+      "order": 3,
+      "title": "Remove equal neighboring signs",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "If two consecutive signs agree, locate the first such pair. A rank-based rearrangement of the tail gives an injection from permutations with that pattern into permutations with one more sign change." }] }] }
+    },
+    {
+      "order": 4,
+      "title": "Finish by an injection",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Normalize the first equal pair to (-1,-1) using value complementation." }],
+        [{ "type": "text", "text": "Define the new entry by its rank among the remaining tail values and reverse the later ranks." }],
+        [{ "type": "text", "text": "Check the new central inequality and recover the original permutation, so the map is injective." }],
+        [{ "type": "text", "text": "Exhibit a pattern in the target that is not hit; iterate until all signs alternate." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Descent patterns",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Every permutation determines exactly one sign string by recording whether each adjacent pair rises or falls, so the sets counted by distinct sign strings are disjoint." }] }] }
+    },
+    {
+      "order": 2,
+      "title": "Rank arguments",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "If a finite ordered set is listed by ranks, specifying the rank of each selected value determines it uniquely. Rank comparisons are therefore a convenient way to prove that a rearrangement is a permutation and preserves inequalities." }] }] }
+    },
+    {
+      "order": 3,
+      "title": "Injective comparison",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "An injection from a finite set into another, together with one element outside its image, proves a strict inequality of cardinalities." }] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "The only maximizing sign strings are the two alternating strings " }, { "type": "inlineMath", "tex": "s_i=(-1)^i" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "s_i=(-1)^{i+1}" }, { "type": "text", "text": " for " }, { "type": "inlineMath", "tex": "1\\le i\\le n-1" }, { "type": "text", "text": "." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "P(s)" }, { "type": "text", "text": " be the set of permutations counted by " }, { "type": "inlineMath", "tex": "f(s)" }, { "type": "text", "text": ". Replacing every value " }, { "type": "inlineMath", "tex": "a_i" }, { "type": "text", "text": " by " }, { "type": "inlineMath", "tex": "n+1-a_i" }, { "type": "text", "text": " is a bijection from " }, { "type": "inlineMath", "tex": "P(s)" }, { "type": "text", "text": " to " }, { "type": "inlineMath", "tex": "P(-s)" }, { "type": "text", "text": ", so " }, { "type": "inlineMath", "tex": "f(s)=f(-s)" }, { "type": "text", "text": "." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "Assume that " }, { "type": "inlineMath", "tex": "s" }, { "type": "text", "text": " is not alternating. Choose the first index " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "s_k=s_{k+1}" }, { "type": "text", "text": ". After replacing " }, { "type": "inlineMath", "tex": "s" }, { "type": "text", "text": " by " }, { "type": "inlineMath", "tex": "-s" }, { "type": "text", "text": " if necessary, take " }, { "type": "inlineMath", "tex": "s_k=s_{k+1}=-1" }, { "type": "text", "text": ". Define " }, { "type": "inlineMath", "tex": "s'" }, { "type": "text", "text": " by keeping the signs through position " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": ", replacing the next sign by +1, and negating the remaining tail: " }, { "type": "inlineMath", "tex": "s'=(s_1,\\ldots,s_{k-1},-1,+1,-s_{k+2},\\ldots,-s_{n-1})" }, { "type": "text", "text": ". The first-equal-pair choice makes " }, { "type": "inlineMath", "tex": "s'" }, { "type": "text", "text": " have one more sign change." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "a\\in P(s)" }, { "type": "text", "text": ", let " }, { "type": "inlineMath", "tex": "a_k" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "a_{k+1}" }, { "type": "text", "text": " have ranks " }, { "type": "inlineMath", "tex": "j" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "m" }, { "type": "text", "text": " among the set " }, { "type": "inlineMath", "tex": "\\{a_k,\\ldots,a_n\\}" }, { "type": "text", "text": ". Since " }, { "type": "inlineMath", "tex": "a_k>a_{k+1}" }, { "type": "text", "text": ", we have " }, { "type": "inlineMath", "tex": "j>m" }, { "type": "text", "text": ". Define " }, { "type": "inlineMath", "tex": "b_i=a_i" }, { "type": "text", "text": " for " }, { "type": "inlineMath", "tex": "i\\le k" }, { "type": "text", "text": ", let " }, { "type": "inlineMath", "tex": "b_{k+1}" }, { "type": "text", "text": " be the " }, { "type": "inlineMath", "tex": "(j-m)" }, { "type": "text", "text": "th smallest member of that set, and for " }, { "type": "inlineMath", "tex": "i>k+1" }, { "type": "text", "text": " let " }, { "type": "inlineMath", "tex": "b_i" }, { "type": "text", "text": " be the rank-reversed image of " }, { "type": "inlineMath", "tex": "a_i" }, { "type": "text", "text": " among " }, { "type": "inlineMath", "tex": "\\{a_{k+1},\\ldots,a_n\\}\\setminus\\{b_{k+1}\\}" }, { "type": "text", "text": ". This defines a permutation " }, { "type": "inlineMath", "tex": "b" }, { "type": "text", "text": "." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "The first " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": " inequalities are unchanged, and rank reversal gives " }, { "type": "inlineMath", "tex": "-s_i(b_{i+1}-b_i)>0" }, { "type": "text", "text": " for " }, { "type": "inlineMath", "tex": "i\\ge k+2" }, { "type": "text", "text": ". Also " }, { "type": "inlineMath", "tex": "b_{k+1}<b_k" }, { "type": "text", "text": " because its rank is less than " }, { "type": "inlineMath", "tex": "j" }, { "type": "text", "text": ". Since " }, { "type": "inlineMath", "tex": "a_{k+2}<a_{k+1}" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "a_{k+1}" }, { "type": "text", "text": " has rank " }, { "type": "inlineMath", "tex": "m" }, { "type": "text", "text": " in the original tail, " }, { "type": "inlineMath", "tex": "a_{k+2}" }, { "type": "text", "text": " is no later than rank " }, { "type": "inlineMath", "tex": "m-1" }, { "type": "text", "text": " in " }, { "type": "inlineMath", "tex": "\\{a_{k+2},\\ldots,a_n\\}" }, { "type": "text", "text": ". Therefore rank reversal makes " }, { "type": "inlineMath", "tex": "b_{k+2}" }, { "type": "text", "text": " at least the " }, { "type": "inlineMath", "tex": "m" }, { "type": "text", "text": "th largest remaining value, whereas " }, { "type": "inlineMath", "tex": "b_{k+1}" }, { "type": "text", "text": " has rank " }, { "type": "inlineMath", "tex": "j-m" }, { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "j-m<n-k+1-m" }, { "type": "text", "text": ". Hence " }, { "type": "inlineMath", "tex": "b_{k+2}>b_{k+1}" }, { "type": "text", "text": ", so " }, { "type": "inlineMath", "tex": "b\\in P(s')" }, { "type": "text", "text": ". The rank data can be read backwards, so the map " }, { "type": "inlineMath", "tex": "a\\mapsto b" }, { "type": "text", "text": " is injective." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "The injection is not onto. If " }, { "type": "inlineMath", "tex": "k=1" }, { "type": "text", "text": ", every image has " }, { "type": "inlineMath", "tex": "b_1=a_1\\ge3" }, { "type": "text", "text": " because " }, { "type": "inlineMath", "tex": "a_1>a_2>a_3" }, { "type": "text", "text": ", while " }, { "type": "inlineMath", "tex": "P(s')" }, { "type": "text", "text": " contains a permutation beginning " }, { "type": "inlineMath", "tex": "(2,1)" }, { "type": "text", "text": ". If " }, { "type": "inlineMath", "tex": "k>1" }, { "type": "text", "text": ", the alternating prefix forces every image to have " }, { "type": "inlineMath", "tex": "b_k=a_k\\ge4" }, { "type": "text", "text": ", whereas " }, { "type": "inlineMath", "tex": "P(s')" }, { "type": "text", "text": " contains one with " }, { "type": "inlineMath", "tex": "b_{k-1}=1,b_k=3,b_{k+1}=2" }, { "type": "text", "text": ". The remaining entries can be filled in the required alternating order. Hence " }, { "type": "inlineMath", "tex": "f(s)<f(s')" }, { "type": "text", "text": ". Repeating this strict improvement eliminates every equal neighboring pair, so a maximizer must be alternating; the two alternating strings are equivalent by sign complementation and both maximize." }]
+      }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2025 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2025-Putnam-Problems-for-Sessions-A-and-B.pdf" },
+    { "kind": "solution", "label": "MAA official 2025 solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf" }
+  ],
+  "originalPdf": { "path": "original/2025-problems.pdf", "pageIndex": 0 }
+}

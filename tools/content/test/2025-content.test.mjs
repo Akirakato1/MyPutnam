@@ -9,11 +9,14 @@ const requiredProblems = [
   { code: 'A1', ordinal: 1, solutionPages: 'page 1' },
   { code: 'A2', ordinal: 2, solutionPages: 'page 2' },
   { code: 'A3', ordinal: 3, solutionPages: 'page 3' },
+  { code: 'A4', ordinal: 4, solutionPages: 'pages 3–4' },
+  { code: 'A5', ordinal: 5, solutionPages: 'page 5' },
+  { code: 'A6', ordinal: 6, solutionPages: 'pages 6–8' },
 ];
 const problemUrl = 'https://maa.org/wp-content/uploads/2026/02/2025-Putnam-Problems-for-Sessions-A-and-B.pdf';
 const solutionUrl = 'https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf';
 
-test('2025 A1–A3 records and review evidence are complete', async () => {
+test('2025 A1–A6 records and review evidence are complete', async () => {
   for (const expected of requiredProblems) {
     const record = await readJson(`problems/${expected.code}.json`);
     assert.deepEqual(validateProblem(record), [], `${expected.code} must satisfy the content schema`);
