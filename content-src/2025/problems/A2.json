@@ -1,0 +1,231 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "code": "A2",
+  "ordinal": 2,
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A2" }] },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Find the largest real number " }, { "type": "inlineMath", "tex": "a" },
+          { "type": "text", "text": " and the smallest real number " }, { "type": "inlineMath", "tex": "b" },
+          { "type": "text", "text": " such that" }
+        ]
+      },
+      { "type": "displayMath", "tex": "ax(\\pi-x)\\le \\sin x\\le bx(\\pi-x)" },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "for all " }, { "type": "inlineMath", "tex": "x" },
+          { "type": "text", "text": " in the interval " }, { "type": "inlineMath", "tex": "[0,\\pi]" },
+          { "type": "text", "text": "." }
+        ]
+      }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "title": "Turn constants into extrema",
+      "document": { "blocks": [{
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "0<x<\\pi" },
+          { "type": "text", "text": ", divide through by the positive quantity " },
+          { "type": "inlineMath", "tex": "x(\\pi-x)" },
+          { "type": "text", "text": ". The problem becomes finding the minimum and maximum of one symmetric ratio." }
+        ]
+      }] }
+    },
+    {
+      "order": 2,
+      "title": "Use symmetry, then monotonicity",
+      "document": { "blocks": [{
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Let " },
+          { "type": "inlineMath", "tex": "R(x)=\\dfrac{\\sin x}{x(\\pi-x)}" },
+          { "type": "text", "text": ". Since " }, { "type": "inlineMath", "tex": "R(\\pi-x)=R(x)" },
+          { "type": "text", "text": ", it is enough to show that " }, { "type": "inlineMath", "tex": "R" },
+          { "type": "text", "text": " increases on " }, { "type": "inlineMath", "tex": "(0,\\pi/2]" },
+          { "type": "text", "text": "." }
+        ]
+      }] }
+    },
+    {
+      "order": 3,
+      "title": "Differentiate the right numerator",
+      "document": { "blocks": [
+        {
+          "type": "paragraph",
+          "runs": [
+            { "type": "text", "text": "The sign of " }, { "type": "inlineMath", "tex": "R'(x)" },
+            { "type": "text", "text": " is the sign of" }
+          ]
+        },
+        { "type": "displayMath", "tex": "g(x)=x(\\pi-x)\\cos x-(\\pi-2x)\\sin x." },
+        { "type": "paragraph", "runs": [{ "type": "text", "text": "A useful cancellation occurs after one more derivative:" }] },
+        { "type": "displayMath", "tex": "g'(x)=(x^2-\\pi x+2)\\sin x." },
+        {
+          "type": "paragraph",
+          "runs": [
+            { "type": "text", "text": "On the half-interval, the quadratic changes sign once. Together with " },
+            { "type": "inlineMath", "tex": "g(0)=g(\\pi/2)=0" },
+            { "type": "text", "text": ", this forces " }, { "type": "inlineMath", "tex": "g(x)\\ge 0" },
+            { "type": "text", "text": "." }
+          ]
+        }
+      ] }
+    },
+    {
+      "order": 4,
+      "title": "Outline the finish",
+      "document": { "blocks": [{
+        "type": "list",
+        "ordered": true,
+        "items": [
+          [{ "type": "text", "text": "Rewrite the desired bounds as " }, { "type": "inlineMath", "tex": "a\\le R(x)\\le b" }, { "type": "text", "text": " for interior points." }],
+          [{ "type": "text", "text": "Use symmetry to restrict attention to " }, { "type": "inlineMath", "tex": "(0,\\pi/2]" }, { "type": "text", "text": "." }],
+          [{ "type": "text", "text": "Show " }, { "type": "inlineMath", "tex": "R'(x)\\ge 0" }, { "type": "text", "text": " there by analyzing " }, { "type": "inlineMath", "tex": "g'" }, { "type": "text", "text": "." }],
+          [{ "type": "text", "text": "Evaluate the endpoint limit and midpoint value to obtain the sharp constants." }]
+        ]
+      }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Sharp constants as extrema",
+      "document": { "blocks": [{
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "When " }, { "type": "inlineMath", "tex": "q(x)>0" },
+          { "type": "text", "text": ", the best constants in " },
+          { "type": "inlineMath", "tex": "a q(x)\\le f(x)\\le b q(x)" },
+          { "type": "text", "text": " are the infimum and supremum of " },
+          { "type": "inlineMath", "tex": "f(x)/q(x)" }, { "type": "text", "text": "." }
+        ]
+      }] }
+    },
+    {
+      "order": 2,
+      "title": "Small-angle limit",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "\\lim_{x\\to 0}\\frac{\\sin x}{x}=1." },
+        {
+          "type": "paragraph",
+          "runs": [
+            { "type": "text", "text": "It follows that " },
+            { "type": "inlineMath", "tex": "\\lim_{x\\to 0^+}\\dfrac{\\sin x}{x(\\pi-x)}=1/\\pi" },
+            { "type": "text", "text": "." }
+          ]
+        }
+      ] }
+    },
+    {
+      "order": 3,
+      "title": "Derivative sign and monotonicity",
+      "document": { "blocks": [{
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "If a differentiable function has nonnegative derivative on an interval, it is nondecreasing there. For a quotient, a positive denominator lets us decide the derivative's sign from its numerator." }
+        ]
+      }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "0<x<\\pi" },
+          { "type": "text", "text": ", the factor " }, { "type": "inlineMath", "tex": "x(\\pi-x)" },
+          { "type": "text", "text": " is positive. Define" }
+        ]
+      },
+      { "type": "displayMath", "tex": "R(x)=\\frac{\\sin x}{x(\\pi-x)}." },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "The requested inequality is equivalent to " },
+          { "type": "inlineMath", "tex": "a\\le R(x)\\le b" },
+          { "type": "text", "text": ". Therefore the largest possible " }, { "type": "inlineMath", "tex": "a" },
+          { "type": "text", "text": " is the infimum of this ratio and the smallest possible " },
+          { "type": "inlineMath", "tex": "b" }, { "type": "text", "text": " is its maximum. This reformulation also explains where to search for equality." }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Both numerator and denominator are unchanged when " },
+          { "type": "inlineMath", "tex": "x" }, { "type": "text", "text": " is replaced by " },
+          { "type": "inlineMath", "tex": "\\pi-x" }, { "type": "text", "text": ", so " },
+          { "type": "inlineMath", "tex": "R(\\pi-x)=R(x)" },
+          { "type": "text", "text": ". It is enough to prove that " }, { "type": "inlineMath", "tex": "R" },
+          { "type": "text", "text": " increases on " }, { "type": "inlineMath", "tex": "(0,\\pi/2]" },
+          { "type": "text", "text": ". The quotient rule gives" }
+        ]
+      },
+      { "type": "displayMath", "tex": "R'(x)=\\frac{g(x)}{x^2(\\pi-x)^2}," },
+      { "type": "displayMath", "tex": "g(x)=x(\\pi-x)\\cos x-(\\pi-2x)\\sin x." },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "The denominator of " }, { "type": "inlineMath", "tex": "R'" },
+          { "type": "text", "text": " is positive, so only the sign of " }, { "type": "inlineMath", "tex": "g" },
+          { "type": "text", "text": " matters. Differentiating once more produces the cancellation" }
+        ]
+      },
+      { "type": "displayMath", "tex": "g'(x)=(x^2-\\pi x+2)\\sin x." },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "On " }, { "type": "inlineMath", "tex": "[0,\\pi/2]" },
+          { "type": "text", "text": ", the sine factor is nonnegative. The quadratic " },
+          { "type": "inlineMath", "tex": "x^2-\\pi x+2" },
+          { "type": "text", "text": " is strictly decreasing there because its derivative is " },
+          { "type": "inlineMath", "tex": "2x-\\pi" },
+          { "type": "text", "text": ". Its endpoint values are " },
+          { "type": "inlineMath", "tex": "2>0" }, { "type": "text", "text": " and " },
+          { "type": "inlineMath", "tex": "2-\\pi^2/4<0" },
+          { "type": "text", "text": ", so it has exactly one root in the open half-interval, namely" }
+        ]
+      },
+      { "type": "displayMath", "tex": "r=\\frac{\\pi-\\sqrt{\\pi^2-8}}{2}." },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Thus " }, { "type": "inlineMath", "tex": "g" },
+          { "type": "text", "text": " first increases and then decreases. Direct substitution gives " },
+          { "type": "inlineMath", "tex": "g(0)=g(\\pi/2)=0" },
+          { "type": "text", "text": ". A function with that rise-then-fall pattern and equal zero endpoint values is nonnegative throughout, so " },
+          { "type": "inlineMath", "tex": "g(x)\\ge 0" },
+          { "type": "text", "text": ". Hence " }, { "type": "inlineMath", "tex": "R'(x)\\ge 0" },
+          { "type": "text", "text": " on the half-interval, as desired." }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "The infimum and maximum now come from the left endpoint limit and the midpoint:" }]
+      },
+      { "type": "displayMath", "tex": "\\lim_{x\\to 0^+}R(x)=\\frac{1}{\\pi},\\qquad R\\left(\\frac{\\pi}{2}\\right)=\\frac{4}{\\pi^2}." },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "By symmetry these are the global infimum and maximum on " },
+          { "type": "inlineMath", "tex": "(0,\\pi)" }, { "type": "text", "text": ". The original inequality also holds at " },
+          { "type": "inlineMath", "tex": "x=0,\\pi" },
+          { "type": "text", "text": " because both sides there are zero. Therefore the sharp constants are" }
+        ]
+      },
+      { "type": "displayMath", "tex": "\\boxed{a=\\frac{1}{\\pi},\\qquad b=\\frac{4}{\\pi^2}}." }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2025 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2025-Putnam-Problems-for-Sessions-A-and-B.pdf" },
+    { "kind": "solution", "label": "MAA official 2025 solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf" }
+  ],
+  "originalPdf": { "path": "original/2025-problems.pdf", "pageIndex": 0 }
+}

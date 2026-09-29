@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "code": "A1",
+  "ordinal": 1,
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A1" }] },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "m_0" },
+          { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "n_0" },
+          { "type": "text", "text": " be distinct positive integers. For every positive integer " },
+          { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": ", define " },
+          { "type": "inlineMath", "tex": "m_k" }, { "type": "text", "text": " and " },
+          { "type": "inlineMath", "tex": "n_k" },
+          { "type": "text", "text": " to be the relatively prime positive integers such that" }
+        ]
+      },
+      { "type": "displayMath", "tex": "\\frac{m_k}{n_k}=\\frac{2m_{k-1}+1}{2n_{k-1}+1}." },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Prove that " }, { "type": "inlineMath", "tex": "2m_k+1" },
+          { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "2n_k+1" },
+          { "type": "text", "text": " are relatively prime for all but finitely many positive integers " },
+          { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": "." }
+        ]
+      }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "title": "Track what normalization does",
+      "document": { "blocks": [{
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Instead of predicting the two sequences separately, subtract the normalized numerators. Look for a quantity attached to " },
+          { "type": "inlineMath", "tex": "|m_k-n_k|" },
+          { "type": "text", "text": " that can only decrease when the next pair is not relatively prime." }
+        ]
+      }] }
+    },
+    {
+      "order": 2,
+      "title": "Separate the power of two",
+      "document": { "blocks": [{
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Write the nonzero difference as " },
+          { "type": "inlineMath", "tex": "|m_k-n_k|=2^{a_k}b_k" },
+          { "type": "text", "text": ", where " }, { "type": "inlineMath", "tex": "b_k" },
+          { "type": "text", "text": " is odd. The common divisor removed at each step is also odd, so compare the new exponent and odd part with the old ones." }
+        ]
+      }] }
+    },
+    {
+      "order": 3,
+      "title": "Use the odd-part descent",
+      "document": { "blocks": [
+        {
+          "type": "paragraph",
+          "runs": [
+            { "type": "text", "text": "For " },
+            { "type": "inlineMath", "tex": "d_k=\\gcd(2m_{k-1}+1,2n_{k-1}+1)" },
+            { "type": "text", "text": ", subtract the arguments of the gcd. Since " },
+            { "type": "inlineMath", "tex": "d_k" },
+            { "type": "text", "text": " is odd, divisibility of " },
+            { "type": "inlineMath", "tex": "2(m_{k-1}-n_{k-1})" },
+            { "type": "text", "text": " implies divisibility of the odd part of the difference. Hence" }
+          ]
+        },
+        { "type": "displayMath", "tex": "a_k=a_{k-1}+1,\\qquad b_k=\\frac{b_{k-1}}{d_k}." },
+        { "type": "paragraph", "runs": [{ "type": "text", "text": "A positive integer cannot strictly decrease infinitely many times." }] }
+      ] }
+    },
+    {
+      "order": 4,
+      "title": "Outline the proof",
+      "document": { "blocks": [{
+        "type": "list",
+        "ordered": true,
+        "items": [
+          [{ "type": "text", "text": "Show inductively that " }, { "type": "inlineMath", "tex": "m_k\\ne n_k" }, { "type": "text", "text": ", so the odd part of their difference is always defined." }],
+          [{ "type": "text", "text": "Express normalization with " }, { "type": "inlineMath", "tex": "d_k" }, { "type": "text", "text": " and derive the recurrences for " }, { "type": "inlineMath", "tex": "a_k" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "b_k" }, { "type": "text", "text": "." }],
+          [{ "type": "text", "text": "Identify the target gcd at index " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": " as " }, { "type": "inlineMath", "tex": "d_{k+1}" }, { "type": "text", "text": "." }],
+          [{ "type": "text", "text": "When that gcd exceeds 1, the positive odd integer " }, { "type": "inlineMath", "tex": "b_k" }, { "type": "text", "text": " strictly decreases; conclude that this happens only finitely often." }]
+        ]
+      }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Reducing a fraction by its gcd",
+      "document": { "blocks": [{
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Dividing positive integers " }, { "type": "inlineMath", "tex": "u,v" },
+          { "type": "text", "text": " by " }, { "type": "inlineMath", "tex": "d=\\gcd(u,v)" },
+          { "type": "text", "text": " gives a relatively prime numerator and denominator, and " },
+          { "type": "inlineMath", "tex": "d\\mid(u-v)" }, { "type": "text", "text": "." }
+        ]
+      }] }
+    },
+    {
+      "order": 2,
+      "title": "Two-adic exponent and odd part",
+      "document": { "blocks": [{
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Every nonzero integer has a unique form " },
+          { "type": "inlineMath", "tex": "N=2^a b" }, { "type": "text", "text": " with " },
+          { "type": "inlineMath", "tex": "a\\ge 0" }, { "type": "text", "text": " and " },
+          { "type": "inlineMath", "tex": "b" },
+          { "type": "text", "text": " odd. Multiplication by 2 changes only the exponent; division by an odd divisor changes only the odd part." }
+        ]
+      }] }
+    },
+    {
+      "order": 3,
+      "title": "Descent on positive integers",
+      "document": { "blocks": [{
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "There is no infinite strictly decreasing sequence of positive integers. An event that forces such a decrease can therefore occur only finitely often." }]
+      }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "At step " }, { "type": "inlineMath", "tex": "k\\ge 1" },
+          { "type": "text", "text": ", the fraction is reduced by the odd integer" }
+        ]
+      },
+      { "type": "displayMath", "tex": "d_k=\\gcd(2m_{k-1}+1,2n_{k-1}+1)," },
+      { "type": "displayMath", "tex": "m_k=\\frac{2m_{k-1}+1}{d_k},\\qquad n_k=\\frac{2n_{k-1}+1}{d_k}." },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "The same positive divisor occurs in both expressions, so unequal inputs remain unequal. Since " },
+          { "type": "inlineMath", "tex": "m_0\\ne n_0" }, { "type": "text", "text": ", induction gives " },
+          { "type": "inlineMath", "tex": "m_k\\ne n_k" },
+          { "type": "text", "text": " for every " }, { "type": "inlineMath", "tex": "k" },
+          { "type": "text", "text": ". We may therefore write" }
+        ]
+      },
+      { "type": "displayMath", "tex": "|m_k-n_k|=2^{a_k}b_k,\\qquad b_k\\text{ odd and positive}." },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "Subtracting the formulas for the new numerator and denominator gives" }]
+      },
+      { "type": "displayMath", "tex": "|m_k-n_k|=\\frac{2|m_{k-1}-n_{k-1}|}{d_k}." },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Both arguments defining " }, { "type": "inlineMath", "tex": "d_k" },
+          { "type": "text", "text": " are odd, so " }, { "type": "inlineMath", "tex": "d_k" },
+          { "type": "text", "text": " is odd. It divides their difference " },
+          { "type": "inlineMath", "tex": "2(m_{k-1}-n_{k-1})" },
+          { "type": "text", "text": "; being odd, it divides the odd part " },
+          { "type": "inlineMath", "tex": "b_{k-1}" },
+          { "type": "text", "text": ". Comparing the two-adic exponent and odd part gives" }
+        ]
+      },
+      { "type": "displayMath", "tex": "a_k=a_{k-1}+1,\\qquad b_k=\\frac{b_{k-1}}{d_k}." },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "The gcd asked about at index " }, { "type": "inlineMath", "tex": "k" },
+          { "type": "text", "text": " is precisely" }
+        ]
+      },
+      { "type": "displayMath", "tex": "\\gcd(2m_k+1,2n_k+1)=d_{k+1}." },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "If these two numbers are not relatively prime, then " },
+          { "type": "inlineMath", "tex": "d_{k+1}>1" }, { "type": "text", "text": ", so " },
+          { "type": "inlineMath", "tex": "b_{k+1}=b_k/d_{k+1}<b_k" },
+          { "type": "text", "text": ". A sequence of positive integers can strictly decrease only finitely many times. Hence the target gcd exceeds 1 for only finitely many nonnegative " },
+          { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": ", as required." }
+        ]
+      }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2025 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2025-Putnam-Problems-for-Sessions-A-and-B.pdf" },
+    { "kind": "solution", "label": "MAA official 2025 solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf" }
+  ],
+  "originalPdf": { "path": "original/2025-problems.pdf", "pageIndex": 0 }
+}

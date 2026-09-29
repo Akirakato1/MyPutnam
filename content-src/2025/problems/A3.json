@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "code": "A3",
+  "ordinal": 3,
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A3" }] },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Alice and Bob play a game with a string of " },
+          { "type": "inlineMath", "tex": "n" },
+          { "type": "text", "text": " digits, each of which is restricted to be 0, 1, or 2. Initially all the digits are 0. A legal move is to add or subtract 1 from one digit to create a new string that has not appeared before. A player with no legal move loses, and the other player wins. Alice goes first, and the players alternate moves. For each " },
+          { "type": "inlineMath", "tex": "n\\ge 1" },
+          { "type": "text", "text": ", determine which player has a strategy that guarantees winning." }
+        ]
+      }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "title": "Look for a reply strategy",
+      "document": { "blocks": [{
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "The game is a walk through a finite graph of digit strings without revisiting a vertex. Can the second player pair most vertices so that every move into one member has an immediate move into its partner?" }
+        ]
+      }] }
+    },
+    {
+      "order": 2,
+      "title": "Pair by the first nonzero digit",
+      "document": { "blocks": [{
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "For each nonzero string, find its first nonzero digit and change that digit from 1 to 2 or from 2 to 1. Leave every other digit fixed. Check that this operation pairs distinct strings and that paired strings differ by one legal move." }
+        ]
+      }] }
+    },
+    {
+      "order": 3,
+      "title": "Maintain a paired-visit invariant",
+      "document": { "blocks": [{
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Immediately before each Alice turn, require that every pair is either completely unvisited or completely visited. If Alice enters an unvisited vertex, its partner cannot already have appeared: otherwise the invariant would say Alice's vertex had appeared too. Bob can therefore take the pairing move." }
+        ]
+      }] }
+    },
+    {
+      "order": 4,
+      "title": "Outline the finish",
+      "document": { "blocks": [{
+        "type": "list",
+        "ordered": true,
+        "items": [
+          [{ "type": "text", "text": "Pair all nonzero strings by flipping their first nonzero digit between 1 and 2." }],
+          [{ "type": "text", "text": "Verify that the pairing is an involution and each vertex is adjacent to its partner." }],
+          [{ "type": "text", "text": "After every Alice move, have Bob move to the paired vertex; prove by induction that this vertex is unused." }],
+          [{ "type": "text", "text": "Use finiteness to show the game must end, and observe that Bob is never the first player without a response." }]
+        ]
+      }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Pairing involution",
+      "document": { "blocks": [{
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "An involution " }, { "type": "inlineMath", "tex": "\\varphi" },
+          { "type": "text", "text": " satisfies " }, { "type": "inlineMath", "tex": "\\varphi(\\varphi(v))=v" },
+          { "type": "text", "text": ". If it has no fixed points, it partitions its domain into disjoint two-element pairs." }
+        ]
+      }] }
+    },
+    {
+      "order": 2,
+      "title": "Strategy invariants",
+      "document": { "blocks": [{
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "To prove a reply strategy is always available, identify a condition true before the opponent's first turn and show that every proposed reply restores that condition for the next turn." }
+        ]
+      }] }
+    },
+    {
+      "order": 3,
+      "title": "Finite play without repetition",
+      "document": { "blocks": [{
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "There are only " }, { "type": "inlineMath", "tex": "3^n" },
+          { "type": "text", "text": " possible strings. Since a legal move must create a string never seen before, every play ends after finitely many moves." }
+        ]
+      }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Bob can guarantee a win for every " },
+          { "type": "inlineMath", "tex": "n\\ge 1" }, { "type": "text", "text": ". The key is to pair every string except the initial all-zero string." }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "For a nonzero string " }, { "type": "inlineMath", "tex": "v" },
+          { "type": "text", "text": ", locate its first nonzero digit. Define " },
+          { "type": "inlineMath", "tex": "\\varphi(v)" },
+          { "type": "text", "text": " by switching that digit from 1 to 2 or from 2 to 1, with all other digits unchanged. Applying the same rule twice restores the original string, and the two strings are distinct. Thus " },
+          { "type": "inlineMath", "tex": "\\varphi" },
+          { "type": "text", "text": " partitions all nonzero strings into pairs." }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "The two members of a pair differ by exactly 1 in exactly one digit. Consequently, moving from " },
+          { "type": "inlineMath", "tex": "v" }, { "type": "text", "text": " to " },
+          { "type": "inlineMath", "tex": "\\varphi(v)" },
+          { "type": "text", "text": " is allowed whenever the partner has not appeared before. Bob will always make this pairing move after Alice chooses a string." }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "We verify that Bob's response is always new. Immediately before Alice's first move, no nonzero string has appeared, so every pair is completely unused. Inductively suppose that immediately before an Alice turn, each pair has either both members used or both members unused. Alice's legal move reaches an unused nonzero string " },
+          { "type": "inlineMath", "tex": "v" },
+          { "type": "text", "text": ". If " }, { "type": "inlineMath", "tex": "\\varphi(v)" },
+          { "type": "text", "text": " had already appeared, the induction hypothesis would imply that " },
+          { "type": "inlineMath", "tex": "v" },
+          { "type": "text", "text": " had appeared too, contradicting Alice's move. Hence Bob can move to " },
+          { "type": "inlineMath", "tex": "\\varphi(v)" },
+          { "type": "text", "text": ". After he does so, that pair is completely used and the invariant is restored." }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Because only " }, { "type": "inlineMath", "tex": "3^n" },
+          { "type": "text", "text": " strings exist and no string may repeat, the game must eventually end. The invariant shows that whenever Alice can move, Bob has a legal reply. Therefore Bob can never be the first player with no legal move; the player who eventually loses is Alice. Thus " },
+          { "type": "inlineMath", "tex": "\\boxed{\\text{Bob wins for every }n\\ge 1}" },
+          { "type": "text", "text": "." }
+        ]
+      }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2025 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2025-Putnam-Problems-for-Sessions-A-and-B.pdf" },
+    { "kind": "solution", "label": "MAA official 2025 solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf" }
+  ],
+  "originalPdf": { "path": "original/2025-problems.pdf", "pageIndex": 0 }
+}
