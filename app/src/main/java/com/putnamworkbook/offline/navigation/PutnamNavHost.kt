@@ -32,19 +32,23 @@ import com.putnamworkbook.offline.feature.archive.ArchiveViewModel
 import com.putnamworkbook.offline.feature.archive.ProblemListScreen
 import com.putnamworkbook.offline.feature.home.HomeScreen
 import com.putnamworkbook.offline.feature.home.HomeViewModel
+import com.putnamworkbook.offline.feature.settings.SettingsScreen
+import com.putnamworkbook.offline.feature.settings.SettingsViewModel
 import com.putnamworkbook.offline.feature.workspace.ReferencePane
 import com.putnamworkbook.offline.feature.workspace.WorkspaceScreen
 import com.putnamworkbook.offline.feature.workspace.WorkspaceViewModel
 import com.putnamworkbook.offline.notebook.storage.NotebookRepository
 import com.putnamworkbook.offline.notebook.ui.NotebookPane
 import com.putnamworkbook.offline.notebook.ui.NotebookViewModel
-import com.putnamworkbook.offline.notebook.ui.PalmGuardState
+import com.putnamworkbook.offline.notebook.ui.toPalmGuardState
 import kotlinx.coroutines.launch
 
 data class WorkspaceDependencies(
     val settingsRepository: SettingsRepository,
     val notebookRepository: NotebookRepository,
     val originalPdfRepository: OriginalPdfRepository,
+    val appVersion: String,
+    val contentVersion: String,
 )
 
 @Composable
@@ -52,6 +56,7 @@ fun PutnamNavHost(
     contentRepository: ContentRepository,
     progressRepository: ProgressRepository,
     workspaceDependencies: WorkspaceDependencies? = null,
+    onWorkspaceActiveChanged: (Boolean) -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     val navController = rememberNavController()
@@ -122,6 +127,7 @@ fun PutnamNavHost(
                     contentRepository = contentRepository,
                     progressRepository = progressRepository,
                     dependencies = workspaceDependencies,
+                    onWorkspaceActiveChanged = onWorkspaceActiveChanged,
                     onHome = {
                         if (!navController.popBackStack(AppRoute.HOME, inclusive = false)) {
                             navController.navigate(AppRoute.HOME) { launchSingleTop = true }
@@ -131,7 +137,14 @@ fun PutnamNavHost(
             }
         }
         composable(AppRoute.SETTINGS) {
-            Placeholder(text = "Settings", tag = "settings-placeholder")
+            if (workspaceDependencies == null) {
+                Placeholder(text = "Settings", tag = "settings-placeholder")
+            } else {
+                SettingsDestination(
+                    dependencies = workspaceDependencies,
+                    onBack = { navController.popBackStack() },
+                )
+            }
         }
     }
 }
@@ -142,6 +155,7 @@ private fun WorkspaceDestination(
     contentRepository: ContentRepository,
     progressRepository: ProgressRepository,
     dependencies: WorkspaceDependencies,
+    onWorkspaceActiveChanged: (Boolean) -> Unit,
     onHome: () -> Unit,
 ) {
     val workspaceViewModel = remember(key, contentRepository, progressRepository) {
@@ -161,7 +175,9 @@ private fun WorkspaceDestination(
     var notebookOpened by remember(key) { mutableStateOf(false) }
 
     DisposableEffect(workspaceViewModel, notebookViewModel, pdfViewModel) {
+        onWorkspaceActiveChanged(true)
         onDispose {
+            onWorkspaceActiveChanged(false)
             workspaceViewModel.close()
             notebookViewModel.close()
             pdfViewModel.close()
@@ -200,14 +216,7 @@ private fun WorkspaceDestination(
         }
     }
 
-    val palmGuard = settings.palmGuard.takeIf { it.enabled }?.let { guard ->
-        PalmGuardState(
-            side = settings.handedness,
-            widthFraction = guard.widthFraction,
-            heightFraction = guard.heightFraction,
-            verticalOffsetFraction = 1f,
-        )
-    }
+    val palmGuard = settings.toPalmGuardState()
 
     WorkspaceScreen(
         state = workspaceState,
@@ -254,6 +263,29 @@ private fun WorkspaceDestination(
                 onReorderPage = notebookViewModel::reorderPage,
             )
         },
+    )
+}
+
+@Composable
+private fun SettingsDestination(
+    dependencies: WorkspaceDependencies,
+    onBack: () -> Unit,
+) {
+    val viewModel = remember(dependencies.settingsRepository) {
+        SettingsViewModel(dependencies.settingsRepository)
+    }
+    val settings by viewModel.uiState.collectAsState()
+    DisposableEffect(viewModel) {
+        onDispose { viewModel.close() }
+    }
+    SettingsScreen(
+        settings = settings,
+        onBack = onBack,
+        onSettingsChanged = { next -> viewModel.update { next } },
+        onBackup = {},
+        onRestore = {},
+        appVersion = dependencies.appVersion,
+        contentVersion = dependencies.contentVersion,
     )
 }
 

@@ -4,16 +4,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import com.putnamworkbook.offline.domain.model.BrushSpec
+import com.putnamworkbook.offline.domain.model.Handedness
 import com.putnamworkbook.offline.domain.model.PaperStyle
 import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.notebook.model.NotebookDocument
 import com.putnamworkbook.offline.notebook.model.NotebookPage
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 
@@ -65,5 +68,42 @@ class NotebookPaneTest {
         }
         composeRule.waitForIdle()
         assertEquals(0, selectedPage)
+    }
+
+    @Test
+    fun palmGuardStaysBelowTheNavigationToolbar() {
+        val document = NotebookDocument(
+            key = ProblemKey(2025, "A1"),
+            pages = listOf(NotebookPage("page-1", PaperStyle.BLANK)),
+        )
+        composeRule.setContent {
+            NotebookPane(
+                state = NotebookUiState(document = document),
+                brush = BrushSpec(),
+                palmGuard = PalmGuardState(
+                    side = Handedness.RIGHT,
+                    widthFraction = 0.5f,
+                    heightFraction = 0.8f,
+                    verticalOffsetFraction = 0f,
+                ),
+                onStrokeFinished = {},
+                onUndo = {},
+                onRedo = {},
+                onAddPage = {},
+                onRequestDeletePage = {},
+                onRequestClearPage = {},
+                onConfirmDeletePage = {},
+                onConfirmClearPage = {},
+                onDismissConfirmation = {},
+                onSelectPage = {},
+                onReorderPage = { _, _ -> },
+            )
+        }
+
+        val toolbarBottom = composeRule.onNodeWithTag(NOTEBOOK_TOOLBAR_TEST_TAG)
+            .getUnclippedBoundsInRoot().bottom
+        val guardTop = composeRule.onNodeWithTag(PALM_GUARD_TEST_TAG)
+            .getUnclippedBoundsInRoot().top
+        assertTrue("Palm guard overlapped the notebook toolbar", guardTop >= toolbarBottom)
     }
 }

@@ -11,8 +11,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import com.putnamworkbook.offline.domain.model.BrushSpec
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
+
+const val NOTEBOOK_TOOLBAR_TEST_TAG = "notebook-toolbar-safe-region"
 
 @Composable
 fun NotebookPane(
@@ -47,6 +50,7 @@ fun NotebookPane(
             onAddPage = onAddPage,
             onClearPage = { onRequestClearPage(page.id) },
             onDeletePage = { onRequestDeletePage(page.id) },
+            modifier = Modifier.testTag(NOTEBOOK_TOOLBAR_TEST_TAG),
         )
         AnimatedContent(
             targetState = state.activePageIndex,

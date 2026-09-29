@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
+import com.putnamworkbook.offline.domain.model.AppSettings
 import com.putnamworkbook.offline.domain.model.Handedness
 
 const val PALM_GUARD_TEST_TAG = "palm-guard"
@@ -31,6 +32,15 @@ data class PalmGuardState(
         require(heightFraction in 0.1f..1f)
         require(verticalOffsetFraction in 0f..1f)
     }
+}
+
+fun AppSettings.toPalmGuardState(): PalmGuardState? = palmGuard.takeIf { it.enabled }?.let { guard ->
+    PalmGuardState(
+        side = handedness,
+        widthFraction = guard.widthFraction,
+        heightFraction = guard.heightFraction,
+        verticalOffsetFraction = 1f,
+    )
 }
 
 @Composable
