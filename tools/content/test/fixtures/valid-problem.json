@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "code": "A1",
+  "ordinal": 1,
+  "statement": {
+    "blocks": [
+      {
+        "type": "heading",
+        "level": 1,
+        "runs": [
+          { "type": "text", "text": "Problem A1" }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Find every real number " },
+          { "type": "inlineMath", "tex": "x\\in\\mathbb{R}" },
+          { "type": "text", "text": " satisfying the equation below." }
+        ]
+      },
+      {
+        "type": "displayMath",
+        "tex": "x^2=1"
+      }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "title": "Try a first move",
+      "document": {
+        "blocks": [
+          {
+            "type": "paragraph",
+            "runs": [
+              { "type": "text", "text": "Move every term to one side." }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "order": 2,
+      "title": "Choose a technique",
+      "document": {
+        "blocks": [
+          {
+            "type": "paragraph",
+            "runs": [
+              { "type": "text", "text": "Factor " },
+              { "type": "inlineMath", "tex": "x^2-1" },
+              { "type": "text", "text": "." }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "order": 3,
+      "title": "Recall the key fact",
+      "document": {
+        "blocks": [
+          {
+            "type": "paragraph",
+            "runs": [
+              { "type": "text", "text": "Use the zero-product property." }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "order": 4,
+      "title": "Outline the finish",
+      "document": {
+        "blocks": [
+          {
+            "type": "list",
+            "ordered": true,
+            "items": [
+              [
+                { "type": "text", "text": "Factor the polynomial." }
+              ],
+              [
+                { "type": "text", "text": "Solve each linear factor." }
+              ]
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Difference of squares",
+      "document": {
+        "blocks": [
+          {
+            "type": "displayMath",
+            "tex": "a^2-b^2=(a-b)(a+b)"
+          }
+        ]
+      }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Factoring gives " },
+          { "type": "inlineMath", "tex": "(x-1)(x+1)=0" },
+          { "type": "text", "text": ", so both candidates can be checked directly." }
+        ]
+      },
+      {
+        "type": "displayMath",
+        "tex": "x\\in\\{-1,1\\}"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "kind": "problem",
+      "label": "MAA official 2025 problem set",
+      "url": "https://maa.org/putnam-2025-problems"
+    },
+    {
+      "kind": "solution",
+      "label": "MAA official 2025 solutions",
+      "url": "https://maa.org/putnam-2025-solutions"
+    }
+  ],
+  "originalPdf": {
+    "path": "original/2025-problems.pdf",
+    "pageIndex": 0
+  }
+}

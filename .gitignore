@@ -1,6 +1,7 @@
 # Android and Gradle
 .gradle/
 **/build/
+**/node_modules/
 local.properties
 
 # Android Studio

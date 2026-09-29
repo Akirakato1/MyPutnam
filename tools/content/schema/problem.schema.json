@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://putnamworkbook.local/schema/problem.schema.json",
+  "title": "Putnam workbook problem",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "year",
+    "code",
+    "ordinal",
+    "statement",
+    "hints",
+    "prerequisites",
+    "solution",
+    "sources",
+    "originalPdf"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "year": { "type": "integer", "minimum": 1938, "maximum": 2100 },
+    "code": { "type": "string", "pattern": "^[AB][1-6]$" },
+    "ordinal": { "type": "integer", "minimum": 1, "maximum": 12 },
+    "statement": { "$ref": "#/$defs/richDocument" },
+    "hints": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": { "$ref": "#/$defs/hint" }
+    },
+    "prerequisites": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/prerequisite" }
+    },
+    "solution": { "$ref": "#/$defs/richDocument" },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/source" }
+    },
+    "originalPdf": { "$ref": "#/$defs/originalPdf" }
+  },
+  "$defs": {
+    "inlineRun": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "text"],
+          "properties": {
+            "type": { "const": "text" },
+            "text": { "type": "string" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "tex"],
+          "properties": {
+            "type": { "const": "inlineMath" },
+            "tex": { "type": "string", "minLength": 1 }
+          }
+        }
+      ]
+    },
+    "runs": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/inlineRun" }
+    },
+    "paragraph": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "runs"],
+      "properties": {
+        "type": { "const": "paragraph" },
+        "runs": { "$ref": "#/$defs/runs" }
+      }
+    },
+    "displayMath": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "tex"],
+      "properties": {
+        "type": { "const": "displayMath" },
+        "tex": { "type": "string", "minLength": 1 }
+      }
+    },
+    "heading": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "level", "runs"],
+      "properties": {
+        "type": { "const": "heading" },
+        "level": { "type": "integer", "minimum": 1, "maximum": 4 },
+        "runs": { "$ref": "#/$defs/runs" }
+      }
+    },
+    "list": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "ordered", "items"],
+      "properties": {
+        "type": { "const": "list" },
+        "ordered": { "type": "boolean" },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/runs" }
+        }
+      }
+    },
+    "figure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "path", "alt"],
+      "properties": {
+        "type": { "const": "figure" },
+        "path": { "type": "string", "minLength": 1 },
+        "alt": { "type": "string", "minLength": 1 },
+        "caption": { "$ref": "#/$defs/runs" }
+      }
+    },
+    "block": {
+      "oneOf": [
+        { "$ref": "#/$defs/paragraph" },
+        { "$ref": "#/$defs/displayMath" },
+        { "$ref": "#/$defs/heading" },
+        { "$ref": "#/$defs/list" },
+        { "$ref": "#/$defs/figure" }
+      ]
+    },
+    "richDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["blocks"],
+      "properties": {
+        "blocks": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/block" }
+        }
+      }
+    },
+    "hint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["order", "title", "document"],
+      "properties": {
+        "order": { "type": "integer", "minimum": 1, "maximum": 4 },
+        "title": { "type": "string", "minLength": 1 },
+        "document": { "$ref": "#/$defs/richDocument" }
+      }
+    },
+    "prerequisite": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["order", "title", "document"],
+      "properties": {
+        "order": { "type": "integer", "minimum": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "document": { "$ref": "#/$defs/richDocument" }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "label", "url"],
+      "properties": {
+        "kind": { "enum": ["problem", "solution", "reference"] },
+        "label": { "type": "string", "minLength": 1 },
+        "url": { "type": "string", "pattern": "^https://" }
+      }
+    },
+    "originalPdf": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "pageIndex"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "pageIndex": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}
