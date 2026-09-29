@@ -1,0 +1,8 @@
+@font-face {
+  font-family: "Fixture Math";
+  src: url("fixture.woff2") format("woff2");
+}
+
+body {
+  font-family: "Fixture Math", sans-serif;
+}
