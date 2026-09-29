@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.androidx.ink.rendering)
     implementation(libs.androidx.ink.strokes)
     implementation(libs.androidx.webkit)
+    implementation(libs.androidx.navigation.compose)
     ksp(libs.androidx.room.compiler)
 
     androidTestImplementation(composeBom)
