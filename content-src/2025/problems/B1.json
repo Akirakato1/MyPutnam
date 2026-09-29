@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "code": "B1",
+  "ordinal": 7,
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B1" }] },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Suppose that each point in the plane is colored either red or green, subject to the following condition: for every three noncollinear points " },
+          { "type": "inlineMath", "tex": "A,B,C" },
+          { "type": "text", "text": " of the same color, the center of the circle passing through " },
+          { "type": "inlineMath", "tex": "A,B,C" },
+          { "type": "text", "text": " is also this color. Prove that all points of the plane are the same color." }
+        ]
+      }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "title": "Bound the opposite color on a circle",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "If a circle is centered at a red point, how many green points can lie on it? Three distinct collinear points cannot lie on a circle, so the hypothesis applies to any three points on that circle." }] }] }
+    },
+    {
+      "order": 2,
+      "title": "Assume two colors exist",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Choose a red point R and a green point G at distance d. Use several circles centered at R and G, with radii strictly between d/2 and d." }] }] }
+    },
+    {
+      "order": 3,
+      "title": "Count circle intersections",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Every circle from the R-family meets every circle from the G-family twice. Choose the radii generically so the 18 intersection points are distinct, then count how many can be each color." }] }] }
+    },
+    {
+      "order": 4,
+      "title": "Contradict the count",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "A circle centered at R contains at most two green points, so three R-circles contain at most six green intersections." }],
+        [{ "type": "text", "text": "A circle centered at G contains at most two red points, so three G-circles contain at most six red intersections." }],
+        [{ "type": "text", "text": "The 18 distinct intersections must all be red or green, but 6+6<18." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Circle-line intersection",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "A line meets a circle in at most two points. Therefore three distinct points on one circle are automatically noncollinear." }] }] }
+    },
+    {
+      "order": 2,
+      "title": "Two-circle geometry",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Two circles with center distance d and radii r,s meet in two points when |r-s|<d<r+s." }] }] }
+    },
+    {
+      "order": 3,
+      "title": "Finite counting",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "If a finite set is partitioned into red and green points, an upper bound for each color that sums to less than the total is impossible." }] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "Fix a red point " }, { "type": "inlineMath", "tex": "R" }, { "type": "text", "text": ". Every circle centered at " }, { "type": "inlineMath", "tex": "R" }, { "type": "text", "text": " contains at most two green points: otherwise three green points on that circle would be noncollinear, and their circumcenter " }, { "type": "inlineMath", "tex": "R" }, { "type": "text", "text": " would have to be green." }] 
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "Assume for contradiction that there are also a green point " }, { "type": "inlineMath", "tex": "G" }, { "type": "text", "text": ", and write " }, { "type": "inlineMath", "tex": "d=RG>0" }, { "type": "text", "text": ". Choose three distinct radii for circles centered at " }, { "type": "inlineMath", "tex": "R" }, { "type": "text", "text": " and three distinct radii for circles centered at " }, { "type": "inlineMath", "tex": "G" }, { "type": "text", "text": ", all in " }, { "type": "inlineMath", "tex": "(d/2,d)" }, { "type": "text", "text": ". Choose them generically so that no intersection point is repeated. Every R-circle meets every G-circle in two points, because each pair of radii has sum greater than " }, { "type": "inlineMath", "tex": "d" }, { "type": "text", "text": " and difference smaller than " }, { "type": "inlineMath", "tex": "d" }, { "type": "text", "text": ". Thus there are " }, { "type": "inlineMath", "tex": "2\\cdot3\\cdot3=18" }, { "type": "text", "text": " distinct intersection points." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "Each of the three circles centered at " }, { "type": "inlineMath", "tex": "R" }, { "type": "text", "text": " contains at most two green intersection points, so at most six of the 18 points are green. Applying the same observation with the colors reversed, each G-circle contains at most two red points, so at most six of the 18 points are red. But every intersection is one of the two colors, giving " }, { "type": "inlineMath", "tex": "18\\le6+6" }, { "type": "text", "text": ", a contradiction. Hence no red and green points coexist, and all points have the same color." }]
+      }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2025 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2025-Putnam-Problems-for-Sessions-A-and-B.pdf" },
+    { "kind": "solution", "label": "MAA official 2025 solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf" }
+  ],
+  "originalPdf": { "path": "original/2025-problems.pdf", "pageIndex": 1 }
+}

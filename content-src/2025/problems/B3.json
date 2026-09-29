@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "code": "B3",
+  "ordinal": 9,
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B3" }] },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Suppose " }, { "type": "inlineMath", "tex": "S" }, { "type": "text", "text": " is a nonempty set of positive integers with the property that if " }, { "type": "inlineMath", "tex": "n\\in S" }, { "type": "text", "text": ", then every positive divisor of " }, { "type": "inlineMath", "tex": "2025^n-15^n" }, { "type": "text", "text": " is in " }, { "type": "inlineMath", "tex": "S" }, { "type": "text", "text": ". Must " }, { "type": "inlineMath", "tex": "S" }, { "type": "text", "text": " contain all positive integers?" }
+        ]
+      }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "title": "Factor the difference",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Use " }, { "type": "inlineMath", "tex": "2025=15\\cdot135" }, { "type": "text", "text": " to write the difference as " }, { "type": "inlineMath", "tex": "15^n(135^n-1)" }, { "type": "text", "text": ". The first element of S gives several small base cases." }] }] }
+    },
+    {
+      "order": 2,
+      "title": "Split off 3s and 5s",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "For a target " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": ", write " }, { "type": "inlineMath", "tex": "n=3^a5^bc" }, { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "(c,15)=1" }, { "type": "text", "text": ". Euler's theorem supplies a small exponent making " }, { "type": "inlineMath", "tex": "135^k\\equiv1\\pmod c" }, { "type": "text", "text": "." }] }] }
+    },
+    {
+      "order": 3,
+      "title": "Use strong induction",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Choose an exponent smaller than the target n whose difference has n as a divisor. Then the induction hypothesis puts that exponent in S, forcing n into S." }] }] }
+    },
+    {
+      "order": 4,
+      "title": "Check the size inequality",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "If a=b=0, use the Euler exponent k<c<=n directly." }],
+        [{ "type": "text", "text": "If a+b>0, use the exponent m=(a+b)k." }],
+        [{ "type": "text", "text": "Show m<n from a+b<3^a5^b and k<c." }],
+        [{ "type": "text", "text": "Then n divides 2025^m-15^m, so the closure property finishes the induction." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Euler's theorem",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "(a,c)=1" }, { "type": "text", "text": ", then " }, { "type": "inlineMath", "tex": "a^{\\varphi(c)}\\equiv1\\pmod c" }, { "type": "text", "text": ". Here " }, { "type": "inlineMath", "tex": "135" }, { "type": "text", "text": " is coprime to " }, { "type": "inlineMath", "tex": "c" }, { "type": "text", "text": "." }] }] }
+    },
+    {
+      "order": 2,
+      "title": "Strong induction",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "To prove a statement for every positive integer, assume it for all smaller positive integers and construct the current case from one of them." }] }] }
+    },
+    {
+      "order": 3,
+      "title": "Prime-factor decomposition",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Every positive integer has a unique form " }, { "type": "inlineMath", "tex": "3^a5^bc" }, { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "(c,15)=1" }, { "type": "text", "text": "." }] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "Yes. Since " }, { "type": "inlineMath", "tex": "2025^n-15^n=15^n(135^n-1)" }, { "type": "text", "text": ", any member of " }, { "type": "inlineMath", "tex": "S" }, { "type": "text", "text": " forces all positive divisors of this product into " }, { "type": "inlineMath", "tex": "S" }, { "type": "text", "text": ". In particular, starting from any member of the nonempty set, the divisors " }, { "type": "inlineMath", "tex": "1,2,3" }, { "type": "text", "text": " belong to " }, { "type": "inlineMath", "tex": "S" }, { "type": "text", "text": "." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "We use strong induction to show that every positive integer belongs to " }, { "type": "inlineMath", "tex": "S" }, { "type": "text", "text": ". Write a target integer as " }, { "type": "inlineMath", "tex": "N=3^a5^bc" }, { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "(c,15)=1" }, { "type": "text", "text": ". If " }, { "type": "inlineMath", "tex": "c>1" }, { "type": "text", "text": ", Euler's theorem gives an exponent " }, { "type": "inlineMath", "tex": "1\\le k\\le c-1" }, { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "135^k\\equiv1\\pmod c" }, { "type": "text", "text": ". When " }, { "type": "inlineMath", "tex": "c=1" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "a+b>0" }, { "type": "text", "text": ", take " }, { "type": "inlineMath", "tex": "k=1" }, { "type": "text", "text": "; the same congruence is automatic." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "First suppose " }, { "type": "inlineMath", "tex": "a=b=0" }, { "type": "text", "text": ". Then " }, { "type": "inlineMath", "tex": "N=c" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "N\\mid(135^k-1)" }, { "type": "text", "text": ", hence " }, { "type": "inlineMath", "tex": "N\\mid(2025^k-15^k)" }, { "type": "text", "text": " because " }, { "type": "inlineMath", "tex": "(N,15)=1" }, { "type": "text", "text": ". Since " }, { "type": "inlineMath", "tex": "k<N" }, { "type": "text", "text": " and the induction hypothesis puts " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": " in " }, { "type": "inlineMath", "tex": "S" }, { "type": "text", "text": ", the closure property puts " }, { "type": "inlineMath", "tex": "N" }, { "type": "text", "text": " in " }, { "type": "inlineMath", "tex": "S" }, { "type": "text", "text": ". The case " }, { "type": "inlineMath", "tex": "N=1" }, { "type": "text", "text": " was already a base case." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "Now suppose " }, { "type": "inlineMath", "tex": "a+b>0" }, { "type": "text", "text": " and set " }, { "type": "inlineMath", "tex": "m=(a+b)k" }, { "type": "text", "text": ". We have " }, { "type": "inlineMath", "tex": "3^a5^b\\mid15^m" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "c\\mid135^m-1" }, { "type": "text", "text": ", so coprimality gives " }, { "type": "inlineMath", "tex": "N\\mid15^m(135^m-1)=2025^m-15^m" }, { "type": "text", "text": ". It remains to check that " }, { "type": "inlineMath", "tex": "m<N" }, { "type": "text", "text": ". Since " }, { "type": "inlineMath", "tex": "a+b<3^a5^b" }, { "type": "text", "text": " for " }, { "type": "inlineMath", "tex": "a+b>0" }, { "type": "text", "text": ", and either " }, { "type": "inlineMath", "tex": "k\\le c-1<c" }, { "type": "text", "text": " when " }, { "type": "inlineMath", "tex": "c>1" }, { "type": "text", "text": " or " }, { "type": "inlineMath", "tex": "k=1" }, { "type": "text", "text": " when " }, { "type": "inlineMath", "tex": "c=1" }, { "type": "text", "text": ", we get " }, { "type": "inlineMath", "tex": "m<N" }, { "type": "text", "text": ". By induction " }, { "type": "inlineMath", "tex": "m\\in S" }, { "type": "text", "text": ", and the closure property then gives " }, { "type": "inlineMath", "tex": "N\\in S" }, { "type": "text", "text": ". Thus every positive integer is in " }, { "type": "inlineMath", "tex": "S" }, { "type": "text", "text": "." }]
+      }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2025 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2025-Putnam-Problems-for-Sessions-A-and-B.pdf" },
+    { "kind": "solution", "label": "MAA official 2025 solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf" }
+  ],
+  "originalPdf": { "path": "original/2025-problems.pdf", "pageIndex": 1 }
+}

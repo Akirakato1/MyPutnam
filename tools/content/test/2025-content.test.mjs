@@ -6,17 +6,20 @@ import { validateProblem } from '../src/validate-problem.mjs';
 
 const yearRoot = new URL('../../../content-src/2025/', import.meta.url);
 const requiredProblems = [
-  { code: 'A1', ordinal: 1, solutionPages: 'page 1' },
-  { code: 'A2', ordinal: 2, solutionPages: 'page 2' },
-  { code: 'A3', ordinal: 3, solutionPages: 'page 3' },
-  { code: 'A4', ordinal: 4, solutionPages: 'pages 3–4' },
-  { code: 'A5', ordinal: 5, solutionPages: 'page 5' },
-  { code: 'A6', ordinal: 6, solutionPages: 'pages 6–8' },
+  { code: 'A1', ordinal: 1, problemPage: 'page 1', originalPageIndex: 0, solutionPages: 'page 1' },
+  { code: 'A2', ordinal: 2, problemPage: 'page 1', originalPageIndex: 0, solutionPages: 'page 2' },
+  { code: 'A3', ordinal: 3, problemPage: 'page 1', originalPageIndex: 0, solutionPages: 'page 3' },
+  { code: 'A4', ordinal: 4, problemPage: 'page 1', originalPageIndex: 0, solutionPages: 'pages 3–4' },
+  { code: 'A5', ordinal: 5, problemPage: 'page 1', originalPageIndex: 0, solutionPages: 'page 5' },
+  { code: 'A6', ordinal: 6, problemPage: 'page 1', originalPageIndex: 0, solutionPages: 'pages 6–8' },
+  { code: 'B1', ordinal: 7, problemPage: 'page 2', originalPageIndex: 1, solutionPages: 'pages 9–10' },
+  { code: 'B2', ordinal: 8, problemPage: 'page 2', originalPageIndex: 1, solutionPages: 'pages 10–11' },
+  { code: 'B3', ordinal: 9, problemPage: 'page 2', originalPageIndex: 1, solutionPages: 'page 12' },
 ];
 const problemUrl = 'https://maa.org/wp-content/uploads/2026/02/2025-Putnam-Problems-for-Sessions-A-and-B.pdf';
 const solutionUrl = 'https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf';
 
-test('2025 A1–A6 records and review evidence are complete', async () => {
+test('2025 A1–A6 and B1–B3 records and review evidence are complete', async () => {
   for (const expected of requiredProblems) {
     const record = await readJson(`problems/${expected.code}.json`);
     assert.deepEqual(validateProblem(record), [], `${expected.code} must satisfy the content schema`);
@@ -36,14 +39,17 @@ test('2025 A1–A6 records and review evidence are complete', async () => {
       ],
     );
     assert.equal(record.originalPdf.path, 'original/2025-problems.pdf');
-    assert.equal(record.originalPdf.pageIndex, 0);
+    assert.equal(record.originalPdf.pageIndex, expected.originalPageIndex);
 
     const review = await readText(`review/${expected.code}.md`);
     assert.match(review, /^# 2025 Putnam [AB][1-6] content review$/m);
     assert.match(review, /- Statement fidelity: complete/i);
     assert.match(review, /- Mathematical review: complete/i);
     assert.match(review, /- Render review: complete/i);
-    assert.match(review, /- Problem source: `original\/2025-problems\.pdf`, page 1\./i);
+    assert.match(
+      review,
+      new RegExp('- Problem source: `original/2025-problems\\.pdf`, ' + expected.problemPage + '\\.', 'i'),
+    );
     assert.ok(
       review.includes(`- Solution source: \`original/2025-solutions.pdf\`, ${expected.solutionPages}.`),
       `${expected.code} must identify every official solution page reviewed`,
