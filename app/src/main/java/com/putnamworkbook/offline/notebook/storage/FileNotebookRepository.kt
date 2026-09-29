@@ -25,15 +25,38 @@ class FileNotebookRepository(
 ) : NotebookRepository {
     private val mutex = Mutex()
 
+    override suspend fun loadExisting(key: ProblemKey): NotebookDocument? = locked {
+        if (Files.exists(manifestPath(key))) loadExistingDocument(key) else null
+    }
+
+    override suspend fun loadExportSnapshot(key: ProblemKey): NotebookExportSnapshot? = locked {
+        if (!Files.isRegularFile(manifestPath(key))) return@locked null
+        val document = loadExistingDocument(key)
+        NotebookExportSnapshot(
+            key = key,
+            pages = document.pages.map { page ->
+                NotebookPageSnapshot(
+                    id = page.id,
+                    paperStyle = page.paperStyle,
+                    strokes = loadActiveStrokes(key, page),
+                )
+            },
+        )
+    }
+
     override suspend fun loadOrCreate(key: ProblemKey, defaultPaper: PaperStyle): NotebookDocument = locked {
         loadOrCreateLocked(key, defaultPaper)
     }
 
     override suspend fun loadStrokes(key: ProblemKey, pageId: String): List<StrokeRecord> = locked {
-        val document = loadExisting(key)
+        val document = loadExistingDocument(key)
         val page = document.page(pageId)
+        loadActiveStrokes(key, page)
+    }
+
+    private fun loadActiveStrokes(key: ProblemKey, page: NotebookPage): List<StrokeRecord> =
         page.strokes.filter { it.active }.map { reference ->
-            val path = strokePath(key, pageId, reference.strokeId)
+            val path = strokePath(key, page.id, reference.strokeId)
             if (!Files.isRegularFile(path)) throw IOException("Referenced stroke file is missing: $path")
             StrokeCodec.decode(Files.readAllBytes(path)).also { stroke ->
                 if (stroke.id != reference.strokeId) {
@@ -41,14 +64,13 @@ class FileNotebookRepository(
                 }
             }
         }
-    }
 
     override suspend fun commitStroke(
         key: ProblemKey,
         pageId: String,
         stroke: StrokeRecord,
     ): NotebookDocument = locked {
-        val document = loadExisting(key)
+        val document = loadExistingDocument(key)
         val page = document.page(pageId)
         require(page.strokes.none { it.strokeId == stroke.id }) { "Stroke id already exists on this page" }
         val strokePath = strokePath(key, pageId, stroke.id)
@@ -72,7 +94,7 @@ class FileNotebookRepository(
         strokeId: String,
         active: Boolean,
     ): NotebookDocument = locked {
-        val document = loadExisting(key)
+        val document = loadExistingDocument(key)
         val page = document.page(pageId)
         require(page.strokes.any { it.strokeId == strokeId }) { "Unknown stroke id: $strokeId" }
         val changedPage = page.copy(
@@ -88,7 +110,7 @@ class FileNotebookRepository(
         afterPageId: String,
         paperStyle: PaperStyle,
     ): NotebookDocument = locked {
-        val document = loadExisting(key)
+        val document = loadExistingDocument(key)
         val afterIndex = document.pages.indexOfFirst { it.id == afterPageId }
         require(afterIndex >= 0) { "Unknown page id: $afterPageId" }
         val changedPages = document.pages.toMutableList().apply {
@@ -98,14 +120,14 @@ class FileNotebookRepository(
     }
 
     override suspend fun deletePage(key: ProblemKey, pageId: String): NotebookDocument = locked {
-        val document = loadExisting(key)
+        val document = loadExistingDocument(key)
         check(document.pages.size > 1) { "The final notebook page cannot be deleted" }
         require(document.pages.any { it.id == pageId }) { "Unknown page id: $pageId" }
         document.copy(pages = document.pages.filterNot { it.id == pageId }).also { writeManifest(it) }
     }
 
     override suspend fun clearPage(key: ProblemKey, pageId: String): NotebookDocument = locked {
-        val document = loadExisting(key)
+        val document = loadExistingDocument(key)
         val changedPage = document.page(pageId).copy(strokes = emptyList())
         document.replacePage(changedPage).also { writeManifest(it) }
     }
@@ -115,7 +137,7 @@ class FileNotebookRepository(
         pageId: String,
         newIndex: Int,
     ): NotebookDocument = locked {
-        val document = loadExisting(key)
+        val document = loadExistingDocument(key)
         require(newIndex in document.pages.indices) { "New page index is outside the notebook" }
         val oldIndex = document.pages.indexOfFirst { it.id == pageId }
         require(oldIndex >= 0) { "Unknown page id: $pageId" }
@@ -134,7 +156,7 @@ class FileNotebookRepository(
             ).also { writeManifest(it) }
         }
         return try {
-            loadExisting(key)
+            loadExistingDocument(key)
         } catch (error: Exception) {
             if (error is InterruptedException) throw error
             preserveCorruptManifest(manifest)
@@ -145,7 +167,7 @@ class FileNotebookRepository(
         }
     }
 
-    private fun loadExisting(key: ProblemKey): NotebookDocument {
+    private fun loadExistingDocument(key: ProblemKey): NotebookDocument {
         val manifest = manifestPath(key)
         if (!Files.isRegularFile(manifest)) throw IOException("Notebook manifest is missing: $manifest")
         return NotebookManifestCodec.decode(Files.readAllBytes(manifest)).also { document ->

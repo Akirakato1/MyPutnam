@@ -11,6 +11,9 @@ import com.putnamworkbook.offline.data.user.RoomProgressRepository
 import com.putnamworkbook.offline.data.user.RoomSettingsRepository
 import com.putnamworkbook.offline.data.user.SettingsRepository
 import com.putnamworkbook.offline.data.user.UserDatabase
+import com.putnamworkbook.offline.export.ExportCoordinator
+import com.putnamworkbook.offline.export.WebViewContentRasterizer
+import com.putnamworkbook.offline.export.WorkbookPdfExporter
 import com.putnamworkbook.offline.notebook.storage.FileNotebookRepository
 import com.putnamworkbook.offline.notebook.storage.NotebookRepository
 import java.nio.file.Path
@@ -29,6 +32,15 @@ class AppContainer(context: Context) {
     val backupCoordinator: BackupCoordinator by lazy {
         BackupCoordinator(userDatabase, notebookRoot)
     }
+    fun createExportCoordinator(renderingContext: Context): ExportCoordinator =
+        ExportCoordinator(
+            WorkbookPdfExporter(
+                contentRepository = contentRepository,
+                progressRepository = progressRepository,
+                notebookRepository = notebookRepository,
+                contentRasterizer = WebViewContentRasterizer(renderingContext),
+            ),
+        )
     val originalPdfRepository: OriginalPdfRepository by lazy {
         OriginalPdfRepository(
             assets = applicationContext.assets,

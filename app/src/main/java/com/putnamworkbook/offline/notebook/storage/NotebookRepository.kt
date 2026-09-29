@@ -5,7 +5,22 @@ import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.notebook.model.NotebookDocument
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
 
+data class NotebookPageSnapshot(
+    val id: String,
+    val paperStyle: PaperStyle,
+    val strokes: List<StrokeRecord>,
+)
+
+data class NotebookExportSnapshot(
+    val key: ProblemKey,
+    val pages: List<NotebookPageSnapshot>,
+)
+
 interface NotebookRepository {
+    suspend fun loadExisting(key: ProblemKey): NotebookDocument?
+
+    suspend fun loadExportSnapshot(key: ProblemKey): NotebookExportSnapshot?
+
     suspend fun loadOrCreate(key: ProblemKey, defaultPaper: PaperStyle): NotebookDocument
 
     suspend fun loadStrokes(key: ProblemKey, pageId: String): List<StrokeRecord>

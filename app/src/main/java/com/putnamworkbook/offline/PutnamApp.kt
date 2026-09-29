@@ -34,6 +34,7 @@ fun PutnamApp(
     val appVersion = remember(context) {
         context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: "unknown"
     }
+    val exportCoordinator = remember(container, context) { container.createExportCoordinator(context) }
     val settings by container.settingsRepository.observe().collectAsState(initial = AppSettings())
     var workspaceActive by remember { mutableStateOf(false) }
     val useDarkTheme = when (settings.theme) {
@@ -64,6 +65,7 @@ fun PutnamApp(
                     notebookRepository = container.notebookRepository,
                     originalPdfRepository = container.originalPdfRepository,
                     backupCoordinator = container.backupCoordinator,
+                    exportCoordinator = exportCoordinator,
                     appVersion = appVersion,
                     contentVersion = "2025 schema 1",
                 ),

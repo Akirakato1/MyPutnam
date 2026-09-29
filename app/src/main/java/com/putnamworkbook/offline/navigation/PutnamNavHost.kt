@@ -12,6 +12,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -41,10 +42,14 @@ import com.putnamworkbook.offline.feature.settings.SettingsViewModel
 import com.putnamworkbook.offline.feature.workspace.ReferencePane
 import com.putnamworkbook.offline.feature.workspace.WorkspaceScreen
 import com.putnamworkbook.offline.feature.workspace.WorkspaceViewModel
+import com.putnamworkbook.offline.export.ExportCoordinator
+import com.putnamworkbook.offline.export.ExportResult
+import com.putnamworkbook.offline.export.WorkbookExportOptions
 import com.putnamworkbook.offline.notebook.storage.NotebookRepository
 import com.putnamworkbook.offline.notebook.ui.NotebookPane
 import com.putnamworkbook.offline.notebook.ui.NotebookViewModel
 import com.putnamworkbook.offline.notebook.ui.toPalmGuardState
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 
 data class WorkspaceDependencies(
@@ -52,6 +57,7 @@ data class WorkspaceDependencies(
     val notebookRepository: NotebookRepository,
     val originalPdfRepository: OriginalPdfRepository,
     val backupCoordinator: BackupCoordinator,
+    val exportCoordinator: ExportCoordinator,
     val appVersion: String,
     val contentVersion: String,
 )
@@ -178,6 +184,60 @@ private fun WorkspaceDestination(
     val pdfState by pdfViewModel.uiState.collectAsState()
     val settings by dependencies.settingsRepository.observe().collectAsState(initial = AppSettings())
     var notebookOpened by remember(key) { mutableStateOf(false) }
+    var exportMessage by remember(key) { mutableStateOf<String?>(null) }
+    var exportInProgress by remember(key) { mutableStateOf(false) }
+    var hasPendingExport by rememberSaveable(key.year, key.code) { mutableStateOf(false) }
+    var pendingIncludeHints by rememberSaveable(key.year, key.code) { mutableStateOf(true) }
+    var pendingIncludeSolution by rememberSaveable(key.year, key.code) { mutableStateOf(true) }
+    val context = LocalContext.current
+    val exportPdf = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument("application/pdf"),
+    ) { uri ->
+        val options = if (hasPendingExport) {
+            WorkbookExportOptions(
+                includeRevealedHints = pendingIncludeHints,
+                includeRevealedSolution = pendingIncludeSolution,
+            )
+        } else {
+            null
+        }
+        hasPendingExport = false
+        if (uri != null && options != null) {
+            scope.launch {
+                exportMessage = "Exporting PDF…"
+                exportInProgress = true
+                try {
+                    notebookViewModel.awaitIdle()
+                    val output = runCatching { context.contentResolver.openOutputStream(uri) }.getOrNull()
+                    if (output == null) {
+                        exportMessage = null
+                        workspaceViewModel.reportIntegrityError("The selected PDF file could not be opened")
+                        return@launch
+                    }
+                    when (
+                        val result = dependencies.exportCoordinator.export(
+                            key,
+                            options,
+                            output,
+                        )
+                    ) {
+                        is ExportResult.Success -> exportMessage = "PDF saved (${result.pageCount} pages)"
+                        is ExportResult.Failure -> {
+                            exportMessage = null
+                            workspaceViewModel.reportIntegrityError(result.message)
+                        }
+                    }
+                } catch (error: CancellationException) {
+                    throw error
+                } catch (error: Exception) {
+                    exportMessage = null
+                    workspaceViewModel.reportIntegrityError(error.message ?: "PDF export failed")
+                } finally {
+                    exportInProgress = false
+                }
+            }
+        }
+    }
 
     DisposableEffect(workspaceViewModel, notebookViewModel, pdfViewModel) {
         onWorkspaceActiveChanged(true)
@@ -238,6 +298,14 @@ private fun WorkspaceDestination(
             }
         },
         onSetCompleted = workspaceViewModel::setCompleted,
+        onExportPdf = { options ->
+            pendingIncludeHints = options.includeRevealedHints
+            pendingIncludeSolution = options.includeRevealedSolution
+            hasPendingExport = true
+            exportPdf.launch("putnam-${key.year}-${key.code}-workbook.pdf")
+        },
+        exportMessage = exportMessage,
+        exportInProgress = exportInProgress,
         referenceContent = {
             ReferencePane(
                 state = workspaceState,

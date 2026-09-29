@@ -1,6 +1,7 @@
 package com.putnamworkbook.offline
 
 import android.app.Application
+import android.webkit.WebView
 import com.putnamworkbook.offline.di.AppContainer
 
 class PutnamApplication : Application() {
@@ -9,6 +10,7 @@ class PutnamApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        WebView.enableSlowWholeDocumentDraw()
         container = AppContainer(this)
     }
 }

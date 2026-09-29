@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -20,11 +22,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.putnamworkbook.offline.domain.model.ProblemStatus
+import com.putnamworkbook.offline.export.WorkbookExportOptions
 
 @Composable
 fun WorkspaceScreen(
@@ -33,9 +37,60 @@ fun WorkspaceScreen(
     onSetCompleted: (Boolean) -> Unit,
     referenceContent: @Composable () -> Unit,
     notebookContent: @Composable () -> Unit,
+    onExportPdf: (WorkbookExportOptions) -> Unit = {},
+    exportMessage: String? = null,
+    exportInProgress: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
     var compactPane by remember { mutableStateOf(CompactPane.REFERENCE) }
+    var showExportOptions by rememberSaveable(state.key?.year, state.key?.code) { mutableStateOf(false) }
+    var includeHints by rememberSaveable(state.key?.year, state.key?.code) { mutableStateOf(true) }
+    var includeSolution by rememberSaveable(state.key?.year, state.key?.code) { mutableStateOf(true) }
+    if (showExportOptions) {
+        AlertDialog(
+            onDismissRequest = { showExportOptions = false },
+            title = { Text("Export problem workbook") },
+            text = {
+                Column(Modifier.testTag("workspace-export-options")) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Checkbox(
+                            checked = includeHints,
+                            onCheckedChange = { includeHints = it },
+                            enabled = (state.progress?.revealedHintCount ?: 0) > 0,
+                            modifier = Modifier.testTag("workspace-export-hints"),
+                        )
+                        Text("Include revealed hints")
+                    }
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Checkbox(
+                            checked = includeSolution,
+                            onCheckedChange = { includeSolution = it },
+                            enabled = state.progress?.solutionRevealed == true,
+                            modifier = Modifier.testTag("workspace-export-solution"),
+                        )
+                        Text("Include revealed solution")
+                    }
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showExportOptions = false
+                        onExportPdf(
+                            WorkbookExportOptions(
+                                includeRevealedHints = includeHints,
+                                includeRevealedSolution = includeSolution,
+                            ),
+                        )
+                    },
+                    modifier = Modifier.testTag("workspace-export-confirm"),
+                ) { Text("Choose file") }
+            },
+            dismissButton = {
+                OutlinedButton(onClick = { showExportOptions = false }) { Text("Cancel") }
+            },
+        )
+    }
     Column(modifier.fillMaxSize().testTag("workspace-screen")) {
         Row(
             modifier = Modifier
@@ -53,6 +108,17 @@ fun WorkspaceScreen(
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.weight(1f),
             )
+            OutlinedButton(
+                onClick = {
+                    includeHints = true
+                    includeSolution = true
+                    showExportOptions = true
+                },
+                enabled = state.progress != null && !exportInProgress,
+                modifier = Modifier.testTag("workspace-export-pdf"),
+            ) {
+                Text(if (exportInProgress) "Exporting…" else "Export PDF")
+            }
             Button(
                 onClick = { onSetCompleted(state.progress?.status != ProblemStatus.COMPLETED) },
                 enabled = state.progress != null,
@@ -67,6 +133,13 @@ fun WorkspaceScreen(
                 text = message,
                 color = MaterialTheme.colorScheme.error,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
+            )
+        }
+        exportMessage?.let { message ->
+            Text(
+                text = message,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp).testTag("workspace-export-status"),
             )
         }
         BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {

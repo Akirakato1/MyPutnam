@@ -18,6 +18,8 @@ import java.io.FileNotFoundException
 class LocalContentClient(
     private val assetContext: Context,
     private val onIntegrityError: (String) -> Unit = {},
+    private val onPageReady: (WebView) -> Unit = {},
+    private val failOnSubresourceError: Boolean = false,
 ) : WebViewClient() {
     private val assetLoader = WebViewAssetLoader.Builder()
         .setDomain(ASSET_HOST)
@@ -61,6 +63,21 @@ class LocalContentClient(
         onIntegrityError(error.message ?: "Bundled content could not be opened: $assetPath")
     }
 
+    @MainThread
+    fun loadAssetData(webView: WebView, assetPath: String): Result<Unit> = runCatching {
+        require(isSafeAssetPath(assetPath)) { "Unsafe bundled asset path: $assetPath" }
+        val html = try {
+            assetContext.assets.open(assetPath).bufferedReader(Charsets.UTF_8).use { it.readText() }
+        } catch (error: FileNotFoundException) {
+            throw IllegalStateException("Bundled content is missing: $assetPath", error)
+        }
+        val parent = assetPath.substringBeforeLast('/', missingDelimiterValue = "")
+        val baseUrl = ASSET_BASE_URL + if (parent.isEmpty()) "" else Uri.encode("$parent/", "/")
+        webView.loadDataWithBaseURL(baseUrl, html, "text/html", "utf-8", null)
+    }.onFailure { error ->
+        onIntegrityError(error.message ?: "Bundled content could not be opened: $assetPath")
+    }
+
     internal fun isNavigationAllowed(uri: Uri): Boolean =
         uri.scheme == "https" &&
             uri.host == ASSET_HOST &&
@@ -99,7 +116,7 @@ class LocalContentClient(
         request: WebResourceRequest,
         error: WebResourceError,
     ) {
-        if (request.isForMainFrame && isNavigationAllowed(request.url)) {
+        if ((request.isForMainFrame || failOnSubresourceError) && isNavigationAllowed(request.url)) {
             onIntegrityError("Bundled content could not be read: ${request.url.lastPathSegment.orEmpty()}")
         }
     }
@@ -109,8 +126,18 @@ class LocalContentClient(
         request: WebResourceRequest,
         errorResponse: WebResourceResponse,
     ) {
-        if (request.isForMainFrame && isNavigationAllowed(request.url) && errorResponse.statusCode >= 400) {
+        if (
+            (request.isForMainFrame || failOnSubresourceError) &&
+            isNavigationAllowed(request.url) &&
+            errorResponse.statusCode >= 400
+        ) {
             onIntegrityError("Bundled content failed its integrity check: ${request.url.lastPathSegment.orEmpty()}")
+        }
+    }
+
+    override fun onPageFinished(view: WebView?, url: String?) {
+        if (view != null && url != null && isNavigationAllowed(Uri.parse(url))) {
+            onPageReady(view)
         }
     }
 
