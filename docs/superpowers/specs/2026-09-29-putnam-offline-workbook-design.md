@@ -2,7 +2,7 @@
 
 **Date:** 2026-09-29
 
-**Status:** Approved in conversation; awaiting written-spec review
+**Status:** Approved for implementation planning
 
 **Target device:** Samsung Galaxy Tab A11+ (SM-X230), 1920 × 1200, Android 16
 
