@@ -38,6 +38,7 @@ fun SettingsScreen(
     onRestore: () -> Unit,
     appVersion: String,
     contentVersion: String,
+    backupState: BackupUiState = BackupUiState.Idle,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier.fillMaxSize().testTag("settings-screen")) {
@@ -131,10 +132,20 @@ fun SettingsScreen(
             }
             item {
                 SettingsSection("Backup and restore") {
+                    val working = backupState is BackupUiState.Working
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Button(onClick = onBackup, modifier = Modifier.testTag("settings-backup")) { Text("Create backup") }
-                        OutlinedButton(onClick = onRestore, modifier = Modifier.testTag("settings-restore")) { Text("Restore backup") }
+                        Button(
+                            onClick = onBackup,
+                            enabled = !working,
+                            modifier = Modifier.testTag("settings-backup"),
+                        ) { Text("Create backup") }
+                        OutlinedButton(
+                            onClick = onRestore,
+                            enabled = !working,
+                            modifier = Modifier.testTag("settings-restore"),
+                        ) { Text("Restore backup") }
                     }
+                    BackupStatus(backupState)
                 }
             }
             item {
@@ -153,6 +164,25 @@ fun SettingsScreen(
             }
         }
     }
+}
+
+@Composable
+private fun BackupStatus(state: BackupUiState) {
+    val text = when (state) {
+        BackupUiState.Idle -> "Backups include progress, settings, and every workbook page."
+        is BackupUiState.Working -> if (state.action == BackupAction.CREATE) {
+            "Creating and verifying backup…"
+        } else {
+            "Validating backup before restore…"
+        }
+        is BackupUiState.Complete -> state.message
+        is BackupUiState.Error -> state.message
+    }
+    Text(
+        text = text,
+        color = if (state is BackupUiState.Error) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.testTag("settings-backup-status"),
+    )
 }
 
 @Composable

@@ -13,6 +13,9 @@ interface UserDao {
     @Query("SELECT * FROM problem_progress ORDER BY year DESC, problem_code")
     fun observeAllProgress(): Flow<List<ProblemProgressEntity>>
 
+    @Query("SELECT * FROM problem_progress ORDER BY year, problem_code")
+    suspend fun allProgressForBackup(): List<ProblemProgressEntity>
+
     @Query("SELECT * FROM problem_progress ORDER BY last_opened_at DESC, year DESC, problem_code LIMIT 1")
     fun observeRecentProgress(): Flow<ProblemProgressEntity?>
 
@@ -22,6 +25,9 @@ interface UserDao {
     @Upsert
     suspend fun upsertProgress(progress: ProblemProgressEntity)
 
+    @Query("DELETE FROM problem_progress")
+    suspend fun deleteAllProgress()
+
     @Query("SELECT * FROM app_setting WHERE id = 1")
     fun observeSettings(): Flow<AppSettingEntity?>
 
@@ -30,4 +36,7 @@ interface UserDao {
 
     @Upsert
     suspend fun upsertSettings(settings: AppSettingEntity)
+
+    @Query("DELETE FROM app_setting")
+    suspend fun deleteSettings()
 }

@@ -1,5 +1,7 @@
 package com.putnamworkbook.offline.navigation
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
@@ -14,12 +16,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.putnamworkbook.offline.backup.BackupCoordinator
 import com.putnamworkbook.offline.data.content.ContentRepository
 import com.putnamworkbook.offline.data.user.ProgressRepository
 import com.putnamworkbook.offline.data.user.SettingsRepository
@@ -47,6 +51,7 @@ data class WorkspaceDependencies(
     val settingsRepository: SettingsRepository,
     val notebookRepository: NotebookRepository,
     val originalPdfRepository: OriginalPdfRepository,
+    val backupCoordinator: BackupCoordinator,
     val appVersion: String,
     val contentVersion: String,
 )
@@ -271,10 +276,31 @@ private fun SettingsDestination(
     dependencies: WorkspaceDependencies,
     onBack: () -> Unit,
 ) {
-    val viewModel = remember(dependencies.settingsRepository) {
-        SettingsViewModel(dependencies.settingsRepository)
+    val context = LocalContext.current
+    val viewModel = remember(dependencies.settingsRepository, dependencies.backupCoordinator) {
+        SettingsViewModel(
+            repository = dependencies.settingsRepository,
+            backupCoordinator = dependencies.backupCoordinator,
+        )
     }
     val settings by viewModel.uiState.collectAsState()
+    val backupState by viewModel.backupState.collectAsState()
+    val createBackup = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument("application/zip"),
+    ) { uri ->
+        if (uri != null) {
+            val output = runCatching { context.contentResolver.openOutputStream(uri) }.getOrNull()
+            if (output == null) viewModel.reportStorageError("The selected backup file could not be opened")
+            else viewModel.createBackup(output)
+        }
+    }
+    val restoreBackup = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        if (uri != null) {
+            val input = runCatching { context.contentResolver.openInputStream(uri) }.getOrNull()
+            if (input == null) viewModel.reportStorageError("The selected backup file could not be opened")
+            else viewModel.restoreBackup(input)
+        }
+    }
     DisposableEffect(viewModel) {
         onDispose { viewModel.close() }
     }
@@ -282,10 +308,11 @@ private fun SettingsDestination(
         settings = settings,
         onBack = onBack,
         onSettingsChanged = { next -> viewModel.update { next } },
-        onBackup = {},
-        onRestore = {},
+        onBackup = { createBackup.launch("putnam-workbook-backup.pwb.zip") },
+        onRestore = { restoreBackup.launch(arrayOf("application/zip", "application/octet-stream")) },
         appVersion = dependencies.appVersion,
         contentVersion = dependencies.contentVersion,
+        backupState = backupState,
     )
 }
 

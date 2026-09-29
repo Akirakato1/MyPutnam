@@ -39,14 +39,16 @@ class SettingsScreenTest {
     @Test
     fun controlsAreAccessibleAndAttributionNamesEverySource() {
         var settings by mutableStateOf(AppSettings())
+        var backupRequests = 0
+        var restoreRequests = 0
         composeRule.setContent {
             MaterialTheme {
                 SettingsScreen(
                     settings = settings,
                     onBack = {},
                     onSettingsChanged = { settings = it },
-                    onBackup = {},
-                    onRestore = {},
+                    onBackup = { backupRequests += 1 },
+                    onRestore = { restoreRequests += 1 },
                     appVersion = "0.1.0",
                     contentVersion = "2025 schema 1",
                 )
@@ -57,6 +59,12 @@ class SettingsScreenTest {
         composeRule.onNodeWithTag("settings-paper-blank").performClick().assertIsSelected()
         composeRule.onNodeWithTag("settings-theme-dark").performClick().assertIsSelected()
         composeRule.onNodeWithTag("settings-keep-awake").performClick()
+        composeRule.onNodeWithTag("settings-list")
+            .performScrollToNode(hasTestTag("settings-backup"))
+        composeRule.onNodeWithTag("settings-backup").performClick()
+        composeRule.onNodeWithTag("settings-restore").performClick()
+        assertEquals(1, backupRequests)
+        assertEquals(1, restoreRequests)
         composeRule.onNodeWithTag("settings-list")
             .performScrollToNode(hasTestTag("settings-attribution-maa"))
         composeRule.onNodeWithTag("settings-attribution-maa").assertTextEquals("Mathematical Association of America")

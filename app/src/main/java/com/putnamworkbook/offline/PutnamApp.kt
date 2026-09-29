@@ -63,6 +63,7 @@ fun PutnamApp(
                     settingsRepository = container.settingsRepository,
                     notebookRepository = container.notebookRepository,
                     originalPdfRepository = container.originalPdfRepository,
+                    backupCoordinator = container.backupCoordinator,
                     appVersion = appVersion,
                     contentVersion = "2025 schema 1",
                 ),
