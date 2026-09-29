@@ -1,0 +1,29 @@
+{
+  "year": 2025,
+  "publisher": "Mathematical Association of America",
+  "usage": "Personal, noncommercial offline study only.",
+  "sources": [
+    {
+      "id": "problems",
+      "title": "2025 William Lowell Putnam Mathematical Competition — Problems for Sessions A and B",
+      "publisher": "Mathematical Association of America",
+      "url": "https://maa.org/wp-content/uploads/2026/02/2025-Putnam-Problems-for-Sessions-A-and-B.pdf",
+      "retrievedOn": "2026-09-29",
+      "file": "original/2025-problems.pdf",
+      "byteLength": 640243,
+      "pageCount": 2,
+      "sha256": "a7c0187adbeafd36a7d227bffc78769cc1098e975ed02c08e286aa4ead479b45"
+    },
+    {
+      "id": "solutions",
+      "title": "2025 William Lowell Putnam Mathematical Competition — Official Solutions",
+      "publisher": "Mathematical Association of America",
+      "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf",
+      "retrievedOn": "2026-09-29",
+      "file": "original/2025-solutions.pdf",
+      "byteLength": 220384,
+      "pageCount": 19,
+      "sha256": "33ea80fcc88c10341830775aa3cf6796c1f533329b570f6dcc81cfe930ad620f"
+    }
+  ]
+}
