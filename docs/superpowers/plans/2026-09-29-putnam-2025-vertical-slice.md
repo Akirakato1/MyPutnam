@@ -6,7 +6,7 @@
 
 **Architecture:** A native Kotlin/Jetpack Compose app reads immutable content from a prepackaged Room database and local static assets, while progress and settings live in a separate Room database and vector notebooks live in app-private files. A desktop Node/Python pipeline validates structured source records, pre-renders mathematics to script-free local HTML, packages official PDFs, and produces the content database consumed by the app.
 
-**Tech Stack:** JDK 17; Gradle 9.6.0; Android Gradle Plugin 9.4.0 with built-in Kotlin; KSP 2.3.12; compile/target SDK 36; min SDK 29; Jetpack Compose BOM 2026.09.00; Activity Compose 1.13.0; Navigation Compose 2.10.2; Room 2.8.5; AndroidX Ink 1.0.0; AndroidX WebKit 1.17.1; Node.js 22; Python 3.9+ standard library; KaTeX and Playwright Chromium with versions pinned in `package-lock.json`.
+**Tech Stack:** JDK 17; Gradle 9.6.0; Android Gradle Plugin 9.4.0 with built-in Kotlin; KSP 2.3.12; compile SDK 37; target SDK 36; min SDK 29; Jetpack Compose BOM 2026.09.00; Activity Compose 1.13.0; Navigation Compose 2.10.2; Room 2.8.5; AndroidX Ink 1.0.0; AndroidX WebKit 1.17.1; Node.js 22; Python 3.9+ standard library; KaTeX and Playwright Chromium with versions pinned in `package-lock.json`.
 
 **Spec:** `docs/superpowers/specs/2026-09-29-putnam-offline-workbook-design.md`
 
@@ -14,7 +14,7 @@
 
 - Application ID: `com.putnamworkbook.offline`; retain it unchanged for every sideloaded upgrade.
 - Minimum Android version: Android 10, API 29.
-- Target and compile SDK: Android 16, API 36.
+- Target SDK: Android 16, API 36. Compile SDK: API 37, as required by Compose 1.12.x from BOM 2026.09.00.
 - Primary device: Galaxy Tab A11+ SM-X230, 1920 × 1200 in landscape.
 - The app must not declare `android.permission.INTERNET` or load remote resources.
 - The APK must contain every required content record, font, diagram, rendering asset, and original 2025 PDF.
@@ -79,7 +79,7 @@ app/src/main/assets/                   # generated content database/HTML/PDF ass
 
 - [ ] **Step 1: Provision the build prerequisites**
 
-Install or select JDK 17, Android SDK Platform 36, Build Tools 36.0.0, platform-tools, and an API 36 emulator. Record only the SDK path in untracked `local.properties`; do not change the machine's existing Java 8 installation globally.
+Install or select JDK 17, Android SDK Platform 37, Build Tools 36.0.0, platform-tools, and an API 36 emulator. Record only the SDK path in untracked `local.properties`; do not change the machine's existing Java 8 installation globally.
 
 - [ ] **Step 2: Write failing launch and permission tests**
 
@@ -93,7 +93,7 @@ Expected: FAIL because the Android project/application does not yet exist.
 
 - [ ] **Step 4: Create the minimal buildable application**
 
-Use the exact versions in the plan header, application ID `com.putnamworkbook.offline`, `minSdk = 29`, `targetSdk = compileSdk = 36`, edge-to-edge layout, Material 3, and no permissions. `PutnamApp` renders a tagged root with a temporary “Putnam Workbook” label.
+Use the exact versions in the plan header, application ID `com.putnamworkbook.offline`, `minSdk = 29`, `targetSdk = 36`, `compileSdk = 37`, edge-to-edge layout, Material 3, and no permissions. `PutnamApp` renders a tagged root with a temporary “Putnam Workbook” label.
 
 - [ ] **Step 5: Verify the build and tests**
 
