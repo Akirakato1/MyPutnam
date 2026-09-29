@@ -9,6 +9,7 @@ espresso = "3.7.0"
 room = "2.8.5"
 ksp = "2.3.12"
 junit4 = "4.13.2"
+androidxInk = "1.0.0"
 
 [libraries]
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
@@ -27,6 +28,11 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 junit4 = { module = "junit:junit", version.ref = "junit4" }
+androidx-ink-authoring = { module = "androidx.ink:ink-authoring", version.ref = "androidxInk" }
+androidx-ink-brush = { module = "androidx.ink:ink-brush", version.ref = "androidxInk" }
+androidx-ink-nativeloader = { module = "androidx.ink:ink-nativeloader", version.ref = "androidxInk" }
+androidx-ink-rendering = { module = "androidx.ink:ink-rendering", version.ref = "androidxInk" }
+androidx-ink-strokes = { module = "androidx.ink:ink-strokes", version.ref = "androidxInk" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
