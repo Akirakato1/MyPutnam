@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "problems": [
+    {
+      "year": 2025,
+      "code": "A1",
+      "ordinal": 1,
+      "sourceRecord": "A1.json",
+      "statement": {
+        "assetPath": "problems/A1/statement.html",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "hints": [
+        {
+          "order": 1,
+          "title": "Nudge",
+          "assetPath": "problems/A1/hint-1.html",
+          "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+        },
+        {
+          "order": 2,
+          "title": "Technique",
+          "assetPath": "problems/A1/hint-2.html",
+          "sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+        },
+        {
+          "order": 3,
+          "title": "Knowledge gap",
+          "assetPath": "problems/A1/hint-3.html",
+          "sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+        },
+        {
+          "order": 4,
+          "title": "Outline",
+          "assetPath": "problems/A1/hint-4.html",
+          "sha256": "4444444444444444444444444444444444444444444444444444444444444444"
+        }
+      ],
+      "prerequisites": [
+        {
+          "order": 1,
+          "title": "Parity",
+          "assetPath": "problems/A1/prerequisite-1.html",
+          "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        {
+          "order": 2,
+          "title": "Pigeonhole principle",
+          "assetPath": "problems/A1/prerequisite-2.html",
+          "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      ],
+      "solution": {
+        "assetPath": "problems/A1/solution.html",
+        "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "sources": [
+        {
+          "kind": "problem",
+          "label": "Official problems",
+          "url": "https://example.test/problems"
+        },
+        {
+          "kind": "solution",
+          "label": "Official solutions",
+          "url": "https://example.test/solutions"
+        }
+      ],
+      "originalPdf": {
+        "assetPath": "original/2025-problems.pdf",
+        "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "pageIndex": 3
+      }
+    }
+  ],
+  "assets": []
+}
