@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readdir, readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import { validateProblem } from '../src/validate-problem.mjs';
@@ -9,17 +9,25 @@ const requiredProblems = [
   { code: 'A1', ordinal: 1, problemPage: 'page 1', originalPageIndex: 0, solutionPages: 'page 1' },
   { code: 'A2', ordinal: 2, problemPage: 'page 1', originalPageIndex: 0, solutionPages: 'page 2' },
   { code: 'A3', ordinal: 3, problemPage: 'page 1', originalPageIndex: 0, solutionPages: 'page 3' },
-  { code: 'A4', ordinal: 4, problemPage: 'page 1', originalPageIndex: 0, solutionPages: 'pages 3–4' },
-  { code: 'A5', ordinal: 5, problemPage: 'page 1', originalPageIndex: 0, solutionPages: 'page 5' },
-  { code: 'A6', ordinal: 6, problemPage: 'page 1', originalPageIndex: 0, solutionPages: 'pages 6–8' },
-  { code: 'B1', ordinal: 7, problemPage: 'page 2', originalPageIndex: 1, solutionPages: 'pages 9–10' },
-  { code: 'B2', ordinal: 8, problemPage: 'page 2', originalPageIndex: 1, solutionPages: 'pages 10–11' },
-  { code: 'B3', ordinal: 9, problemPage: 'page 2', originalPageIndex: 1, solutionPages: 'page 12' },
+  { code: 'A4', ordinal: 4, problemPage: 'page 1', originalPageIndex: 0, solutionPages: 'pages 4–5' },
+  { code: 'A5', ordinal: 5, problemPage: 'page 1', originalPageIndex: 0, solutionPages: 'page 6' },
+  { code: 'A6', ordinal: 6, problemPage: 'page 1', originalPageIndex: 0, solutionPages: 'pages 7–9' },
+  { code: 'B1', ordinal: 7, problemPage: 'page 2', originalPageIndex: 1, solutionPages: 'page 10' },
+  { code: 'B2', ordinal: 8, problemPage: 'page 2', originalPageIndex: 1, solutionPages: 'pages 11–12' },
+  { code: 'B3', ordinal: 9, problemPage: 'page 2', originalPageIndex: 1, solutionPages: 'page 13' },
+  { code: 'B4', ordinal: 10, problemPage: 'page 2', originalPageIndex: 1, solutionPages: 'pages 14–16' },
+  { code: 'B5', ordinal: 11, problemPage: 'page 2', originalPageIndex: 1, solutionPages: 'pages 17–18' },
+  { code: 'B6', ordinal: 12, problemPage: 'page 2', originalPageIndex: 1, solutionPages: 'page 19' },
 ];
 const problemUrl = 'https://maa.org/wp-content/uploads/2026/02/2025-Putnam-Problems-for-Sessions-A-and-B.pdf';
 const solutionUrl = 'https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf';
 
-test('2025 A1–A6 and B1–B3 records and review evidence are complete', async () => {
+test('complete 2025 A1–A6 and B1–B6 records and review evidence are complete', async () => {
+  assert.deepEqual(
+    await readdir(new URL('problems/', yearRoot)),
+    requiredProblems.map(({ code }) => `${code}.json`),
+    'the complete 2025 set must contain exactly A1–A6 and B1–B6',
+  );
   for (const expected of requiredProblems) {
     const record = await readJson(`problems/${expected.code}.json`);
     assert.deepEqual(validateProblem(record), [], `${expected.code} must satisfy the content schema`);

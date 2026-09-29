@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "code": "B6",
+  "ordinal": 12,
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B6" }] },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "\\mathbb N=\\{1,2,3,\\ldots\\}" }, { "type": "text", "text": ". Find the largest real constant " }, { "type": "inlineMath", "tex": "r" }, { "type": "text", "text": " such that there exists a function " }, { "type": "inlineMath", "tex": "g:\\mathbb N\\to\\mathbb N" }, { "type": "text", "text": " satisfying " }, { "type": "inlineMath", "tex": "g(n+1)-g(n)\\ge(g(g(n)))^r" }, { "type": "text", "text": " for all " }, { "type": "inlineMath", "tex": "n\\in\\mathbb N" }, { "type": "text", "text": "." }]
+      }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "title": "Find a quadratic example",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Try " }, { "type": "inlineMath", "tex": "g(n)=n^2" }, { "type": "text", "text": ". Compare the linear increment with " }, { "type": "inlineMath", "tex": "g(g(n))" }, { "type": "text", "text": "." }] }] }
+    },
+    {
+      "order": 2,
+      "title": "Bootstrap polynomial growth",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Assuming " }, { "type": "inlineMath", "tex": "r>1/4" }, { "type": "text", "text": ", first show " }, { "type": "inlineMath", "tex": "g(n)\\ge n" }, { "type": "text", "text": ". Define " }, { "type": "inlineMath", "tex": "b_{k+1}=rb_k^2+1" }, { "type": "text", "text": " and inductively prove " }, { "type": "inlineMath", "tex": "g(n)\\ge c_kn^{b_k}" }, { "type": "text", "text": "." }] }] }
+    },
+    {
+      "order": 3,
+      "title": "Force exponential growth",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "The sequence " }, { "type": "inlineMath", "tex": "b_k" }, { "type": "text", "text": " is unbounded. Choose k with " }, { "type": "inlineMath", "tex": "rb_k>1" }, { "type": "text", "text": "; the inequality then makes " }, { "type": "inlineMath", "tex": "g" }, { "type": "text", "text": " grow at least geometrically." }] }] }
+    },
+    {
+      "order": 4,
+      "title": "Contradict the original inequality",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "For large n, exponential growth gives g(n)≥n+2, so g(g(n))≥g(n+2)." }],
+        [{ "type": "text", "text": "Use the inequality at n and n+1 to bound g(n+2) both above by a power of g(n+1) and below exponentially in g(n+1)." }],
+        [{ "type": "text", "text": "A polynomial cannot dominate an exponential, yielding the contradiction." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Discrete growth",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "If every increment of an integer-valued function is at least one, then " }, { "type": "inlineMath", "tex": "g(n)\\ge n" }, { "type": "text", "text": " after induction." }] }] }
+    },
+    {
+      "order": 2,
+      "title": "Polynomial versus exponential",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "For any fixed positive exponents and base " }, { "type": "inlineMath", "tex": "C>1" }, { "type": "text", "text": ", the exponential " }, { "type": "inlineMath", "tex": "C^x" }, { "type": "text", "text": " eventually exceeds every power of " }, { "type": "inlineMath", "tex": "x" }, { "type": "text", "text": "." }] }] }
+    },
+    {
+      "order": 3,
+      "title": "Summing power increments",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "q>0" }, { "type": "text", "text": ", the sum " }, { "type": "inlineMath", "tex": "\\sum_{m=1}^N m^q" }, { "type": "text", "text": " is at least the integral " }, { "type": "inlineMath", "tex": "N^{q+1}/(q+1)" }, { "type": "text", "text": "." }] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "The answer is " }, { "type": "inlineMath", "tex": "\\boxed{r=1/4}" }, { "type": "text", "text": ". It is attainable with " }, { "type": "inlineMath", "tex": "g(n)=n^2" }, { "type": "text", "text": ": the left side is " }, { "type": "inlineMath", "tex": "2n+1" }, { "type": "text", "text": " and the right side is " }, { "type": "inlineMath", "tex": "((n^2)^2)^{1/4}=n" }, { "type": "text", "text": "." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "Suppose now that " }, { "type": "inlineMath", "tex": "r>1/4" }, { "type": "text", "text": " were possible. Since " }, { "type": "inlineMath", "tex": "g(g(n))\\ge1" }, { "type": "text", "text": ", the increments are at least one, so " }, { "type": "inlineMath", "tex": "g(n)\\ge n" }, { "type": "text", "text": ". Define " }, { "type": "inlineMath", "tex": "b_0=1" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "b_{k+1}=rb_k^2+1" }, { "type": "text", "text": ". Since " }, { "type": "inlineMath", "tex": "rb^2-b+1=(r-1/4)b^2+(b/2-1)^2\\ge r-1/4" }, { "type": "text", "text": " for " }, { "type": "inlineMath", "tex": "b\\ge1" }, { "type": "text", "text": ", the sequence " }, { "type": "inlineMath", "tex": "b_k" }, { "type": "text", "text": " is unbounded." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "We claim that for each " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": " there is " }, { "type": "inlineMath", "tex": "0<c_k\\le1" }, { "type": "text", "text": " such that " }, { "type": "inlineMath", "tex": "g(n)\\ge c_kn^{b_k}" }, { "type": "text", "text": " for all " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": ". This is true for " }, { "type": "inlineMath", "tex": "k=0" }, { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "c_0=1" }, { "type": "text", "text": ". If it holds for " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": ", then " }, { "type": "inlineMath", "tex": "g(g(n))^r\\ge c_k^{r(b_k+1)}n^{b_{k+1}-1}" }, { "type": "text", "text": ". Summing the increment inequality from 1 to " }, { "type": "inlineMath", "tex": "N" }, { "type": "text", "text": " and using " }, { "type": "inlineMath", "tex": "\\sum_{m=1}^N m^{b_{k+1}-1}\\ge N^{b_{k+1}}/b_{k+1}" }, { "type": "text", "text": " gives the claim at " }, { "type": "inlineMath", "tex": "k+1" }, { "type": "text", "text": " with, for example, " }, { "type": "inlineMath", "tex": "c_{k+1}=c_k^{r(b_k+1)}/(b_{k+1}2^{b_{k+1}})" }, { "type": "text", "text": "." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "Choose " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": " so large that " }, { "type": "inlineMath", "tex": "rb_k>1" }, { "type": "text", "text": ". The growth claim gives " }, { "type": "inlineMath", "tex": "g(g(n))^r\\ge c_k^r g(n)" }, { "type": "text", "text": ", so " }, { "type": "inlineMath", "tex": "g(n+1)\\ge(1+c_k^r)g(n)" }, { "type": "text", "text": ". Thus there are constants " }, { "type": "inlineMath", "tex": "C>1" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "g(n)\\ge C^{n-1}" }, { "type": "text", "text": " for all " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": "." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "For large " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " we have " }, { "type": "inlineMath", "tex": "g(n)\\ge n+2" }, { "type": "text", "text": ". Since " }, { "type": "inlineMath", "tex": "g" }, { "type": "text", "text": " is increasing, the inequality at " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " gives " }, { "type": "inlineMath", "tex": "g(n+1)\\ge g(n+2)^r" }, { "type": "text", "text": ", hence " }, { "type": "inlineMath", "tex": "g(n+2)\\le g(n+1)^{1/r}" }, { "type": "text", "text": ". Applying the original inequality at " }, { "type": "inlineMath", "tex": "n+1" }, { "type": "text", "text": " and the exponential lower bound gives " }, { "type": "inlineMath", "tex": "g(n+2)\\ge g(g(n+1))^r\\ge C^{r(g(n+1)-1)}" }, { "type": "text", "text": ". Therefore " }, { "type": "inlineMath", "tex": "g(n+1)^{1/r^2}\\ge C^{g(n+1)-1}" }, { "type": "text", "text": ", impossible for sufficiently large " }, { "type": "inlineMath", "tex": "g(n+1)" }, { "type": "text", "text": " because an exponential eventually dominates a power. This contradiction proves no " }, { "type": "inlineMath", "tex": "r>1/4" }, { "type": "text", "text": " works." }]
+      }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2025 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2025-Putnam-Problems-for-Sessions-A-and-B.pdf" },
+    { "kind": "solution", "label": "MAA official 2025 solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf" }
+  ],
+  "originalPdf": { "path": "original/2025-problems.pdf", "pageIndex": 1 }
+}

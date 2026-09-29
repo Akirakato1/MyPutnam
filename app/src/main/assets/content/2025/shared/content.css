@@ -1,0 +1,96 @@
+:root {
+  color-scheme: light;
+  font-family: "Noto Serif", "Source Serif 4", Georgia, serif;
+  font-size: 20px;
+  line-height: 1.58;
+  background: #fbfaf7;
+  color: #1d2430;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-width: 0;
+  background: #fbfaf7;
+}
+
+body {
+  padding: 28px 34px 52px;
+}
+
+.document {
+  width: 100%;
+  max-width: 52rem;
+  margin: 0 auto;
+  overflow-wrap: anywhere;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 1.35em 0 0.55em;
+  line-height: 1.2;
+  color: #172033;
+}
+
+h1:first-child,
+h2:first-child {
+  margin-top: 0;
+}
+
+p,
+ol,
+ul,
+figure {
+  margin: 0 0 1.1em;
+}
+
+li + li {
+  margin-top: 0.45em;
+}
+
+.math-display {
+  width: 100%;
+  margin: 1.4em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.3em 0.1em 0.55em;
+}
+
+.katex-display {
+  margin: 0;
+  text-align: center;
+}
+
+figure {
+  text-align: center;
+}
+
+figure img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
+figcaption {
+  margin-top: 0.55em;
+  color: #566173;
+  font-size: 0.88em;
+}
+
+@media (max-width: 720px) {
+  :root {
+    font-size: 18px;
+  }
+
+  body {
+    padding: 22px 24px 44px;
+  }
+}

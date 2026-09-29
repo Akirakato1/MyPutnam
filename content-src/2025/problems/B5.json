@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "code": "B5",
+  "ordinal": 11,
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B5" }] },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "p>3" }, { "type": "text", "text": " be prime. For each " }, { "type": "inlineMath", "tex": "k\\in\\{1,\\ldots,p-1\\}" }, { "type": "text", "text": ", let " }, { "type": "inlineMath", "tex": "I(k)\\in\\{1,\\ldots,p-1\\}" }, { "type": "text", "text": " be such that " }, { "type": "inlineMath", "tex": "kI(k)\\equiv1\\pmod p" }, { "type": "text", "text": ". Prove that the number of integers " }, { "type": "inlineMath", "tex": "k\\in\\{1,\\ldots,p-2\\}" }, { "type": "text", "text": " such that " }, { "type": "inlineMath", "tex": "I(k+1)<I(k)" }, { "type": "text", "text": " is greater than " }, { "type": "inlineMath", "tex": "p/4-1" }, { "type": "text", "text": "." }
+        ]
+      }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "title": "Extend the inverse sequence",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Set " }, { "type": "inlineMath", "tex": "I(0)=I(p)=0" }, { "type": "text", "text": " so that neighboring inverse values can be compared near the endpoints." }] }] }
+    },
+    {
+      "order": 2,
+      "title": "Pair four steps",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "For each " }, { "type": "inlineMath", "tex": "t=2,\\ldots,p-2" }, { "type": "text", "text": ", compare the two steps in " }, { "type": "inlineMath", "tex": "I(t-1),I(t),I(t+1)" }, { "type": "text", "text": " with the two steps in " }, { "type": "inlineMath", "tex": "I(I(t)-1),I(I(t)),I(I(t)+1)" }, { "type": "text", "text": "." }] }] }
+    },
+    {
+      "order": 3,
+      "title": "Use inverse identities",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "The endpoint sums satisfy " }, { "type": "inlineMath", "tex": "I(t-1)+I(I(t)-1)=p-1" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "I(t+1)+I(I(t)+1)=p+1" }, { "type": "text", "text": ". If all four steps rose, the difference of these sums would be at least four, but it is two." }] }] }
+    },
+    {
+      "order": 4,
+      "title": "Count multiplicities",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Each t forces at least one downstep among four slots." }],
+        [{ "type": "text", "text": "There are p−3 choices of t." }],
+        [{ "type": "text", "text": "Any actual step I(k) to I(k+1) occurs in at most four slots, so the number of downsteps is at least (p−3)/4." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Modular inverses",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "For nonzero residues modulo a prime, inversion reverses multiplication: " }, { "type": "inlineMath", "tex": "I(k)\\equiv k^{-1}\\pmod p" }, { "type": "text", "text": "." }] }] }
+    },
+    {
+      "order": 2,
+      "title": "Upsteps and downsteps",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "A step in a finite integer sequence is an upstep if the next value is larger and a downstep if it is smaller." }] }] }
+    },
+    {
+      "order": 3,
+      "title": "Double counting with multiplicity",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "If each of M configurations contributes at least one marked slot and each object can occupy at most four slots, then at least M/4 distinct objects are marked." }] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "Extend the definition by setting " }, { "type": "inlineMath", "tex": "I(0)=I(p)=0" }, { "type": "text", "text": ". Call the step from " }, { "type": "inlineMath", "tex": "I(k)" }, { "type": "text", "text": " to " }, { "type": "inlineMath", "tex": "I(k+1)" }, { "type": "text", "text": " a downstep when " }, { "type": "inlineMath", "tex": "I(k+1)<I(k)" }, { "type": "text", "text": "." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "Fix " }, { "type": "inlineMath", "tex": "t\\in\\{2,\\ldots,p-2\\}" }, { "type": "text", "text": ". Since " }, { "type": "inlineMath", "tex": "I(t)\\equiv t^{-1}" }, { "type": "text", "text": " modulo " }, { "type": "inlineMath", "tex": "p" }, { "type": "text", "text": ", we have " }, { "type": "inlineMath", "tex": "I(t-1)+I(I(t)-1)\\equiv\\frac1{t-1}+\\frac1{I(t)-1}\\equiv-1\\pmod p" }, { "type": "text", "text": ". Neither summand is zero, so their ordinary sum is " }, { "type": "inlineMath", "tex": "p-1" }, { "type": "text", "text": ". Similarly " }, { "type": "inlineMath", "tex": "I(t+1)+I(I(t)+1)\\equiv\\frac1{t+1}+\\frac1{I(t)+1}\\equiv1\\pmod p" }, { "type": "text", "text": ", and the ordinary sum is " }, { "type": "inlineMath", "tex": "p+1" }, { "type": "text", "text": "." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "Suppose all four steps in the two triples " }, { "type": "inlineMath", "tex": "I(t-1),I(t),I(t+1)" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "I(I(t)-1),I(I(t)),I(I(t)+1)" }, { "type": "text", "text": " were upsteps. Each triple would then increase by at least two, so the sum of the increases would be at least four. But that sum equals " }, { "type": "inlineMath", "tex": "[I(t+1)+I(I(t)+1)]-[I(t-1)+I(I(t)-1)]=(p+1)-(p-1)=2" }, { "type": "text", "text": ", a contradiction. Thus every " }, { "type": "inlineMath", "tex": "t" }, { "type": "text", "text": " forces at least one downstep among four slots." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "There are " }, { "type": "inlineMath", "tex": "p-3" }, { "type": "text", "text": " choices of " }, { "type": "inlineMath", "tex": "t" }, { "type": "text", "text": ". Any actual step from " }, { "type": "inlineMath", "tex": "I(k)" }, { "type": "text", "text": " to " }, { "type": "inlineMath", "tex": "I(k+1)" }, { "type": "text", "text": " can appear at most once in each of the four slots, hence in at most four of the quadruples. If " }, { "type": "inlineMath", "tex": "D" }, { "type": "text", "text": " is the number of downsteps, then " }, { "type": "inlineMath", "tex": "4D\\ge p-3" }, { "type": "text", "text": ". Therefore " }, { "type": "inlineMath", "tex": "D\\ge(p-3)/4>p/4-1" }, { "type": "text", "text": ", as required." }]
+      }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2025 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2025-Putnam-Problems-for-Sessions-A-and-B.pdf" },
+    { "kind": "solution", "label": "MAA official 2025 solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf" }
+  ],
+  "originalPdf": { "path": "original/2025-problems.pdf", "pageIndex": 1 }
+}

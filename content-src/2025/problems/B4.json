@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "code": "B4",
+  "ordinal": 10,
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B4" }] },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "n\\ge2" }, { "type": "text", "text": ", let " }, { "type": "inlineMath", "tex": "A=[a_{i,j}]_{i,j=1}^n" }, { "type": "text", "text": " be an " }, { "type": "inlineMath", "tex": "n\\times n" }, { "type": "text", "text": " matrix of nonnegative integers such that: (a) " }, { "type": "inlineMath", "tex": "a_{i,j}=0" }, { "type": "text", "text": " when " }, { "type": "inlineMath", "tex": "i+j\\le n" }, { "type": "text", "text": "; (b) " }, { "type": "inlineMath", "tex": "a_{i+1,j}\\in\\{a_{i,j},a_{i,j}+1\\}" }, { "type": "text", "text": "; and (c) " }, { "type": "inlineMath", "tex": "a_{i,j+1}\\in\\{a_{i,j},a_{i,j}+1\\}" }, { "type": "text", "text": " whenever the displayed indices are valid. Let " }, { "type": "inlineMath", "tex": "S" }, { "type": "text", "text": " be the sum of the entries and " }, { "type": "inlineMath", "tex": "N" }, { "type": "text", "text": " the number of nonzero entries. Prove that " }, { "type": "inlineMath", "tex": "S\\le\\frac{(n+2)N}{3}" }, { "type": "text", "text": "." }
+        ]
+      }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "title": "Inspect the long diagonal",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "The diagonal " }, { "type": "inlineMath", "tex": "i+j=n+1" }, { "type": "text", "text": " consists only of zeros and ones. If it is all zero, delete the zero top row and left column." }] }] }
+    },
+    {
+      "order": 2,
+      "title": "Peel off a layer",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "When the long diagonal has a one, subtract one from every nonzero entry after deleting the top row and left column. The resulting smaller matrix satisfies the same conditions." }] }] }
+    },
+    {
+      "order": 3,
+      "title": "Count the new zeros",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Choose a diagonal one at " }, { "type": "inlineMath", "tex": "(i_0,j_0)" }, { "type": "text", "text": ". Monotonicity forces at least one entry equal to one in each lower row to its left and each rightward column above it." }] }] }
+    },
+    {
+      "order": 4,
+      "title": "Close the induction",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Let r be the number of ones, so N=N'+r and S=N+S'." }],
+        [{ "type": "text", "text": "Use r≥n and the induction bound for the (n−1)-matrix." }],
+        [{ "type": "text", "text": "At most n(n+1)/2 entries can be nonzero, which completes the numerical inequality." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Monotone array paths",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "The step conditions say entries never decrease as one moves down or right, and each step increases by at most one." }] }] }
+    },
+    {
+      "order": 2,
+      "title": "Induction on matrix size",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Deleting the zero top row and left column leaves an array of size " }, { "type": "inlineMath", "tex": "n-1" }, { "type": "text", "text": " with the same local rules." }] }] }
+    },
+    {
+      "order": 3,
+      "title": "Counting the support triangle",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Condition (a) leaves only the " }, { "type": "inlineMath", "tex": "n(n+1)/2" }, { "type": "text", "text": " cells with " }, { "type": "inlineMath", "tex": "i+j\\ge n+1" }, { "type": "text", "text": " available for nonzero entries." }] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "We induct on " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": ". The case " }, { "type": "inlineMath", "tex": "n=2" }, { "type": "text", "text": " is a direct check of the six possible arrays allowed by the rules." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "Every entry on the long diagonal " }, { "type": "inlineMath", "tex": "i+j=n+1" }, { "type": "text", "text": " is 0 or 1, because its predecessor on a path from the zero region is zero. If the diagonal is all zero, the top row and left column are zero. Deleting them gives an " }, { "type": "inlineMath", "tex": "(n-1)\\times(n-1)" }, { "type": "text", "text": " array with the same conditions, so the induction hypothesis gives " }, { "type": "inlineMath", "tex": "S\\le(n+1)N/3\\le(n+2)N/3" }, { "type": "text", "text": "." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "Otherwise choose a diagonal one at " }, { "type": "inlineMath", "tex": "(i_0,j_0)" }, { "type": "text", "text": ". Delete the top row and left column, and in the remaining entries replace each positive value " }, { "type": "inlineMath", "tex": "a" }, { "type": "text", "text": " by " }, { "type": "inlineMath", "tex": "a-1" }, { "type": "text", "text": " (leaving zero as zero). Call the resulting matrix " }, { "type": "inlineMath", "tex": "A'" }, { "type": "text", "text": ", with sum " }, { "type": "inlineMath", "tex": "S'" }, { "type": "text", "text": " and support size " }, { "type": "inlineMath", "tex": "N'" }, { "type": "text", "text": ". It still satisfies the three conditions, and if " }, { "type": "inlineMath", "tex": "r" }, { "type": "text", "text": " is the number of ones in " }, { "type": "inlineMath", "tex": "A" }, { "type": "text", "text": ", then " }, { "type": "inlineMath", "tex": "S=N+S'" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "N=N'+r" }, { "type": "text", "text": "." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "We claim " }, { "type": "inlineMath", "tex": "r\\ge n" }, { "type": "text", "text": ". The chosen diagonal one contributes one. For each row " }, { "type": "inlineMath", "tex": "i>i_0" }, { "type": "text", "text": ", monotonicity and the zero region force a one in some column " }, { "type": "inlineMath", "tex": "j\\le j_0" }, { "type": "text", "text": "; otherwise the first positive entry in that row would jump past one. Similarly every column " }, { "type": "inlineMath", "tex": "j>j_0" }, { "type": "text", "text": " has a one in a row " }, { "type": "inlineMath", "tex": "i\\le i_0" }, { "type": "text", "text": ". These entries are disjoint, and because " }, { "type": "inlineMath", "tex": "i_0+j_0=n+1" }, { "type": "text", "text": ", their number is " }, { "type": "inlineMath", "tex": "1+(n-i_0)+(n-j_0)=n" }, { "type": "text", "text": "." }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [{ "type": "text", "text": "Apply induction to " }, { "type": "inlineMath", "tex": "A'" }, { "type": "text", "text": ": " }, { "type": "inlineMath", "tex": "S\\le N+(n+1)N'/3=((n+4)N-(n+1)r)/3" }, { "type": "text", "text": ". Using " }, { "type": "inlineMath", "tex": "r\\ge n" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "N\\le n(n+1)/2" }, { "type": "text", "text": " (only cells with " }, { "type": "inlineMath", "tex": "i+j\\ge n+1" }, { "type": "text", "text": " can be nonzero), we obtain " }, { "type": "inlineMath", "tex": "S\\le((n+4)N-n(n+1))/3\\le(n+2)N/3" }, { "type": "text", "text": ". This completes the induction." }]
+      }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2025 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2025-Putnam-Problems-for-Sessions-A-and-B.pdf" },
+    { "kind": "solution", "label": "MAA official 2025 solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf" }
+  ],
+  "originalPdf": { "path": "original/2025-problems.pdf", "pageIndex": 1 }
+}
