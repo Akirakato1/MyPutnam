@@ -31,12 +31,12 @@ class NotebookViewModel(
 
     val uiState: StateFlow<NotebookUiState> = mutableUiState.asStateFlow()
 
-    fun open(key: ProblemKey) {
+    fun open(key: ProblemKey, initialPageIndex: Int = 0) {
         currentKey = key
         launchOperation(NotebookSaveState.LOADING) {
             val defaultPaper = settingsRepository.observe().first().defaultPaperStyle
             val document = repository.loadOrCreate(key, defaultPaper)
-            publishDocument(document, activePageIndex = 0)
+            publishDocument(document, activePageIndex = initialPageIndex.coerceIn(document.pages.indices))
         }
     }
 

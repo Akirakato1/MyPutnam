@@ -8,7 +8,10 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -19,16 +22,36 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.putnamworkbook.offline.data.content.ContentRepository
 import com.putnamworkbook.offline.data.user.ProgressRepository
+import com.putnamworkbook.offline.data.user.SettingsRepository
+import com.putnamworkbook.offline.content.ui.OriginalPdfRepository
+import com.putnamworkbook.offline.content.ui.OriginalPdfViewModel
+import com.putnamworkbook.offline.domain.model.AppSettings
+import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.feature.archive.ArchiveScreen
 import com.putnamworkbook.offline.feature.archive.ArchiveViewModel
 import com.putnamworkbook.offline.feature.archive.ProblemListScreen
 import com.putnamworkbook.offline.feature.home.HomeScreen
 import com.putnamworkbook.offline.feature.home.HomeViewModel
+import com.putnamworkbook.offline.feature.workspace.ReferencePane
+import com.putnamworkbook.offline.feature.workspace.WorkspaceScreen
+import com.putnamworkbook.offline.feature.workspace.WorkspaceViewModel
+import com.putnamworkbook.offline.notebook.storage.NotebookRepository
+import com.putnamworkbook.offline.notebook.ui.NotebookPane
+import com.putnamworkbook.offline.notebook.ui.NotebookViewModel
+import com.putnamworkbook.offline.notebook.ui.PalmGuardState
+import kotlinx.coroutines.launch
+
+data class WorkspaceDependencies(
+    val settingsRepository: SettingsRepository,
+    val notebookRepository: NotebookRepository,
+    val originalPdfRepository: OriginalPdfRepository,
+)
 
 @Composable
 fun PutnamNavHost(
     contentRepository: ContentRepository,
     progressRepository: ProgressRepository,
+    workspaceDependencies: WorkspaceDependencies? = null,
     modifier: Modifier = Modifier,
 ) {
     val navController = rememberNavController()
@@ -88,15 +111,150 @@ fun PutnamNavHost(
         ) { entry ->
             val year = requireNotNull(entry.arguments?.getInt("year"))
             val code = requireNotNull(entry.arguments?.getString("code"))
-            Placeholder(
-                text = "Workspace $year $code",
-                tag = "workspace-placeholder-$year-$code",
-            )
+            if (workspaceDependencies == null) {
+                Placeholder(
+                    text = "Workspace $year $code",
+                    tag = "workspace-placeholder-$year-$code",
+                )
+            } else {
+                WorkspaceDestination(
+                    key = ProblemKey(year, code),
+                    contentRepository = contentRepository,
+                    progressRepository = progressRepository,
+                    dependencies = workspaceDependencies,
+                    onHome = {
+                        if (!navController.popBackStack(AppRoute.HOME, inclusive = false)) {
+                            navController.navigate(AppRoute.HOME) { launchSingleTop = true }
+                        }
+                    },
+                )
+            }
         }
         composable(AppRoute.SETTINGS) {
             Placeholder(text = "Settings", tag = "settings-placeholder")
         }
     }
+}
+
+@Composable
+private fun WorkspaceDestination(
+    key: ProblemKey,
+    contentRepository: ContentRepository,
+    progressRepository: ProgressRepository,
+    dependencies: WorkspaceDependencies,
+    onHome: () -> Unit,
+) {
+    val workspaceViewModel = remember(key, contentRepository, progressRepository) {
+        WorkspaceViewModel(contentRepository, progressRepository)
+    }
+    val notebookViewModel = remember(key, dependencies.notebookRepository, dependencies.settingsRepository) {
+        NotebookViewModel(dependencies.notebookRepository, dependencies.settingsRepository)
+    }
+    val pdfViewModel = remember(key, dependencies.originalPdfRepository) {
+        OriginalPdfViewModel(dependencies.originalPdfRepository)
+    }
+    val scope = rememberCoroutineScope()
+    val workspaceState by workspaceViewModel.uiState.collectAsState()
+    val notebookState by notebookViewModel.uiState.collectAsState()
+    val pdfState by pdfViewModel.uiState.collectAsState()
+    val settings by dependencies.settingsRepository.observe().collectAsState(initial = AppSettings())
+    var notebookOpened by remember(key) { mutableStateOf(false) }
+
+    DisposableEffect(workspaceViewModel, notebookViewModel, pdfViewModel) {
+        onDispose {
+            workspaceViewModel.close()
+            notebookViewModel.close()
+            pdfViewModel.close()
+        }
+    }
+
+    LaunchedEffect(key) {
+        workspaceViewModel.open(key)
+    }
+    LaunchedEffect(workspaceState.progress, notebookOpened) {
+        val progress = workspaceState.progress
+        if (progress != null && !notebookOpened) {
+            notebookOpened = true
+            notebookViewModel.open(key, progress.activePageIndex)
+        }
+    }
+    LaunchedEffect(
+        notebookState.document?.pages?.size,
+        notebookState.activePageIndex,
+        workspaceState.selectedReferenceTab,
+    ) {
+        val document = notebookState.document
+        if (document != null) {
+            workspaceViewModel.updateNotebookState(document.pages.size, notebookState.activePageIndex)
+        }
+    }
+    LaunchedEffect(workspaceState.selectedReferenceTab, workspaceState.content?.originalPdf) {
+        if (workspaceState.selectedReferenceTab == com.putnamworkbook.offline.domain.model.ReferenceTab.ORIGINAL_PAPER) {
+            workspaceState.content?.originalPdf?.let { original ->
+                pdfViewModel.open(original.assetPath, original.sha256)
+                pdfViewModel.awaitIdle()
+                if (original.pageIndex > 0) {
+                    pdfViewModel.selectPage(original.pageIndex)
+                }
+            }
+        }
+    }
+
+    val palmGuard = settings.palmGuard.takeIf { it.enabled }?.let { guard ->
+        PalmGuardState(
+            side = settings.handedness,
+            widthFraction = guard.widthFraction,
+            heightFraction = guard.heightFraction,
+            verticalOffsetFraction = 1f,
+        )
+    }
+
+    WorkspaceScreen(
+        state = workspaceState,
+        onHome = {
+            scope.launch {
+                notebookViewModel.awaitIdle()
+                notebookViewModel.uiState.value.let { latestNotebook ->
+                    latestNotebook.document?.let { document ->
+                        workspaceViewModel.updateNotebookState(document.pages.size, latestNotebook.activePageIndex)
+                    }
+                    workspaceViewModel.awaitIdle()
+                }
+                onHome()
+            }
+        },
+        onSetCompleted = workspaceViewModel::setCompleted,
+        referenceContent = {
+            ReferencePane(
+                state = workspaceState,
+                pdfState = pdfState,
+                onSelectTab = workspaceViewModel::selectReferenceTab,
+                onRevealNextStage = workspaceViewModel::revealNextStage,
+                onSelectHint = workspaceViewModel::selectHint,
+                onPreviousPdfPage = { pdfViewModel.selectPage(pdfState.currentPageIndex - 1) },
+                onNextPdfPage = { pdfViewModel.selectPage(pdfState.currentPageIndex + 1) },
+                onIntegrityError = workspaceViewModel::reportIntegrityError,
+            )
+        },
+        notebookContent = {
+            NotebookPane(
+                state = notebookState,
+                brush = settings.brush,
+                palmGuard = palmGuard,
+                onStrokeFinished = notebookViewModel::commitStroke,
+                onUndo = notebookViewModel::undo,
+                onRedo = notebookViewModel::redo,
+                onAddPage = notebookViewModel::addPage,
+                onRequestDeletePage = notebookViewModel::requestDeletePage,
+                onRequestClearPage = notebookViewModel::requestClearPage,
+                onConfirmDeletePage = notebookViewModel::confirmDeletePage,
+                onConfirmClearPage = notebookViewModel::confirmClearPage,
+                onDismissConfirmation = notebookViewModel::dismissConfirmation,
+                onSelectPage = notebookViewModel::selectPage,
+                onReorderPage = notebookViewModel::reorderPage,
+            )
+        },
+    )
 }
 
 @Composable

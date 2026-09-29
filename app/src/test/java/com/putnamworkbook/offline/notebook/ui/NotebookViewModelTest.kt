@@ -61,7 +61,7 @@ class NotebookViewModelTest {
     fun newPagesUseCurrentDefaultWithoutChangingExistingPages() = runBlocking {
         val repository = FileNotebookRepository(temporaryFolder.newFolder("defaults").toPath())
         val settings = FakeSettingsRepository()
-        val viewModel = viewModel(repository, settings)
+        var viewModel = viewModel(repository, settings)
         viewModel.open(key)
         viewModel.awaitIdle()
         settings.update { it.copy(defaultPaperStyle = PaperStyle.BLANK) }
@@ -73,6 +73,12 @@ class NotebookViewModelTest {
             listOf(PaperStyle.SQUARE_GRID, PaperStyle.BLANK),
             viewModel.uiState.value.document!!.pages.map { it.paperStyle },
         )
+        assertEquals(1, viewModel.uiState.value.activePageIndex)
+        viewModel.close()
+
+        viewModel = viewModel(repository, settings)
+        viewModel.open(key, initialPageIndex = 1)
+        viewModel.awaitIdle()
         assertEquals(1, viewModel.uiState.value.activePageIndex)
         viewModel.close()
     }

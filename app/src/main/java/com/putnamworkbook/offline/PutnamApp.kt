@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import com.putnamworkbook.offline.di.AppContainer
 import com.putnamworkbook.offline.navigation.PutnamNavHost
+import com.putnamworkbook.offline.navigation.WorkspaceDependencies
 
 @Composable
 fun PutnamApp(container: AppContainer) {
@@ -25,6 +26,11 @@ fun PutnamApp(container: AppContainer) {
             PutnamNavHost(
                 contentRepository = container.contentRepository,
                 progressRepository = container.progressRepository,
+                workspaceDependencies = WorkspaceDependencies(
+                    settingsRepository = container.settingsRepository,
+                    notebookRepository = container.notebookRepository,
+                    originalPdfRepository = container.originalPdfRepository,
+                ),
             )
         }
     }
