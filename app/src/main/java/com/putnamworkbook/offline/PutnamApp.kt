@@ -34,6 +34,7 @@ fun PutnamApp(
     val appVersion = remember(context) {
         context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: "unknown"
     }
+    var contentVersion by remember { mutableStateOf("loading") }
     val exportCoordinator = remember(container, context) { container.createExportCoordinator(context) }
     val settings by container.settingsRepository.observe().collectAsState(initial = AppSettings())
     var workspaceActive by remember { mutableStateOf(false) }
@@ -44,6 +45,9 @@ fun PutnamApp(
     }
     LaunchedEffect(workspaceActive, settings.keepAwakeInWorkspace) {
         onKeepScreenAwakeChanged(workspaceActive && settings.keepAwakeInWorkspace)
+    }
+    LaunchedEffect(container.contentRepository) {
+        contentVersion = container.contentRepository.contentVersion()
     }
     DisposableEffect(Unit) {
         onDispose { onKeepScreenAwakeChanged(false) }
@@ -67,7 +71,7 @@ fun PutnamApp(
                     backupCoordinator = container.backupCoordinator,
                     exportCoordinator = exportCoordinator,
                     appVersion = appVersion,
-                    contentVersion = "2025 schema 1",
+                    contentVersion = contentVersion,
                 ),
                 onWorkspaceActiveChanged = { workspaceActive = it },
             )

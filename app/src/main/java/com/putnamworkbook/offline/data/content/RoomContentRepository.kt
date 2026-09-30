@@ -9,6 +9,8 @@ class RoomContentRepository(
 ) : ContentRepository {
     private val dao = database.contentDao()
 
+    override suspend fun contentVersion(): String = dao.meta("contentVersion") ?: "unknown"
+
     override suspend fun years(): List<Int> = dao.years()
 
     override suspend fun problems(year: Int): List<ProblemSummary> =

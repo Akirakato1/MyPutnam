@@ -50,6 +50,7 @@ export async function buildYear(sourceDir, outputDir, options = {}) {
     problems.sort(compareProblems);
     const manifest = {
       schemaVersion: SCHEMA_VERSION,
+      contentVersion: options.contentVersion ?? `${year}.1`,
       year,
       problems,
       assets: [...assets.values()].sort((left, right) => left.path.localeCompare(right.path)),
@@ -371,6 +372,9 @@ function parseArguments(args) {
       case '--year':
         options.year = Number.parseInt(takeValue(), 10);
         break;
+      case '--content-version':
+        options.contentVersion = takeValue();
+        break;
       case '--problems':
         options.problems = takeValue().split(',').filter(Boolean);
         break;
@@ -392,6 +396,9 @@ function parseArguments(args) {
   }
   if (!Number.isInteger(options.year)) {
     throw new Error('--year is required and must be an integer');
+  }
+  if (options.contentVersion !== undefined && !options.contentVersion.trim()) {
+    throw new Error('--content-version must not be empty');
   }
   return options;
 }

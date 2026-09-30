@@ -12,6 +12,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.putnamworkbook.offline.content.ui.MathContentWebView
 import com.putnamworkbook.offline.content.ui.OriginalPdfPane
@@ -40,9 +41,17 @@ fun ReferencePane(
             ReferenceTab.entries.forEach { tab ->
                 val enabled = tab != ReferenceTab.SOLUTION || state.progress?.solutionRevealed == true
                 if (tab == state.selectedReferenceTab) {
-                    Button(onClick = {}, enabled = enabled) { Text(tab.label()) }
+                    Button(
+                        onClick = {},
+                        enabled = enabled,
+                        modifier = Modifier.testTag("reference-tab-${tab.name.lowercase()}"),
+                    ) { Text(tab.label()) }
                 } else {
-                    OutlinedButton(onClick = { onSelectTab(tab) }, enabled = enabled) { Text(tab.label()) }
+                    OutlinedButton(
+                        onClick = { onSelectTab(tab) },
+                        enabled = enabled,
+                        modifier = Modifier.testTag("reference-tab-${tab.name.lowercase()}"),
+                    ) { Text(tab.label()) }
                 }
             }
         }

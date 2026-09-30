@@ -39,6 +39,8 @@ data class ProblemContent(
 )
 
 interface ContentRepository {
+    suspend fun contentVersion(): String = "unknown"
+
     suspend fun years(): List<Int>
 
     suspend fun problems(year: Int): List<ProblemSummary>

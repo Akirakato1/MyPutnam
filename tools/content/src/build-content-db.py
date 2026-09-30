@@ -60,6 +60,7 @@ def _insert_manifest(database, manifest):
     canonical_manifest = canonical_json(manifest).encode("utf-8")
     metadata = (
         ("contentSchemaVersion", str(schema_version)),
+        ("contentVersion", manifest.get("contentVersion", f"{year}.1")),
         ("manifestSha256", hashlib.sha256(canonical_manifest).hexdigest()),
         ("year", str(year)),
     )
@@ -143,6 +144,7 @@ def main():
         if arguments.manifest
         else {
             "schemaVersion": 1,
+            "contentVersion": f"{arguments.empty_year}.1",
             "year": arguments.empty_year,
             "problems": [],
             "assets": [],

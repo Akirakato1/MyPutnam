@@ -1,9 +1,22 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.androidx.room)
 }
+
+val releaseKeystoreFile = rootProject.file("keystore.properties")
+val releaseKeystore = Properties().apply {
+    if (releaseKeystoreFile.isFile) {
+        releaseKeystoreFile.inputStream().use(::load)
+    }
+}
+val releaseVersionCode = providers.gradleProperty("versionCodeOverride").orNull?.toIntOrNull() ?: 2
+
+fun releaseProperty(name: String): String =
+    releaseKeystore.getProperty(name) ?: error("Missing $name in ${releaseKeystoreFile.path}")
 
 room {
     schemaDirectory("$projectDir/schemas")
@@ -17,15 +30,27 @@ android {
         applicationId = "com.putnamworkbook.offline"
         minSdk = 29
         targetSdk = 36
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = releaseVersionCode
+        versionName = "0.2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        if (releaseKeystoreFile.isFile) {
+            create("release") {
+                storeFile = rootProject.file(releaseProperty("storeFile"))
+                storePassword = releaseProperty("storePassword")
+                keyAlias = releaseProperty("keyAlias")
+                keyPassword = releaseProperty("keyPassword")
+            }
+        }
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.findByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",

@@ -49,6 +49,7 @@ class BuildContentDatabaseTest(unittest.TestCase):
         self.output = Path(self.temporary_directory.name) / "content.db"
         self.manifest = {
             "schemaVersion": 1,
+            "contentVersion": "2025.1",
             "year": 2025,
             "problems": [problem("B1", 2), problem("A1", 1)],
             "assets": [],
@@ -82,6 +83,12 @@ class BuildContentDatabaseTest(unittest.TestCase):
                 "SELECT attribution_json FROM problem WHERE code = 'A1'"
             ).fetchone()[0]
             self.assertEqual(self.manifest["problems"][1]["sources"], json.loads(sources))
+            self.assertEqual(
+                "2025.1",
+                database.execute(
+                    "SELECT value FROM content_meta WHERE key = 'contentVersion'"
+                ).fetchone()[0],
+            )
 
     def test_foreign_keys_reject_an_orphan_hint(self):
         BUILDER.build_content_database(self.manifest, self.output)

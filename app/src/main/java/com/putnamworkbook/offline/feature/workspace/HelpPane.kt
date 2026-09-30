@@ -19,6 +19,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.putnamworkbook.offline.content.ui.MathContentWebView
 
@@ -44,13 +45,23 @@ fun HelpPane(
             content?.hints
                 ?.take(progress?.revealedHintCount ?: 0)
                 ?.forEachIndexed { index, hint ->
-                    OutlinedButton(onClick = { onSelectHint(index) }, enabled = index != state.activeHintIndex) {
+                    OutlinedButton(
+                        onClick = { onSelectHint(index) },
+                        enabled = index != state.activeHintIndex,
+                        modifier = Modifier.testTag("help-hint-${index + 1}"),
+                    ) {
                         Text(hint.title)
                     }
                 }
             when (state.nextReveal) {
-                RevealStage.HINT -> Button(onClick = onRevealNextStage) { Text("Reveal next hint") }
-                RevealStage.SOLUTION -> Button(onClick = { confirmSolution = true }) { Text("Reveal solution") }
+                RevealStage.HINT -> Button(
+                    onClick = onRevealNextStage,
+                    modifier = Modifier.testTag("help-reveal-next"),
+                ) { Text("Reveal next hint") }
+                RevealStage.SOLUTION -> Button(
+                    onClick = { confirmSolution = true },
+                    modifier = Modifier.testTag("help-reveal-solution"),
+                ) { Text("Reveal solution") }
                 RevealStage.NONE -> Unit
             }
         }
@@ -74,7 +85,7 @@ fun HelpPane(
                 TextButton(onClick = {
                     confirmSolution = false
                     onRevealNextStage()
-                }) { Text("Reveal solution") }
+                }, modifier = Modifier.testTag("help-confirm-solution")) { Text("Reveal solution") }
             },
             dismissButton = {
                 TextButton(onClick = { confirmSolution = false }) { Text("Keep working") }

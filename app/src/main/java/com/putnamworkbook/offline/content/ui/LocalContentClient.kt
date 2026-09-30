@@ -20,6 +20,7 @@ class LocalContentClient(
     private val onIntegrityError: (String) -> Unit = {},
     private val onPageReady: (WebView) -> Unit = {},
     private val failOnSubresourceError: Boolean = false,
+    private val onRendererGone: () -> Unit = {},
 ) : WebViewClient() {
     private val assetLoader = WebViewAssetLoader.Builder()
         .setDomain(ASSET_HOST)
@@ -143,7 +144,8 @@ class LocalContentClient(
 
     override fun onRenderProcessGone(view: WebView?, detail: RenderProcessGoneDetail?): Boolean {
         onIntegrityError("The offline math renderer stopped unexpectedly")
-        view?.destroy()
+        view?.stopLoading()
+        onRendererGone()
         return true
     }
 

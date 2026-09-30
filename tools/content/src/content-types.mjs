@@ -15,7 +15,8 @@ export const BLOCK_TYPES = Object.freeze([
  * @typedef {{schemaVersion: 1, year: number, code: string, ordinal: number,
  *   statement: RichDocument, hints: Array<object>, prerequisites: Array<object>,
  *   solution: RichDocument, sources: Array<object>, originalPdf: object}} ProblemRecord
- * @typedef {{schemaVersion: 1, year: number, problems: Array<object>, assets: Array<object>}} BuildManifest
+ * @typedef {{schemaVersion: 1, contentVersion: string, year: number,
+ *   problems: Array<object>, assets: Array<object>}} BuildManifest
  */
 
 export function isPlainObject(value) {

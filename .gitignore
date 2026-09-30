@@ -4,6 +4,10 @@
 **/node_modules/
 **/__pycache__/
 local.properties
+keystore.properties
+*.jks
+*.keystore
+dist/
 
 # Android Studio
 .idea/
