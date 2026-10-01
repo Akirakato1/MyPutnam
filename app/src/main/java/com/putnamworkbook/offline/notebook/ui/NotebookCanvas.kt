@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -68,7 +67,7 @@ fun NotebookCanvas(
     val renderedStrokes = selection?.previewStrokes?.let { preview ->
         strokes.filterNot { it.id in selection.selectedStrokeIds } + preview
     } ?: strokes
-    BoxWithConstraints(
+    Box(
         modifier = modifier
             .fillMaxSize()
             .testTag(NOTEBOOK_CANVAS_TEST_TAG)
