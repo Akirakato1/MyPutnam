@@ -5,6 +5,8 @@ import com.putnamworkbook.offline.domain.model.PaperStyle
 import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
 import com.putnamworkbook.offline.notebook.model.StrokeSample
+import com.putnamworkbook.offline.notebook.model.NotebookEdit
+import com.putnamworkbook.offline.notebook.model.NotebookEditGroup
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
@@ -24,6 +26,85 @@ class FileNotebookRepositoryTest {
     val temporaryFolder = TemporaryFolder()
 
     private val key = ProblemKey(2025, "A1")
+
+    @Test
+    fun tenEditsWriteEveryStrokeButReplaceTheManifestOnlyOnce() = runBlocking {
+        val root = temporaryFolder.newFolder("batch").toPath()
+        val durableWriter = DurableAtomicFileWriter()
+        var manifestWrites = 0
+        val countingWriter = AtomicFileWriter { target, bytes ->
+            if (target.fileName.toString() == "manifest.bin") manifestWrites += 1
+            durableWriter.write(target, bytes)
+        }
+        val repository = FileNotebookRepository(root, countingWriter)
+        val pageId = repository.loadOrCreate(key, PaperStyle.BLANK).pages.single().id
+        manifestWrites = 0
+        val edits = (1..10).map { index ->
+            val id = "rapid-$index"
+            NotebookEdit(
+                NotebookEditGroup("draw-$index", listOf(id), emptyList()),
+                listOf(stroke(id, index / 20f)),
+            )
+        }
+
+        val changed = repository.applyEdits(key, pageId, edits)
+
+        assertEquals(1, manifestWrites)
+        assertEquals(edits.map { it.newStrokes.single().id }, changed.pages.single().strokes.map { it.strokeId })
+        assertEquals(10, repository.loadStrokes(key, pageId).size)
+    }
+
+    @Test
+    fun failedBatchKeepsPriorManifestAndRetryAcceptsIdenticalOrphanStroke() = runBlocking {
+        val root = temporaryFolder.newFolder("batch-retry").toPath()
+        val durableWriter = DurableAtomicFileWriter()
+        val initialRepository = FileNotebookRepository(root, durableWriter)
+        val before = initialRepository.loadOrCreate(key, PaperStyle.BLANK)
+        val pageId = before.pages.single().id
+        val manifest = root.resolve("2025-A1/manifest.bin")
+        val beforeBytes = Files.readAllBytes(manifest)
+        val edit = NotebookEdit(
+            NotebookEditGroup("draw-retry", listOf("retry"), emptyList()),
+            listOf(stroke("retry", 0.4f)),
+        )
+        val failingWriter = AtomicFileWriter { target, bytes ->
+            if (target.fileName.toString() == "manifest.bin") throw IOException("injected batch failure")
+            durableWriter.write(target, bytes)
+        }
+
+        assertThrows(IOException::class.java) {
+            runBlocking { FileNotebookRepository(root, failingWriter).applyEdits(key, pageId, listOf(edit)) }
+        }
+        assertArrayEquals(beforeBytes, Files.readAllBytes(manifest))
+        assertEquals(before, FileNotebookRepository(root).loadExisting(key))
+
+        val retried = FileNotebookRepository(root).applyEdits(key, pageId, listOf(edit))
+        assertEquals(listOf("retry"), retried.pages.single().strokes.map { it.strokeId })
+        assertEquals(listOf("retry"), FileNotebookRepository(root).loadStrokes(key, pageId).map { it.id })
+    }
+
+    @Test
+    fun repositoryUndoAndRedoApplyWholeEditGroup() = runBlocking {
+        val root = temporaryFolder.newFolder("grouped-undo").toPath()
+        val repository = FileNotebookRepository(root)
+        val pageId = repository.loadOrCreate(key, PaperStyle.BLANK).pages.single().id
+        val originals = listOf(stroke("left", 0.2f), stroke("right", 0.8f))
+        repository.applyEdits(
+            key,
+            pageId,
+            listOf(
+                NotebookEdit(
+                    NotebookEditGroup("draw-pair", originals.map { it.id }, emptyList()),
+                    originals,
+                ),
+            ),
+        )
+
+        val undone = repository.undo(key, pageId)
+        assertEquals(listOf(false, false), undone.pages.single().strokes.map { it.active })
+        val redone = repository.redo(key, pageId)
+        assertEquals(listOf(true, true), redone.pages.single().strokes.map { it.active })
+    }
 
     @Test
     fun undoRedoPersistsAndACommitAfterUndoDiscardsOnlyTheRedoReference() = runBlocking {

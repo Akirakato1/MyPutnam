@@ -3,8 +3,10 @@ package com.putnamworkbook.offline.notebook.storage
 import com.putnamworkbook.offline.domain.model.PaperStyle
 import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.notebook.model.NotebookDocument
+import com.putnamworkbook.offline.notebook.model.NotebookEdit
 import com.putnamworkbook.offline.notebook.model.NotebookEditGroup
 import com.putnamworkbook.offline.notebook.model.NotebookPage
+import com.putnamworkbook.offline.notebook.model.NotebookReducer
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
 import com.putnamworkbook.offline.notebook.model.StrokeReference
 import kotlinx.coroutines.CoroutineDispatcher
@@ -55,6 +57,34 @@ class FileNotebookRepository(
         loadActiveStrokes(key, page)
     }
 
+    override suspend fun applyEdits(
+        key: ProblemKey,
+        pageId: String,
+        edits: List<NotebookEdit>,
+    ): NotebookDocument = locked {
+        val document = loadExistingDocument(key)
+        if (edits.isEmpty()) return@locked document
+        val changedPage = NotebookReducer.applyEdits(document.page(pageId), edits)
+        edits.flatMap { it.newStrokes }.forEach { stroke ->
+            writeImmutableStroke(key, pageId, stroke)
+        }
+        document.replacePage(changedPage).also { writeManifest(it) }
+    }
+
+    override suspend fun undo(key: ProblemKey, pageId: String): NotebookDocument = locked {
+        val document = loadExistingDocument(key)
+        val page = document.page(pageId)
+        val changedPage = NotebookReducer.undo(page)
+        if (changedPage == page) document else document.replacePage(changedPage).also { writeManifest(it) }
+    }
+
+    override suspend fun redo(key: ProblemKey, pageId: String): NotebookDocument = locked {
+        val document = loadExistingDocument(key)
+        val page = document.page(pageId)
+        val changedPage = NotebookReducer.redo(page)
+        if (changedPage == page) document else document.replacePage(changedPage).also { writeManifest(it) }
+    }
+
     private fun loadActiveStrokes(key: ProblemKey, page: NotebookPage): List<StrokeRecord> =
         page.strokes.filter { it.active }.map { reference ->
             val path = strokePath(key, page.id, reference.strokeId)
@@ -70,24 +100,27 @@ class FileNotebookRepository(
         key: ProblemKey,
         pageId: String,
         stroke: StrokeRecord,
-    ): NotebookDocument = locked {
-        val document = loadExistingDocument(key)
-        val page = document.page(pageId)
-        require(page.strokes.none { it.strokeId == stroke.id }) { "Stroke id already exists on this page" }
-        val strokePath = strokePath(key, pageId, stroke.id)
+    ): NotebookDocument = applyEdits(
+        key = key,
+        pageId = pageId,
+        edits = listOf(
+            NotebookEdit(
+                group = NotebookEditGroup(idFactory(), listOf(stroke.id), emptyList()),
+                newStrokes = listOf(stroke),
+            ),
+        ),
+    )
+
+    private fun writeImmutableStroke(key: ProblemKey, pageId: String, stroke: StrokeRecord) {
+        val path = strokePath(key, pageId, stroke.id)
         val encodedStroke = StrokeCodec.encode(stroke)
-        if (Files.exists(strokePath)) {
-            require(Files.readAllBytes(strokePath).contentEquals(encodedStroke)) {
+        if (Files.exists(path)) {
+            require(Files.readAllBytes(path).contentEquals(encodedStroke)) {
                 "An immutable stroke file already exists with different content"
             }
         } else {
-            writer.write(strokePath, encodedStroke)
+            writer.write(path, encodedStroke)
         }
-        val changedPage = page.appendEdit(
-            strokeReferences = page.strokes + StrokeReference(stroke.id, active = true),
-            group = NotebookEditGroup(idFactory(), listOf(stroke.id), emptyList()),
-        )
-        document.replacePage(changedPage).also { writeManifest(it) }
     }
 
     override suspend fun setStrokeActive(
@@ -101,14 +134,17 @@ class FileNotebookRepository(
         require(page.strokes.any { it.strokeId == strokeId }) { "Unknown stroke id: $strokeId" }
         val reference = page.strokes.first { it.strokeId == strokeId }
         if (reference.active == active) return@locked document
-        val changedPage = page.appendEdit(
-            strokeReferences = page.strokes.map { existing ->
-                if (existing.strokeId == strokeId) existing.copy(active = active) else existing
-            },
-            group = NotebookEditGroup(
-                id = idFactory(),
-                activatedStrokeIds = if (active) listOf(strokeId) else emptyList(),
-                deactivatedStrokeIds = if (active) emptyList() else listOf(strokeId),
+        val changedPage = NotebookReducer.applyEdits(
+            page,
+            listOf(
+                NotebookEdit(
+                    group = NotebookEditGroup(
+                        id = idFactory(),
+                        activatedStrokeIds = if (active) listOf(strokeId) else emptyList(),
+                        deactivatedStrokeIds = if (active) emptyList() else listOf(strokeId),
+                    ),
+                    newStrokes = emptyList(),
+                ),
             ),
         )
         document.replacePage(changedPage).also { writeManifest(it) }
@@ -236,15 +272,6 @@ class FileNotebookRepository(
 
     private fun NotebookDocument.replacePage(changedPage: NotebookPage): NotebookDocument =
         copy(pages = pages.map { if (it.id == changedPage.id) changedPage else it })
-
-    private fun NotebookPage.appendEdit(
-        strokeReferences: List<StrokeReference>,
-        group: NotebookEditGroup,
-    ): NotebookPage = copy(
-        strokes = strokeReferences,
-        editHistory = editHistory.take(appliedEditCount) + group,
-        appliedEditCount = appliedEditCount + 1,
-    )
 
     private companion object {
         const val MANIFEST_FILE = "manifest.bin"

@@ -3,6 +3,7 @@ package com.putnamworkbook.offline.notebook.storage
 import com.putnamworkbook.offline.domain.model.PaperStyle
 import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.notebook.model.NotebookDocument
+import com.putnamworkbook.offline.notebook.model.NotebookEdit
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
 
 data class NotebookPageSnapshot(
@@ -24,6 +25,12 @@ interface NotebookRepository {
     suspend fun loadOrCreate(key: ProblemKey, defaultPaper: PaperStyle): NotebookDocument
 
     suspend fun loadStrokes(key: ProblemKey, pageId: String): List<StrokeRecord>
+
+    suspend fun applyEdits(key: ProblemKey, pageId: String, edits: List<NotebookEdit>): NotebookDocument
+
+    suspend fun undo(key: ProblemKey, pageId: String): NotebookDocument
+
+    suspend fun redo(key: ProblemKey, pageId: String): NotebookDocument
 
     suspend fun commitStroke(key: ProblemKey, pageId: String, stroke: StrokeRecord): NotebookDocument
 
