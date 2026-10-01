@@ -9,6 +9,9 @@ import com.putnamworkbook.offline.notebook.model.StrokeRecord
 import com.putnamworkbook.offline.notebook.model.StrokeSample
 import com.putnamworkbook.offline.notebook.storage.FileNotebookRepository
 import com.putnamworkbook.offline.notebook.storage.NotebookRepository
+import com.putnamworkbook.offline.notebook.edit.NotebookClipboard
+import com.putnamworkbook.offline.notebook.edit.NormalizedRect
+import com.putnamworkbook.offline.notebook.edit.NotebookToolMode
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +22,7 @@ import kotlinx.coroutines.delay
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -113,6 +117,82 @@ class NotebookViewModelTest {
     }
 
     @Test
+    fun partialMarqueeSelectsWholeStrokeAndDeleteUndoOperateAsOneGroup() = runBlocking {
+        val repository = FileNotebookRepository(temporaryFolder.newFolder("selection").toPath())
+        val viewModel = viewModel(repository, FakeSettingsRepository(), wait = { })
+        viewModel.open(key)
+        viewModel.awaitIdle()
+        viewModel.commitStroke(strokeAt("crossing", 0.3f, 0.5f, 0.7f, 0.5f))
+        viewModel.commitStroke(strokeAt("outside", 0.1f, 0.1f, 0.2f, 0.2f))
+        viewModel.awaitIdle()
+
+        viewModel.setToolMode(NotebookToolMode.SELECT)
+        viewModel.select(NormalizedRect(0.45f, 0.45f, 0.55f, 0.55f))
+        assertEquals(setOf("crossing"), viewModel.uiState.value.selection!!.selectedStrokeIds)
+
+        viewModel.deleteSelection()
+        assertEquals(listOf("outside"), viewModel.uiState.value.strokes.map { it.id })
+        viewModel.awaitIdle()
+        viewModel.undo()
+        viewModel.awaitIdle()
+        assertEquals(setOf("crossing", "outside"), viewModel.uiState.value.strokes.map { it.id }.toSet())
+        viewModel.close()
+    }
+
+    @Test
+    fun clipboardCanPasteAcrossNotebookViewModelsAndPenModeClearsSelection() = runBlocking {
+        val clipboard = NotebookClipboard()
+        val firstRepository = FileNotebookRepository(temporaryFolder.newFolder("clipboard-a").toPath())
+        val first = viewModel(firstRepository, FakeSettingsRepository(), wait = { }, clipboard = clipboard)
+        first.open(key)
+        first.awaitIdle()
+        first.commitStroke(stroke("copied"))
+        first.awaitIdle()
+        first.setToolMode(NotebookToolMode.SELECT)
+        first.select(NormalizedRect(0f, 0f, 1f, 1f))
+        first.copySelection()
+        first.close()
+
+        val secondRepository = FileNotebookRepository(temporaryFolder.newFolder("clipboard-b").toPath())
+        val second = viewModel(secondRepository, FakeSettingsRepository(), wait = { }, clipboard = clipboard)
+        second.open(ProblemKey(2025, "A2"))
+        second.awaitIdle()
+        second.paste()
+        assertEquals(1, second.uiState.value.strokes.size)
+        assertNotEquals("copied", second.uiState.value.strokes.single().id)
+        assertTrue(second.uiState.value.selection != null)
+        second.setToolMode(NotebookToolMode.PEN)
+        assertNull(second.uiState.value.selection)
+        second.close()
+    }
+
+    @Test
+    fun movePreviewIsNonDestructiveAndCommitCreatesOneUndoableReplacementGroup() = runBlocking {
+        val repository = FileNotebookRepository(temporaryFolder.newFolder("move").toPath())
+        val viewModel = viewModel(repository, FakeSettingsRepository(), wait = { })
+        viewModel.open(key)
+        viewModel.awaitIdle()
+        viewModel.commitStroke(strokeAt("left", 0.2f, 0.2f, 0.3f, 0.3f))
+        viewModel.commitStroke(strokeAt("right", 0.4f, 0.2f, 0.5f, 0.3f))
+        viewModel.awaitIdle()
+        viewModel.setToolMode(NotebookToolMode.SELECT)
+        viewModel.select(NormalizedRect(0.1f, 0.1f, 0.6f, 0.4f))
+
+        viewModel.previewMove(0.2f, 0.1f)
+        assertEquals(listOf("left", "right"), viewModel.uiState.value.strokes.map { it.id })
+        assertEquals(2, viewModel.uiState.value.selection!!.previewStrokes!!.size)
+        viewModel.commitMove(0.2f, 0.1f)
+        val replacementIds = viewModel.uiState.value.strokes.map { it.id }
+        assertTrue(replacementIds.none { it in setOf("left", "right") })
+        viewModel.awaitIdle()
+
+        viewModel.undo()
+        viewModel.awaitIdle()
+        assertEquals(setOf("left", "right"), viewModel.uiState.value.strokes.map { it.id }.toSet())
+        viewModel.close()
+    }
+
+    @Test
     fun newPagesUseCurrentDefaultWithoutChangingExistingPages() = runBlocking {
         val repository = FileNotebookRepository(temporaryFolder.newFolder("defaults").toPath())
         val settings = FakeSettingsRepository()
@@ -171,7 +251,8 @@ class NotebookViewModelTest {
         repository: NotebookRepository,
         settings: SettingsRepository,
         wait: suspend (Long) -> Unit = { delay(it) },
-    ) = NotebookViewModel(repository, settings, CoroutineScope(Dispatchers.Default), wait)
+        clipboard: NotebookClipboard = NotebookClipboard(),
+    ) = NotebookViewModel(repository, settings, CoroutineScope(Dispatchers.Default), wait, clipboard)
 
     private fun stroke(id: String) = StrokeRecord(
         id = id,
@@ -179,6 +260,15 @@ class NotebookViewModelTest {
         samples = listOf(
             StrokeSample(0.1f, 0.1f, 0L, null),
             StrokeSample(0.2f, 0.2f, 10L, null),
+        ),
+    )
+
+    private fun strokeAt(id: String, x1: Float, y1: Float, x2: Float, y2: Float) = StrokeRecord(
+        id = id,
+        brush = BrushSpec(),
+        samples = listOf(
+            StrokeSample(x1, y1, 0L, null),
+            StrokeSample(x2, y2, 10L, null),
         ),
     )
 }

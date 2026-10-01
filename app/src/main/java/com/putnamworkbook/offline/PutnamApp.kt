@@ -67,6 +67,7 @@ fun PutnamApp(
                 workspaceDependencies = WorkspaceDependencies(
                     settingsRepository = container.settingsRepository,
                     notebookRepository = container.notebookRepository,
+                    notebookClipboard = container.notebookClipboard,
                     originalPdfRepository = container.originalPdfRepository,
                     backupCoordinator = container.backupCoordinator,
                     exportCoordinator = exportCoordinator,

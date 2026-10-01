@@ -16,6 +16,7 @@ import com.putnamworkbook.offline.export.WebViewContentRasterizer
 import com.putnamworkbook.offline.export.WorkbookPdfExporter
 import com.putnamworkbook.offline.notebook.storage.FileNotebookRepository
 import com.putnamworkbook.offline.notebook.storage.NotebookRepository
+import com.putnamworkbook.offline.notebook.edit.NotebookClipboard
 import java.nio.file.Path
 
 class AppContainer(context: Context) {
@@ -29,6 +30,7 @@ class AppContainer(context: Context) {
     val notebookRepository: NotebookRepository by lazy {
         FileNotebookRepository(notebookRoot)
     }
+    val notebookClipboard: NotebookClipboard by lazy { NotebookClipboard() }
     val backupCoordinator: BackupCoordinator by lazy {
         BackupCoordinator(userDatabase, notebookRoot)
     }

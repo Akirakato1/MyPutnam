@@ -8,6 +8,15 @@ import com.putnamworkbook.offline.notebook.model.NotebookEditGroup
 import com.putnamworkbook.offline.notebook.model.NotebookReducer
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
 import com.putnamworkbook.offline.notebook.storage.NotebookRepository
+import com.putnamworkbook.offline.notebook.edit.NotebookClipboard
+import com.putnamworkbook.offline.notebook.edit.NotebookSelectionState
+import com.putnamworkbook.offline.notebook.edit.NotebookToolMode
+import com.putnamworkbook.offline.notebook.edit.NormalizedPoint
+import com.putnamworkbook.offline.notebook.edit.NormalizedRect
+import com.putnamworkbook.offline.notebook.edit.SelectionCorner
+import com.putnamworkbook.offline.notebook.edit.StrokeTransform
+import com.putnamworkbook.offline.notebook.edit.intersects
+import com.putnamworkbook.offline.notebook.edit.selectionBounds
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,6 +38,7 @@ class NotebookViewModel(
     private val settingsRepository: SettingsRepository,
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate),
     saveWait: suspend (Long) -> Unit = { delay(it) },
+    private val clipboard: NotebookClipboard = NotebookClipboard(),
 ) {
     private val mutableUiState = MutableStateFlow(NotebookUiState())
     private val operationMutex = Mutex()
@@ -57,9 +67,6 @@ class NotebookViewModel(
     }
 
     fun commitStroke(stroke: StrokeRecord) {
-        val state = mutableUiState.value
-        val document = requireNotNull(state.document) { "Open a problem before editing its notebook" }
-        val page = document.pages[state.activePageIndex]
         val edit = NotebookEdit(
             group = NotebookEditGroup(
                 id = UUID.randomUUID().toString(),
@@ -68,18 +75,91 @@ class NotebookViewModel(
             ),
             newStrokes = listOf(stroke),
         )
-        val changedPage = NotebookReducer.applyEdits(page, listOf(edit))
-        val revision = state.uiRevision + 1
-        mutableUiState.value = state.copy(
-            document = document.replacePage(changedPage),
-            strokes = state.strokes + stroke,
-            saveState = NotebookSaveState.SAVING,
-            errorMessage = null,
-            uiRevision = revision,
+        commitOptimisticEdit(edit)
+    }
+
+    fun setToolMode(mode: NotebookToolMode) {
+        mutableUiState.value = mutableUiState.value.copy(
+            toolMode = mode,
+            selection = if (mode == NotebookToolMode.PEN) null else mutableUiState.value.selection,
         )
-        check(saveCoordinator.enqueue(page.id, edit) == revision) {
-            "Notebook save revisions must remain monotonic"
-        }
+    }
+
+    fun select(rect: NormalizedRect) {
+        val selected = mutableUiState.value.strokes.filter { it.intersects(rect) }
+        mutableUiState.value = mutableUiState.value.copy(
+            selection = selected.selectionState(),
+        )
+    }
+
+    fun previewMove(dx: Float, dy: Float) {
+        val selected = selectedStrokes()
+        val replacements = StrokeTransform.move(selected, dx, dy) { "preview-${UUID.randomUUID()}" }
+        updatePreview(replacements)
+    }
+
+    fun commitMove(dx: Float, dy: Float) {
+        val selected = selectedStrokes()
+        if (selected.isEmpty()) return
+        commitReplacement(selected, StrokeTransform.move(selected, dx, dy) { UUID.randomUUID().toString() })
+    }
+
+    fun previewScale(corner: SelectionCorner, target: NormalizedPoint) {
+        val selection = mutableUiState.value.selection ?: return
+        val replacements = StrokeTransform.scaleFromCorner(
+            selectedStrokes(), selection.bounds, corner, target,
+        ) { "preview-${UUID.randomUUID()}" }
+        updatePreview(replacements)
+    }
+
+    fun commitScale(corner: SelectionCorner, target: NormalizedPoint) {
+        val selection = mutableUiState.value.selection ?: return
+        val selected = selectedStrokes()
+        if (selected.isEmpty()) return
+        commitReplacement(
+            selected,
+            StrokeTransform.scaleFromCorner(selected, selection.bounds, corner, target) {
+                UUID.randomUUID().toString()
+            },
+        )
+    }
+
+    fun copySelection() {
+        clipboard.copy(selectedStrokes())
+        mutableUiState.value = mutableUiState.value.copy(clipboardHasContent = clipboard.hasContent)
+    }
+
+    fun cutSelection() {
+        copySelection()
+        deleteSelection()
+    }
+
+    fun paste() {
+        val pasted = clipboard.createPaste(mutableUiState.value.strokes) { UUID.randomUUID().toString() }
+        if (pasted.isEmpty()) return
+        commitOptimisticEdit(
+            NotebookEdit(
+                NotebookEditGroup(UUID.randomUUID().toString(), pasted.map { it.id }, emptyList()),
+                pasted,
+            ),
+            selectionAfter = pasted.selectionState(),
+        )
+    }
+
+    fun deleteSelection() {
+        val selected = selectedStrokes()
+        if (selected.isEmpty()) return
+        commitOptimisticEdit(
+            NotebookEdit(
+                NotebookEditGroup(UUID.randomUUID().toString(), emptyList(), selected.map { it.id }),
+                emptyList(),
+            ),
+            selectionAfter = null,
+        )
+    }
+
+    fun cancelSelection() {
+        mutableUiState.value = mutableUiState.value.copy(selection = null)
     }
 
     fun undo() = launchSaving {
@@ -226,6 +306,8 @@ class NotebookViewModel(
             activePageIndex = safeIndex,
             strokes = strokes,
             pendingConfirmation = pendingConfirmation,
+            selection = null,
+            clipboardHasContent = clipboard.hasContent,
         )
     }
 
@@ -273,4 +355,60 @@ class NotebookViewModel(
 
     private fun NotebookDocument.replacePage(changedPage: com.putnamworkbook.offline.notebook.model.NotebookPage): NotebookDocument =
         copy(pages = pages.map { if (it.id == changedPage.id) changedPage else it })
+
+    private fun commitReplacement(originals: List<StrokeRecord>, replacements: List<StrokeRecord>) {
+        commitOptimisticEdit(
+            NotebookEdit(
+                NotebookEditGroup(
+                    UUID.randomUUID().toString(),
+                    replacements.map { it.id },
+                    originals.map { it.id },
+                ),
+                replacements,
+            ),
+            selectionAfter = replacements.selectionState(),
+        )
+    }
+
+    private fun commitOptimisticEdit(
+        edit: NotebookEdit,
+        selectionAfter: NotebookSelectionState? = mutableUiState.value.selection,
+    ) {
+        val state = mutableUiState.value
+        val document = requireNotNull(state.document) { "Open a problem before editing its notebook" }
+        val page = document.pages[state.activePageIndex]
+        val changedPage = NotebookReducer.applyEdits(page, listOf(edit))
+        val deactivated = edit.group.deactivatedStrokeIds.toSet()
+        val changedStrokes = state.strokes.filterNot { it.id in deactivated } + edit.newStrokes
+        val revision = state.uiRevision + 1
+        mutableUiState.value = state.copy(
+            document = document.replacePage(changedPage),
+            strokes = changedStrokes,
+            selection = selectionAfter,
+            clipboardHasContent = clipboard.hasContent,
+            saveState = NotebookSaveState.SAVING,
+            errorMessage = null,
+            uiRevision = revision,
+        )
+        check(saveCoordinator.enqueue(page.id, edit) == revision) {
+            "Notebook save revisions must remain monotonic"
+        }
+    }
+
+    private fun selectedStrokes(): List<StrokeRecord> {
+        val ids = mutableUiState.value.selection?.selectedStrokeIds ?: return emptyList()
+        return mutableUiState.value.strokes.filter { it.id in ids }
+    }
+
+    private fun updatePreview(replacements: List<StrokeRecord>) {
+        val selection = mutableUiState.value.selection ?: return
+        mutableUiState.value = mutableUiState.value.copy(
+            selection = selection.copy(previewStrokes = replacements),
+        )
+    }
+
+    private fun List<StrokeRecord>.selectionState(): NotebookSelectionState? {
+        val bounds = selectionBounds() ?: return null
+        return NotebookSelectionState(mapTo(linkedSetOf()) { it.id }, bounds)
+    }
 }

@@ -2,6 +2,8 @@ package com.putnamworkbook.offline.notebook.ui
 
 import com.putnamworkbook.offline.notebook.model.NotebookDocument
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
+import com.putnamworkbook.offline.notebook.edit.NotebookSelectionState
+import com.putnamworkbook.offline.notebook.edit.NotebookToolMode
 
 sealed interface PendingConfirmation {
     val pageId: String
@@ -28,4 +30,7 @@ data class NotebookUiState(
     val errorMessage: String? = null,
     val uiRevision: Long = 0L,
     val durableRevision: Long = 0L,
+    val toolMode: NotebookToolMode = NotebookToolMode.PEN,
+    val selection: NotebookSelectionState? = null,
+    val clipboardHasContent: Boolean = false,
 )

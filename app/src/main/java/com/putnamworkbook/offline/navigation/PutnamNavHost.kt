@@ -46,6 +46,7 @@ import com.putnamworkbook.offline.export.ExportCoordinator
 import com.putnamworkbook.offline.export.ExportResult
 import com.putnamworkbook.offline.export.WorkbookExportOptions
 import com.putnamworkbook.offline.notebook.storage.NotebookRepository
+import com.putnamworkbook.offline.notebook.edit.NotebookClipboard
 import com.putnamworkbook.offline.notebook.ui.NotebookPane
 import com.putnamworkbook.offline.notebook.ui.NotebookViewModel
 import com.putnamworkbook.offline.notebook.ui.toPalmGuardState
@@ -55,6 +56,7 @@ import kotlinx.coroutines.launch
 data class WorkspaceDependencies(
     val settingsRepository: SettingsRepository,
     val notebookRepository: NotebookRepository,
+    val notebookClipboard: NotebookClipboard,
     val originalPdfRepository: OriginalPdfRepository,
     val backupCoordinator: BackupCoordinator,
     val exportCoordinator: ExportCoordinator,
@@ -172,8 +174,12 @@ private fun WorkspaceDestination(
     val workspaceViewModel = remember(key, contentRepository, progressRepository) {
         WorkspaceViewModel(contentRepository, progressRepository)
     }
-    val notebookViewModel = remember(key, dependencies.notebookRepository, dependencies.settingsRepository) {
-        NotebookViewModel(dependencies.notebookRepository, dependencies.settingsRepository)
+    val notebookViewModel = remember(key, dependencies.notebookRepository, dependencies.settingsRepository, dependencies.notebookClipboard) {
+        NotebookViewModel(
+            dependencies.notebookRepository,
+            dependencies.settingsRepository,
+            clipboard = dependencies.notebookClipboard,
+        )
     }
     val pdfViewModel = remember(key, dependencies.originalPdfRepository) {
         OriginalPdfViewModel(dependencies.originalPdfRepository)
