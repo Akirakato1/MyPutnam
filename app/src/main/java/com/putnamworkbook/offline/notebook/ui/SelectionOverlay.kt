@@ -38,7 +38,7 @@ fun SelectionOverlay(
     Canvas(
         modifier = modifier
             .testTag(SELECTION_OVERLAY_TEST_TAG)
-            .pointerInput(selection) {
+            .pointerInput(selection?.selectedStrokeIds) {
                 detectDragGestures(
                     onDragStart = { start ->
                         val point = start.normalized(size.width, size.height)
