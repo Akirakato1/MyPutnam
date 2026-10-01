@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import com.putnamworkbook.offline.content.ui.MathContentWebView
 import com.putnamworkbook.offline.domain.model.ReferenceTab
 
 @Composable
@@ -23,6 +22,7 @@ fun ReferencePane(
     onSelectTab: (ReferenceTab) -> Unit,
     onRevealNextStage: () -> Unit,
     onSelectHint: (Int) -> Unit,
+    onSelectPrerequisite: (Int) -> Unit,
     onIntegrityError: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -31,7 +31,8 @@ fun ReferencePane(
             modifier = Modifier
                 .fillMaxWidth()
                 .horizontalScroll(rememberScrollState())
-                .padding(8.dp),
+                .padding(8.dp)
+                .testTag("reference-tabs"),
         ) {
             ReferenceTab.visibleEntries.forEach { tab ->
                 val enabled = tab != ReferenceTab.SOLUTION || state.progress?.solutionRevealed == true
@@ -53,22 +54,55 @@ fun ReferencePane(
         val content = state.content
         when (state.selectedReferenceTab.normalizedForDisplay()) {
             ReferenceTab.PROBLEM -> content?.let {
-                MathContentWebView(it.statementAssetPath, onIntegrityError, Modifier.fillMaxSize())
+                ReferenceDocumentBody(
+                    it.statementAssetPath,
+                    onIntegrityError,
+                    Modifier.fillMaxWidth().weight(1f),
+                )
             } ?: LoadingReference()
             ReferenceTab.HELP -> HelpPane(
                 state,
                 onRevealNextStage,
                 onSelectHint,
                 onIntegrityError,
-                Modifier.fillMaxSize(),
+                Modifier.fillMaxWidth().weight(1f),
             )
             ReferenceTab.PREREQUISITES -> {
-                val prerequisite = content?.prerequisites?.firstOrNull()
-                if (prerequisite == null) Text("No prerequisite note is needed", Modifier.padding(20.dp))
-                else MathContentWebView(prerequisite.assetPath, onIntegrityError, Modifier.fillMaxSize())
+                val prerequisites = content?.prerequisites.orEmpty()
+                val prerequisite = prerequisites.getOrNull(state.activePrerequisiteIndex)
+                if (prerequisites.isNotEmpty()) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .horizontalScroll(rememberScrollState())
+                            .padding(8.dp)
+                            .testTag("prerequisite-controls"),
+                    ) {
+                        prerequisites.forEachIndexed { index, item ->
+                            OutlinedButton(
+                                onClick = { onSelectPrerequisite(index) },
+                                enabled = index != state.activePrerequisiteIndex,
+                                modifier = Modifier.testTag("prerequisite-${index + 1}"),
+                            ) { Text(item.title) }
+                        }
+                    }
+                }
+                if (prerequisite == null) {
+                    Text("No prerequisite note is needed", Modifier.padding(20.dp))
+                } else {
+                    ReferenceDocumentBody(
+                        prerequisite.assetPath,
+                        onIntegrityError,
+                        Modifier.fillMaxWidth().weight(1f),
+                    )
+                }
             }
             ReferenceTab.SOLUTION -> if (state.progress?.solutionRevealed == true && content != null) {
-                MathContentWebView(content.solutionAssetPath, onIntegrityError, Modifier.fillMaxSize())
+                ReferenceDocumentBody(
+                    content.solutionAssetPath,
+                    onIntegrityError,
+                    Modifier.fillMaxWidth().weight(1f),
+                )
             } else {
                 Text("Reveal the four hints before opening the solution", Modifier.padding(20.dp))
             }

@@ -58,6 +58,7 @@ class WorkspaceViewModel(
             progress = progress,
             selectedReferenceTab = restoredTab,
             activeHintIndex = if (progress.revealedHintCount > 0) progress.revealedHintCount - 1 else -1,
+            activePrerequisiteIndex = if (content.prerequisites.isEmpty()) -1 else 0,
         )
     }
 
@@ -94,6 +95,12 @@ class WorkspaceViewModel(
             ReferenceTab.HELP,
         )
         refreshProgress(selectedTab = ReferenceTab.HELP, activeHintIndex = index)
+    }
+
+    fun selectPrerequisite(index: Int) {
+        val prerequisites = mutableUiState.value.content?.prerequisites.orEmpty()
+        require(index in prerequisites.indices) { "Prerequisite is unavailable" }
+        mutableUiState.value = mutableUiState.value.copy(activePrerequisiteIndex = index)
     }
 
     fun selectReferenceTab(tab: ReferenceTab) = launchOperation {

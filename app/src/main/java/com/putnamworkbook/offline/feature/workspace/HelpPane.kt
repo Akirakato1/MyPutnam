@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.AlertDialog
@@ -21,7 +22,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import com.putnamworkbook.offline.content.ui.MathContentWebView
 
 @Composable
 fun HelpPane(
@@ -39,7 +39,8 @@ fun HelpPane(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
-                .horizontalScroll(rememberScrollState()),
+                .horizontalScroll(rememberScrollState())
+                .testTag("help-controls"),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             content?.hints
@@ -67,12 +68,18 @@ fun HelpPane(
         }
         val activeHint = content?.hints?.getOrNull(state.activeHintIndex)
         if (activeHint == null) {
-            Text(
-                "Hints appear here one at a time. Try the problem first, then reveal only what you need.",
-                modifier = Modifier.padding(20.dp),
-            )
+            Box(Modifier.fillMaxWidth().weight(1f).testTag("reference-document-body")) {
+                Text(
+                    "Hints appear here one at a time. Try the problem first, then reveal only what you need.",
+                    modifier = Modifier.padding(20.dp),
+                )
+            }
         } else {
-            MathContentWebView(activeHint.assetPath, onIntegrityError, Modifier.fillMaxSize())
+            ReferenceDocumentBody(
+                activeHint.assetPath,
+                onIntegrityError,
+                Modifier.fillMaxWidth().weight(1f),
+            )
         }
     }
 

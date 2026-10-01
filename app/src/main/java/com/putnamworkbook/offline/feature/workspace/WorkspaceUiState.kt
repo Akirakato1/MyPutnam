@@ -17,6 +17,7 @@ data class WorkspaceUiState(
     val progress: ProblemProgress? = null,
     val selectedReferenceTab: ReferenceTab = ReferenceTab.PROBLEM,
     val activeHintIndex: Int = -1,
+    val activePrerequisiteIndex: Int = 0,
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
 ) {

@@ -38,7 +38,7 @@ class LocalContentClientTest {
 
     @Test
     fun configureDisablesActiveAndNonAssetContent() {
-        val client = LocalContentClient(assetContext)
+        val client = LocalContentClient(appContext)
 
         instrumentation.runOnMainSync {
             client.configure(webView)
@@ -74,6 +74,41 @@ class LocalContentClientTest {
         assertFalse(client.isNavigationAllowed(Uri.parse("https://example.com/problem.html")))
         assertFalse(client.isNavigationAllowed(Uri.parse("file:///android_asset/content/fixture/index.html")))
         assertEquals(403, client.interceptForTest(Uri.parse("https://example.com/style.css"))!!.statusCode)
+    }
+
+    @Test
+    fun generatedHintAndItsKatexStylesAndFontResolveOffline() {
+        val client = LocalContentClient(appContext)
+        val generatedPaths = listOf(
+            "content/2025/problems/A1/hint-1.html",
+            "content/2025/shared/content.css",
+            "content/2025/shared/katex/katex.min.css",
+            "content/2025/shared/katex/fonts/KaTeX_Main-Regular.woff2",
+        )
+
+        generatedPaths.forEach { path ->
+            val response = client.interceptForTest(Uri.parse("${LocalContentClient.ASSET_BASE_URL}$path"))
+            assertEquals("Expected bundled response for $path", 200, response?.statusCode)
+        }
+    }
+
+    @Test
+    fun rendererLossReportsIntegrityErrorAndRequestsAReplacementView() {
+        val errors = mutableListOf<String>()
+        var restartCount = 0
+        val client = LocalContentClient(
+            assetContext = assetContext,
+            onIntegrityError = errors::add,
+            onRendererGone = { restartCount += 1 },
+        )
+
+        instrumentation.runOnMainSync {
+            client.configure(webView)
+            assertTrue(client.onRenderProcessGone(webView, null))
+        }
+
+        assertEquals(1, restartCount)
+        assertTrue(errors.single().contains("renderer stopped"))
     }
 
     @Test

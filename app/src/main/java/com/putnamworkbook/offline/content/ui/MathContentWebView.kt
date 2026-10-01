@@ -44,7 +44,7 @@ fun MathContentWebView(
         )
     }
 
-    key(renderGeneration) {
+    key(assetPath, renderGeneration) {
         AndroidView(
             factory = { context ->
                 WebView(context).also { webView ->

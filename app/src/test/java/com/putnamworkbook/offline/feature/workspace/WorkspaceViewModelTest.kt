@@ -28,6 +28,21 @@ class WorkspaceViewModelTest {
     private val key = ProblemKey(2025, "A1")
 
     @Test
+    fun everyPrerequisiteCanBeSelected() = runBlocking {
+        val progress = FakeWorkspaceProgressRepository()
+        val viewModel = viewModel(progress)
+        viewModel.open(key)
+        viewModel.awaitIdle()
+
+        assertEquals(0, viewModel.uiState.value.activePrerequisiteIndex)
+        viewModel.selectPrerequisite(1)
+        viewModel.awaitIdle()
+
+        assertEquals(1, viewModel.uiState.value.activePrerequisiteIndex)
+        viewModel.close()
+    }
+
+    @Test
     fun visibleReferenceTabsExcludeOriginalPaper() {
         assertEquals(
             listOf(
@@ -152,7 +167,10 @@ private class FakeWorkspaceContentRepository(
                 index.toString().repeat(64),
             )
         },
-        prerequisites = listOf(ContentDocument(1, "Useful theorem", "theorem.html", "a".repeat(64))),
+        prerequisites = listOf(
+            ContentDocument(1, "Useful theorem", "theorem.html", "a".repeat(64)),
+            ContentDocument(2, "Second theorem", "theorem-2.html", "d".repeat(64)),
+        ),
         solutionAssetPath = "solution.html",
         solutionSha256 = "b".repeat(64),
         attribution = emptyList<Attribution>(),

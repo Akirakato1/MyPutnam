@@ -308,6 +308,7 @@ private fun WorkspaceDestination(
                 onSelectTab = workspaceViewModel::selectReferenceTab,
                 onRevealNextStage = workspaceViewModel::revealNextStage,
                 onSelectHint = workspaceViewModel::selectHint,
+                onSelectPrerequisite = workspaceViewModel::selectPrerequisite,
                 onIntegrityError = workspaceViewModel::reportIntegrityError,
             )
         },
