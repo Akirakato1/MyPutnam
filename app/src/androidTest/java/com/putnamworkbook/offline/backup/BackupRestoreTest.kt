@@ -10,6 +10,7 @@ import com.putnamworkbook.offline.domain.model.AppTheme
 import com.putnamworkbook.offline.domain.model.Handedness
 import com.putnamworkbook.offline.domain.model.PaperStyle
 import com.putnamworkbook.offline.domain.model.ProblemKey
+import com.putnamworkbook.offline.domain.model.ReferenceTab
 import com.putnamworkbook.offline.notebook.storage.FileNotebookRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -56,6 +57,7 @@ class BackupRestoreTest {
 
         progress.markOpened(key)
         progress.revealNextHint(key)
+        progress.setNotebookState(key, 1, 0, ReferenceTab.ORIGINAL_PAPER)
         settings.update { it.copy(handedness = Handedness.LEFT, theme = AppTheme.DARK) }
         val firstPage = notebooks.loadOrCreate(key, PaperStyle.SQUARE_GRID).pages.single()
         notebooks.addPage(key, firstPage.id, PaperStyle.BLANK)
@@ -74,6 +76,7 @@ class BackupRestoreTest {
             coordinator.validateAndRestore(ByteArrayInputStream(output.toByteArray())) is RestoreResult.Success,
         )
         assertEquals(expectedProgress, progress.observe(key).first())
+        assertEquals(ReferenceTab.ORIGINAL_PAPER, progress.observe(key).first().activeReferenceTab)
         assertEquals(expectedSettings, settings.observe().first())
         assertSnapshotEquals(expectedNotebookBytes, snapshot(notebookRoot))
 

@@ -15,19 +15,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.putnamworkbook.offline.content.ui.MathContentWebView
-import com.putnamworkbook.offline.content.ui.OriginalPdfPane
-import com.putnamworkbook.offline.content.ui.OriginalPdfUiState
 import com.putnamworkbook.offline.domain.model.ReferenceTab
 
 @Composable
 fun ReferencePane(
     state: WorkspaceUiState,
-    pdfState: OriginalPdfUiState,
     onSelectTab: (ReferenceTab) -> Unit,
     onRevealNextStage: () -> Unit,
     onSelectHint: (Int) -> Unit,
-    onPreviousPdfPage: () -> Unit,
-    onNextPdfPage: () -> Unit,
     onIntegrityError: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -38,7 +33,7 @@ fun ReferencePane(
                 .horizontalScroll(rememberScrollState())
                 .padding(8.dp),
         ) {
-            ReferenceTab.entries.forEach { tab ->
+            ReferenceTab.visibleEntries.forEach { tab ->
                 val enabled = tab != ReferenceTab.SOLUTION || state.progress?.solutionRevealed == true
                 if (tab == state.selectedReferenceTab) {
                     Button(
@@ -56,7 +51,7 @@ fun ReferencePane(
             }
         }
         val content = state.content
-        when (state.selectedReferenceTab) {
+        when (state.selectedReferenceTab.normalizedForDisplay()) {
             ReferenceTab.PROBLEM -> content?.let {
                 MathContentWebView(it.statementAssetPath, onIntegrityError, Modifier.fillMaxSize())
             } ?: LoadingReference()
@@ -77,13 +72,7 @@ fun ReferencePane(
             } else {
                 Text("Reveal the four hints before opening the solution", Modifier.padding(20.dp))
             }
-            ReferenceTab.ORIGINAL_PAPER -> OriginalPdfPane(
-                state = pdfState,
-                onPreviousPage = onPreviousPdfPage,
-                onNextPage = onNextPdfPage,
-                onShowNormalizedContent = { onSelectTab(ReferenceTab.PROBLEM) },
-                modifier = Modifier.fillMaxSize(),
-            )
+            else -> Unit
         }
     }
 }
@@ -98,5 +87,5 @@ private fun ReferenceTab.label(): String = when (this) {
     ReferenceTab.HELP -> "Help"
     ReferenceTab.PREREQUISITES -> "Prerequisites"
     ReferenceTab.SOLUTION -> "Solution"
-    ReferenceTab.ORIGINAL_PAPER -> "Original paper"
+    else -> "Problem"
 }

@@ -101,6 +101,7 @@ class ProgressRepositoryTest {
         recent = progress.observeRecent().first()!!
         assertEquals(first, recent.key)
         assertEquals(4_000L, recent.lastOpenedAt)
+        assertEquals(ReferenceTab.ORIGINAL_PAPER, recent.activeReferenceTab)
         assertEquals(setOf(first, second), progress.observeAll().first().keys)
     }
 

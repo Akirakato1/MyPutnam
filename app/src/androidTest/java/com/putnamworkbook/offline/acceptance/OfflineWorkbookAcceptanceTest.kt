@@ -107,8 +107,7 @@ class OfflineWorkbookAcceptanceTest {
         }
         composeRule.onNodeWithTag("reference-tab-solution").assertIsEnabled()
 
-        composeRule.onNodeWithTag("reference-tab-original_paper").performClick()
-        waitForText("Page 1 of 2")
+        composeRule.onNodeWithTag("reference-tab-original_paper").assertDoesNotExist()
     }
 
     private fun addNotebookPageAndMarkCompleted() {

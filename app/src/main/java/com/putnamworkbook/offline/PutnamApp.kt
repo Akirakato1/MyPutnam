@@ -68,7 +68,6 @@ fun PutnamApp(
                     settingsRepository = container.settingsRepository,
                     notebookRepository = container.notebookRepository,
                     notebookClipboard = container.notebookClipboard,
-                    originalPdfRepository = container.originalPdfRepository,
                     backupCoordinator = container.backupCoordinator,
                     exportCoordinator = exportCoordinator,
                     appVersion = appVersion,

@@ -28,6 +28,36 @@ class WorkspaceViewModelTest {
     private val key = ProblemKey(2025, "A1")
 
     @Test
+    fun visibleReferenceTabsExcludeOriginalPaper() {
+        assertEquals(
+            listOf(
+                ReferenceTab.PROBLEM,
+                ReferenceTab.HELP,
+                ReferenceTab.PREREQUISITES,
+                ReferenceTab.SOLUTION,
+            ),
+            ReferenceTab.visibleEntries,
+        )
+    }
+
+    @Test
+    fun legacyOriginalPaperProgressOpensAndPersistsProblemTab() = runBlocking {
+        val legacy = ProblemProgress.untouched(key).copy(
+            status = ProblemStatus.IN_PROGRESS,
+            activeReferenceTab = ReferenceTab.ORIGINAL_PAPER,
+        )
+        val progress = FakeWorkspaceProgressRepository(mapOf(key to legacy))
+        val viewModel = viewModel(progress)
+
+        viewModel.open(key)
+        viewModel.awaitIdle()
+
+        assertEquals(ReferenceTab.PROBLEM, viewModel.uiState.value.selectedReferenceTab)
+        assertEquals(ReferenceTab.PROBLEM, progress.observe(key).first().activeReferenceTab)
+        viewModel.close()
+    }
+
+    @Test
     fun hintsRevealInOrderThenSolutionIsASeparateFifthRevealAndPersists() = runBlocking {
         val progress = FakeWorkspaceProgressRepository()
         var viewModel = viewModel(progress)
@@ -129,8 +159,10 @@ private class FakeWorkspaceContentRepository(
     )
 }
 
-private class FakeWorkspaceProgressRepository : ProgressRepository {
-    private val rows = MutableStateFlow<Map<ProblemKey, ProblemProgress>>(emptyMap())
+private class FakeWorkspaceProgressRepository(
+    initialRows: Map<ProblemKey, ProblemProgress> = emptyMap(),
+) : ProgressRepository {
+    private val rows = MutableStateFlow(initialRows)
 
     override fun observe(key: ProblemKey): Flow<ProblemProgress> =
         rows.map { it[key] ?: ProblemProgress.untouched(key) }

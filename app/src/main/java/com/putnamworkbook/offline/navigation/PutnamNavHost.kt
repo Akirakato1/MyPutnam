@@ -28,8 +28,6 @@ import com.putnamworkbook.offline.backup.BackupCoordinator
 import com.putnamworkbook.offline.data.content.ContentRepository
 import com.putnamworkbook.offline.data.user.ProgressRepository
 import com.putnamworkbook.offline.data.user.SettingsRepository
-import com.putnamworkbook.offline.content.ui.OriginalPdfRepository
-import com.putnamworkbook.offline.content.ui.OriginalPdfViewModel
 import com.putnamworkbook.offline.domain.model.AppSettings
 import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.feature.archive.ArchiveScreen
@@ -59,7 +57,6 @@ data class WorkspaceDependencies(
     val settingsRepository: SettingsRepository,
     val notebookRepository: NotebookRepository,
     val notebookClipboard: NotebookClipboard,
-    val originalPdfRepository: OriginalPdfRepository,
     val backupCoordinator: BackupCoordinator,
     val exportCoordinator: ExportCoordinator,
     val appVersion: String,
@@ -183,13 +180,9 @@ private fun WorkspaceDestination(
             clipboard = dependencies.notebookClipboard,
         )
     }
-    val pdfViewModel = remember(key, dependencies.originalPdfRepository) {
-        OriginalPdfViewModel(dependencies.originalPdfRepository)
-    }
     val scope = rememberCoroutineScope()
     val workspaceState by workspaceViewModel.uiState.collectAsState()
     val notebookState by notebookViewModel.uiState.collectAsState()
-    val pdfState by pdfViewModel.uiState.collectAsState()
     val settings by dependencies.settingsRepository.observe().collectAsState(initial = AppSettings())
     var notebookOpened by remember(key) { mutableStateOf(false) }
     var exportMessage by remember(key) { mutableStateOf<String?>(null) }
@@ -248,13 +241,12 @@ private fun WorkspaceDestination(
         }
     }
 
-    DisposableEffect(workspaceViewModel, notebookViewModel, pdfViewModel) {
+    DisposableEffect(workspaceViewModel, notebookViewModel) {
         onWorkspaceActiveChanged(true)
         onDispose {
             onWorkspaceActiveChanged(false)
             workspaceViewModel.close()
             notebookViewModel.close()
-            pdfViewModel.close()
         }
     }
     DisposableEffect(lifecycleOwner, notebookViewModel) {
@@ -287,18 +279,6 @@ private fun WorkspaceDestination(
             workspaceViewModel.updateNotebookState(document.pages.size, notebookState.activePageIndex)
         }
     }
-    LaunchedEffect(workspaceState.selectedReferenceTab, workspaceState.content?.originalPdf) {
-        if (workspaceState.selectedReferenceTab == com.putnamworkbook.offline.domain.model.ReferenceTab.ORIGINAL_PAPER) {
-            workspaceState.content?.originalPdf?.let { original ->
-                pdfViewModel.open(original.assetPath, original.sha256)
-                pdfViewModel.awaitIdle()
-                if (original.pageIndex > 0) {
-                    pdfViewModel.selectPage(original.pageIndex)
-                }
-            }
-        }
-    }
-
     WorkspaceScreen(
         state = workspaceState,
         onHome = {
@@ -325,12 +305,9 @@ private fun WorkspaceDestination(
         referenceContent = {
             ReferencePane(
                 state = workspaceState,
-                pdfState = pdfState,
                 onSelectTab = workspaceViewModel::selectReferenceTab,
                 onRevealNextStage = workspaceViewModel::revealNextStage,
                 onSelectHint = workspaceViewModel::selectHint,
-                onPreviousPdfPage = { pdfViewModel.selectPage(pdfState.currentPageIndex - 1) },
-                onNextPdfPage = { pdfViewModel.selectPage(pdfState.currentPageIndex + 1) },
                 onIntegrityError = workspaceViewModel::reportIntegrityError,
             )
         },

@@ -37,12 +37,21 @@ class WorkspaceViewModel(
         mutableUiState.value = WorkspaceUiState(key = key, isLoading = true)
         val content = requireNotNull(contentRepository.problem(key)) { "Problem ${key.year} ${key.code} is unavailable" }
         progressRepository.markOpened(key)
-        val progress = progressRepository.observe(key).first()
+        var progress = progressRepository.observe(key).first()
         notebookPageCount = progress.notebookPageCount
         notebookPageIndex = progress.activePageIndex
-        val restoredTab = progress.activeReferenceTab.takeIf { tab ->
+        val restoredTab = progress.activeReferenceTab.normalizedForDisplay().takeIf { tab ->
             tab != ReferenceTab.SOLUTION || progress.solutionRevealed
         } ?: ReferenceTab.PROBLEM
+        if (restoredTab != progress.activeReferenceTab) {
+            progressRepository.setNotebookState(
+                key,
+                notebookPageCount,
+                notebookPageIndex,
+                restoredTab,
+            )
+            progress = progressRepository.observe(key).first()
+        }
         mutableUiState.value = WorkspaceUiState(
             key = key,
             content = content,
@@ -88,15 +97,16 @@ class WorkspaceViewModel(
     }
 
     fun selectReferenceTab(tab: ReferenceTab) = launchOperation {
+        val visibleTab = tab.normalizedForDisplay()
         val state = mutableUiState.value
-        if (tab == ReferenceTab.SOLUTION && state.progress?.solutionRevealed != true) return@launchOperation
+        if (visibleTab == ReferenceTab.SOLUTION && state.progress?.solutionRevealed != true) return@launchOperation
         progressRepository.setNotebookState(
             requireOpenKey(),
             notebookPageCount,
             notebookPageIndex,
-            tab,
+            visibleTab,
         )
-        refreshProgress(selectedTab = tab)
+        refreshProgress(selectedTab = visibleTab)
     }
 
     fun updateNotebookState(pageCount: Int, pageIndex: Int) = launchOperation {

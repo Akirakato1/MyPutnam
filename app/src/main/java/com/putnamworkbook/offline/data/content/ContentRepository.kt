@@ -23,12 +23,6 @@ data class HintContent(
     val sha256: String,
 )
 
-data class OriginalPdf(
-    val assetPath: String,
-    val sha256: String,
-    val pageIndex: Int,
-)
-
 data class Attribution(
     val kind: String,
     val label: String,
@@ -44,10 +38,7 @@ data class ProblemContent(
     val solutionAssetPath: String,
     val solutionSha256: String,
     val attribution: List<Attribution>,
-) {
-    @Deprecated("Original papers are no longer packaged; retained until the PDF UI is removed")
-    val originalPdf: OriginalPdf? get() = null
-}
+)
 
 interface ContentRepository {
     suspend fun contentVersion(): String = "unknown"

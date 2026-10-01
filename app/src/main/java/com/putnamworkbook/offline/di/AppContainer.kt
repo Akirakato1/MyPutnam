@@ -2,7 +2,6 @@ package com.putnamworkbook.offline.di
 
 import android.content.Context
 import com.putnamworkbook.offline.backup.BackupCoordinator
-import com.putnamworkbook.offline.content.ui.OriginalPdfRepository
 import com.putnamworkbook.offline.data.content.ContentDatabase
 import com.putnamworkbook.offline.data.content.ContentRepository
 import com.putnamworkbook.offline.data.content.RoomContentRepository
@@ -43,10 +42,4 @@ class AppContainer(context: Context) {
                 contentRasterizer = WebViewContentRasterizer(renderingContext),
             ),
         )
-    val originalPdfRepository: OriginalPdfRepository by lazy {
-        OriginalPdfRepository(
-            assets = applicationContext.assets,
-            cacheDirectory = applicationContext.cacheDir.resolve("original-pdf"),
-        )
-    }
 }
