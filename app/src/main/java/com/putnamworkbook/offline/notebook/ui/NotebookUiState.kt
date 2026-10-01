@@ -26,4 +26,6 @@ data class NotebookUiState(
     val pendingConfirmation: PendingConfirmation? = null,
     val saveState: NotebookSaveState = NotebookSaveState.IDLE,
     val errorMessage: String? = null,
+    val uiRevision: Long = 0L,
+    val durableRevision: Long = 0L,
 )

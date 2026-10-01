@@ -8,11 +8,14 @@ import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
 import com.putnamworkbook.offline.notebook.model.StrokeSample
 import com.putnamworkbook.offline.notebook.storage.FileNotebookRepository
+import com.putnamworkbook.offline.notebook.storage.NotebookRepository
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.delay
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -28,7 +31,7 @@ class NotebookViewModelTest {
     private val key = ProblemKey(2025, "A1")
 
     @Test
-    fun firstOpenAutosavesEveryStrokeAndUndoRedoSurviveReload() = runBlocking {
+    fun firstOpenAutosavesBufferedStrokeAndUndoRedoSurviveReload() = runBlocking {
         val repository = FileNotebookRepository(temporaryFolder.newFolder("autosave").toPath())
         val settings = FakeSettingsRepository()
         var viewModel = viewModel(repository, settings)
@@ -54,6 +57,58 @@ class NotebookViewModelTest {
         viewModel.redo()
         viewModel.awaitIdle()
         assertEquals(listOf("one"), viewModel.uiState.value.strokes.map { it.id })
+        viewModel.close()
+    }
+
+    @Test
+    fun rapidStrokesAppearImmediatelyAndPersistInOrderAfterDebounce() = runBlocking {
+        val repository = FileNotebookRepository(temporaryFolder.newFolder("rapid").toPath())
+        val gate = CompletableDeferred<Unit>()
+        val viewModel = viewModel(repository, FakeSettingsRepository(), wait = { gate.await() })
+        viewModel.open(key)
+        viewModel.awaitIdle()
+        val pageId = viewModel.uiState.value.document!!.pages.single().id
+
+        (1..10).forEach { viewModel.commitStroke(stroke("rapid-$it")) }
+
+        assertEquals((1..10).map { "rapid-$it" }, viewModel.uiState.value.strokes.map { it.id })
+        assertTrue(repository.loadStrokes(key, pageId).isEmpty())
+        assertEquals(10L, viewModel.uiState.value.uiRevision)
+        assertEquals(0L, viewModel.uiState.value.durableRevision)
+
+        gate.complete(Unit)
+        viewModel.awaitIdle()
+        assertEquals((1..10).map { "rapid-$it" }, repository.loadStrokes(key, pageId).map { it.id })
+        assertEquals(10L, viewModel.uiState.value.durableRevision)
+        viewModel.close()
+    }
+
+    @Test
+    fun completedOlderSaveNeverReplacesAStrokeAddedWhileRepositoryIsBlocked() = runBlocking {
+        val fileRepository = FileNotebookRepository(temporaryFolder.newFolder("stale").toPath())
+        val persistStarted = CompletableDeferred<Unit>()
+        val releasePersist = CompletableDeferred<Unit>()
+        val repository = object : NotebookRepository by fileRepository {
+            override suspend fun applyEdits(key: ProblemKey, pageId: String, edits: List<com.putnamworkbook.offline.notebook.model.NotebookEdit>) =
+                fileRepository.applyEdits(key, pageId, edits).also {
+                    persistStarted.complete(Unit)
+                    releasePersist.await()
+                }
+        }
+        val viewModel = viewModel(repository, FakeSettingsRepository(), wait = { })
+        viewModel.open(key)
+        viewModel.awaitIdle()
+
+        viewModel.commitStroke(stroke("first"))
+        persistStarted.await()
+        viewModel.commitStroke(stroke("second"))
+        assertEquals(listOf("first", "second"), viewModel.uiState.value.strokes.map { it.id })
+
+        releasePersist.complete(Unit)
+        viewModel.awaitIdle()
+
+        assertEquals(listOf("first", "second"), viewModel.uiState.value.strokes.map { it.id })
+        assertEquals(2L, viewModel.uiState.value.durableRevision)
         viewModel.close()
     }
 
@@ -113,9 +168,10 @@ class NotebookViewModelTest {
     }
 
     private fun viewModel(
-        repository: FileNotebookRepository,
+        repository: NotebookRepository,
         settings: SettingsRepository,
-    ) = NotebookViewModel(repository, settings, CoroutineScope(Dispatchers.Default))
+        wait: suspend (Long) -> Unit = { delay(it) },
+    ) = NotebookViewModel(repository, settings, CoroutineScope(Dispatchers.Default), wait)
 
     private fun stroke(id: String) = StrokeRecord(
         id = id,

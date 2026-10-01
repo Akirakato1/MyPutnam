@@ -3,6 +3,9 @@ package com.putnamworkbook.offline.notebook.ui
 import com.putnamworkbook.offline.data.user.SettingsRepository
 import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.notebook.model.NotebookDocument
+import com.putnamworkbook.offline.notebook.model.NotebookEdit
+import com.putnamworkbook.offline.notebook.model.NotebookEditGroup
+import com.putnamworkbook.offline.notebook.model.NotebookReducer
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
 import com.putnamworkbook.offline.notebook.storage.NotebookRepository
 import kotlinx.coroutines.CancellationException
@@ -18,16 +21,29 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.delay
+import java.util.UUID
 
 class NotebookViewModel(
     private val repository: NotebookRepository,
     private val settingsRepository: SettingsRepository,
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate),
+    saveWait: suspend (Long) -> Unit = { delay(it) },
 ) {
     private val mutableUiState = MutableStateFlow(NotebookUiState())
     private val operationMutex = Mutex()
     private var currentKey: ProblemKey? = null
     private var latestOperation: Job? = null
+    private val saveCoordinator = NotebookSaveCoordinator(
+        scope = scope,
+        wait = saveWait,
+        persist = { pageId, edits ->
+            repository.applyEdits(requireNotNull(currentKey), pageId, edits)
+        },
+        onSaving = ::handleSaving,
+        onSaved = ::handleSaved,
+        onFailure = ::handleSaveFailure,
+    )
 
     val uiState: StateFlow<NotebookUiState> = mutableUiState.asStateFlow()
 
@@ -40,32 +56,46 @@ class NotebookViewModel(
         }
     }
 
-    fun commitStroke(stroke: StrokeRecord) = launchSaving {
-        val (key, pageId) = currentPage()
-        publishDocument(repository.commitStroke(key, pageId, stroke), mutableUiState.value.activePageIndex)
+    fun commitStroke(stroke: StrokeRecord) {
+        val state = mutableUiState.value
+        val document = requireNotNull(state.document) { "Open a problem before editing its notebook" }
+        val page = document.pages[state.activePageIndex]
+        val edit = NotebookEdit(
+            group = NotebookEditGroup(
+                id = UUID.randomUUID().toString(),
+                activatedStrokeIds = listOf(stroke.id),
+                deactivatedStrokeIds = emptyList(),
+            ),
+            newStrokes = listOf(stroke),
+        )
+        val changedPage = NotebookReducer.applyEdits(page, listOf(edit))
+        val revision = state.uiRevision + 1
+        mutableUiState.value = state.copy(
+            document = document.replacePage(changedPage),
+            strokes = state.strokes + stroke,
+            saveState = NotebookSaveState.SAVING,
+            errorMessage = null,
+            uiRevision = revision,
+        )
+        check(saveCoordinator.enqueue(page.id, edit) == revision) {
+            "Notebook save revisions must remain monotonic"
+        }
     }
 
     fun undo() = launchSaving {
+        saveCoordinator.flush()
         val (key, pageId) = currentPage()
-        val reference = requireDocument().pages[mutableUiState.value.activePageIndex]
-            .strokes.lastOrNull { it.active } ?: return@launchSaving
-        publishDocument(
-            repository.setStrokeActive(key, pageId, reference.strokeId, active = false),
-            mutableUiState.value.activePageIndex,
-        )
+        publishDocument(repository.undo(key, pageId), mutableUiState.value.activePageIndex)
     }
 
     fun redo() = launchSaving {
+        saveCoordinator.flush()
         val (key, pageId) = currentPage()
-        val reference = requireDocument().pages[mutableUiState.value.activePageIndex]
-            .strokes.firstOrNull { !it.active } ?: return@launchSaving
-        publishDocument(
-            repository.setStrokeActive(key, pageId, reference.strokeId, active = true),
-            mutableUiState.value.activePageIndex,
-        )
+        publishDocument(repository.redo(key, pageId), mutableUiState.value.activePageIndex)
     }
 
     fun addPage() = launchSaving {
+        saveCoordinator.flush()
         val (key, pageId) = currentPage()
         val oldIds = requireDocument().pages.mapTo(mutableSetOf()) { it.id }
         val paper = settingsRepository.observe().first().defaultPaperStyle
@@ -84,6 +114,7 @@ class NotebookViewModel(
     fun confirmDeletePage() {
         val confirmation = mutableUiState.value.pendingConfirmation as? PendingConfirmation.DeletePage ?: return
         launchSaving {
+            saveCoordinator.flush()
             val key = requireNotNull(currentKey)
             val oldDocument = requireDocument()
             val deletedIndex = oldDocument.pages.indexOfFirst { it.id == confirmation.pageId }
@@ -106,6 +137,7 @@ class NotebookViewModel(
     fun confirmClearPage() {
         val confirmation = mutableUiState.value.pendingConfirmation as? PendingConfirmation.ClearPage ?: return
         launchSaving {
+            saveCoordinator.flush()
             val document = repository.clearPage(requireNotNull(currentKey), confirmation.pageId)
             publishDocument(document, mutableUiState.value.activePageIndex, pendingConfirmation = null)
         }
@@ -116,6 +148,7 @@ class NotebookViewModel(
     }
 
     fun reorderPage(pageId: String, newIndex: Int) = launchSaving {
+        saveCoordinator.flush()
         val document = requireDocument()
         val activePageId = document.pages[mutableUiState.value.activePageIndex].id
         val changed = repository.reorderPage(requireNotNull(currentKey), pageId, newIndex)
@@ -123,6 +156,7 @@ class NotebookViewModel(
     }
 
     fun selectPage(index: Int) = launchOperation(NotebookSaveState.IDLE) {
+        saveCoordinator.flush()
         val document = requireDocument()
         require(index in document.pages.indices) { "Page index is outside the notebook" }
         publishDocument(document, index)
@@ -130,13 +164,19 @@ class NotebookViewModel(
 
     suspend fun awaitIdle() {
         while (true) {
-            val operation = latestOperation ?: return
-            operation.join()
+            val operation = latestOperation
+            operation?.join()
+            saveCoordinator.awaitIdle()
             if (operation === latestOperation) return
         }
     }
 
+    suspend fun flush() {
+        saveCoordinator.flush()
+    }
+
     fun close() {
+        saveCoordinator.cancel()
         scope.cancel()
     }
 
@@ -200,4 +240,37 @@ class NotebookViewModel(
     private fun requirePage(pageId: String) {
         require(requireDocument().pages.any { it.id == pageId }) { "Unknown page id: $pageId" }
     }
+
+    private fun handleSaving(revision: Long) {
+        val state = mutableUiState.value
+        if (revision < state.durableRevision) return
+        mutableUiState.value = state.copy(saveState = NotebookSaveState.SAVING, errorMessage = null)
+    }
+
+    private fun handleSaved(revision: Long) {
+        val state = mutableUiState.value
+        if (revision < state.durableRevision) return
+        val durableRevision = maxOf(state.durableRevision, revision)
+        mutableUiState.value = state.copy(
+            durableRevision = durableRevision,
+            saveState = if (durableRevision >= state.uiRevision && !saveCoordinator.hasPendingEdits) {
+                NotebookSaveState.SAVED
+            } else {
+                NotebookSaveState.SAVING
+            },
+            errorMessage = null,
+        )
+    }
+
+    private fun handleSaveFailure(revision: Long, error: Exception) {
+        val state = mutableUiState.value
+        if (revision < state.durableRevision) return
+        mutableUiState.value = state.copy(
+            saveState = NotebookSaveState.ERROR,
+            errorMessage = error.message ?: error::class.simpleName,
+        )
+    }
+
+    private fun NotebookDocument.replacePage(changedPage: com.putnamworkbook.offline.notebook.model.NotebookPage): NotebookDocument =
+        copy(pages = pages.map { if (it.id == changedPage.id) changedPage else it })
 }
