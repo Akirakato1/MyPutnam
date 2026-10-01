@@ -27,6 +27,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -323,33 +324,40 @@ class NotebookViewModel(
     }
 
     private fun handleSaving(revision: Long) {
-        val state = mutableUiState.value
-        if (revision < state.durableRevision) return
-        mutableUiState.value = state.copy(saveState = NotebookSaveState.SAVING, errorMessage = null)
+        mutableUiState.update { state ->
+            if (revision < state.durableRevision) state else state.copy(
+                saveState = NotebookSaveState.SAVING,
+                errorMessage = null,
+            )
+        }
     }
 
     private fun handleSaved(revision: Long) {
-        val state = mutableUiState.value
-        if (revision < state.durableRevision) return
-        val durableRevision = maxOf(state.durableRevision, revision)
-        mutableUiState.value = state.copy(
-            durableRevision = durableRevision,
-            saveState = if (durableRevision >= state.uiRevision && !saveCoordinator.hasPendingEdits) {
-                NotebookSaveState.SAVED
+        mutableUiState.update { state ->
+            if (revision < state.durableRevision) {
+                state
             } else {
-                NotebookSaveState.SAVING
-            },
-            errorMessage = null,
-        )
+                val durableRevision = maxOf(state.durableRevision, revision)
+                state.copy(
+                    durableRevision = durableRevision,
+                    saveState = if (durableRevision >= state.uiRevision && !saveCoordinator.hasPendingEdits) {
+                        NotebookSaveState.SAVED
+                    } else {
+                        NotebookSaveState.SAVING
+                    },
+                    errorMessage = null,
+                )
+            }
+        }
     }
 
     private fun handleSaveFailure(revision: Long, error: Exception) {
-        val state = mutableUiState.value
-        if (revision < state.durableRevision) return
-        mutableUiState.value = state.copy(
-            saveState = NotebookSaveState.ERROR,
-            errorMessage = error.message ?: error::class.simpleName,
-        )
+        mutableUiState.update { state ->
+            if (revision < state.durableRevision) state else state.copy(
+                saveState = NotebookSaveState.ERROR,
+                errorMessage = error.message ?: error::class.simpleName,
+            )
+        }
     }
 
     private fun NotebookDocument.replacePage(changedPage: com.putnamworkbook.offline.notebook.model.NotebookPage): NotebookDocument =
@@ -376,21 +384,29 @@ class NotebookViewModel(
         val state = mutableUiState.value
         val document = requireNotNull(state.document) { "Open a problem before editing its notebook" }
         val page = document.pages[state.activePageIndex]
-        val changedPage = NotebookReducer.applyEdits(page, listOf(edit))
-        val deactivated = edit.group.deactivatedStrokeIds.toSet()
-        val changedStrokes = state.strokes.filterNot { it.id in deactivated } + edit.newStrokes
-        val revision = state.uiRevision + 1
-        mutableUiState.value = state.copy(
-            document = document.replacePage(changedPage),
-            strokes = changedStrokes,
-            selection = selectionAfter,
-            clipboardHasContent = clipboard.hasContent,
-            saveState = NotebookSaveState.SAVING,
-            errorMessage = null,
-            uiRevision = revision,
-        )
-        check(saveCoordinator.enqueue(page.id, edit) == revision) {
-            "Notebook save revisions must remain monotonic"
+        val revision = saveCoordinator.enqueue(page.id, edit)
+        mutableUiState.update { current ->
+            val currentDocument = requireNotNull(current.document) {
+                "Open a problem before editing its notebook"
+            }
+            val pageIndex = currentDocument.pages.indexOfFirst { it.id == page.id }
+            check(pageIndex >= 0) { "The edited notebook page is no longer available" }
+            val changedPage = NotebookReducer.applyEdits(currentDocument.pages[pageIndex], listOf(edit))
+            val deactivated = edit.group.deactivatedStrokeIds.toSet()
+            val changedStrokes = current.strokes.filterNot { it.id in deactivated } + edit.newStrokes
+            current.copy(
+                document = currentDocument.replacePage(changedPage),
+                strokes = changedStrokes,
+                selection = selectionAfter,
+                clipboardHasContent = clipboard.hasContent,
+                saveState = if (current.durableRevision >= revision && !saveCoordinator.hasPendingEdits) {
+                    NotebookSaveState.SAVED
+                } else {
+                    NotebookSaveState.SAVING
+                },
+                errorMessage = null,
+                uiRevision = maxOf(current.uiRevision, revision),
+            )
         }
     }
 
