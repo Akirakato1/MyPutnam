@@ -11,6 +11,7 @@ from pathlib import Path
 
 
 SCHEMA_PATH = Path(__file__).parents[1] / "sql" / "content-schema.sql"
+CONTENT_SCHEMA_VERSION = 2
 
 
 def canonical_json(value):
@@ -56,11 +57,16 @@ def build_content_database(manifest, output_path):
 
 def _insert_manifest(database, manifest):
     schema_version = manifest["schemaVersion"]
+    if schema_version != CONTENT_SCHEMA_VERSION:
+        raise ValueError(
+            f"Manifest schema version {schema_version} does not match "
+            f"database schema version {CONTENT_SCHEMA_VERSION}"
+        )
     year = manifest["year"]
     canonical_manifest = canonical_json(manifest).encode("utf-8")
     metadata = (
         ("contentSchemaVersion", str(schema_version)),
-        ("contentVersion", manifest.get("contentVersion", f"{year}.1")),
+        ("contentVersion", manifest.get("contentVersion", f"{year}.2")),
         ("manifestSha256", hashlib.sha256(canonical_manifest).hexdigest()),
         ("year", str(year)),
     )
@@ -73,9 +79,8 @@ def _insert_manifest(database, manifest):
             """
             INSERT INTO problem (
                 year, code, ordinal, statement_asset_path, statement_sha256,
-                solution_asset_path, solution_sha256, original_pdf_path,
-                original_pdf_sha256, original_pdf_page_index, attribution_json
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                solution_asset_path, solution_sha256, attribution_json
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 year,
@@ -85,22 +90,20 @@ def _insert_manifest(database, manifest):
                 problem["statement"]["sha256"],
                 rooted_asset_path(year, problem["solution"]["assetPath"]),
                 problem["solution"]["sha256"],
-                rooted_asset_path(year, problem["originalPdf"]["assetPath"]),
-                problem["originalPdf"]["sha256"],
-                problem["originalPdf"]["pageIndex"],
                 canonical_json(problem["sources"]),
             ),
         )
         database.executemany(
             """
-            INSERT INTO hint (year, problem_code, hint_order, title, asset_path, sha256)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO hint (year, problem_code, hint_order, stage, title, asset_path, sha256)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
             """,
             [
                 (
                     year,
                     problem["code"],
                     hint["order"],
+                    hint["stage"],
                     hint["title"],
                     rooted_asset_path(year, hint["assetPath"]),
                     hint["sha256"],
@@ -143,8 +146,8 @@ def main():
         arguments.manifest
         if arguments.manifest
         else {
-            "schemaVersion": 1,
-            "contentVersion": f"{arguments.empty_year}.1",
+            "schemaVersion": CONTENT_SCHEMA_VERSION,
+            "contentVersion": f"{arguments.empty_year}.2",
             "year": arguments.empty_year,
             "problems": [],
             "assets": [],

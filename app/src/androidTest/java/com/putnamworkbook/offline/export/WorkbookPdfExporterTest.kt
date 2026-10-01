@@ -10,9 +10,8 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.putnamworkbook.offline.data.content.ContentDocument
 import com.putnamworkbook.offline.data.content.ContentRepository
-import com.putnamworkbook.offline.data.content.OriginalPdf
+import com.putnamworkbook.offline.data.content.HintContent
 import com.putnamworkbook.offline.data.content.ProblemContent
 import com.putnamworkbook.offline.data.content.ProblemSummary
 import com.putnamworkbook.offline.data.user.RoomProgressRepository
@@ -20,6 +19,7 @@ import com.putnamworkbook.offline.data.user.UserDatabase
 import com.putnamworkbook.offline.domain.model.BrushSpec
 import com.putnamworkbook.offline.domain.model.PaperStyle
 import com.putnamworkbook.offline.domain.model.ProblemKey
+import com.putnamworkbook.offline.domain.model.HintStage
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
 import com.putnamworkbook.offline.notebook.model.StrokeSample
 import com.putnamworkbook.offline.notebook.storage.FileNotebookRepository
@@ -232,12 +232,17 @@ class WorkbookPdfExporterTest {
         statementAssetPath = "statement.html",
         statementSha256 = "statement",
         hints = (1..4).map { index ->
-            ContentDocument(index, "Hint $index", "hint-$index.html", "hint-$index")
+            HintContent(
+                index,
+                HintStage.entries[index - 1],
+                "Hint $index",
+                "hint-$index.html",
+                "hint-$index",
+            )
         },
         prerequisites = emptyList(),
         solutionAssetPath = "solution.html",
         solutionSha256 = "solution",
-        originalPdf = OriginalPdf("original.pdf", "pdf", 0),
         attribution = emptyList(),
     )
 

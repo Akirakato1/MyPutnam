@@ -18,9 +18,6 @@ data class ProblemEntity(
     @ColumnInfo(name = "statement_sha256") val statementSha256: String,
     @ColumnInfo(name = "solution_asset_path") val solutionAssetPath: String,
     @ColumnInfo(name = "solution_sha256") val solutionSha256: String,
-    @ColumnInfo(name = "original_pdf_path") val originalPdfPath: String,
-    @ColumnInfo(name = "original_pdf_sha256") val originalPdfSha256: String,
-    @ColumnInfo(name = "original_pdf_page_index") val originalPdfPageIndex: Int,
     @ColumnInfo(name = "attribution_json") val attributionJson: String,
 )
 
@@ -41,6 +38,7 @@ data class HintEntity(
     val year: Int,
     @ColumnInfo(name = "problem_code") val problemCode: String,
     @ColumnInfo(name = "hint_order") val order: Int,
+    val stage: String,
     val title: String,
     @ColumnInfo(name = "asset_path") val assetPath: String,
     val sha256: String,

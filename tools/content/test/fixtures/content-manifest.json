@@ -1,5 +1,6 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+  "contentVersion": "2025.2",
   "year": 2025,
   "problems": [
     {
@@ -14,24 +15,28 @@
       "hints": [
         {
           "order": 1,
+          "stage": "nudge",
           "title": "Nudge",
           "assetPath": "problems/A1/hint-1.html",
           "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
         },
         {
           "order": 2,
+          "stage": "strategy",
           "title": "Technique",
           "assetPath": "problems/A1/hint-2.html",
           "sha256": "2222222222222222222222222222222222222222222222222222222222222222"
         },
         {
           "order": 3,
+          "stage": "knowledge",
           "title": "Knowledge gap",
           "assetPath": "problems/A1/hint-3.html",
           "sha256": "3333333333333333333333333333333333333333333333333333333333333333"
         },
         {
           "order": 4,
+          "stage": "outline",
           "title": "Outline",
           "assetPath": "problems/A1/hint-4.html",
           "sha256": "4444444444444444444444444444444444444444444444444444444444444444"
@@ -66,12 +71,7 @@
           "label": "Official solutions",
           "url": "https://example.test/solutions"
         }
-      ],
-      "originalPdf": {
-        "assetPath": "original/2025-problems.pdf",
-        "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
-        "pageIndex": 3
-      }
+      ]
     }
   ],
   "assets": []

@@ -15,7 +15,7 @@ import androidx.test.espresso.Espresso.pressBack
 import com.putnamworkbook.offline.data.content.Attribution
 import com.putnamworkbook.offline.data.content.ContentDocument
 import com.putnamworkbook.offline.data.content.ContentRepository
-import com.putnamworkbook.offline.data.content.OriginalPdf
+import com.putnamworkbook.offline.data.content.HintContent
 import com.putnamworkbook.offline.data.content.ProblemContent
 import com.putnamworkbook.offline.data.content.ProblemSummary
 import com.putnamworkbook.offline.data.user.ProblemProgress
@@ -122,11 +122,10 @@ private class FakeContentRepository : ContentRepository {
             summary = summary,
             statementAssetPath = "content/${key.year}/${key.code}/statement.html",
             statementSha256 = "0".repeat(64),
-            hints = emptyList<ContentDocument>(),
+            hints = emptyList<HintContent>(),
             prerequisites = emptyList<ContentDocument>(),
             solutionAssetPath = "content/${key.year}/${key.code}/solution.html",
             solutionSha256 = "0".repeat(64),
-            originalPdf = OriginalPdf("pdf/${key.year}.pdf", "0".repeat(64), 0),
             attribution = emptyList<Attribution>(),
         )
     }

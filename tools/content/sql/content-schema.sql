@@ -8,9 +8,6 @@ CREATE TABLE problem (
     statement_sha256 TEXT NOT NULL,
     solution_asset_path TEXT NOT NULL,
     solution_sha256 TEXT NOT NULL,
-    original_pdf_path TEXT NOT NULL,
-    original_pdf_sha256 TEXT NOT NULL,
-    original_pdf_page_index INTEGER NOT NULL,
     attribution_json TEXT NOT NULL,
     PRIMARY KEY (year, code)
 );
@@ -21,6 +18,7 @@ CREATE TABLE hint (
     year INTEGER NOT NULL,
     problem_code TEXT NOT NULL,
     hint_order INTEGER NOT NULL,
+    stage TEXT NOT NULL CHECK (stage IN ('nudge', 'strategy', 'knowledge', 'outline')),
     title TEXT NOT NULL,
     asset_path TEXT NOT NULL,
     sha256 TEXT NOT NULL,
@@ -51,4 +49,4 @@ CREATE TABLE content_meta (
     PRIMARY KEY (key)
 );
 
-PRAGMA user_version = 1;
+PRAGMA user_version = 2;

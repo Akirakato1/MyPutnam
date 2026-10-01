@@ -13,7 +13,7 @@ import java.security.MessageDigest
         PrerequisiteEntity::class,
         ContentMetaEntity::class,
     ],
-    version = 1,
+    version = 2,
     exportSchema = true,
 )
 abstract class ContentDatabase : RoomDatabase() {

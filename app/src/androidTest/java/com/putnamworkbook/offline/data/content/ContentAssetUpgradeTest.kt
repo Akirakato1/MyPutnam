@@ -37,6 +37,8 @@ class ContentAssetUpgradeTest {
     fun changedPackagedAssetReplacesOnlyTheImmutableContentDatabase() = runBlocking {
         val initial = ContentDatabase.create(context, DATABASE_NAME, PREFERENCES_NAME)
         val packagedVersion = initial.contentDao().meta("contentVersion")
+        assertEquals("2025.2", packagedVersion)
+        assertEquals("2", initial.contentDao().meta("contentSchemaVersion"))
         initial.openHelper.writableDatabase.execSQL(
             "UPDATE content_meta SET value = 'stale-version' WHERE `key` = 'contentVersion'",
         )

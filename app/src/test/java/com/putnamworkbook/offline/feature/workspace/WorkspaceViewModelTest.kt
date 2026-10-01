@@ -3,12 +3,13 @@ package com.putnamworkbook.offline.feature.workspace
 import com.putnamworkbook.offline.data.content.Attribution
 import com.putnamworkbook.offline.data.content.ContentDocument
 import com.putnamworkbook.offline.data.content.ContentRepository
-import com.putnamworkbook.offline.data.content.OriginalPdf
+import com.putnamworkbook.offline.data.content.HintContent
 import com.putnamworkbook.offline.data.content.ProblemContent
 import com.putnamworkbook.offline.data.content.ProblemSummary
 import com.putnamworkbook.offline.data.user.ProblemProgress
 import com.putnamworkbook.offline.data.user.ProgressRepository
 import com.putnamworkbook.offline.domain.model.ProblemKey
+import com.putnamworkbook.offline.domain.model.HintStage
 import com.putnamworkbook.offline.domain.model.ProblemStatus
 import com.putnamworkbook.offline.domain.model.ReferenceTab
 import kotlinx.coroutines.CoroutineScope
@@ -113,12 +114,17 @@ private class FakeWorkspaceContentRepository(
         statementAssetPath = "statement.html",
         statementSha256 = "0".repeat(64),
         hints = (1..4).map { index ->
-            ContentDocument(index, "Hint $index", "hint-$index.html", index.toString().repeat(64))
+            HintContent(
+                index,
+                HintStage.entries[index - 1],
+                "Hint $index",
+                "hint-$index.html",
+                index.toString().repeat(64),
+            )
         },
         prerequisites = listOf(ContentDocument(1, "Useful theorem", "theorem.html", "a".repeat(64))),
         solutionAssetPath = "solution.html",
         solutionSha256 = "b".repeat(64),
-        originalPdf = OriginalPdf("paper.pdf", "c".repeat(64), 0),
         attribution = emptyList<Attribution>(),
     )
 }

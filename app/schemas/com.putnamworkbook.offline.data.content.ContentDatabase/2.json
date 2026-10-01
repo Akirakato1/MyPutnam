@@ -1,0 +1,270 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "4b0365f3e756d4665172af151be1f2c5",
+    "entities": [
+      {
+        "tableName": "problem",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`year` INTEGER NOT NULL, `code` TEXT NOT NULL, `ordinal` INTEGER NOT NULL, `statement_asset_path` TEXT NOT NULL, `statement_sha256` TEXT NOT NULL, `solution_asset_path` TEXT NOT NULL, `solution_sha256` TEXT NOT NULL, `attribution_json` TEXT NOT NULL, PRIMARY KEY(`year`, `code`))",
+        "fields": [
+          {
+            "fieldPath": "year",
+            "columnName": "year",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "code",
+            "columnName": "code",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ordinal",
+            "columnName": "ordinal",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "statementAssetPath",
+            "columnName": "statement_asset_path",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "statementSha256",
+            "columnName": "statement_sha256",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "solutionAssetPath",
+            "columnName": "solution_asset_path",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "solutionSha256",
+            "columnName": "solution_sha256",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "attributionJson",
+            "columnName": "attribution_json",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "year",
+            "code"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_problem_year_ordinal",
+            "unique": true,
+            "columnNames": [
+              "year",
+              "ordinal"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_problem_year_ordinal` ON `${TABLE_NAME}` (`year`, `ordinal`)"
+          }
+        ]
+      },
+      {
+        "tableName": "hint",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`year` INTEGER NOT NULL, `problem_code` TEXT NOT NULL, `hint_order` INTEGER NOT NULL, `stage` TEXT NOT NULL, `title` TEXT NOT NULL, `asset_path` TEXT NOT NULL, `sha256` TEXT NOT NULL, PRIMARY KEY(`year`, `problem_code`, `hint_order`), FOREIGN KEY(`year`, `problem_code`) REFERENCES `problem`(`year`, `code`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "year",
+            "columnName": "year",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "problemCode",
+            "columnName": "problem_code",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "order",
+            "columnName": "hint_order",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "stage",
+            "columnName": "stage",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "assetPath",
+            "columnName": "asset_path",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sha256",
+            "columnName": "sha256",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "year",
+            "problem_code",
+            "hint_order"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_hint_year_problem_code",
+            "unique": false,
+            "columnNames": [
+              "year",
+              "problem_code"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_hint_year_problem_code` ON `${TABLE_NAME}` (`year`, `problem_code`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "problem",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "year",
+              "problem_code"
+            ],
+            "referencedColumns": [
+              "year",
+              "code"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "prerequisite",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`year` INTEGER NOT NULL, `problem_code` TEXT NOT NULL, `prerequisite_order` INTEGER NOT NULL, `title` TEXT NOT NULL, `asset_path` TEXT NOT NULL, `sha256` TEXT NOT NULL, PRIMARY KEY(`year`, `problem_code`, `prerequisite_order`), FOREIGN KEY(`year`, `problem_code`) REFERENCES `problem`(`year`, `code`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "year",
+            "columnName": "year",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "problemCode",
+            "columnName": "problem_code",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "order",
+            "columnName": "prerequisite_order",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "assetPath",
+            "columnName": "asset_path",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sha256",
+            "columnName": "sha256",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "year",
+            "problem_code",
+            "prerequisite_order"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_prerequisite_year_problem_code",
+            "unique": false,
+            "columnNames": [
+              "year",
+              "problem_code"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_prerequisite_year_problem_code` ON `${TABLE_NAME}` (`year`, `problem_code`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "problem",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "year",
+              "problem_code"
+            ],
+            "referencedColumns": [
+              "year",
+              "code"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "content_meta",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`key` TEXT NOT NULL, `value` TEXT NOT NULL, PRIMARY KEY(`key`))",
+        "fields": [
+          {
+            "fieldPath": "key",
+            "columnName": "key",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "value",
+            "columnName": "value",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "key"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4b0365f3e756d4665172af151be1f2c5')"
+    ]
+  }
+}

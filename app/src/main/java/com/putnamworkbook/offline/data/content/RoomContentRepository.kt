@@ -1,6 +1,7 @@
 package com.putnamworkbook.offline.data.content
 
 import androidx.room.withTransaction
+import com.putnamworkbook.offline.domain.model.HintStage
 import com.putnamworkbook.offline.domain.model.ProblemKey
 import org.json.JSONArray
 
@@ -22,15 +23,10 @@ class RoomContentRepository(
             summary = problem.toSummary(),
             statementAssetPath = problem.statementAssetPath,
             statementSha256 = problem.statementSha256,
-            hints = dao.hints(key.year, key.code).map { it.toDocument() },
+            hints = dao.hints(key.year, key.code).map { it.toHint() },
             prerequisites = dao.prerequisites(key.year, key.code).map { it.toDocument() },
             solutionAssetPath = problem.solutionAssetPath,
             solutionSha256 = problem.solutionSha256,
-            originalPdf = OriginalPdf(
-                assetPath = problem.originalPdfPath,
-                sha256 = problem.originalPdfSha256,
-                pageIndex = problem.originalPdfPageIndex,
-            ),
             attribution = problem.attributionJson.toAttribution(),
         )
     }
@@ -38,7 +34,13 @@ class RoomContentRepository(
 
 private fun ProblemEntity.toSummary() = ProblemSummary(ProblemKey(year, code), ordinal)
 
-private fun HintEntity.toDocument() = ContentDocument(order, title, assetPath, sha256)
+private fun HintEntity.toHint() = HintContent(
+    order = order,
+    stage = HintStage.fromStorageValue(stage),
+    title = title,
+    assetPath = assetPath,
+    sha256 = sha256,
+)
 
 private fun PrerequisiteEntity.toDocument() = ContentDocument(order, title, assetPath, sha256)
 

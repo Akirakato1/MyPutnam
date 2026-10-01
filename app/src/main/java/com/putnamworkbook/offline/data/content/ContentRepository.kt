@@ -1,6 +1,7 @@
 package com.putnamworkbook.offline.data.content
 
 import com.putnamworkbook.offline.domain.model.ProblemKey
+import com.putnamworkbook.offline.domain.model.HintStage
 
 data class ProblemSummary(
     val key: ProblemKey,
@@ -9,6 +10,14 @@ data class ProblemSummary(
 
 data class ContentDocument(
     val order: Int,
+    val title: String,
+    val assetPath: String,
+    val sha256: String,
+)
+
+data class HintContent(
+    val order: Int,
+    val stage: HintStage,
     val title: String,
     val assetPath: String,
     val sha256: String,
@@ -30,13 +39,15 @@ data class ProblemContent(
     val summary: ProblemSummary,
     val statementAssetPath: String,
     val statementSha256: String,
-    val hints: List<ContentDocument>,
+    val hints: List<HintContent>,
     val prerequisites: List<ContentDocument>,
     val solutionAssetPath: String,
     val solutionSha256: String,
-    val originalPdf: OriginalPdf,
     val attribution: List<Attribution>,
-)
+) {
+    @Deprecated("Original papers are no longer packaged; retained until the PDF UI is removed")
+    val originalPdf: OriginalPdf? get() = null
+}
 
 interface ContentRepository {
     suspend fun contentVersion(): String = "unknown"
