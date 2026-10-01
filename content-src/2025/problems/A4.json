@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "year": 2025,
   "code": "A4",
   "ordinal": 4,
@@ -27,6 +27,7 @@
   "hints": [
     {
       "order": 1,
+      "stage": "nudge",
       "title": "Read the commutation graph",
       "document": { "blocks": [{
         "type": "paragraph",
@@ -39,6 +40,7 @@
     },
     {
       "order": 2,
+      "stage": "strategy",
       "title": "Use the commutant in dimension two",
       "document": { "blocks": [{
         "type": "paragraph",
@@ -57,6 +59,7 @@
     },
     {
       "order": 3,
+      "stage": "knowledge",
       "title": "Try rank-one matrices",
       "document": { "blocks": [{
         "type": "paragraph",
@@ -71,6 +74,7 @@
     },
     {
       "order": 4,
+      "stage": "outline",
       "title": "Assemble the proof",
       "document": { "blocks": [{
         "type": "list",
@@ -141,6 +145,5 @@
   "sources": [
     { "kind": "problem", "label": "MAA official 2025 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2025-Putnam-Problems-for-Sessions-A-and-B.pdf" },
     { "kind": "solution", "label": "MAA official 2025 solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf" }
-  ],
-  "originalPdf": { "path": "original/2025-problems.pdf", "pageIndex": 0 }
+  ]
 }

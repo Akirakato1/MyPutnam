@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "year": 2025,
   "code": "A6",
   "ordinal": 6,
@@ -17,21 +17,25 @@
   "hints": [
     {
       "order": 1,
+      "stage": "nudge",
       "title": "Track powers of two",
       "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "The recurrence alternates parity. Work with congruences modulo successive powers of 2, not with a closed form for " }, { "type": "inlineMath", "tex": "b_n" }, { "type": "text", "text": "." }] }] }
     },
     {
       "order": 2,
+      "stage": "strategy",
       "title": "Introduce finite differences",
       "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Set " }, { "type": "inlineMath", "tex": "c_{n,k}=b_{n+2^k}-b_n" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "d_{n,k}=b_{n+2^{k+1}}-2b_{n+2^k}+b_n" }, { "type": "text", "text": ". The target is " }, { "type": "inlineMath", "tex": "d_{0,k}" }, { "type": "text", "text": "." }] }] }
     },
     {
       "order": 3,
+      "stage": "knowledge",
       "title": "Subtract two recurrences",
       "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "From the recurrence derive " }, { "type": "inlineMath", "tex": "c_{n+1,k}-c_{n,k}=4b_nc_{n,k}+2c_{n,k}^2" }, { "type": "text", "text": ". This makes the congruence class of " }, { "type": "inlineMath", "tex": "c_{n,k}" }, { "type": "text", "text": " nearly independent of " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": "." }] }] }
     },
     {
       "order": 4,
+      "stage": "outline",
       "title": "Prove two congruence lemmas",
       "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
         [{ "type": "text", "text": "Show c_{n,k} is congruent to 2^{k+1} modulo 2^{k+2}." }],
@@ -88,6 +92,5 @@
   "sources": [
     { "kind": "problem", "label": "MAA official 2025 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2025-Putnam-Problems-for-Sessions-A-and-B.pdf" },
     { "kind": "solution", "label": "MAA official 2025 solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf" }
-  ],
-  "originalPdf": { "path": "original/2025-problems.pdf", "pageIndex": 0 }
+  ]
 }

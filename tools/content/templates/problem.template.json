@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 2,
+  "year": 2025,
+  "code": "A1",
+  "ordinal": 1,
+  "statement": {
+    "blocks": [
+      {
+        "type": "heading",
+        "level": 1,
+        "runs": [{ "type": "text", "text": "Problem A1" }]
+      },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "State the problem using inline mathematics such as " },
+          { "type": "inlineMath", "tex": "x\\in\\mathbb{R}" },
+          { "type": "text", "text": "." }
+        ]
+      },
+      { "type": "displayMath", "tex": "x^2=1" }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Notice a useful feature",
+      "document": {
+        "blocks": [{
+          "type": "paragraph",
+          "runs": [{ "type": "text", "text": "Ask a non-spoiling question or point out a pattern." }]
+        }]
+      }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Choose the main technique",
+      "document": {
+        "blocks": [{
+          "type": "paragraph",
+          "runs": [
+            { "type": "text", "text": "Name the useful reduction, for example factoring " },
+            { "type": "inlineMath", "tex": "x^2-1" },
+            { "type": "text", "text": "." }
+          ]
+        }]
+      }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Recall the needed result",
+      "document": {
+        "blocks": [{
+          "type": "paragraph",
+          "runs": [{ "type": "text", "text": "Bridge the relevant theorem, identity, or knowledge gap." }]
+        }]
+      }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Outline the proof",
+      "document": {
+        "blocks": [{
+          "type": "list",
+          "ordered": true,
+          "items": [
+            [{ "type": "text", "text": "Apply the main reduction." }],
+            [{ "type": "text", "text": "Finish the remaining cases." }]
+          ]
+        }]
+      }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Difference of squares",
+      "document": {
+        "blocks": [{ "type": "displayMath", "tex": "a^2-b^2=(a-b)(a+b)" }]
+      }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Give a complete argument with inline mathematics such as " },
+          { "type": "inlineMath", "tex": "(x-1)(x+1)=0" },
+          { "type": "text", "text": "." }
+        ]
+      },
+      { "type": "displayMath", "tex": "x\\in\\{-1,1\\}" }
+    ]
+  },
+  "sources": [
+    {
+      "kind": "problem",
+      "label": "Official problem source",
+      "url": "https://example.com/problem-source"
+    },
+    {
+      "kind": "solution",
+      "label": "Official solution source",
+      "url": "https://example.com/solution-source"
+    }
+  ]
+}

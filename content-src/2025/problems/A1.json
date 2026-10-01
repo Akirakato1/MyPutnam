@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "year": 2025,
   "code": "A1",
   "ordinal": 1,
@@ -33,6 +33,7 @@
   "hints": [
     {
       "order": 1,
+      "stage": "nudge",
       "title": "Track what normalization does",
       "document": { "blocks": [{
         "type": "paragraph",
@@ -45,6 +46,7 @@
     },
     {
       "order": 2,
+      "stage": "strategy",
       "title": "Separate the power of two",
       "document": { "blocks": [{
         "type": "paragraph",
@@ -58,6 +60,7 @@
     },
     {
       "order": 3,
+      "stage": "knowledge",
       "title": "Use the odd-part descent",
       "document": { "blocks": [
         {
@@ -78,6 +81,7 @@
     },
     {
       "order": 4,
+      "stage": "outline",
       "title": "Outline the proof",
       "document": { "blocks": [{
         "type": "list",
@@ -191,6 +195,5 @@
   "sources": [
     { "kind": "problem", "label": "MAA official 2025 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2025-Putnam-Problems-for-Sessions-A-and-B.pdf" },
     { "kind": "solution", "label": "MAA official 2025 solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf" }
-  ],
-  "originalPdf": { "path": "original/2025-problems.pdf", "pageIndex": 0 }
+  ]
 }

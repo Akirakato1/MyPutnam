@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "year": 2025,
   "code": "B6",
   "ordinal": 12,
@@ -15,21 +15,25 @@
   "hints": [
     {
       "order": 1,
+      "stage": "nudge",
       "title": "Find a quadratic example",
       "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Try " }, { "type": "inlineMath", "tex": "g(n)=n^2" }, { "type": "text", "text": ". Compare the linear increment with " }, { "type": "inlineMath", "tex": "g(g(n))" }, { "type": "text", "text": "." }] }] }
     },
     {
       "order": 2,
+      "stage": "strategy",
       "title": "Bootstrap polynomial growth",
       "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Assuming " }, { "type": "inlineMath", "tex": "r>1/4" }, { "type": "text", "text": ", first show " }, { "type": "inlineMath", "tex": "g(n)\\ge n" }, { "type": "text", "text": ". Define " }, { "type": "inlineMath", "tex": "b_{k+1}=rb_k^2+1" }, { "type": "text", "text": " and inductively prove " }, { "type": "inlineMath", "tex": "g(n)\\ge c_kn^{b_k}" }, { "type": "text", "text": "." }] }] }
     },
     {
       "order": 3,
+      "stage": "knowledge",
       "title": "Force exponential growth",
       "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "The sequence " }, { "type": "inlineMath", "tex": "b_k" }, { "type": "text", "text": " is unbounded. Choose k with " }, { "type": "inlineMath", "tex": "rb_k>1" }, { "type": "text", "text": "; the inequality then makes " }, { "type": "inlineMath", "tex": "g" }, { "type": "text", "text": " grow at least geometrically." }] }] }
     },
     {
       "order": 4,
+      "stage": "outline",
       "title": "Contradict the original inequality",
       "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
         [{ "type": "text", "text": "For large n, exponential growth gives g(n)≥n+2, so g(g(n))≥g(n+2)." }],
@@ -82,6 +86,5 @@
   "sources": [
     { "kind": "problem", "label": "MAA official 2025 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2025-Putnam-Problems-for-Sessions-A-and-B.pdf" },
     { "kind": "solution", "label": "MAA official 2025 solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf" }
-  ],
-  "originalPdf": { "path": "original/2025-problems.pdf", "pageIndex": 1 }
+  ]
 }

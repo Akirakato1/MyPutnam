@@ -3,7 +3,12 @@ import { readFileSync } from 'node:fs';
 import Ajv2020 from 'ajv/dist/2020.js';
 import katex from 'katex';
 
-import { isPlainObject, isSafeLocalPath, problemDocuments } from './content-types.mjs';
+import {
+  HINT_STAGES,
+  isPlainObject,
+  isSafeLocalPath,
+  problemDocuments,
+} from './content-types.mjs';
 
 const schema = JSON.parse(
   readFileSync(new URL('../schema/problem.schema.json', import.meta.url), 'utf8'),
@@ -26,6 +31,7 @@ export function validateProblem(record) {
   }
 
   validateOrderedItems(record.hints, '$.hints', [1, 2, 3, 4], errors);
+  validateHintStages(record.hints, errors);
   if (Array.isArray(record.prerequisites)) {
     validateOrderedItems(
       record.prerequisites,
@@ -35,15 +41,32 @@ export function validateProblem(record) {
     );
   }
 
-  if (isPlainObject(record.originalPdf) && !isSafeLocalPath(record.originalPdf.path)) {
-    errors.push('$.originalPdf.path: must be a normalized local path');
-  }
-
   for (const { path, document } of problemDocuments(record)) {
     validateDocument(document, path, errors);
   }
 
   return uniqueSorted(errors);
+}
+
+function validateHintStages(hints, errors) {
+  if (!Array.isArray(hints)) {
+    return;
+  }
+
+  const seen = new Set();
+  hints.forEach((hint, index) => {
+    const stage = hint?.stage;
+    if (typeof stage !== 'string') {
+      return;
+    }
+    if (seen.has(stage)) {
+      errors.push(`$.hints[${index}].stage: duplicate stage ${stage}`);
+    }
+    seen.add(stage);
+    if (stage !== HINT_STAGES[index]) {
+      errors.push(`$.hints[${index}].stage: expected ${HINT_STAGES[index]}`);
+    }
+  });
 }
 
 function validateOrderedItems(items, path, expectedOrders, errors) {
@@ -151,6 +174,9 @@ function schemaErrorPath(error) {
 
   if (error.keyword === 'required') {
     path += `.${error.params.missingProperty}`;
+  }
+  if (error.keyword === 'additionalProperties') {
+    path += `.${error.params.additionalProperty}`;
   }
 
   return path;

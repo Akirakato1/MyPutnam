@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "year": 2025,
   "code": "A1",
   "ordinal": 1,
@@ -29,6 +29,7 @@
   "hints": [
     {
       "order": 1,
+      "stage": "nudge",
       "title": "Try a first move",
       "document": {
         "blocks": [
@@ -43,6 +44,7 @@
     },
     {
       "order": 2,
+      "stage": "strategy",
       "title": "Choose a technique",
       "document": {
         "blocks": [
@@ -59,6 +61,7 @@
     },
     {
       "order": 3,
+      "stage": "knowledge",
       "title": "Recall the key fact",
       "document": {
         "blocks": [
@@ -73,6 +76,7 @@
     },
     {
       "order": 4,
+      "stage": "outline",
       "title": "Outline the finish",
       "document": {
         "blocks": [
@@ -133,9 +137,5 @@
       "label": "MAA official 2025 solutions",
       "url": "https://maa.org/putnam-2025-solutions"
     }
-  ],
-  "originalPdf": {
-    "path": "original/2025-problems.pdf",
-    "pageIndex": 0
-  }
+  ]
 }

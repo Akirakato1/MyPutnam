@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "year": 2025,
   "code": "A3",
   "ordinal": 3,
@@ -21,6 +21,7 @@
   "hints": [
     {
       "order": 1,
+      "stage": "nudge",
       "title": "Look for a reply strategy",
       "document": { "blocks": [{
         "type": "paragraph",
@@ -31,6 +32,7 @@
     },
     {
       "order": 2,
+      "stage": "strategy",
       "title": "Pair by the first nonzero digit",
       "document": { "blocks": [{
         "type": "paragraph",
@@ -41,6 +43,7 @@
     },
     {
       "order": 3,
+      "stage": "knowledge",
       "title": "Maintain a paired-visit invariant",
       "document": { "blocks": [{
         "type": "paragraph",
@@ -51,6 +54,7 @@
     },
     {
       "order": 4,
+      "stage": "outline",
       "title": "Outline the finish",
       "document": { "blocks": [{
         "type": "list",
@@ -155,6 +159,5 @@
   "sources": [
     { "kind": "problem", "label": "MAA official 2025 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2025-Putnam-Problems-for-Sessions-A-and-B.pdf" },
     { "kind": "solution", "label": "MAA official 2025 solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf" }
-  ],
-  "originalPdf": { "path": "original/2025-problems.pdf", "pageIndex": 0 }
+  ]
 }

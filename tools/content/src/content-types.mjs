@@ -1,6 +1,12 @@
 import { posix } from 'node:path';
 
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
+export const HINT_STAGES = Object.freeze([
+  'nudge',
+  'strategy',
+  'knowledge',
+  'outline',
+]);
 export const BLOCK_TYPES = Object.freeze([
   'paragraph',
   'displayMath',
@@ -12,10 +18,12 @@ export const BLOCK_TYPES = Object.freeze([
 /**
  * @typedef {{type: 'text', text: string} | {type: 'inlineMath', tex: string}} InlineRun
  * @typedef {{blocks: Array<object>}} RichDocument
- * @typedef {{schemaVersion: 1, year: number, code: string, ordinal: number,
+ * @typedef {'nudge' | 'strategy' | 'knowledge' | 'outline'} HintStage
+ * @typedef {{order: number, stage: HintStage, title: string, document: RichDocument}} Hint
+ * @typedef {{schemaVersion: 2, year: number, code: string, ordinal: number,
  *   statement: RichDocument, hints: Array<object>, prerequisites: Array<object>,
- *   solution: RichDocument, sources: Array<object>, originalPdf: object}} ProblemRecord
- * @typedef {{schemaVersion: 1, contentVersion: string, year: number,
+ *   solution: RichDocument, sources: Array<object>}} ProblemRecord
+ * @typedef {{schemaVersion: 2, contentVersion: string, year: number,
  *   problems: Array<object>, assets: Array<object>}} BuildManifest
  */
 

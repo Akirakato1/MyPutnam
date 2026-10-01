@@ -254,14 +254,6 @@ async function buildProblem(sourceRoot, stagingRoot, record, fileName, assets) {
     assets,
   );
 
-  const pdfSource = await resolveContainedFile(sourceRoot, record.originalPdf.path);
-  const pdfAsset = await writeAsset(
-    stagingRoot,
-    record.originalPdf.path,
-    await readFile(pdfSource),
-    assets,
-  );
-
   return {
     year: record.year,
     code: record.code,
@@ -272,10 +264,6 @@ async function buildProblem(sourceRoot, stagingRoot, record, fileName, assets) {
     prerequisites,
     solution: assetReference(solutionAsset),
     sources: record.sources,
-    originalPdf: {
-      ...assetReference(pdfAsset),
-      pageIndex: record.originalPdf.pageIndex,
-    },
   };
 }
 

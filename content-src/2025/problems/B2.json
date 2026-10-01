@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "year": 2025,
   "code": "B2",
   "ordinal": 8,
@@ -17,21 +17,25 @@
   "hints": [
     {
       "order": 1,
+      "stage": "nudge",
       "title": "Write both centroids as integrals",
       "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "A vertical slice of the planar region has area " }, { "type": "inlineMath", "tex": "f(x)dx" }, { "type": "text", "text": ", while a slice of the solid has volume " }, { "type": "inlineMath", "tex": "\\pi f(x)^2dx" }, { "type": "text", "text": "." }] }] }
     },
     {
       "order": 2,
+      "stage": "strategy",
       "title": "Compare weighted means",
       "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "After cancelling " }, { "type": "inlineMath", "tex": "\\pi" }, { "type": "text", "text": ", the two x-coordinates are weighted averages of " }, { "type": "inlineMath", "tex": "x" }, { "type": "text", "text": " with weights " }, { "type": "inlineMath", "tex": "f" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "f^2" }, { "type": "text", "text": ". Increasing the weight in an increasing function should shift the mean right." }] }] }
     },
     {
       "order": 3,
+      "stage": "knowledge",
       "title": "Use a double integral",
       "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Clear denominators and symmetrize the numerator. Look for the factor " }, { "type": "inlineMath", "tex": "(x-y)(f(x)-f(y))" }, { "type": "text", "text": "." }] }] }
     },
     {
       "order": 4,
+      "stage": "outline",
       "title": "Show strict positivity",
       "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
         [{ "type": "text", "text": "Express the numerator of x_2-x_1 as one half of a double integral." }],
@@ -76,6 +80,5 @@
   "sources": [
     { "kind": "problem", "label": "MAA official 2025 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2025-Putnam-Problems-for-Sessions-A-and-B.pdf" },
     { "kind": "solution", "label": "MAA official 2025 solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf" }
-  ],
-  "originalPdf": { "path": "original/2025-problems.pdf", "pageIndex": 1 }
+  ]
 }

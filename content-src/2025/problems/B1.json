@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "year": 2025,
   "code": "B1",
   "ordinal": 7,
@@ -21,21 +21,25 @@
   "hints": [
     {
       "order": 1,
+      "stage": "nudge",
       "title": "Bound the opposite color on a circle",
       "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "If a circle is centered at a red point, how many green points can lie on it? Three distinct collinear points cannot lie on a circle, so the hypothesis applies to any three points on that circle." }] }] }
     },
     {
       "order": 2,
+      "stage": "strategy",
       "title": "Assume two colors exist",
       "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Choose a red point R and a green point G at distance d. Use several circles centered at R and G, with radii strictly between d/2 and d." }] }] }
     },
     {
       "order": 3,
+      "stage": "knowledge",
       "title": "Count circle intersections",
       "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Every circle from the R-family meets every circle from the G-family twice. Choose the radii generically so the 18 intersection points are distinct, then count how many can be each color." }] }] }
     },
     {
       "order": 4,
+      "stage": "outline",
       "title": "Contradict the count",
       "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
         [{ "type": "text", "text": "A circle centered at R contains at most two green points, so three R-circles contain at most six green intersections." }],
@@ -80,6 +84,5 @@
   "sources": [
     { "kind": "problem", "label": "MAA official 2025 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2025-Putnam-Problems-for-Sessions-A-and-B.pdf" },
     { "kind": "solution", "label": "MAA official 2025 solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf" }
-  ],
-  "originalPdf": { "path": "original/2025-problems.pdf", "pageIndex": 1 }
+  ]
 }

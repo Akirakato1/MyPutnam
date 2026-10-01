@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "year": 2025,
   "code": "B5",
   "ordinal": 11,
@@ -17,21 +17,25 @@
   "hints": [
     {
       "order": 1,
+      "stage": "nudge",
       "title": "Extend the inverse sequence",
       "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Set " }, { "type": "inlineMath", "tex": "I(0)=I(p)=0" }, { "type": "text", "text": " so that neighboring inverse values can be compared near the endpoints." }] }] }
     },
     {
       "order": 2,
+      "stage": "strategy",
       "title": "Pair four steps",
       "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "For each " }, { "type": "inlineMath", "tex": "t=2,\\ldots,p-2" }, { "type": "text", "text": ", compare the two steps in " }, { "type": "inlineMath", "tex": "I(t-1),I(t),I(t+1)" }, { "type": "text", "text": " with the two steps in " }, { "type": "inlineMath", "tex": "I(I(t)-1),I(I(t)),I(I(t)+1)" }, { "type": "text", "text": "." }] }] }
     },
     {
       "order": 3,
+      "stage": "knowledge",
       "title": "Use inverse identities",
       "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "The endpoint sums satisfy " }, { "type": "inlineMath", "tex": "I(t-1)+I(I(t)-1)=p-1" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "I(t+1)+I(I(t)+1)=p+1" }, { "type": "text", "text": ". If all four steps rose, the difference of these sums would be at least four, but it is two." }] }] }
     },
     {
       "order": 4,
+      "stage": "outline",
       "title": "Count multiplicities",
       "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
         [{ "type": "text", "text": "Each t forces at least one downstep among four slots." }],
@@ -80,6 +84,5 @@
   "sources": [
     { "kind": "problem", "label": "MAA official 2025 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2025-Putnam-Problems-for-Sessions-A-and-B.pdf" },
     { "kind": "solution", "label": "MAA official 2025 solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf" }
-  ],
-  "originalPdf": { "path": "original/2025-problems.pdf", "pageIndex": 1 }
+  ]
 }
