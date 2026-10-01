@@ -35,6 +35,7 @@ import com.putnamworkbook.offline.domain.model.PaperStyle
 import com.putnamworkbook.offline.notebook.input.MotionEventAdapter
 import com.putnamworkbook.offline.notebook.input.PointerAction
 import com.putnamworkbook.offline.notebook.input.TouchStrokeRecorder
+import com.putnamworkbook.offline.notebook.input.FinishedStrokeBuffer
 import com.putnamworkbook.offline.notebook.model.NotebookPage
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
 
@@ -96,7 +97,7 @@ private class InkInputLayer(context: Context) : FrameLayout(context) {
     private var recorderBrush = BrushSpec()
     private var primaryPointerId: Int? = null
     private var inProgressStrokeId: InProgressStrokeId? = null
-    private var pendingStroke: StrokeRecord? = null
+    private val finishedStrokeBuffer = FinishedStrokeBuffer<InProgressStrokeId>()
 
     var brush: BrushSpec = BrushSpec()
         set(value) {
@@ -117,8 +118,7 @@ private class InkInputLayer(context: Context) : FrameLayout(context) {
         inkView.addFinishedStrokesListener(
             object : InProgressStrokesFinishedListener {
                 override fun onStrokesFinished(strokes: Map<InProgressStrokeId, Stroke>) {
-                    pendingStroke?.let(onStrokeFinished)
-                    pendingStroke = null
+                    finishedStrokeBuffer.drain(strokes.keys).forEach(onStrokeFinished)
                     inkView.removeFinishedStrokes(strokes.keys)
                 }
             },
@@ -132,7 +132,9 @@ private class InkInputLayer(context: Context) : FrameLayout(context) {
     private fun handleTouch(view: android.view.View, event: MotionEvent) {
         MotionEventAdapter.toEvents(event).forEach { pointerEvent ->
             val result = recorder.onEvent(pointerEvent, width.toFloat(), height.toFloat())
-            result.finishedStroke?.let { pendingStroke = it }
+            result.finishedStroke?.let { finished ->
+                inProgressStrokeId?.let { inkId -> finishedStrokeBuffer.put(inkId, finished) }
+            }
         }
 
         when (event.actionMasked) {
@@ -162,7 +164,7 @@ private class InkInputLayer(context: Context) : FrameLayout(context) {
                 inProgressStrokeId?.let { inkView.cancelStroke(it, event) }
                 primaryPointerId = null
                 inProgressStrokeId = null
-                pendingStroke = null
+                finishedStrokeBuffer.clear()
                 recorderBrush = brush
                 recorder = recorderFor(brush)
             }
