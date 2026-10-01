@@ -15,6 +15,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import java.io.IOException
+import java.io.ByteArrayOutputStream
+import java.io.DataOutputStream
 import java.nio.file.Files
 
 class FileNotebookRepositoryTest {
@@ -45,7 +47,8 @@ class FileNotebookRepositoryTest {
 
         repository.setStrokeActive(key, pageId, "second", false)
         loaded = repository.commitStroke(key, pageId, stroke("third", 0.3f))
-        assertEquals(listOf("first", "third"), loaded.pages.single().strokes.map { it.strokeId })
+        assertEquals(listOf("first", "second", "third"), loaded.pages.single().strokes.map { it.strokeId })
+        assertEquals(listOf(true, false, true), loaded.pages.single().strokes.map { it.active })
         assertEquals(
             listOf("first", "third"),
             repository.loadStrokes(key, pageId).map { it.id },
@@ -95,6 +98,54 @@ class FileNotebookRepositoryTest {
     }
 
     @Test
+    fun versionOneManifestIsBackedUpOnceAndMigratedAtomically() = runBlocking {
+        val root = temporaryFolder.newFolder("migration").toPath()
+        val notebookDirectory = root.resolve("2025-A1")
+        Files.createDirectories(notebookDirectory)
+        val manifest = notebookDirectory.resolve("manifest.bin")
+        val legacyBytes = versionOneManifest(listOf("visible" to true, "undone" to false))
+        Files.write(manifest, legacyBytes)
+
+        val repository = FileNotebookRepository(root)
+        val migrated = repository.loadOrCreate(key, PaperStyle.SQUARE_GRID)
+
+        assertEquals(2, migrated.schemaVersion)
+        assertEquals(listOf("visible"), migrated.pages.single().strokes.map { it.strokeId })
+        val backup = notebookDirectory.resolve("manifest.bin.v1.bak")
+        assertArrayEquals(legacyBytes, Files.readAllBytes(backup))
+        assertFalse(legacyBytes.contentEquals(Files.readAllBytes(manifest)))
+
+        val sentinelBackup = byteArrayOf(9, 8, 7)
+        Files.write(backup, sentinelBackup)
+        FileNotebookRepository(root).loadExisting(key)
+        assertArrayEquals(sentinelBackup, Files.readAllBytes(backup))
+    }
+
+    @Test
+    fun failedVersionOneMigrationLeavesOriginalManifestInPlace() = runBlocking {
+        val root = temporaryFolder.newFolder("failed-migration").toPath()
+        val notebookDirectory = root.resolve("2025-A1")
+        Files.createDirectories(notebookDirectory)
+        val manifest = notebookDirectory.resolve("manifest.bin")
+        val legacyBytes = versionOneManifest(listOf("visible" to true))
+        Files.write(manifest, legacyBytes)
+        val durableWriter = DurableAtomicFileWriter()
+        val failingWriter = AtomicFileWriter { target, bytes ->
+            if (target.fileName.toString() == "manifest.bin") throw IOException("injected migration failure")
+            durableWriter.write(target, bytes)
+        }
+
+        val error = assertThrows(IOException::class.java) {
+            runBlocking { FileNotebookRepository(root, failingWriter).loadOrCreate(key, PaperStyle.BLANK) }
+        }
+
+        assertEquals("injected migration failure", error.message)
+        assertArrayEquals(legacyBytes, Files.readAllBytes(manifest))
+        assertFalse(Files.exists(notebookDirectory.resolve("manifest.bin.corrupt")))
+        assertArrayEquals(legacyBytes, Files.readAllBytes(notebookDirectory.resolve("manifest.bin.v1.bak")))
+    }
+
+    @Test
     fun pageOperationsPreserveAtLeastOnePageAndStableOrder() = runBlocking {
         val root = temporaryFolder.newFolder("pages").toPath()
         val repository = FileNotebookRepository(root)
@@ -121,4 +172,23 @@ class FileNotebookRepositoryTest {
             StrokeSample(x, 0.5f, 10L, 0.5f),
         ),
     )
+
+    private fun versionOneManifest(strokes: List<Pair<String, Boolean>>): ByteArray =
+        ByteArrayOutputStream().use { bytes ->
+            DataOutputStream(bytes).use { output ->
+                output.writeInt(0x50574E42)
+                output.writeInt(1)
+                output.writeInt(key.year)
+                output.writeUTF(key.code)
+                output.writeInt(1)
+                output.writeUTF("legacy-page")
+                output.writeUTF(PaperStyle.BLANK.name)
+                output.writeInt(strokes.size)
+                strokes.forEach { (id, active) ->
+                    output.writeUTF(id)
+                    output.writeBoolean(active)
+                }
+            }
+            bytes.toByteArray()
+        }
 }

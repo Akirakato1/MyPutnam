@@ -14,6 +14,6 @@ data class NotebookDocument(
     }
 
     companion object {
-        const val SCHEMA_VERSION = 1
+        const val SCHEMA_VERSION = 2
     }
 }

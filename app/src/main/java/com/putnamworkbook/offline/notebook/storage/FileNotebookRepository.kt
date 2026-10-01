@@ -3,6 +3,7 @@ package com.putnamworkbook.offline.notebook.storage
 import com.putnamworkbook.offline.domain.model.PaperStyle
 import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.notebook.model.NotebookDocument
+import com.putnamworkbook.offline.notebook.model.NotebookEditGroup
 import com.putnamworkbook.offline.notebook.model.NotebookPage
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
 import com.putnamworkbook.offline.notebook.model.StrokeReference
@@ -82,8 +83,9 @@ class FileNotebookRepository(
         } else {
             writer.write(strokePath, encodedStroke)
         }
-        val changedPage = page.copy(
-            strokes = page.strokes.filter { it.active } + StrokeReference(stroke.id, active = true),
+        val changedPage = page.appendEdit(
+            strokeReferences = page.strokes + StrokeReference(stroke.id, active = true),
+            group = NotebookEditGroup(idFactory(), listOf(stroke.id), emptyList()),
         )
         document.replacePage(changedPage).also { writeManifest(it) }
     }
@@ -97,10 +99,17 @@ class FileNotebookRepository(
         val document = loadExistingDocument(key)
         val page = document.page(pageId)
         require(page.strokes.any { it.strokeId == strokeId }) { "Unknown stroke id: $strokeId" }
-        val changedPage = page.copy(
-            strokes = page.strokes.map { reference ->
-                if (reference.strokeId == strokeId) reference.copy(active = active) else reference
+        val reference = page.strokes.first { it.strokeId == strokeId }
+        if (reference.active == active) return@locked document
+        val changedPage = page.appendEdit(
+            strokeReferences = page.strokes.map { existing ->
+                if (existing.strokeId == strokeId) existing.copy(active = active) else existing
             },
+            group = NotebookEditGroup(
+                id = idFactory(),
+                activatedStrokeIds = if (active) listOf(strokeId) else emptyList(),
+                deactivatedStrokeIds = if (active) emptyList() else listOf(strokeId),
+            ),
         )
         document.replacePage(changedPage).also { writeManifest(it) }
     }
@@ -128,7 +137,11 @@ class FileNotebookRepository(
 
     override suspend fun clearPage(key: ProblemKey, pageId: String): NotebookDocument = locked {
         val document = loadExistingDocument(key)
-        val changedPage = document.page(pageId).copy(strokes = emptyList())
+        val changedPage = document.page(pageId).copy(
+            strokes = emptyList(),
+            editHistory = emptyList(),
+            appliedEditCount = 0,
+        )
         document.replacePage(changedPage).also { writeManifest(it) }
     }
 
@@ -155,24 +168,42 @@ class FileNotebookRepository(
                 pages = listOf(NotebookPage(idFactory(), defaultPaper)),
             ).also { writeManifest(it) }
         }
-        return try {
-            loadExistingDocument(key)
+        val decoded = try {
+            readDecodedManifest(key)
         } catch (error: Exception) {
             if (error is InterruptedException) throw error
             preserveCorruptManifest(manifest)
-            NotebookDocument(
+            return NotebookDocument(
                 key = key,
                 pages = listOf(NotebookPage(idFactory(), defaultPaper)),
             ).also { writeManifest(it) }
         }
+        return migrateIfNeeded(key, decoded)
     }
 
     private fun loadExistingDocument(key: ProblemKey): NotebookDocument {
+        return migrateIfNeeded(key, readDecodedManifest(key))
+    }
+
+    private fun readDecodedManifest(key: ProblemKey): DecodedNotebookManifest {
         val manifest = manifestPath(key)
         if (!Files.isRegularFile(manifest)) throw IOException("Notebook manifest is missing: $manifest")
-        return NotebookManifestCodec.decode(Files.readAllBytes(manifest)).also { document ->
-            if (document.key != key) throw IOException("Notebook manifest key does not match its directory")
+        return NotebookManifestCodec.decode(Files.readAllBytes(manifest)).also { decoded ->
+            if (decoded.document.key != key) throw IOException("Notebook manifest key does not match its directory")
         }
+    }
+
+    private fun migrateIfNeeded(
+        key: ProblemKey,
+        decoded: DecodedNotebookManifest,
+    ): NotebookDocument {
+        if (decoded.sourceVersion == NotebookDocument.SCHEMA_VERSION) return decoded.document
+        val manifest = manifestPath(key)
+        val legacyBytes = Files.readAllBytes(manifest)
+        val backup = manifest.resolveSibling("$MANIFEST_FILE.v1.bak")
+        if (!Files.exists(backup)) writer.write(backup, legacyBytes)
+        writer.write(manifest, NotebookManifestCodec.encode(decoded.document))
+        return decoded.document
     }
 
     private fun preserveCorruptManifest(manifest: Path) {
@@ -205,6 +236,15 @@ class FileNotebookRepository(
 
     private fun NotebookDocument.replacePage(changedPage: NotebookPage): NotebookDocument =
         copy(pages = pages.map { if (it.id == changedPage.id) changedPage else it })
+
+    private fun NotebookPage.appendEdit(
+        strokeReferences: List<StrokeReference>,
+        group: NotebookEditGroup,
+    ): NotebookPage = copy(
+        strokes = strokeReferences,
+        editHistory = editHistory.take(appliedEditCount) + group,
+        appliedEditCount = appliedEditCount + 1,
+    )
 
     private companion object {
         const val MANIFEST_FILE = "manifest.bin"
