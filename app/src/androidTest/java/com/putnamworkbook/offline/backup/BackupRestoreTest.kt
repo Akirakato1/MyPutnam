@@ -3,6 +3,7 @@ package com.putnamworkbook.offline.backup
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.putnamworkbook.offline.PutnamApplication
 import com.putnamworkbook.offline.data.user.RoomProgressRepository
 import com.putnamworkbook.offline.data.user.RoomSettingsRepository
 import com.putnamworkbook.offline.data.user.UserDatabase
@@ -11,7 +12,10 @@ import com.putnamworkbook.offline.domain.model.Handedness
 import com.putnamworkbook.offline.domain.model.PaperStyle
 import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.domain.model.ReferenceTab
+import com.putnamworkbook.offline.feature.workspace.WorkspaceViewModel
 import com.putnamworkbook.offline.notebook.storage.FileNotebookRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -28,6 +32,7 @@ import java.util.UUID
 
 @RunWith(AndroidJUnit4::class)
 class BackupRestoreTest {
+    private lateinit var application: PutnamApplication
     private lateinit var database: UserDatabase
     private lateinit var testRoot: Path
     private lateinit var notebookRoot: Path
@@ -35,6 +40,7 @@ class BackupRestoreTest {
     @Before
     fun setUp() {
         val context = ApplicationProvider.getApplicationContext<android.content.Context>()
+        application = context.applicationContext as PutnamApplication
         database = Room.inMemoryDatabaseBuilder(context, UserDatabase::class.java).build()
         testRoot = context.cacheDir.toPath().resolve("backup-restore-${UUID.randomUUID()}")
         notebookRoot = testRoot.resolve("notebooks")
@@ -79,6 +85,20 @@ class BackupRestoreTest {
         assertEquals(ReferenceTab.ORIGINAL_PAPER, progress.observe(key).first().activeReferenceTab)
         assertEquals(expectedSettings, settings.observe().first())
         assertSnapshotEquals(expectedNotebookBytes, snapshot(notebookRoot))
+
+        val workspace = WorkspaceViewModel(
+            contentRepository = application.container.contentRepository,
+            progressRepository = progress,
+            scope = CoroutineScope(Dispatchers.Default),
+        )
+        workspace.open(key)
+        workspace.awaitIdle()
+        assertEquals(ReferenceTab.PROBLEM, workspace.uiState.value.selectedReferenceTab)
+        val normalizedProgress = progress.observe(key).first()
+        assertEquals(ReferenceTab.PROBLEM, normalizedProgress.activeReferenceTab)
+        assertEquals(expectedProgress.status, normalizedProgress.status)
+        assertEquals(expectedProgress.revealedHintCount, normalizedProgress.revealedHintCount)
+        workspace.close()
 
         val stateBeforeFailure = progress.observe(key).first()
         val settingsBeforeFailure = settings.observe().first()

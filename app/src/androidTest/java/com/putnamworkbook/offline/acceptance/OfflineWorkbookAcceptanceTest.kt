@@ -2,8 +2,10 @@ package com.putnamworkbook.offline.acceptance
 
 import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -13,6 +15,8 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipe
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.putnamworkbook.offline.MainActivity
@@ -21,10 +25,23 @@ import com.putnamworkbook.offline.backup.BackupResult
 import com.putnamworkbook.offline.backup.RestoreResult
 import com.putnamworkbook.offline.domain.model.BrushSpec
 import com.putnamworkbook.offline.domain.model.ProblemKey
+import com.putnamworkbook.offline.domain.model.ReferenceTab
 import com.putnamworkbook.offline.export.ExportResult
 import com.putnamworkbook.offline.export.WorkbookExportOptions
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
 import com.putnamworkbook.offline.notebook.model.StrokeSample
+import com.putnamworkbook.offline.notebook.edit.selectionBounds
+import com.putnamworkbook.offline.notebook.ui.COPY_SELECTION_TEST_TAG
+import com.putnamworkbook.offline.notebook.ui.NEXT_PAGE_TEST_TAG
+import com.putnamworkbook.offline.notebook.ui.NOTEBOOK_CANVAS_TEST_TAG
+import com.putnamworkbook.offline.notebook.ui.PASTE_SELECTION_TEST_TAG
+import com.putnamworkbook.offline.notebook.ui.PEN_MODE_TEST_TAG
+import com.putnamworkbook.offline.notebook.ui.PREVIOUS_PAGE_TEST_TAG
+import com.putnamworkbook.offline.notebook.ui.REDO_TEST_TAG
+import com.putnamworkbook.offline.notebook.ui.RenderedStrokeCountKey
+import com.putnamworkbook.offline.notebook.ui.SELECTION_OVERLAY_TEST_TAG
+import com.putnamworkbook.offline.notebook.ui.SELECT_MODE_TEST_TAG
+import com.putnamworkbook.offline.notebook.ui.UNDO_TEST_TAG
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -56,7 +73,9 @@ class OfflineWorkbookAcceptanceTest {
         composeRule.onNodeWithTag("home-continue").assertIsDisplayed().performClick()
         waitForTag("workspace-screen")
         composeRule.onNodeWithTag("workspace-completed").assertTextEquals("Completed")
-        composeRule.onNodeWithText("Page 2 of 2").assertExists()
+        waitForText("Page 2 of 2")
+        exerciseSelectionEditingAndPageNavigation()
+        verifyEditedNotebookSurvivesHomeAndContinue()
     }
 
     private fun openA1FromTheArchive() {
@@ -94,6 +113,12 @@ class OfflineWorkbookAcceptanceTest {
                 assertEquals(expected + 1, application.container.progressRepository.revealNextHint(key))
             }
             application.container.progressRepository.revealSolution(key)
+            application.container.progressRepository.setNotebookState(
+                key,
+                pageCount = 1,
+                pageIndex = 0,
+                referenceTab = ReferenceTab.ORIGINAL_PAPER,
+            )
         }
 
         composeRule.onNodeWithTag("workspace-home").performClick()
@@ -101,13 +126,25 @@ class OfflineWorkbookAcceptanceTest {
         composeRule.onNodeWithTag("home-continue").performClick()
         waitForTag("workspace-screen")
         waitForTag("math-content-ready")
+        assertLegacyReferenceWasNormalized()
+        listOf("problem", "help", "prerequisites", "solution").forEach { tab ->
+            composeRule.onNodeWithTag("reference-tab-$tab").assertIsDisplayed()
+        }
         composeRule.onNodeWithTag("reference-tab-help").performClick()
         repeat(4) { index ->
             waitForTag("help-hint-${index + 1}")
         }
+        composeRule.onNodeWithTag("help-hint-1").performClick()
+        waitForTag("math-content-ready")
+        val hintHtml = targetContext.assets.open("content/2025/problems/A1/hint-1.html")
+            .bufferedReader().use { it.readText() }
+        assertTrue("Hint HTML should contain pre-rendered KaTeX", hintHtml.contains("class=\"katex\""))
         composeRule.onNodeWithTag("reference-tab-solution").assertIsEnabled()
 
         composeRule.onNodeWithTag("reference-tab-original_paper").assertDoesNotExist()
+        composeRule.onNodeWithTag("palm-guard").assertDoesNotExist()
+        composeRule.onNodeWithText("Move left").assertDoesNotExist()
+        composeRule.onNodeWithText("Move right").assertDoesNotExist()
     }
 
     private fun addNotebookPageAndMarkCompleted() {
@@ -125,17 +162,17 @@ class OfflineWorkbookAcceptanceTest {
         runBlocking {
             val notebook = application.container.notebookRepository.loadExisting(key)
                 ?: error("The workspace did not create a notebook")
-            val firstPage = notebook.pages.first()
+            val activePage = notebook.pages.last()
             application.container.notebookRepository.commitStroke(
                 key,
-                firstPage.id,
+                activePage.id,
                 StrokeRecord(
                     id = "acceptance-stroke",
                     brush = BrushSpec(colorArgb = 0xFF1D4ED8L, width = 8f),
                     samples = listOf(
-                        StrokeSample(0.1f, 0.1f, 0L, null),
-                        StrokeSample(0.5f, 0.5f, 10L, null),
-                        StrokeSample(0.9f, 0.9f, 20L, null),
+                        StrokeSample(0.15f, 0.25f, 0L, null),
+                        StrokeSample(0.35f, 0.35f, 10L, null),
+                        StrokeSample(0.55f, 0.45f, 20L, null),
                     ),
                 ),
             )
@@ -173,6 +210,131 @@ class OfflineWorkbookAcceptanceTest {
             } finally {
                 pdfFile.delete()
             }
+        }
+    }
+
+    private fun assertLegacyReferenceWasNormalized() {
+        val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
+        val application = targetContext.applicationContext as PutnamApplication
+        runBlocking {
+            val progress = application.container.progressRepository.observe(ProblemKey(2025, "A1")).first()
+            assertEquals(ReferenceTab.PROBLEM, progress.activeReferenceTab)
+            assertEquals(4, progress.revealedHintCount)
+            assertTrue(progress.solutionRevealed)
+        }
+    }
+
+    private fun exerciseSelectionEditingAndPageNavigation() {
+        waitForRenderedStrokeCount(1)
+        composeRule.onNodeWithTag(NEXT_PAGE_TEST_TAG).assertIsNotEnabled()
+        composeRule.onNodeWithTag(PREVIOUS_PAGE_TEST_TAG).assertIsEnabled().performClick()
+        waitForText("Page 1 of 2")
+        composeRule.onNodeWithTag(PREVIOUS_PAGE_TEST_TAG).assertIsNotEnabled()
+        composeRule.onNodeWithTag(NEXT_PAGE_TEST_TAG).assertIsEnabled().performClick()
+        waitForText("Page 2 of 2")
+        waitForRenderedStrokeCount(1)
+
+        composeRule.onNodeWithTag(PEN_MODE_TEST_TAG).assertTextEquals("Pen ✓")
+        composeRule.onNodeWithTag(SELECT_MODE_TEST_TAG).performClick()
+        composeRule.onNodeWithTag(SELECT_MODE_TEST_TAG).assertTextEquals("Select ✓")
+
+        val overlay = composeRule.onNodeWithTag(SELECTION_OVERLAY_TEST_TAG)
+        val overlayBounds = overlay.fetchSemanticsNode().boundsInRoot
+        val overlayWidth = overlayBounds.width
+        val overlayHeight = overlayBounds.height
+        assertTrue(overlayWidth > 0f && overlayHeight > 0f)
+        overlay.performTouchInput {
+            swipe(
+                start = Offset(overlayWidth * 0.05f, overlayHeight * 0.05f),
+                end = Offset(overlayWidth * 0.50f, overlayHeight * 0.50f),
+                durationMillis = 500L,
+            )
+        }
+        composeRule.onNodeWithTag(COPY_SELECTION_TEST_TAG).assertIsEnabled()
+        val selectedOverlayBounds = overlay.fetchSemanticsNode().boundsInRoot
+        val selectedOverlayWidth = selectedOverlayBounds.width
+        val selectedOverlayHeight = selectedOverlayBounds.height
+
+        overlay.performTouchInput {
+            swipe(
+                start = Offset(selectedOverlayWidth * 0.35f, selectedOverlayHeight * 0.35f),
+                end = Offset(selectedOverlayWidth * 0.43f, selectedOverlayHeight * 0.43f),
+                durationMillis = 400L,
+            )
+        }
+        composeRule.onNodeWithTag(COPY_SELECTION_TEST_TAG).assertIsEnabled()
+        composeRule.waitUntil(timeoutMillis = 15_000) {
+            runBlocking {
+                val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
+                val application = targetContext.applicationContext as PutnamApplication
+                val key = ProblemKey(2025, "A1")
+                val notebook = application.container.notebookRepository.loadExisting(key) ?: return@runBlocking false
+                val stored = application.container.notebookRepository.loadStrokes(key, notebook.pages.last().id)
+                stored.size == 1 && stored.none { it.id == "acceptance-stroke" }
+            }
+        }
+        composeRule.onNodeWithText("Save failed").assertDoesNotExist()
+        val movedBounds = runBlocking {
+            val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
+            val application = targetContext.applicationContext as PutnamApplication
+            val key = ProblemKey(2025, "A1")
+            val notebook = requireNotNull(application.container.notebookRepository.loadExisting(key))
+            requireNotNull(
+                application.container.notebookRepository
+                    .loadStrokes(key, notebook.pages.last().id)
+                    .selectionBounds(),
+            )
+        }
+        overlay.performTouchInput {
+            swipe(
+                start = Offset(selectedOverlayWidth * movedBounds.right, selectedOverlayHeight * movedBounds.bottom),
+                end = Offset(
+                    selectedOverlayWidth * (movedBounds.right + 0.10f),
+                    selectedOverlayHeight * (movedBounds.bottom + 0.10f),
+                ),
+                durationMillis = 400L,
+            )
+        }
+        composeRule.onNodeWithTag(COPY_SELECTION_TEST_TAG).assertIsEnabled()
+
+        composeRule.onNodeWithTag(COPY_SELECTION_TEST_TAG).performClick()
+        composeRule.onNodeWithTag(PASTE_SELECTION_TEST_TAG).assertIsEnabled().performClick()
+        waitForRenderedStrokeCount(2)
+        composeRule.onNodeWithTag(UNDO_TEST_TAG).performClick()
+        waitForRenderedStrokeCount(1)
+        composeRule.onNodeWithTag(REDO_TEST_TAG).performClick()
+        waitForRenderedStrokeCount(2)
+
+        composeRule.onNodeWithTag(PEN_MODE_TEST_TAG).performClick()
+        composeRule.onNodeWithTag(PEN_MODE_TEST_TAG).assertTextEquals("Pen ✓")
+        composeRule.onNodeWithTag(COPY_SELECTION_TEST_TAG).assertIsNotEnabled()
+        composeRule.onNodeWithTag(PASTE_SELECTION_TEST_TAG).assertIsEnabled()
+    }
+
+    private fun verifyEditedNotebookSurvivesHomeAndContinue() {
+        composeRule.onNodeWithTag("workspace-home").performClick()
+        waitForTag("home-screen")
+        composeRule.onNodeWithTag("home-continue").performClick()
+        waitForTag("workspace-screen")
+        waitForText("Page 2 of 2")
+        waitForRenderedStrokeCount(2)
+
+        val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
+        val application = targetContext.applicationContext as PutnamApplication
+        runBlocking {
+            val key = ProblemKey(2025, "A1")
+            val notebook = requireNotNull(application.container.notebookRepository.loadExisting(key))
+            val strokes = application.container.notebookRepository.loadStrokes(key, notebook.pages.last().id)
+            assertEquals(2, strokes.size)
+            assertEquals(2, strokes.map { it.id }.distinct().size)
+            assertTrue("Move/scale should replace the original geometry", strokes.none { it.id == "acceptance-stroke" })
+        }
+    }
+
+    private fun waitForRenderedStrokeCount(expected: Int) {
+        composeRule.waitUntil(timeoutMillis = 15_000) {
+            composeRule.onNodeWithTag(NOTEBOOK_CANVAS_TEST_TAG)
+                .fetchSemanticsNode().config[RenderedStrokeCountKey] == expected
         }
     }
 

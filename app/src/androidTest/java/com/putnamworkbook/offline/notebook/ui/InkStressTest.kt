@@ -1,9 +1,11 @@
 package com.putnamworkbook.offline.notebook.ui
 
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.unit.dp
 import com.putnamworkbook.offline.domain.model.BrushSpec
 import com.putnamworkbook.offline.domain.model.PaperStyle
@@ -18,6 +20,31 @@ import org.junit.Test
 class InkStressTest {
     @get:Rule
     val composeRule = createComposeRule()
+
+    @Test
+    fun tenRapidStrokesAreDeliveredOnceWithoutWaitingForPersistence() {
+        val finished = mutableListOf<StrokeRecord>()
+        composeRule.setContent {
+            NotebookCanvas(
+                page = NotebookPage("rapid-page", PaperStyle.BLANK),
+                strokes = emptyList(),
+                brush = BrushSpec(width = 4f),
+                onStrokeFinished = { finished += it },
+            )
+        }
+
+        composeRule.onNodeWithTag(NOTEBOOK_CANVAS_TEST_TAG).performTouchInput {
+            repeat(10) { index ->
+                val y = 30f + index * 24f
+                down(Offset(30f, y))
+                moveTo(Offset(180f, y + 8f), 8L)
+                up()
+            }
+        }
+
+        composeRule.waitUntil(timeoutMillis = 5_000) { finished.size == 10 }
+        assertEquals(10, finished.map { it.id }.distinct().size)
+    }
 
     @Test
     fun twoThousandStrokesRenderOnceWithoutCrashing() {
