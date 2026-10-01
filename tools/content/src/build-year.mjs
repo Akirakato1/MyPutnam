@@ -215,7 +215,12 @@ async function buildProblem(sourceRoot, stagingRoot, record, fileName, assets) {
       renderDocument(document),
       assets,
     );
-    hints.push({ order: hint.order, title: hint.title, ...assetReference(asset) });
+    hints.push({
+      order: hint.order,
+      stage: hint.stage,
+      title: hint.title,
+      ...assetReference(asset),
+    });
   }
 
   const prerequisites = [];

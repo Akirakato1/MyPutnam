@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 1,
-  "contentVersion": "2025.1",
+  "schemaVersion": 2,
+  "contentVersion": "2025.2",
   "year": 2025,
   "problems": [
     {
@@ -15,24 +15,28 @@
       "hints": [
         {
           "order": 1,
+          "stage": "nudge",
           "title": "Track what normalization does",
           "assetPath": "problems/A1/hint-1.html",
           "sha256": "7121239b8127bc997fa7d84ea9ee3794902bec7baf728b6fe6e83dd30ee03200"
         },
         {
           "order": 2,
+          "stage": "strategy",
           "title": "Separate the power of two",
           "assetPath": "problems/A1/hint-2.html",
           "sha256": "5b679b25d57e9450a894744d7ef05c65a24f78dd683dd2f22f55a0f548372bd3"
         },
         {
           "order": 3,
+          "stage": "knowledge",
           "title": "Use the odd-part descent",
           "assetPath": "problems/A1/hint-3.html",
           "sha256": "10849ec5e62bd99247799a3b4b22f87273a0099b53562d4ab359ff9d54d4b346"
         },
         {
           "order": 4,
+          "stage": "outline",
           "title": "Outline the proof",
           "assetPath": "problems/A1/hint-4.html",
           "sha256": "767f5204a1fe4f9a439e561a0fe533d8e8cb7d529c70d00d7369016afa305e9a"
@@ -73,12 +77,7 @@
           "label": "MAA official 2025 solutions",
           "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf"
         }
-      ],
-      "originalPdf": {
-        "assetPath": "original/2025-problems.pdf",
-        "sha256": "a7c0187adbeafd36a7d227bffc78769cc1098e975ed02c08e286aa4ead479b45",
-        "pageIndex": 0
-      }
+      ]
     },
     {
       "year": 2025,
@@ -92,24 +91,28 @@
       "hints": [
         {
           "order": 1,
+          "stage": "nudge",
           "title": "Turn constants into extrema",
           "assetPath": "problems/A2/hint-1.html",
           "sha256": "b20b170de9d298b3d16210f232a8ca0085a221ed998fc80ecfd5951eaf9f0a18"
         },
         {
           "order": 2,
+          "stage": "strategy",
           "title": "Use symmetry, then monotonicity",
           "assetPath": "problems/A2/hint-2.html",
           "sha256": "53491f38e7967dd765bdc2dc8e6625c55e555d700bd4c9345a845905264994ff"
         },
         {
           "order": 3,
+          "stage": "knowledge",
           "title": "Differentiate the right numerator",
           "assetPath": "problems/A2/hint-3.html",
           "sha256": "04efab854ca3282a48911bd9a0b0698ac67d1e0bd486f7b9acbebe13fbfa8c8d"
         },
         {
           "order": 4,
+          "stage": "outline",
           "title": "Outline the finish",
           "assetPath": "problems/A2/hint-4.html",
           "sha256": "0700202bb33a30d8a6ba04453fb1947635aa27b49ba80b870ea66273f4709d8d"
@@ -150,12 +153,7 @@
           "label": "MAA official 2025 solutions",
           "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf"
         }
-      ],
-      "originalPdf": {
-        "assetPath": "original/2025-problems.pdf",
-        "sha256": "a7c0187adbeafd36a7d227bffc78769cc1098e975ed02c08e286aa4ead479b45",
-        "pageIndex": 0
-      }
+      ]
     },
     {
       "year": 2025,
@@ -169,24 +167,28 @@
       "hints": [
         {
           "order": 1,
+          "stage": "nudge",
           "title": "Look for a reply strategy",
           "assetPath": "problems/A3/hint-1.html",
           "sha256": "ba00c0b9dbdfdad3de64d8b0b922ac4768d947acc9aa069aff1950e5a63cf5a8"
         },
         {
           "order": 2,
+          "stage": "strategy",
           "title": "Pair by the first nonzero digit",
           "assetPath": "problems/A3/hint-2.html",
           "sha256": "2511d801f590e3a5fd3a295292dad397e7d982695489eb39a844c34c47768ba4"
         },
         {
           "order": 3,
+          "stage": "knowledge",
           "title": "Maintain a paired-visit invariant",
           "assetPath": "problems/A3/hint-3.html",
           "sha256": "8a9cb914c1e49606ec95e9c9f802e04003d242c643865291b249a5bea07cbff5"
         },
         {
           "order": 4,
+          "stage": "outline",
           "title": "Outline the finish",
           "assetPath": "problems/A3/hint-4.html",
           "sha256": "5b249c9fe3d2ad9a0237975ed570196e72b750593cbad5abdd1ac906c29c39be"
@@ -227,12 +229,7 @@
           "label": "MAA official 2025 solutions",
           "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf"
         }
-      ],
-      "originalPdf": {
-        "assetPath": "original/2025-problems.pdf",
-        "sha256": "a7c0187adbeafd36a7d227bffc78769cc1098e975ed02c08e286aa4ead479b45",
-        "pageIndex": 0
-      }
+      ]
     },
     {
       "year": 2025,
@@ -246,24 +243,28 @@
       "hints": [
         {
           "order": 1,
+          "stage": "nudge",
           "title": "Read the commutation graph",
           "assetPath": "problems/A4/hint-1.html",
           "sha256": "ce09e7bb7f15c75018e8f51ff5507401fe7f9b055516e42c0f1be8defea0e027"
         },
         {
           "order": 2,
+          "stage": "strategy",
           "title": "Use the commutant in dimension two",
           "assetPath": "problems/A4/hint-2.html",
           "sha256": "516f3a81b85c7378b8b52134a0dcb28402a83a8e117240e75ae104fc388a0a4b"
         },
         {
           "order": 3,
+          "stage": "knowledge",
           "title": "Try rank-one matrices",
           "assetPath": "problems/A4/hint-3.html",
           "sha256": "056782df82df3243fd9f3abaeec9076499dfa156a50740c1581294ea1f7854f6"
         },
         {
           "order": 4,
+          "stage": "outline",
           "title": "Assemble the proof",
           "assetPath": "problems/A4/hint-4.html",
           "sha256": "ceffa2de7331651762e2bf89cb789061d6f6c1a92a235b30f9e10269eca11566"
@@ -304,12 +305,7 @@
           "label": "MAA official 2025 solutions",
           "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf"
         }
-      ],
-      "originalPdf": {
-        "assetPath": "original/2025-problems.pdf",
-        "sha256": "a7c0187adbeafd36a7d227bffc78769cc1098e975ed02c08e286aa4ead479b45",
-        "pageIndex": 0
-      }
+      ]
     },
     {
       "year": 2025,
@@ -323,24 +319,28 @@
       "hints": [
         {
           "order": 1,
+          "stage": "nudge",
           "title": "Interpret the signs",
           "assetPath": "problems/A5/hint-1.html",
           "sha256": "35372a3359be4dd82a008f9318d9388a5a90738ccbc2ae3b58c9a6ace800c70a"
         },
         {
           "order": 2,
+          "stage": "strategy",
           "title": "Use value complementation",
           "assetPath": "problems/A5/hint-2.html",
           "sha256": "f73bd2c3d3e40b37809ee6da9fa7fcb718f336ea612b8702503917d2c35f1055"
         },
         {
           "order": 3,
+          "stage": "knowledge",
           "title": "Remove equal neighboring signs",
           "assetPath": "problems/A5/hint-3.html",
           "sha256": "6d6d811eec2617f24b9a4d49a7f156ad475a2345108009ff1ff9ee9657c93a54"
         },
         {
           "order": 4,
+          "stage": "outline",
           "title": "Finish by an injection",
           "assetPath": "problems/A5/hint-4.html",
           "sha256": "75b8046345ba8d9a24c56b02b672760d56f03ea1a161e699202be3e31829445f"
@@ -381,12 +381,7 @@
           "label": "MAA official 2025 solutions",
           "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf"
         }
-      ],
-      "originalPdf": {
-        "assetPath": "original/2025-problems.pdf",
-        "sha256": "a7c0187adbeafd36a7d227bffc78769cc1098e975ed02c08e286aa4ead479b45",
-        "pageIndex": 0
-      }
+      ]
     },
     {
       "year": 2025,
@@ -400,24 +395,28 @@
       "hints": [
         {
           "order": 1,
+          "stage": "nudge",
           "title": "Track powers of two",
           "assetPath": "problems/A6/hint-1.html",
           "sha256": "5ae03360fbf4064b7ccf7873a3ae2663722db47aac2e6262ce06ed6e6ee19f1b"
         },
         {
           "order": 2,
+          "stage": "strategy",
           "title": "Introduce finite differences",
           "assetPath": "problems/A6/hint-2.html",
           "sha256": "5a285b0cb95cfa0eed63baff17830c1f992f2460878704048d88af429d78aa94"
         },
         {
           "order": 3,
+          "stage": "knowledge",
           "title": "Subtract two recurrences",
           "assetPath": "problems/A6/hint-3.html",
           "sha256": "09de3bcd0e18f4de05949a0cfb5978bbd34677be3ab0a14de52d814d0c98808d"
         },
         {
           "order": 4,
+          "stage": "outline",
           "title": "Prove two congruence lemmas",
           "assetPath": "problems/A6/hint-4.html",
           "sha256": "b40d07656d4215f4ba636169e87be31427324fcc51428474d07938ed6974693d"
@@ -458,12 +457,7 @@
           "label": "MAA official 2025 solutions",
           "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf"
         }
-      ],
-      "originalPdf": {
-        "assetPath": "original/2025-problems.pdf",
-        "sha256": "a7c0187adbeafd36a7d227bffc78769cc1098e975ed02c08e286aa4ead479b45",
-        "pageIndex": 0
-      }
+      ]
     },
     {
       "year": 2025,
@@ -477,24 +471,28 @@
       "hints": [
         {
           "order": 1,
+          "stage": "nudge",
           "title": "Bound the opposite color on a circle",
           "assetPath": "problems/B1/hint-1.html",
           "sha256": "0ccbc98a726f37cdc9e0932450f7e3e67183af958e306ef1a60f8ddc9180969a"
         },
         {
           "order": 2,
+          "stage": "strategy",
           "title": "Assume two colors exist",
           "assetPath": "problems/B1/hint-2.html",
           "sha256": "60d3e1df29a25f501669c83ad49fbd3072f6134b1a135893a9fb7aecb8f95eaa"
         },
         {
           "order": 3,
+          "stage": "knowledge",
           "title": "Count circle intersections",
           "assetPath": "problems/B1/hint-3.html",
           "sha256": "a7f259ac582ff2efa6ffcc64cbc3f37b505774b9fec4ed64d4d49b973d1a137f"
         },
         {
           "order": 4,
+          "stage": "outline",
           "title": "Contradict the count",
           "assetPath": "problems/B1/hint-4.html",
           "sha256": "cffd6ce27c785594eb49598e3397abce42bb2483f6b10d887996013df4afae75"
@@ -535,12 +533,7 @@
           "label": "MAA official 2025 solutions",
           "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf"
         }
-      ],
-      "originalPdf": {
-        "assetPath": "original/2025-problems.pdf",
-        "sha256": "a7c0187adbeafd36a7d227bffc78769cc1098e975ed02c08e286aa4ead479b45",
-        "pageIndex": 1
-      }
+      ]
     },
     {
       "year": 2025,
@@ -554,24 +547,28 @@
       "hints": [
         {
           "order": 1,
+          "stage": "nudge",
           "title": "Write both centroids as integrals",
           "assetPath": "problems/B2/hint-1.html",
           "sha256": "7e3c497d13ec3c9a4d5bbc524d71cc104e0cae16dd6e5953dbaaf206c4183688"
         },
         {
           "order": 2,
+          "stage": "strategy",
           "title": "Compare weighted means",
           "assetPath": "problems/B2/hint-2.html",
           "sha256": "ef0e8b06c9c362a4ed8d9374a5eb52a6fc120ed48ef31d6f06792bcb852e6bc1"
         },
         {
           "order": 3,
+          "stage": "knowledge",
           "title": "Use a double integral",
           "assetPath": "problems/B2/hint-3.html",
           "sha256": "e176d7ab42f0c1ea4c8c362421351e1c44c6616ddb28db8a860f5a6066c7c9fc"
         },
         {
           "order": 4,
+          "stage": "outline",
           "title": "Show strict positivity",
           "assetPath": "problems/B2/hint-4.html",
           "sha256": "6f2e3bd8e31d7d5dfd34121754122cdbf34767bcc45b16f6665ee810d9807c6a"
@@ -612,12 +609,7 @@
           "label": "MAA official 2025 solutions",
           "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf"
         }
-      ],
-      "originalPdf": {
-        "assetPath": "original/2025-problems.pdf",
-        "sha256": "a7c0187adbeafd36a7d227bffc78769cc1098e975ed02c08e286aa4ead479b45",
-        "pageIndex": 1
-      }
+      ]
     },
     {
       "year": 2025,
@@ -631,24 +623,28 @@
       "hints": [
         {
           "order": 1,
+          "stage": "nudge",
           "title": "Factor the difference",
           "assetPath": "problems/B3/hint-1.html",
           "sha256": "b0cae3ffaa8db686afcb373a1f9e931d8b1cc1e84d9f4127c4c3ad57a56ff194"
         },
         {
           "order": 2,
+          "stage": "strategy",
           "title": "Split off 3s and 5s",
           "assetPath": "problems/B3/hint-2.html",
           "sha256": "ab99fc2fc384b6ea80ac252aa4f5e93d9bb8d02555959fbc24ac1fa066b404ab"
         },
         {
           "order": 3,
+          "stage": "knowledge",
           "title": "Use strong induction",
           "assetPath": "problems/B3/hint-3.html",
           "sha256": "ae51613c04faef5938dfb30901267348048b3eb715e637e9a222092f454b0857"
         },
         {
           "order": 4,
+          "stage": "outline",
           "title": "Check the size inequality",
           "assetPath": "problems/B3/hint-4.html",
           "sha256": "6bc9745ac2d5fb410550355db2a7a1d6d252f00d7bec5c2a63517f1c00c0381e"
@@ -689,12 +685,7 @@
           "label": "MAA official 2025 solutions",
           "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf"
         }
-      ],
-      "originalPdf": {
-        "assetPath": "original/2025-problems.pdf",
-        "sha256": "a7c0187adbeafd36a7d227bffc78769cc1098e975ed02c08e286aa4ead479b45",
-        "pageIndex": 1
-      }
+      ]
     },
     {
       "year": 2025,
@@ -708,24 +699,28 @@
       "hints": [
         {
           "order": 1,
+          "stage": "nudge",
           "title": "Inspect the long diagonal",
           "assetPath": "problems/B4/hint-1.html",
           "sha256": "856107ebe0c7393fd77b81be96da3d183be1498036d8078a6dd4cb53aeffe3e1"
         },
         {
           "order": 2,
+          "stage": "strategy",
           "title": "Peel off a layer",
           "assetPath": "problems/B4/hint-2.html",
           "sha256": "b30a1667c7f38e208035867b62e7b5789d7b15c939f589018461cdbc4a0ffa0d"
         },
         {
           "order": 3,
+          "stage": "knowledge",
           "title": "Count the new zeros",
           "assetPath": "problems/B4/hint-3.html",
           "sha256": "cb3eb9d126e5cf358081ce96a9d43859b3b7c49db94edc4d3b8eff0a8ea5c313"
         },
         {
           "order": 4,
+          "stage": "outline",
           "title": "Close the induction",
           "assetPath": "problems/B4/hint-4.html",
           "sha256": "625fe513535568538b572c37e7d78145ee94274f3d047372a74eb96e2c63f778"
@@ -766,12 +761,7 @@
           "label": "MAA official 2025 solutions",
           "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf"
         }
-      ],
-      "originalPdf": {
-        "assetPath": "original/2025-problems.pdf",
-        "sha256": "a7c0187adbeafd36a7d227bffc78769cc1098e975ed02c08e286aa4ead479b45",
-        "pageIndex": 1
-      }
+      ]
     },
     {
       "year": 2025,
@@ -785,24 +775,28 @@
       "hints": [
         {
           "order": 1,
+          "stage": "nudge",
           "title": "Extend the inverse sequence",
           "assetPath": "problems/B5/hint-1.html",
           "sha256": "3660ee2abcca96510b7a09f423b0119ec2c1a204fb634a89b9238c0db6edb823"
         },
         {
           "order": 2,
+          "stage": "strategy",
           "title": "Pair four steps",
           "assetPath": "problems/B5/hint-2.html",
           "sha256": "969d40f195e648c05136c01fbf44112363574fc69e7a3f92b7b856c44c588b8f"
         },
         {
           "order": 3,
+          "stage": "knowledge",
           "title": "Use inverse identities",
           "assetPath": "problems/B5/hint-3.html",
           "sha256": "6d1e5dc1366c80ee0f453d2cc4c671b8befe0c0628b16260641e93d7a5499100"
         },
         {
           "order": 4,
+          "stage": "outline",
           "title": "Count multiplicities",
           "assetPath": "problems/B5/hint-4.html",
           "sha256": "eaa24da02a6df04a5cfe099b473bad154a5d1cb2787db099b674558264d4a50b"
@@ -843,12 +837,7 @@
           "label": "MAA official 2025 solutions",
           "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf"
         }
-      ],
-      "originalPdf": {
-        "assetPath": "original/2025-problems.pdf",
-        "sha256": "a7c0187adbeafd36a7d227bffc78769cc1098e975ed02c08e286aa4ead479b45",
-        "pageIndex": 1
-      }
+      ]
     },
     {
       "year": 2025,
@@ -862,24 +851,28 @@
       "hints": [
         {
           "order": 1,
+          "stage": "nudge",
           "title": "Find a quadratic example",
           "assetPath": "problems/B6/hint-1.html",
           "sha256": "452a323287c92c59e29ef71dad4dde3b2bdff31e851c1198278b349b224dec0d"
         },
         {
           "order": 2,
+          "stage": "strategy",
           "title": "Bootstrap polynomial growth",
           "assetPath": "problems/B6/hint-2.html",
           "sha256": "3e0d5ea892b2360c6426f7da00147b086b9e15fe28c8a9f3a3ae153fa72fc80f"
         },
         {
           "order": 3,
+          "stage": "knowledge",
           "title": "Force exponential growth",
           "assetPath": "problems/B6/hint-3.html",
           "sha256": "d65e5512a3e91ca0237aa1d346f61d153c98855f7b3df1cdeab3afe68cb5602a"
         },
         {
           "order": 4,
+          "stage": "outline",
           "title": "Contradict the original inequality",
           "assetPath": "problems/B6/hint-4.html",
           "sha256": "6752e9d9196ce97a2d79affb92a0975631a9c8aa4bdb6ec15151d30ecba04969"
@@ -920,20 +913,10 @@
           "label": "MAA official 2025 solutions",
           "url": "https://maa.org/wp-content/uploads/2026/02/2025OfficialSolutions.pdf"
         }
-      ],
-      "originalPdf": {
-        "assetPath": "original/2025-problems.pdf",
-        "sha256": "a7c0187adbeafd36a7d227bffc78769cc1098e975ed02c08e286aa4ead479b45",
-        "pageIndex": 1
-      }
+      ]
     }
   ],
   "assets": [
-    {
-      "path": "original/2025-problems.pdf",
-      "sha256": "a7c0187adbeafd36a7d227bffc78769cc1098e975ed02c08e286aa4ead479b45",
-      "bytes": 640243
-    },
     {
       "path": "problems/A1/hint-1.html",
       "sha256": "7121239b8127bc997fa7d84ea9ee3794902bec7baf728b6fe6e83dd30ee03200",

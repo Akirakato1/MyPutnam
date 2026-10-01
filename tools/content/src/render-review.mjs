@@ -51,6 +51,9 @@ export async function renderReview(contentDir, screenshotDir, options = {}) {
           brokenStylesheets: [...document.querySelectorAll('link[rel="stylesheet"]')]
             .filter((link) => link.sheet === null)
             .map((link) => link.getAttribute('href')),
+          katexErrors: [...document.querySelectorAll('.katex-error')]
+            .map((element) => element.textContent?.trim() || 'unknown KaTeX error'),
+          containsReplacementGlyph: document.body.innerText.includes('\uFFFD'),
         }));
 
         if (inspection.blank) {
@@ -64,6 +67,12 @@ export async function renderReview(contentDir, screenshotDir, options = {}) {
         }
         for (const stylesheet of inspection.brokenStylesheets) {
           pageFailures.push(`broken stylesheet: ${stylesheet}`);
+        }
+        for (const katexError of inspection.katexErrors) {
+          pageFailures.push(`KaTeX error: ${katexError}`);
+        }
+        if (inspection.containsReplacementGlyph) {
+          pageFailures.push('document contains a missing-glyph replacement character');
         }
 
         const screenshotPath = join(

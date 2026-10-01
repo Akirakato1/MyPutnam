@@ -6,7 +6,11 @@ import { join, relative } from 'node:path';
 import test from 'node:test';
 
 import { buildYear } from '../src/build-year.mjs';
-import { renderDocument } from '../src/render-document.mjs';
+import {
+  auditRenderedDocument,
+  findDocumentMathRuns,
+  renderDocument,
+} from '../src/render-document.mjs';
 import { renderReview } from '../src/render-review.mjs';
 
 const fixtureUrl = new URL('./fixtures/valid-problem.json', import.meta.url);
@@ -57,16 +61,57 @@ test('renderer supports every permitted block without allowing raw HTML', () => 
   assert.match(html, /alt="A &lt;unit&gt; square"/);
 });
 
+test('math audit covers nested runs and permits documents with no math', () => {
+  const nestedMath = {
+    blocks: [
+      {
+        type: 'list',
+        ordered: true,
+        items: [[{ type: 'text', text: 'Use ' }, { type: 'inlineMath', tex: 'x^2' }]],
+      },
+      {
+        type: 'figure',
+        path: 'figures/example.svg',
+        alt: 'Example',
+        caption: [{ type: 'inlineMath', tex: 'y=1' }],
+      },
+      { type: 'displayMath', tex: 'x^2+y^2=1' },
+    ],
+  };
+  const noMath = {
+    blocks: [{ type: 'paragraph', runs: [{ type: 'text', text: 'No formulas here.' }] }],
+  };
+
+  assert.deepEqual(
+    findDocumentMathRuns(nestedMath).map(({ path }) => path),
+    [
+      '$.blocks[0].items[0][1].tex',
+      '$.blocks[1].caption[0].tex',
+      '$.blocks[2].tex',
+    ],
+  );
+  assert.deepEqual(auditRenderedDocument(nestedMath, renderDocument(nestedMath)), {
+    mathRunCount: 3,
+    katexRootCount: 3,
+  });
+  assert.deepEqual(auditRenderedDocument(noMath, renderDocument(noMath)), {
+    mathRunCount: 0,
+    katexRootCount: 0,
+  });
+  assert.throws(
+    () => auditRenderedDocument(nestedMath, '<html><body>missing math</body></html>'),
+    /expected 3 KaTeX root/,
+  );
+});
+
 test('year builds are byte-for-byte deterministic', async () => {
   const root = await mkdtemp(join(tmpdir(), 'putnam-content-'));
   const sourceDir = join(root, 'source');
   const problemsDir = join(sourceDir, 'problems');
-  const originalDir = join(sourceDir, 'original');
   const firstOutput = join(root, 'first');
   const secondOutput = join(root, 'second');
 
   await mkdir(problemsDir, { recursive: true });
-  await mkdir(originalDir, { recursive: true });
   const problem = JSON.parse(await readFile(fixtureUrl, 'utf8'));
   problem.statement.blocks.push({
     type: 'figure',
@@ -79,13 +124,16 @@ test('year builds are byte-for-byte deterministic', async () => {
     join(problemsDir, 'A1', 'figures', 'unit-square.svg'),
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><path d="M1 1h8v8H1z"/></svg>\n',
   );
-  await writeFile(join(originalDir, '2025-problems.pdf'), '%PDF-1.4\n% deterministic fixture\n');
 
   const firstManifest = await buildYear(sourceDir, firstOutput);
   const secondManifest = await buildYear(sourceDir, secondOutput);
 
   assert.deepEqual(firstManifest, secondManifest);
   assert.deepEqual(await hashTree(firstOutput), await hashTree(secondOutput));
+  const figureAsset = firstManifest.assets.find(({ path }) => path.endsWith('/figures/unit-square.svg'));
+  assert.ok(figureAsset, 'referenced local figures must be copied and hashed');
+  assert.match(figureAsset.sha256, /^[a-f0-9]{64}$/);
+  assert.equal(firstManifest.assets.some(({ path }) => path.endsWith('.pdf')), false);
 
   const review = await renderReview(firstOutput, join(root, 'review-screenshots'));
   assert.equal(review.files.length, 7);
