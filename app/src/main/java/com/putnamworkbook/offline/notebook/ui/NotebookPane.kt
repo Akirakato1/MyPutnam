@@ -14,6 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import com.putnamworkbook.offline.domain.model.BrushSpec
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
+import com.putnamworkbook.offline.notebook.edit.NotebookToolMode
+import com.putnamworkbook.offline.notebook.edit.NormalizedPoint
+import com.putnamworkbook.offline.notebook.edit.NormalizedRect
+import com.putnamworkbook.offline.notebook.edit.SelectionCorner
 
 const val NOTEBOOK_TOOLBAR_TEST_TAG = "notebook-toolbar-safe-region"
 
@@ -33,6 +37,18 @@ fun NotebookPane(
     onDismissConfirmation: () -> Unit,
     onSelectPage: (Int) -> Unit,
     onReorderPage: (String, Int) -> Unit,
+    onSetToolMode: (NotebookToolMode) -> Unit = {},
+    onSelect: (NormalizedRect) -> Unit = {},
+    onPreviewMove: (Float, Float) -> Unit = { _, _ -> },
+    onCommitMove: (Float, Float) -> Unit = { _, _ -> },
+    onPreviewScale: (SelectionCorner, NormalizedPoint) -> Unit = { _, _ -> },
+    onCommitScale: (SelectionCorner, NormalizedPoint) -> Unit = { _, _ -> },
+    onCancelPreview: () -> Unit = {},
+    onCutSelection: () -> Unit = {},
+    onCopySelection: () -> Unit = {},
+    onPaste: () -> Unit = {},
+    onDeleteSelection: () -> Unit = {},
+    onCancelSelection: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     val document = state.document
@@ -44,6 +60,15 @@ fun NotebookPane(
     Column(modifier.fillMaxSize()) {
         NotebookToolbar(
             saveState = state.saveState,
+            toolMode = state.toolMode,
+            hasSelection = state.selection != null,
+            clipboardHasContent = state.clipboardHasContent,
+            onSetToolMode = onSetToolMode,
+            onCut = onCutSelection,
+            onCopy = onCopySelection,
+            onPaste = onPaste,
+            onDeleteSelection = onDeleteSelection,
+            onCancelSelection = onCancelSelection,
             onUndo = onUndo,
             onRedo = onRedo,
             onEraseLast = onUndo,
@@ -72,6 +97,14 @@ fun NotebookPane(
                 brush = brush,
                 palmGuard = palmGuard,
                 onStrokeFinished = onStrokeFinished,
+                toolMode = state.toolMode,
+                selection = state.selection,
+                onSelect = onSelect,
+                onPreviewMove = onPreviewMove,
+                onCommitMove = onCommitMove,
+                onPreviewScale = onPreviewScale,
+                onCommitScale = onCommitScale,
+                onCancelPreview = onCancelPreview,
             )
         }
         PageStrip(document, state.activePageIndex, onSelectPage, onReorderPage)

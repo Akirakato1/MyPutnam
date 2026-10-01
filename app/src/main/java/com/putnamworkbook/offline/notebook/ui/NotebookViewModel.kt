@@ -162,6 +162,13 @@ class NotebookViewModel(
         mutableUiState.value = mutableUiState.value.copy(selection = null)
     }
 
+    fun cancelTransformPreview() {
+        val selection = mutableUiState.value.selection ?: return
+        mutableUiState.value = mutableUiState.value.copy(
+            selection = selection.copy(previewStrokes = null),
+        )
+    }
+
     fun undo() = launchSaving {
         saveCoordinator.flush()
         val (key, pageId) = currentPage()

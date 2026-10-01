@@ -340,6 +340,18 @@ private fun WorkspaceDestination(
                 onDismissConfirmation = notebookViewModel::dismissConfirmation,
                 onSelectPage = notebookViewModel::selectPage,
                 onReorderPage = notebookViewModel::reorderPage,
+                onSetToolMode = notebookViewModel::setToolMode,
+                onSelect = notebookViewModel::select,
+                onPreviewMove = notebookViewModel::previewMove,
+                onCommitMove = notebookViewModel::commitMove,
+                onPreviewScale = notebookViewModel::previewScale,
+                onCommitScale = notebookViewModel::commitScale,
+                onCancelPreview = notebookViewModel::cancelTransformPreview,
+                onCutSelection = notebookViewModel::cutSelection,
+                onCopySelection = notebookViewModel::copySelection,
+                onPaste = notebookViewModel::paste,
+                onDeleteSelection = notebookViewModel::deleteSelection,
+                onCancelSelection = notebookViewModel::cancelSelection,
             )
         },
     )

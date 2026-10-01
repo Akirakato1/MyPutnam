@@ -38,6 +38,11 @@ import com.putnamworkbook.offline.notebook.input.TouchStrokeRecorder
 import com.putnamworkbook.offline.notebook.input.FinishedStrokeBuffer
 import com.putnamworkbook.offline.notebook.model.NotebookPage
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
+import com.putnamworkbook.offline.notebook.edit.NotebookSelectionState
+import com.putnamworkbook.offline.notebook.edit.NotebookToolMode
+import com.putnamworkbook.offline.notebook.edit.NormalizedPoint
+import com.putnamworkbook.offline.notebook.edit.NormalizedRect
+import com.putnamworkbook.offline.notebook.edit.SelectionCorner
 
 const val NOTEBOOK_CANVAS_TEST_TAG = "notebook-canvas"
 val RenderedStrokeCountKey = SemanticsPropertyKey<Int>("RenderedStrokeCount")
@@ -50,14 +55,25 @@ fun NotebookCanvas(
     brush: BrushSpec,
     palmGuard: PalmGuardState?,
     onStrokeFinished: (StrokeRecord) -> Unit,
+    toolMode: NotebookToolMode = NotebookToolMode.PEN,
+    selection: NotebookSelectionState? = null,
+    onSelect: (NormalizedRect) -> Unit = {},
+    onPreviewMove: (Float, Float) -> Unit = { _, _ -> },
+    onCommitMove: (Float, Float) -> Unit = { _, _ -> },
+    onPreviewScale: (SelectionCorner, NormalizedPoint) -> Unit = { _, _ -> },
+    onCommitScale: (SelectionCorner, NormalizedPoint) -> Unit = { _, _ -> },
+    onCancelPreview: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     val renderer = remember { CanvasStrokeRenderer.create() }
+    val renderedStrokes = selection?.previewStrokes?.let { preview ->
+        strokes.filterNot { it.id in selection.selectedStrokeIds } + preview
+    } ?: strokes
     BoxWithConstraints(
         modifier = modifier
             .fillMaxSize()
             .testTag(NOTEBOOK_CANVAS_TEST_TAG)
-            .semantics { renderedStrokeCount = strokes.size },
+            .semantics { renderedStrokeCount = renderedStrokes.size },
     ) {
         Canvas(Modifier.fillMaxSize()) {
             drawRect(Color.White)
@@ -75,18 +91,31 @@ fun NotebookCanvas(
                 }
             }
             val matrix = Matrix()
-            strokes.forEach { record ->
+            renderedStrokes.forEach { record ->
                 renderer.draw(drawContext.canvas.nativeCanvas, record.toInkStroke(size.width, size.height), matrix)
             }
         }
-        AndroidView(
-            factory = { context -> InkInputLayer(context) },
-            modifier = Modifier.fillMaxSize(),
-            update = { layer ->
-                layer.brush = brush
-                layer.onStrokeFinished = onStrokeFinished
-            },
-        )
+        if (toolMode == NotebookToolMode.PEN) {
+            AndroidView(
+                factory = { context -> InkInputLayer(context) },
+                modifier = Modifier.fillMaxSize(),
+                update = { layer ->
+                    layer.brush = brush
+                    layer.onStrokeFinished = onStrokeFinished
+                },
+            )
+        } else {
+            SelectionOverlay(
+                selection = selection,
+                onSelect = onSelect,
+                onPreviewMove = onPreviewMove,
+                onCommitMove = onCommitMove,
+                onPreviewScale = onPreviewScale,
+                onCommitScale = onCommitScale,
+                onCancelPreview = onCancelPreview,
+                modifier = Modifier.fillMaxSize(),
+            )
+        }
         palmGuard?.let { PalmGuard(it, maxHeight) }
     }
 }
