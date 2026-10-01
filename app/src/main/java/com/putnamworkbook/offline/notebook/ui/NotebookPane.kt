@@ -5,7 +5,10 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -20,12 +23,14 @@ import com.putnamworkbook.offline.notebook.edit.NormalizedRect
 import com.putnamworkbook.offline.notebook.edit.SelectionCorner
 
 const val NOTEBOOK_TOOLBAR_TEST_TAG = "notebook-toolbar-safe-region"
+const val PREVIOUS_PAGE_TEST_TAG = "previous-page"
+const val NEXT_PAGE_TEST_TAG = "next-page"
+const val PAGE_INDEX_TEST_TAG = "notebook-page-index"
 
 @Composable
 fun NotebookPane(
     state: NotebookUiState,
     brush: BrushSpec,
-    palmGuard: PalmGuardState?,
     onStrokeFinished: (StrokeRecord) -> Unit,
     onUndo: () -> Unit,
     onRedo: () -> Unit,
@@ -36,7 +41,6 @@ fun NotebookPane(
     onConfirmClearPage: () -> Unit,
     onDismissConfirmation: () -> Unit,
     onSelectPage: (Int) -> Unit,
-    onReorderPage: (String, Int) -> Unit,
     onSetToolMode: (NotebookToolMode) -> Unit = {},
     onSelect: (NormalizedRect) -> Unit = {},
     onPreviewMove: (Float, Float) -> Unit = { _, _ -> },
@@ -77,6 +81,25 @@ fun NotebookPane(
             onDeletePage = { onRequestDeletePage(page.id) },
             modifier = Modifier.testTag(NOTEBOOK_TOOLBAR_TEST_TAG),
         )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End,
+        ) {
+            TextButton(
+                onClick = { onSelectPage(state.activePageIndex - 1) },
+                enabled = state.activePageIndex > 0,
+                modifier = Modifier.testTag(PREVIOUS_PAGE_TEST_TAG),
+            ) { Text("←") }
+            Text(
+                "Page ${state.activePageIndex + 1} of ${document.pages.size}",
+                modifier = Modifier.testTag(PAGE_INDEX_TEST_TAG),
+            )
+            TextButton(
+                onClick = { onSelectPage(state.activePageIndex + 1) },
+                enabled = state.activePageIndex < document.pages.lastIndex,
+                modifier = Modifier.testTag(NEXT_PAGE_TEST_TAG),
+            ) { Text("→") }
+        }
         AnimatedContent(
             targetState = state.activePageIndex,
             transitionSpec = {
@@ -95,7 +118,6 @@ fun NotebookPane(
                 page = document.pages[pageIndex],
                 strokes = if (pageIndex == state.activePageIndex) state.strokes else emptyList(),
                 brush = brush,
-                palmGuard = palmGuard,
                 onStrokeFinished = onStrokeFinished,
                 toolMode = state.toolMode,
                 selection = state.selection,
@@ -107,7 +129,6 @@ fun NotebookPane(
                 onCancelPreview = onCancelPreview,
             )
         }
-        PageStrip(document, state.activePageIndex, onSelectPage, onReorderPage)
     }
 
     when (state.pendingConfirmation) {

@@ -49,9 +49,11 @@ import com.putnamworkbook.offline.notebook.storage.NotebookRepository
 import com.putnamworkbook.offline.notebook.edit.NotebookClipboard
 import com.putnamworkbook.offline.notebook.ui.NotebookPane
 import com.putnamworkbook.offline.notebook.ui.NotebookViewModel
-import com.putnamworkbook.offline.notebook.ui.toPalmGuardState
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 
 data class WorkspaceDependencies(
     val settingsRepository: SettingsRepository,
@@ -196,6 +198,7 @@ private fun WorkspaceDestination(
     var pendingIncludeHints by rememberSaveable(key.year, key.code) { mutableStateOf(true) }
     var pendingIncludeSolution by rememberSaveable(key.year, key.code) { mutableStateOf(true) }
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
     val exportPdf = rememberLauncherForActivityResult(
         ActivityResultContracts.CreateDocument("application/pdf"),
     ) { uri ->
@@ -254,6 +257,15 @@ private fun WorkspaceDestination(
             pdfViewModel.close()
         }
     }
+    DisposableEffect(lifecycleOwner, notebookViewModel) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) {
+                scope.launch { runCatching { notebookViewModel.flush() } }
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
 
     LaunchedEffect(key) {
         workspaceViewModel.open(key)
@@ -286,8 +298,6 @@ private fun WorkspaceDestination(
             }
         }
     }
-
-    val palmGuard = settings.toPalmGuardState()
 
     WorkspaceScreen(
         state = workspaceState,
@@ -328,7 +338,6 @@ private fun WorkspaceDestination(
             NotebookPane(
                 state = notebookState,
                 brush = settings.brush,
-                palmGuard = palmGuard,
                 onStrokeFinished = notebookViewModel::commitStroke,
                 onUndo = notebookViewModel::undo,
                 onRedo = notebookViewModel::redo,
@@ -339,7 +348,6 @@ private fun WorkspaceDestination(
                 onConfirmClearPage = notebookViewModel::confirmClearPage,
                 onDismissConfirmation = notebookViewModel::dismissConfirmation,
                 onSelectPage = notebookViewModel::selectPage,
-                onReorderPage = notebookViewModel::reorderPage,
                 onSetToolMode = notebookViewModel::setToolMode,
                 onSelect = notebookViewModel::select,
                 onPreviewMove = notebookViewModel::previewMove,

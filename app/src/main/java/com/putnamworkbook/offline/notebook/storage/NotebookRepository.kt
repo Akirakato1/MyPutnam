@@ -47,5 +47,4 @@ interface NotebookRepository {
 
     suspend fun clearPage(key: ProblemKey, pageId: String): NotebookDocument
 
-    suspend fun reorderPage(key: ProblemKey, pageId: String, newIndex: Int): NotebookDocument
 }

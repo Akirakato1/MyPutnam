@@ -234,14 +234,6 @@ class NotebookViewModel(
         mutableUiState.value = mutableUiState.value.copy(pendingConfirmation = null)
     }
 
-    fun reorderPage(pageId: String, newIndex: Int) = launchSaving {
-        saveCoordinator.flush()
-        val document = requireDocument()
-        val activePageId = document.pages[mutableUiState.value.activePageIndex].id
-        val changed = repository.reorderPage(requireNotNull(currentKey), pageId, newIndex)
-        publishDocument(changed, changed.pages.indexOfFirst { it.id == activePageId })
-    }
-
     fun selectPage(index: Int) = launchOperation(NotebookSaveState.IDLE) {
         saveCoordinator.flush()
         val document = requireDocument()

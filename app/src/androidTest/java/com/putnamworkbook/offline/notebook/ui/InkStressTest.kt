@@ -38,7 +38,6 @@ class InkStressTest {
                 page = NotebookPage("stress-page", PaperStyle.BLANK),
                 strokes = strokes,
                 brush = BrushSpec(),
-                palmGuard = null,
                 onStrokeFinished = {},
                 modifier = Modifier,
             )

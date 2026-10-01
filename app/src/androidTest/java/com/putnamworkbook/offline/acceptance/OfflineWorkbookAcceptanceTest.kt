@@ -56,7 +56,7 @@ class OfflineWorkbookAcceptanceTest {
         composeRule.onNodeWithTag("home-continue").assertIsDisplayed().performClick()
         waitForTag("workspace-screen")
         composeRule.onNodeWithTag("workspace-completed").assertTextEquals("Completed")
-        composeRule.onNodeWithText("Page 2").assertExists()
+        composeRule.onNodeWithText("Page 2 of 2").assertExists()
     }
 
     private fun openA1FromTheArchive() {
@@ -113,7 +113,7 @@ class OfflineWorkbookAcceptanceTest {
 
     private fun addNotebookPageAndMarkCompleted() {
         composeRule.onNodeWithText("Add page").performClick()
-        waitForText("Page 2")
+        waitForText("Page 2 of 2")
         composeRule.onNodeWithTag("workspace-completed").performClick()
         composeRule.onNodeWithTag("workspace-completed").assertTextEquals("Completed")
     }

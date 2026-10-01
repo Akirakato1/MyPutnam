@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import com.putnamworkbook.offline.domain.model.AppSettings
 import com.putnamworkbook.offline.domain.model.AppTheme
 import com.putnamworkbook.offline.domain.model.BrushSpec
-import com.putnamworkbook.offline.domain.model.Handedness
 import com.putnamworkbook.offline.domain.model.PaperStyle
 
 @Composable
@@ -56,39 +55,6 @@ fun SettingsScreen(
             contentPadding = androidx.compose.foundation.layout.PaddingValues(24.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
-            item {
-                SettingsSection("Handedness and palm guard") {
-                    ChoiceRow {
-                        Choice("Right handed", settings.handedness == Handedness.RIGHT, "settings-handedness-right") {
-                            onSettingsChanged(settings.copy(handedness = Handedness.RIGHT))
-                        }
-                        Choice("Left handed", settings.handedness == Handedness.LEFT, "settings-handedness-left") {
-                            onSettingsChanged(settings.copy(handedness = Handedness.LEFT))
-                        }
-                    }
-                    ToggleRow("Block palm touches in the notebook", settings.palmGuard.enabled, "settings-palm-guard") {
-                        onSettingsChanged(settings.copy(palmGuard = settings.palmGuard.copy(enabled = it)))
-                    }
-                    Text("Guard width ${percent(settings.palmGuard.widthFraction)}")
-                    Slider(
-                        value = settings.palmGuard.widthFraction,
-                        onValueChange = { value ->
-                            onSettingsChanged(settings.copy(palmGuard = settings.palmGuard.copy(widthFraction = value)))
-                        },
-                        valueRange = 0.1f..0.5f,
-                        modifier = Modifier.testTag("settings-palm-width"),
-                    )
-                    Text("Guard height ${percent(settings.palmGuard.heightFraction)}")
-                    Slider(
-                        value = settings.palmGuard.heightFraction,
-                        onValueChange = { value ->
-                            onSettingsChanged(settings.copy(palmGuard = settings.palmGuard.copy(heightFraction = value)))
-                        },
-                        valueRange = 0.1f..0.8f,
-                        modifier = Modifier.testTag("settings-palm-height"),
-                    )
-                }
-            }
             item {
                 SettingsSection("New notebook pages") {
                     ChoiceRow {
@@ -221,8 +187,6 @@ private fun ToggleRow(label: String, checked: Boolean, tag: String, onCheckedCha
         Switch(checked = checked, onCheckedChange = onCheckedChange, modifier = Modifier.testTag(tag))
     }
 }
-
-private fun percent(value: Float) = "${(value * 100).toInt()}%"
 
 private fun AppTheme.label() = when (this) {
     AppTheme.SYSTEM -> "System"

@@ -233,11 +233,8 @@ class FileNotebookRepositoryTest {
         val first = repository.loadOrCreate(key, PaperStyle.BLANK).pages.single()
         val withSecond = repository.addPage(key, first.id, PaperStyle.SQUARE_GRID)
         val second = withSecond.pages[1]
-        val reordered = repository.reorderPage(key, second.id, 0)
-        assertEquals(listOf(second.id, first.id), reordered.pages.map { it.id })
-
         repository.commitStroke(key, second.id, stroke("to-clear", 0.5f))
-        assertTrue(repository.clearPage(key, second.id).pages[0].strokes.isEmpty())
+        assertTrue(repository.clearPage(key, second.id).pages[1].strokes.isEmpty())
         repository.deletePage(key, first.id)
         assertThrows(IllegalStateException::class.java) {
             runBlocking { repository.deletePage(key, second.id) }

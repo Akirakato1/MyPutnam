@@ -21,7 +21,6 @@ import com.putnamworkbook.offline.domain.model.AppSettings
 import com.putnamworkbook.offline.domain.model.AppTheme
 import com.putnamworkbook.offline.domain.model.Handedness
 import com.putnamworkbook.offline.domain.model.PaperStyle
-import com.putnamworkbook.offline.notebook.ui.toPalmGuardState
 import com.putnamworkbook.offline.updateKeepScreenAwake
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -55,7 +54,9 @@ class SettingsScreenTest {
             }
         }
 
-        composeRule.onNodeWithTag("settings-handedness-left").performClick().assertIsSelected()
+        composeRule.onNodeWithTag("settings-palm-guard").assertDoesNotExist()
+        composeRule.onNodeWithTag("settings-palm-width").assertDoesNotExist()
+        composeRule.onNodeWithTag("settings-palm-height").assertDoesNotExist()
         composeRule.onNodeWithTag("settings-paper-blank").performClick().assertIsSelected()
         composeRule.onNodeWithTag("settings-theme-dark").performClick().assertIsSelected()
         composeRule.onNodeWithTag("settings-keep-awake").performClick()
@@ -75,11 +76,9 @@ class SettingsScreenTest {
         composeRule.onNodeWithTag("settings-app-version").assertTextEquals("App version 0.1.0")
         composeRule.onNodeWithTag("settings-content-version").assertTextEquals("Content version 2025 schema 1")
 
-        assertEquals(Handedness.LEFT, settings.handedness)
         assertEquals(PaperStyle.BLANK, settings.defaultPaperStyle)
         assertEquals(AppTheme.DARK, settings.theme)
-        assertTrue(settings.keepAwakeInWorkspace)
-        assertEquals(Handedness.LEFT, settings.toPalmGuardState()!!.side)
+        assertFalse(settings.keepAwakeInWorkspace)
     }
 
     @Test

@@ -24,7 +24,6 @@ class InkCompletionTest {
                 page = NotebookPage("page", PaperStyle.BLANK),
                 strokes = emptyList(),
                 brush = BrushSpec(),
-                palmGuard = null,
                 onStrokeFinished = { finished += it },
             )
         }

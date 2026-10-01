@@ -33,12 +33,11 @@ class NotebookSelectionTest {
             NotebookPane(
                 state = state(toolMode = NotebookToolMode.SELECT),
                 brush = BrushSpec(),
-                palmGuard = null,
                 onStrokeFinished = { inkCount += 1 },
                 onUndo = {}, onRedo = {}, onAddPage = {},
                 onRequestDeletePage = {}, onRequestClearPage = {},
                 onConfirmDeletePage = {}, onConfirmClearPage = {}, onDismissConfirmation = {},
-                onSelectPage = {}, onReorderPage = { _, _ -> },
+                onSelectPage = {},
                 onSelect = { selected = it },
             )
         }
@@ -66,11 +65,11 @@ class NotebookSelectionTest {
                     selection = NotebookSelectionState(setOf("selected"), NormalizedRect(0.4f, 0.4f, 0.6f, 0.6f)),
                     clipboardHasContent = true,
                 ),
-                brush = BrushSpec(), palmGuard = null, onStrokeFinished = {},
+                brush = BrushSpec(), onStrokeFinished = {},
                 onUndo = {}, onRedo = {}, onAddPage = {},
                 onRequestDeletePage = {}, onRequestClearPage = {},
                 onConfirmDeletePage = {}, onConfirmClearPage = {}, onDismissConfirmation = {},
-                onSelectPage = {}, onReorderPage = { _, _ -> },
+                onSelectPage = {},
                 onCutSelection = { calls += "cut" },
                 onCopySelection = { calls += "copy" },
                 onPaste = { calls += "paste" },

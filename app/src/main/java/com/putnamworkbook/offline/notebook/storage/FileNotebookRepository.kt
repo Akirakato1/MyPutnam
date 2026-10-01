@@ -181,21 +181,6 @@ class FileNotebookRepository(
         document.replacePage(changedPage).also { writeManifest(it) }
     }
 
-    override suspend fun reorderPage(
-        key: ProblemKey,
-        pageId: String,
-        newIndex: Int,
-    ): NotebookDocument = locked {
-        val document = loadExistingDocument(key)
-        require(newIndex in document.pages.indices) { "New page index is outside the notebook" }
-        val oldIndex = document.pages.indexOfFirst { it.id == pageId }
-        require(oldIndex >= 0) { "Unknown page id: $pageId" }
-        val changedPages = document.pages.toMutableList()
-        val page = changedPages.removeAt(oldIndex)
-        changedPages.add(newIndex, page)
-        document.copy(pages = changedPages).also { writeManifest(it) }
-    }
-
     private fun loadOrCreateLocked(key: ProblemKey, defaultPaper: PaperStyle): NotebookDocument {
         val manifest = manifestPath(key)
         if (!Files.exists(manifest)) {

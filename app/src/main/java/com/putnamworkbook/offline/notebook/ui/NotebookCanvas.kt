@@ -53,7 +53,6 @@ fun NotebookCanvas(
     page: NotebookPage,
     strokes: List<StrokeRecord>,
     brush: BrushSpec,
-    palmGuard: PalmGuardState?,
     onStrokeFinished: (StrokeRecord) -> Unit,
     toolMode: NotebookToolMode = NotebookToolMode.PEN,
     selection: NotebookSelectionState? = null,
@@ -116,7 +115,6 @@ fun NotebookCanvas(
                 modifier = Modifier.fillMaxSize(),
             )
         }
-        palmGuard?.let { PalmGuard(it, maxHeight) }
     }
 }
 
