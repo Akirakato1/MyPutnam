@@ -6,6 +6,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipe
 import com.putnamworkbook.offline.domain.model.BrushSpec
 import com.putnamworkbook.offline.domain.model.PaperStyle
 import com.putnamworkbook.offline.domain.model.ProblemKey
@@ -43,9 +44,11 @@ class NotebookSelectionTest {
         }
 
         composeRule.onNodeWithTag(SELECTION_OVERLAY_TEST_TAG).performTouchInput {
-            down(Offset(50f, 80f))
-            moveTo(Offset(250f, 280f))
-            up()
+            swipe(
+                start = Offset(50f, 80f),
+                end = Offset(250f, 280f),
+                durationMillis = 400L,
+            )
         }
         composeRule.waitForIdle()
 
