@@ -8,9 +8,11 @@ archive must retain the existing problem-first workflow: choose a year, choose
 a problem, read properly rendered mathematics, reveal progressive help, and
 work in the integrated notebook.
 
-Development builds are disposable. Each release in this expansion is a fresh
-APK with a freshly generated immutable content database. No work will be spent
-converting notebooks or preserving app data from earlier development APKs.
+Content-authoring batches are saved and validated locally without rebuilding
+the Android app. After every 1962–2025 problem is complete, one integration
+pass renders the full archive, creates the immutable content database, and
+builds a fresh APK. No work will be spent converting notebooks or preserving
+app data from earlier development APKs.
 
 ## Scope and batch sequence
 
@@ -30,10 +32,11 @@ Content is added cumulatively, newest first, in five-calendar-year batches:
 12. 1965–1969
 13. 1962–1964
 
-The completed archive contains 64 competition years and 768 problems. A batch
-is not added to the app catalog until every year and problem in that batch has
-passed the content and rendering gates below. The first deliverable therefore
-contains 2020–2025: six years and 72 problems.
+The completed archive contains 64 competition years and 768 problems. Each
+batch is a local authoring checkpoint and is not packaged into an APK. A batch
+is marked complete only after every year and problem in it has passed the
+source, schema, mathematical-review, and local-rendering gates below. The only
+APK deliverable contains the complete 1962–2025 archive.
 
 Years before 1962 are out of scope because they predate the modern twelve
 problem A1–A6/B1–B6 format.
@@ -91,18 +94,21 @@ without duplicating the final solution.
 
 ## Multi-year content pipeline
 
-Per-year authoring and rendering remain isolated:
+Per-year authoring and local review rendering remain isolated:
 
 - `content-src/<year>/` contains provenance, records, figures, and review
   evidence.
-- `app/src/main/assets/content/<year>/` contains that year's generated,
-  script-free HTML, KaTeX assets, figures, and manifest.
-- A tracked archive catalog lists the included years and the global content
-  version.
+- `build/content-review/<year>/` contains disposable local review pages during
+  authoring.
+- A tracked archive catalog records which local batches have passed review and
+  will be included in the final integration.
 
-The existing year builder continues to build and review one year at a time. A
-new archive-level build command reads the catalog, renders its years in sorted
-order, and rejects missing, duplicate, or out-of-catalog years.
+The existing year builder continues to validate and render one year at a time
+into local review output. Generated Android assets are not committed or
+repackaged after each batch. After all batches are complete, a new
+archive-level build command reads the catalog, renders every year into
+`app/src/main/assets/content/` in sorted order, and rejects missing, duplicate,
+partially reviewed, or out-of-catalog years.
 
 The content database builder accepts all catalog manifests and writes one
 deterministic Room database. It inserts years in ascending order and problems
@@ -116,17 +122,16 @@ change is required. Global metadata records:
 - total year and problem counts;
 - a digest of the canonical catalog and all included manifests.
 
-The archive content version uses
-`archive-<minimum-year>-2025.<revision>`, beginning with
-`archive-2020-2025.1`. Rebuilding identical inputs must produce identical
+The final archive content version uses `archive-1962-2025.<revision>`, beginning
+with `archive-1962-2025.1`. Rebuilding identical inputs must produce identical
 manifests, rendered assets, logical database contents, and catalog digest.
 
 ## Application behavior
 
 The existing archive screens already query distinct years and then the twelve
 problems for a selected year. They remain the user-facing model and require no
-layout redesign. The first batch must display years in descending order from
-2025 through 2020 and show A1–A6 followed by B1–B6 for each year.
+layout redesign. The final app must display years in descending order from
+2025 through 1962 and show A1–A6 followed by B1–B6 for each year.
 
 All statements, prerequisites, hints, and solutions load from packaged local
 assets while the device is offline. The app continues to declare no internet
@@ -139,10 +144,12 @@ version, absence of original PDFs, and absence of internet permission.
 
 ## Fresh-install development policy
 
-Every content batch produces a new APK and is tested as a clean installation.
-The prior development APK may be uninstalled or its data cleared before
-sideloading. There is no upgrade rehearsal and no requirement to retain
-notebooks, progress, settings, or backups across development versions.
+Only the fully integrated 1962–2025 archive produces a new APK. Intermediate
+batches remain local source records, source locks, review evidence, and review
+renders. The prior development APK may be uninstalled or its data cleared
+before sideloading the completed archive. There is no upgrade rehearsal and no
+requirement to retain notebooks, progress, settings, or backups from the
+current development APK.
 
 No new notebook or user-database migration code will be written for this
 expansion. Existing defensive migration code may remain untouched, but the
@@ -180,16 +187,16 @@ Automated gates cover:
 
 ## Batch completion and releases
 
-A batch is complete only when all records are authored, review evidence is
-present, automated gates pass, generated pages have been visually inspected,
-the clean-install Android smoke test passes, and a signed APK has been
-verified. Partially authored years remain outside the tracked archive catalog
-and therefore cannot leak into release builds.
+A local batch is complete when all records are authored, review evidence is
+present, source and schema gates pass, and its local review pages have been
+visually inspected. Partially authored years remain outside the completed
+catalog and therefore cannot leak into the final build.
 
-The first batch produces a fresh v0.4.0 APK named
-`putnam-workbook-2020-2025-v0.4.0.apk`. Later batches follow the same process
-with a new app version and a filename describing the cumulative minimum and
-maximum year.
+After the 1962–1964 batch completes, one final integration generates every
+packaged HTML asset and manifest, builds the cumulative Room database, runs the
+complete automated and Android test suites, performs the clean-install tablet
+smoke test, and verifies one signed APK. The target artifact is
+`putnam-workbook-1962-2025-v1.0.0.apk`.
 
 ## Explicit non-goals
 
