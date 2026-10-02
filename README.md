@@ -32,7 +32,28 @@ node tools/content/src/build-year.mjs --year 2025 --content-version 2025.2
 python tools/content/src/build-content-db.py --manifest app/src/main/assets/content/2025/manifest.json --output app/src/main/assets/databases/content.db
 ```
 
-Problem source files follow the versioned schema documented in `tools/content/SCHEMA.md`. Each problem has a canonical statement and solution, exactly four progressive hint stages, and zero or more prerequisite references. Start from `tools/content/templates/problem.template.json`, validate with `npm --prefix tools/content test`, and review the generated pages in `build/content-review/2025/` before committing packaged assets.
+## Historical archive development
+
+The historical expansion is curated locally in five-year batches from 2024
+back through 1962. Batch work adds locked sources, schema-v2 problem records,
+staged hints, prerequisite refreshers, explanatory solutions, and review
+evidence beneath `content-src/`; it does not rebuild the app, modify packaged
+Android assets, or produce an APK.
+
+Only after `content-src/archive.json` has `completedYears` exactly equal to
+`targetYears` may the already-tested final integration command be run:
+
+```text
+node tools/content/src/build-archive.mjs --catalog content-src/archive.json --source content-src --output app/src/main/assets/content --review build/content-preview/archive --database app/src/main/assets/databases/content.db
+```
+
+All five paths are explicit. The command renders and deduplicates the complete
+archive and builds its multi-year Room database. It is documented now so the
+eventual 1962–2025 packaging pass is mechanical, but it must not be run during
+the 2020–2024 batch (or any other incomplete batch). No intermediate APK is
+created.
+
+Problem source files follow the versioned schema documented in `tools/content/SCHEMA.md`. Each problem has a canonical statement and solution, exactly four progressive hint stages, and one or more prerequisite refreshers. Start from `tools/content/templates/problem.template.json`, validate with `npm --prefix tools/content test`, and review the generated pages in `build/content-review/2025/` before committing packaged assets.
 
 Place the final APK at `dist/putnam-workbook-2025-v0.3.0.apk`, write its SHA-256 to `dist/putnam-workbook-2025-v0.3.0.apk.sha256`, and verify it:
 

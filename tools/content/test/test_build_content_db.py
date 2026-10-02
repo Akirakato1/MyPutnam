@@ -1,4 +1,5 @@
 import importlib.util
+import hashlib
 import json
 import sqlite3
 import tempfile
@@ -16,10 +17,10 @@ def asset(path, fill):
     return {"assetPath": path, "sha256": fill * 64}
 
 
-def problem(code, ordinal):
+def problem(code, ordinal, year=2025):
     stages = {1: "nudge", 2: "strategy", 3: "knowledge", 4: "outline"}
     return {
-        "year": 2025,
+        "year": year,
         "code": code,
         "ordinal": ordinal,
         "sourceRecord": f"{code}.json",
@@ -142,6 +143,134 @@ class BuildContentDatabaseTest(unittest.TestCase):
             second_dump = "\n".join(database.iterdump())
 
         self.assertEqual(first_dump, second_dump)
+
+    def test_archive_database_contains_two_years_and_global_metadata(self):
+        catalog = {
+            "schemaVersion": 1,
+            "contentSchemaVersion": 2,
+            "contentVersion": "archive-2024-2025.1",
+            "targetYears": [2024, 2025],
+            "completedYears": [2024, 2025],
+        }
+        manifests = [
+            {
+                "schemaVersion": 2,
+                "contentVersion": "2025.1",
+                "year": 2025,
+                "problems": [problem("A1", 1, 2025)],
+                "assets": [],
+            },
+            {
+                "schemaVersion": 2,
+                "contentVersion": "2024.1",
+                "year": 2024,
+                "problems": [problem("A1", 1, 2024)],
+                "assets": [],
+            },
+        ]
+
+        BUILDER.build_archive_database(manifests, catalog, self.output)
+
+        with sqlite3.connect(self.output) as database:
+            self.assertEqual(
+                [(2024, "A1"), (2025, "A1")],
+                database.execute("SELECT year, code FROM problem ORDER BY rowid").fetchall(),
+            )
+            self.assertEqual(
+                [
+                    (2024, "content/2024/problems/A1/statement.html"),
+                    (2025, "content/2025/problems/A1/statement.html"),
+                ],
+                database.execute(
+                    "SELECT year, statement_asset_path FROM problem ORDER BY rowid"
+                ).fetchall(),
+            )
+            metadata = dict(database.execute("SELECT key, value FROM content_meta"))
+
+        self.assertEqual("2", metadata["contentSchemaVersion"])
+        self.assertEqual("archive-2024-2025.1", metadata["contentVersion"])
+        self.assertEqual("[2024,2025]", metadata["includedYears"])
+        self.assertEqual("2024", metadata["minimumYear"])
+        self.assertEqual("2025", metadata["maximumYear"])
+        self.assertEqual("2", metadata["yearCount"])
+        self.assertEqual("2", metadata["problemCount"])
+        self.assertEqual(
+            hashlib.sha256(BUILDER.canonical_json(catalog).encode("utf-8")).hexdigest(),
+            metadata["catalogSha256"],
+        )
+        archive_payload = {
+            "catalog": catalog,
+            "manifests": sorted(manifests, key=lambda manifest: manifest["year"]),
+        }
+        self.assertEqual(
+            hashlib.sha256(
+                BUILDER.canonical_json(archive_payload).encode("utf-8")
+            ).hexdigest(),
+            metadata["archiveSha256"],
+        )
+
+    def test_archive_row_order_and_digest_are_stable_for_reversed_manifest_input(self):
+        catalog = {
+            "schemaVersion": 1,
+            "contentSchemaVersion": 2,
+            "contentVersion": "archive-2024-2025.1",
+            "targetYears": [2024, 2025],
+            "completedYears": [2024, 2025],
+        }
+        manifests = [
+            {
+                "schemaVersion": 2,
+                "contentVersion": f"{year}.1",
+                "year": year,
+                "problems": [problem("B1", 2, year), problem("A1", 1, year)],
+                "assets": [],
+            }
+            for year in (2025, 2024)
+        ]
+        second_output = Path(self.temporary_directory.name) / "archive-second.db"
+
+        BUILDER.build_archive_database(manifests, catalog, self.output)
+        BUILDER.build_archive_database(list(reversed(manifests)), catalog, second_output)
+
+        with sqlite3.connect(self.output) as database:
+            first_dump = "\n".join(database.iterdump())
+        with sqlite3.connect(second_output) as database:
+            second_dump = "\n".join(database.iterdump())
+        self.assertEqual(first_dump, second_dump)
+
+    def test_archive_rejects_manifest_year_mismatches_and_duplicate_problem_keys(self):
+        catalog = {
+            "schemaVersion": 1,
+            "contentSchemaVersion": 2,
+            "contentVersion": "archive-2024-2025.1",
+            "targetYears": [2024, 2025],
+            "completedYears": [2024, 2025],
+        }
+        missing_year = [{
+            "schemaVersion": 2,
+            "year": 2025,
+            "problems": [problem("A1", 1, 2025)],
+            "assets": [],
+        }]
+        with self.assertRaisesRegex(ValueError, "manifest years"):
+            BUILDER.build_archive_database(missing_year, catalog, self.output)
+
+        duplicate_problem = [
+            {
+                "schemaVersion": 2,
+                "year": 2024,
+                "problems": [problem("A1", 1, 2024), problem("A1", 2, 2024)],
+                "assets": [],
+            },
+            {
+                "schemaVersion": 2,
+                "year": 2025,
+                "problems": [problem("A1", 1, 2025)],
+                "assets": [],
+            },
+        ]
+        with self.assertRaisesRegex(ValueError, "Duplicate problem key"):
+            BUILDER.build_archive_database(duplicate_problem, catalog, self.output)
 
 
 if __name__ == "__main__":
