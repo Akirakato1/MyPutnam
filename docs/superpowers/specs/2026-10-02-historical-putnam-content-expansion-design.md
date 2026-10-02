@@ -110,6 +110,13 @@ archive-level build command reads the catalog, renders every year into
 `app/src/main/assets/content/` in sorted order, and rejects missing, duplicate,
 partially reviewed, or out-of-catalog years.
 
+The archive-level tooling and its deterministic tests are implemented before
+bulk authoring begins, using fixtures, temporary directories, and the existing
+2025 records. These tests must not modify packaged app assets or assemble an
+APK. This makes the final 1962–2025 integration a mechanical invocation of an
+already-tested pipeline rather than a new development task discovered at the
+end.
+
 The content database builder accepts all catalog manifests and writes one
 deterministic Room database. It inserts years in ascending order and problems
 by ordinal. Composite `(year, code)` keys remain unchanged, so no Room schema
