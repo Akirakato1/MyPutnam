@@ -1,6 +1,7 @@
 package com.putnamworkbook.offline.navigation
 
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.compose.BackHandler
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -51,6 +52,9 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 
 data class WorkspaceDependencies(
@@ -62,6 +66,20 @@ data class WorkspaceDependencies(
     val appVersion: String,
     val contentVersion: String,
 )
+
+private class NotebookViewModelFactory(
+    private val dependencies: WorkspaceDependencies,
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        require(modelClass.isAssignableFrom(NotebookViewModel::class.java))
+        @Suppress("UNCHECKED_CAST")
+        return NotebookViewModel(
+            dependencies.notebookRepository,
+            dependencies.settingsRepository,
+            clipboard = dependencies.notebookClipboard,
+        ) as T
+    }
+}
 
 @Composable
 fun PutnamNavHost(
@@ -139,6 +157,7 @@ fun PutnamNavHost(
                     contentRepository = contentRepository,
                     progressRepository = progressRepository,
                     dependencies = workspaceDependencies,
+                    viewModelStoreOwner = entry,
                     onWorkspaceActiveChanged = onWorkspaceActiveChanged,
                     onHome = {
                         if (!navController.popBackStack(AppRoute.HOME, inclusive = false)) {
@@ -167,17 +186,18 @@ private fun WorkspaceDestination(
     contentRepository: ContentRepository,
     progressRepository: ProgressRepository,
     dependencies: WorkspaceDependencies,
+    viewModelStoreOwner: ViewModelStoreOwner,
     onWorkspaceActiveChanged: (Boolean) -> Unit,
     onHome: () -> Unit,
 ) {
     val workspaceViewModel = remember(key, contentRepository, progressRepository) {
         WorkspaceViewModel(contentRepository, progressRepository)
     }
-    val notebookViewModel = remember(key, dependencies.notebookRepository, dependencies.settingsRepository, dependencies.notebookClipboard) {
-        NotebookViewModel(
-            dependencies.notebookRepository,
-            dependencies.settingsRepository,
-            clipboard = dependencies.notebookClipboard,
+    val notebookFactory = remember(dependencies) { NotebookViewModelFactory(dependencies) }
+    val notebookViewModel = remember(viewModelStoreOwner, key, notebookFactory) {
+        ViewModelProvider(viewModelStoreOwner, notebookFactory).get(
+            "notebook-${key.year}-${key.code}",
+            NotebookViewModel::class.java,
         )
     }
     val scope = rememberCoroutineScope()
@@ -246,13 +266,12 @@ private fun WorkspaceDestination(
         onDispose {
             onWorkspaceActiveChanged(false)
             workspaceViewModel.close()
-            notebookViewModel.close()
         }
     }
     DisposableEffect(lifecycleOwner, notebookViewModel) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_STOP) {
-                scope.launch { runCatching { notebookViewModel.flush() } }
+                notebookViewModel.requestFlush()
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -279,10 +298,9 @@ private fun WorkspaceDestination(
             workspaceViewModel.updateNotebookState(document.pages.size, notebookState.activePageIndex)
         }
     }
-    WorkspaceScreen(
-        state = workspaceState,
-        onHome = {
-            scope.launch {
+    val returnHome: () -> Unit = {
+        scope.launch {
+            try {
                 notebookViewModel.awaitIdle()
                 notebookViewModel.uiState.value.let { latestNotebook ->
                     latestNotebook.document?.let { document ->
@@ -291,8 +309,17 @@ private fun WorkspaceDestination(
                     workspaceViewModel.awaitIdle()
                 }
                 onHome()
+            } catch (error: CancellationException) {
+                throw error
+            } catch (error: Exception) {
+                workspaceViewModel.reportIntegrityError(error.message ?: "Notebook save failed")
             }
-        },
+        }
+    }
+    BackHandler(onBack = returnHome)
+    WorkspaceScreen(
+        state = workspaceState,
+        onHome = returnHome,
         onSetCompleted = workspaceViewModel::setCompleted,
         onExportPdf = { options ->
             pendingIncludeHints = options.includeRevealedHints

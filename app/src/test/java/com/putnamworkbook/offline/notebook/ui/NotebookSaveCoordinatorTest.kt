@@ -71,6 +71,24 @@ class NotebookSaveCoordinatorTest {
         scope.cancel()
     }
 
+    @Test
+    fun awaitIdlePropagatesPersistentFailureAndKeepsBatchForRetry() = runBlocking {
+        val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+        val waitForever = CompletableDeferred<Unit>()
+        val coordinator = NotebookSaveCoordinator(
+            scope = scope,
+            wait = { waitForever.await() },
+            persist = { _, _ -> throw IOException("disk unavailable") },
+        )
+        coordinator.enqueue("page", drawEdit("stroke"))
+
+        val result = runCatching { coordinator.awaitIdle() }
+
+        assertTrue(result.exceptionOrNull() is IOException)
+        assertTrue(coordinator.hasPendingEdits)
+        scope.cancel()
+    }
+
     private fun drawEdit(id: String) = NotebookEdit(
         NotebookEditGroup("edit-$id", listOf(id), emptyList()),
         listOf(

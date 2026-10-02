@@ -29,13 +29,13 @@ class FinishedStrokeBufferTest {
     }
 
     @Test
-    fun clearDropsCancelledEntriesWithoutACompletion() {
+    fun cancellingNewGestureDoesNotDropEarlierFinishedStroke() {
         val buffer = FinishedStrokeBuffer<String>()
-        buffer.put("cancelled", stroke("record"))
+        buffer.put("ink-a", stroke("record-a"))
 
-        buffer.clear()
+        buffer.remove("ink-b")
 
-        assertTrue(buffer.drain(listOf("cancelled")).isEmpty())
+        assertEquals(listOf("record-a"), buffer.drain(listOf("ink-a")).map { it.id })
     }
 
     private fun stroke(id: String) = StrokeRecord(

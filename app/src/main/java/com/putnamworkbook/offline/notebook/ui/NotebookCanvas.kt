@@ -187,10 +187,12 @@ private class InkInputLayer(context: Context) : FrameLayout(context) {
             }
 
             MotionEvent.ACTION_CANCEL -> {
-                inProgressStrokeId?.let { inkView.cancelStroke(it, event) }
+                inProgressStrokeId?.let { strokeId ->
+                    inkView.cancelStroke(strokeId, event)
+                    finishedStrokeBuffer.remove(strokeId)
+                }
                 primaryPointerId = null
                 inProgressStrokeId = null
-                finishedStrokeBuffer.clear()
                 recorderBrush = brush
                 recorder = recorderFor(brush)
             }

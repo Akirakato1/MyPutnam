@@ -53,11 +53,7 @@ class NotebookSaveCoordinator(
     suspend fun awaitIdle() {
         debounceJob?.cancel()
         debounceJob = null
-        try {
-            flushPending()
-        } catch (_: Exception) {
-            // The failure is reported through onFailure and the edits remain pending for retry.
-        }
+        flushPending()
         automaticFlushJob?.join()
     }
 

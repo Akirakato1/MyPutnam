@@ -14,7 +14,5 @@ class FinishedStrokeBuffer<K> {
         finishedIds.forEach { id -> records.remove(id)?.let(::add) }
     }
 
-    fun clear() {
-        records.clear()
-    }
+    fun remove(id: K): StrokeRecord? = records.remove(id)
 }

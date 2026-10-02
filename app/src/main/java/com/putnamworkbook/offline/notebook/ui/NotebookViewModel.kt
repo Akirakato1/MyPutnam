@@ -1,5 +1,7 @@
 package com.putnamworkbook.offline.notebook.ui
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.putnamworkbook.offline.data.user.SettingsRepository
 import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.notebook.model.NotebookDocument
@@ -19,9 +21,7 @@ import com.putnamworkbook.offline.notebook.edit.intersects
 import com.putnamworkbook.offline.notebook.edit.selectionBounds
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -37,10 +37,11 @@ import java.util.UUID
 class NotebookViewModel(
     private val repository: NotebookRepository,
     private val settingsRepository: SettingsRepository,
-    private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate),
+    private val providedScope: CoroutineScope? = null,
     saveWait: suspend (Long) -> Unit = { delay(it) },
     private val clipboard: NotebookClipboard = NotebookClipboard(),
-) {
+) : ViewModel() {
+    private val scope = providedScope ?: viewModelScope
     private val mutableUiState = MutableStateFlow(NotebookUiState())
     private val operationMutex = Mutex()
     private var currentKey: ProblemKey? = null
@@ -255,9 +256,27 @@ class NotebookViewModel(
         saveCoordinator.flush()
     }
 
-    fun close() {
+    fun requestFlush() {
+        scope.launch {
+            try {
+                saveCoordinator.flush()
+            } catch (error: CancellationException) {
+                throw error
+            } catch (_: Exception) {
+                // onFailure has already retained the pending batch and exposed the error state.
+            }
+        }
+    }
+
+    suspend fun close() {
+        awaitIdle()
         saveCoordinator.cancel()
-        scope.cancel()
+        providedScope?.cancel()
+    }
+
+    override fun onCleared() {
+        saveCoordinator.cancel()
+        super.onCleared()
     }
 
     private fun launchSaving(block: suspend () -> Unit) = launchOperation(NotebookSaveState.SAVING, block)
@@ -298,17 +317,32 @@ class NotebookViewModel(
         activePageIndex: Int,
         pendingConfirmation: PendingConfirmation? = mutableUiState.value.pendingConfirmation,
     ) {
-        val safeIndex = activePageIndex.coerceIn(document.pages.indices)
-        val page = document.pages[safeIndex]
-        val strokes = repository.loadStrokes(document.key, page.id)
-        mutableUiState.value = mutableUiState.value.copy(
-            document = document,
-            activePageIndex = safeIndex,
-            strokes = strokes,
-            pendingConfirmation = pendingConfirmation,
-            selection = null,
-            clipboardHasContent = clipboard.hasContent,
-        )
+        var candidate = document
+        while (true) {
+            saveCoordinator.flush()
+            val revision = mutableUiState.value.uiRevision
+            candidate = repository.loadExisting(candidate.key) ?: candidate
+            val safeIndex = activePageIndex.coerceIn(candidate.pages.indices)
+            val page = candidate.pages[safeIndex]
+            val strokes = repository.loadStrokes(candidate.key, page.id)
+            var published = false
+            mutableUiState.update { current ->
+                if (current.uiRevision != revision || saveCoordinator.hasPendingEdits) {
+                    current
+                } else {
+                    published = true
+                    current.copy(
+                        document = candidate,
+                        activePageIndex = safeIndex,
+                        strokes = strokes,
+                        pendingConfirmation = pendingConfirmation,
+                        selection = null,
+                        clipboardHasContent = clipboard.hasContent,
+                    )
+                }
+            }
+            if (published) return
+        }
     }
 
     private fun currentPage(): Pair<ProblemKey, String> {

@@ -15,6 +15,7 @@ import com.putnamworkbook.offline.notebook.edit.NotebookToolMode
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
@@ -27,6 +28,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
+import java.io.IOException
 
 class NotebookViewModelTest {
     @get:Rule
@@ -114,6 +116,82 @@ class NotebookViewModelTest {
         assertEquals(listOf("first", "second"), viewModel.uiState.value.strokes.map { it.id })
         assertEquals(2L, viewModel.uiState.value.durableRevision)
         viewModel.close()
+    }
+
+    @Test
+    fun persistentSaveFailurePropagatesWhileOptimisticStrokeRemainsVisible() = runBlocking {
+        val fileRepository = FileNotebookRepository(temporaryFolder.newFolder("save-failure").toPath())
+        val repository = object : NotebookRepository by fileRepository {
+            override suspend fun applyEdits(
+                key: ProblemKey,
+                pageId: String,
+                edits: List<com.putnamworkbook.offline.notebook.model.NotebookEdit>,
+            ) = throw IOException("disk unavailable")
+        }
+        val scope = CoroutineScope(Dispatchers.Default)
+        val viewModel = NotebookViewModel(
+            repository,
+            FakeSettingsRepository(),
+            scope,
+            saveWait = { CompletableDeferred<Unit>().await() },
+        )
+        viewModel.open(key)
+        viewModel.awaitIdle()
+        viewModel.commitStroke(stroke("unsaved"))
+
+        val result = runCatching { viewModel.awaitIdle() }
+
+        assertTrue(result.exceptionOrNull() is IOException)
+        assertEquals(listOf("unsaved"), viewModel.uiState.value.strokes.map { it.id })
+        assertEquals(NotebookSaveState.ERROR, viewModel.uiState.value.saveState)
+        scope.cancel()
+    }
+
+    @Test
+    fun strokeAcceptedDuringDelayedUndoRemainsVisibleAndDurable() = runBlocking {
+        val fileRepository = FileNotebookRepository(temporaryFolder.newFolder("undo-race").toPath())
+        val undoStarted = CompletableDeferred<Unit>()
+        val releaseUndo = CompletableDeferred<Unit>()
+        val repository = object : NotebookRepository by fileRepository {
+            override suspend fun undo(key: ProblemKey, pageId: String) =
+                fileRepository.undo(key, pageId).also {
+                    undoStarted.complete(Unit)
+                    releaseUndo.await()
+                }
+        }
+        val saveGate = CompletableDeferred<Unit>()
+        val viewModel = viewModel(repository, FakeSettingsRepository(), wait = { saveGate.await() })
+        viewModel.open(key)
+        viewModel.awaitIdle()
+        val pageId = viewModel.uiState.value.document!!.pages.single().id
+        viewModel.commitStroke(stroke("before-undo"))
+        viewModel.awaitIdle()
+
+        viewModel.undo()
+        undoStarted.await()
+        viewModel.commitStroke(stroke("during-undo"))
+        releaseUndo.complete(Unit)
+        viewModel.awaitIdle()
+
+        assertEquals(listOf("during-undo"), viewModel.uiState.value.strokes.map { it.id })
+        assertEquals(listOf("during-undo"), fileRepository.loadStrokes(key, pageId).map { it.id })
+        viewModel.close()
+    }
+
+    @Test
+    fun closeFlushesDebouncedStrokeBeforeCancellingItsScope() = runBlocking {
+        val repository = FileNotebookRepository(temporaryFolder.newFolder("close-flush").toPath())
+        val waitForever = CompletableDeferred<Unit>()
+        val viewModel = viewModel(repository, FakeSettingsRepository(), wait = { waitForever.await() })
+        viewModel.open(key)
+        viewModel.awaitIdle()
+        val pageId = viewModel.uiState.value.document!!.pages.single().id
+        viewModel.commitStroke(stroke("before-close"))
+        assertTrue(repository.loadStrokes(key, pageId).isEmpty())
+
+        viewModel.close()
+
+        assertEquals(listOf("before-close"), repository.loadStrokes(key, pageId).map { it.id })
     }
 
     @Test
