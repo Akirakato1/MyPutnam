@@ -24,6 +24,7 @@ import com.putnamworkbook.offline.domain.model.PaperStyle
 import com.putnamworkbook.offline.updateKeepScreenAwake
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -88,17 +89,21 @@ class SettingsScreenTest {
             .allowMainThreadQueries()
             .build()
         val repository = RoomSettingsRepository(database)
-        var viewModel = SettingsViewModel(repository, CoroutineScope(Dispatchers.Default))
+        val firstScope = CoroutineScope(Dispatchers.Default)
+        var viewModel = SettingsViewModel(repository, firstScope)
 
         viewModel.update { it.copy(handedness = Handedness.LEFT, theme = AppTheme.DARK) }
         viewModel.awaitIdle()
         viewModel.close()
-        viewModel = SettingsViewModel(repository, CoroutineScope(Dispatchers.Default))
+        firstScope.coroutineContext[Job]?.join()
+        val secondScope = CoroutineScope(Dispatchers.Default)
+        viewModel = SettingsViewModel(repository, secondScope)
         viewModel.awaitLoaded()
 
         assertEquals(Handedness.LEFT, viewModel.uiState.value.handedness)
         assertEquals(AppTheme.DARK, viewModel.uiState.value.theme)
         viewModel.close()
+        secondScope.coroutineContext[Job]?.join()
         database.close()
     }
 
