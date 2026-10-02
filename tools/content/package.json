@@ -7,8 +7,10 @@
     "node": ">=22.12.0"
   },
   "scripts": {
+    "audit-year": "node src/audit-year.mjs",
     "build": "node src/build-year.mjs",
     "review": "node src/render-review.mjs",
+    "review-year": "node src/review-year.mjs",
     "test": "node --test test/*.test.mjs",
     "postinstall": "playwright install chromium"
   },
