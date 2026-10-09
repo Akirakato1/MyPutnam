@@ -3,6 +3,7 @@ package com.putnamworkbook.offline.notebook.ui
 import android.content.Context
 import android.graphics.Matrix
 import android.view.MotionEvent
+import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.compose.foundation.Canvas
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.testTag
@@ -38,6 +40,7 @@ import com.putnamworkbook.offline.notebook.input.FinishedStrokeBuffer
 import com.putnamworkbook.offline.notebook.model.NotebookPage
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
 import com.putnamworkbook.offline.notebook.edit.NotebookSelectionState
+import com.putnamworkbook.offline.notebook.edit.CanvasViewport
 import com.putnamworkbook.offline.notebook.edit.NotebookToolMode
 import com.putnamworkbook.offline.notebook.edit.NormalizedPoint
 import com.putnamworkbook.offline.notebook.edit.NormalizedRect
@@ -47,6 +50,23 @@ const val NOTEBOOK_CANVAS_TEST_TAG = "notebook-canvas"
 val RenderedStrokeCountKey = SemanticsPropertyKey<Int>("RenderedStrokeCount")
 private var SemanticsPropertyReceiver.renderedStrokeCount by RenderedStrokeCountKey
 
+enum class InkHandoffEvent {
+    MODEL_DELIVERED,
+    RENDERED_ID_ACKNOWLEDGED,
+    REMOVAL_SCHEDULED,
+    PLATFORM_REMOVED,
+}
+
+fun interface InkRemovalScheduler {
+    fun schedule(host: View, removal: () -> Unit)
+}
+
+private object PostOnAnimationInkRemovalScheduler : InkRemovalScheduler {
+    override fun schedule(host: View, removal: () -> Unit) {
+        host.postOnAnimation(removal)
+    }
+}
+
 @Composable
 fun NotebookCanvas(
     page: NotebookPage,
@@ -55,12 +75,16 @@ fun NotebookCanvas(
     onStrokeFinished: (StrokeRecord) -> Unit,
     toolMode: NotebookToolMode = NotebookToolMode.PEN,
     selection: NotebookSelectionState? = null,
-    onSelect: (NormalizedRect) -> Unit = {},
+    onSelect: (NormalizedRect, CanvasViewport) -> Unit = { _, _ -> },
+    onViewportChanged: (CanvasViewport) -> Unit = {},
     onPreviewMove: (Float, Float) -> Unit = { _, _ -> },
     onCommitMove: (Float, Float) -> Unit = { _, _ -> },
     onPreviewScale: (SelectionCorner, NormalizedPoint) -> Unit = { _, _ -> },
     onCommitScale: (SelectionCorner, NormalizedPoint) -> Unit = { _, _ -> },
     onCancelPreview: () -> Unit = {},
+    onClearSelection: () -> Unit = {},
+    inkRemovalScheduler: InkRemovalScheduler = PostOnAnimationInkRemovalScheduler,
+    onInkHandoffEvent: (InkHandoffEvent) -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     val renderer = remember { CanvasStrokeRenderer.create() }
@@ -71,6 +95,11 @@ fun NotebookCanvas(
         modifier = modifier
             .fillMaxSize()
             .testTag(NOTEBOOK_CANVAS_TEST_TAG)
+            .onSizeChanged { size ->
+                if (size.width > 0 && size.height > 0) {
+                    onViewportChanged(CanvasViewport(size.width.toFloat(), size.height.toFloat()))
+                }
+            }
             .semantics { renderedStrokeCount = renderedStrokes.size },
     ) {
         Canvas(Modifier.fillMaxSize()) {
@@ -95,11 +124,18 @@ fun NotebookCanvas(
         }
         if (toolMode == NotebookToolMode.PEN) {
             AndroidView(
-                factory = { context -> InkInputLayer(context) },
+                factory = { context ->
+                    InkInputLayer(
+                        context = context,
+                        inkRemovalScheduler = inkRemovalScheduler,
+                        onInkHandoffEvent = onInkHandoffEvent,
+                    )
+                },
                 modifier = Modifier.fillMaxSize(),
                 update = { layer ->
                     layer.brush = brush
                     layer.onStrokeFinished = onStrokeFinished
+                    layer.renderedStrokeIds = renderedStrokes.mapTo(hashSetOf()) { it.id }
                 },
             )
         } else {
@@ -111,13 +147,18 @@ fun NotebookCanvas(
                 onPreviewScale = onPreviewScale,
                 onCommitScale = onCommitScale,
                 onCancelPreview = onCancelPreview,
+                onClearSelection = onClearSelection,
                 modifier = Modifier.fillMaxSize(),
             )
         }
     }
 }
 
-private class InkInputLayer(context: Context) : FrameLayout(context) {
+private class InkInputLayer(
+    context: Context,
+    private val inkRemovalScheduler: InkRemovalScheduler,
+    private val onInkHandoffEvent: (InkHandoffEvent) -> Unit,
+) : FrameLayout(context) {
     private val inkView = InProgressStrokesView(context)
     private var recorder = recorderFor(BrushSpec())
     private var recorderBrush = BrushSpec()
@@ -134,6 +175,19 @@ private class InkInputLayer(context: Context) : FrameLayout(context) {
             }
         }
     var onStrokeFinished: (StrokeRecord) -> Unit = {}
+    var renderedStrokeIds: Set<String> = emptySet()
+        set(value) {
+            field = value
+            val acknowledgedInkIds = finishedStrokeBuffer.acknowledgeRendered(value)
+            if (acknowledgedInkIds.isNotEmpty()) {
+                onInkHandoffEvent(InkHandoffEvent.RENDERED_ID_ACKNOWLEDGED)
+                onInkHandoffEvent(InkHandoffEvent.REMOVAL_SCHEDULED)
+                inkRemovalScheduler.schedule(this) {
+                    inkView.removeFinishedStrokes(acknowledgedInkIds.toSet())
+                    onInkHandoffEvent(InkHandoffEvent.PLATFORM_REMOVED)
+                }
+            }
+        }
 
     init {
         addView(
@@ -144,8 +198,15 @@ private class InkInputLayer(context: Context) : FrameLayout(context) {
         inkView.addFinishedStrokesListener(
             object : InProgressStrokesFinishedListener {
                 override fun onStrokesFinished(strokes: Map<InProgressStrokeId, Stroke>) {
-                    finishedStrokeBuffer.drain(strokes.keys).forEach(onStrokeFinished)
-                    inkView.removeFinishedStrokes(strokes.keys)
+                    val finished = finishedStrokeBuffer.finish(strokes.keys)
+                    finished.values.forEach { record ->
+                        onInkHandoffEvent(InkHandoffEvent.MODEL_DELIVERED)
+                        onStrokeFinished(record)
+                    }
+                    val untrackedInkIds = strokes.keys - finished.keys
+                    if (untrackedInkIds.isNotEmpty()) {
+                        inkView.removeFinishedStrokes(untrackedInkIds)
+                    }
                 }
             },
         )

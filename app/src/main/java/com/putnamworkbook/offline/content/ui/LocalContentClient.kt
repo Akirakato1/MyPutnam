@@ -21,6 +21,7 @@ class LocalContentClient(
     private val onPageReady: (WebView) -> Unit = {},
     private val failOnSubresourceError: Boolean = false,
     private val onRendererGone: () -> Unit = {},
+    private val loadDispatcher: ((() -> Unit) -> Unit) = { load -> load() },
 ) : WebViewClient() {
     private val assetLoader = WebViewAssetLoader.Builder()
         .setDomain(ASSET_HOST)
@@ -59,7 +60,8 @@ class LocalContentClient(
         } catch (error: FileNotFoundException) {
             throw IllegalStateException("Bundled content is missing: $assetPath", error)
         }
-        webView.loadUrl(ASSET_BASE_URL + Uri.encode(assetPath, "/"))
+        val url = ASSET_BASE_URL + Uri.encode(assetPath, "/")
+        loadDispatcher { webView.loadUrl(url) }
     }.onFailure { error ->
         onIntegrityError(error.message ?: "Bundled content could not be opened: $assetPath")
     }

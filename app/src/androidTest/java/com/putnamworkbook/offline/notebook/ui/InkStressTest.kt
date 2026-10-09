@@ -2,6 +2,10 @@ package com.putnamworkbook.offline.notebook.ui
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -23,13 +27,19 @@ class InkStressTest {
 
     @Test
     fun tenRapidStrokesAreDeliveredOnceWithoutWaitingForPersistence() {
-        val finished = mutableListOf<StrokeRecord>()
+        val delivered = mutableListOf<StrokeRecord>()
+        val rendered = mutableStateListOf<StrokeRecord>()
+        val events = mutableListOf<InkHandoffEvent>()
+        val scheduler = ManualInkRemovalScheduler()
+        var page by mutableStateOf(NotebookPage("rapid-page", PaperStyle.BLANK))
         composeRule.setContent {
             NotebookCanvas(
-                page = NotebookPage("rapid-page", PaperStyle.BLANK),
-                strokes = emptyList(),
+                page = page,
+                strokes = rendered,
                 brush = BrushSpec(width = 4f),
-                onStrokeFinished = { finished += it },
+                onStrokeFinished = { delivered += it },
+                inkRemovalScheduler = scheduler,
+                onInkHandoffEvent = { events += it },
             )
         }
 
@@ -42,8 +52,21 @@ class InkStressTest {
             }
         }
 
-        composeRule.waitUntil(timeoutMillis = 5_000) { finished.size == 10 }
-        assertEquals(10, finished.map { it.id }.distinct().size)
+        composeRule.waitUntil(timeoutMillis = 5_000) { delivered.size == 10 }
+        assertEquals(10, delivered.map { it.id }.distinct().size)
+
+        composeRule.runOnIdle {
+            page = NotebookPage("recomposed-page", PaperStyle.SQUARE_GRID)
+            rendered += delivered
+        }
+        composeRule.waitUntil(timeoutMillis = 5_000) {
+            events.count { it == InkHandoffEvent.REMOVAL_SCHEDULED } == 1
+        }
+        composeRule.runOnIdle { scheduler.advanceAllFrames() }
+        composeRule.waitUntil(timeoutMillis = 5_000) {
+            events.count { it == InkHandoffEvent.PLATFORM_REMOVED } == 1
+        }
+        assertEquals(10, rendered.map { it.id }.distinct().size)
     }
 
     @Test

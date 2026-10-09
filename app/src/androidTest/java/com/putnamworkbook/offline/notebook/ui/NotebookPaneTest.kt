@@ -18,6 +18,7 @@ import com.putnamworkbook.offline.domain.model.PaperStyle
 import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.notebook.model.NotebookDocument
 import com.putnamworkbook.offline.notebook.model.NotebookPage
+import com.putnamworkbook.offline.notebook.model.StrokeRecord
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -101,6 +102,48 @@ class NotebookPaneTest {
         composeRule.onNodeWithTag(PREVIOUS_PAGE_TEST_TAG).assertIsNotEnabled()
         composeRule.onNodeWithTag(NEXT_PAGE_TEST_TAG).assertIsEnabled()
         composeRule.onNodeWithText("Move left").assertDoesNotExist()
-        composeRule.onNodeWithTag("palm-guard").assertDoesNotExist()
+        composeRule.onNodeWithText("Move right").assertDoesNotExist()
+        composeRule.onNodeWithText("Page 1").assertDoesNotExist()
+    }
+
+    @Test
+    fun everyCanvasCornerAcceptsPenInputWithoutAnInvisibleBlocker() {
+        val document = NotebookDocument(
+            key = ProblemKey(2025, "A1"),
+            pages = listOf(NotebookPage("page-1", PaperStyle.BLANK)),
+        )
+        val delivered = mutableListOf<StrokeRecord>()
+        composeRule.setContent {
+            NotebookPane(
+                state = NotebookUiState(document = document),
+                brush = BrushSpec(),
+                onStrokeFinished = { delivered += it },
+                onUndo = {}, onRedo = {}, onAddPage = {},
+                onRequestDeletePage = {}, onRequestClearPage = {},
+                onConfirmDeletePage = {}, onConfirmClearPage = {}, onDismissConfirmation = {},
+                onSelectPage = {},
+            )
+        }
+
+        val canvas = composeRule.onNodeWithTag(NOTEBOOK_CANVAS_TEST_TAG)
+        val bounds = canvas.fetchSemanticsNode().boundsInRoot
+        val width = bounds.width
+        val height = bounds.height
+        val starts = listOf(
+            Offset(12f, 12f),
+            Offset(width - 20f, 12f),
+            Offset(12f, height - 20f),
+            Offset(width - 20f, height - 20f),
+        )
+        canvas.performTouchInput {
+            starts.forEach { start ->
+                down(start)
+                moveTo(start + Offset(6f, 6f), 12L)
+                up()
+            }
+        }
+
+        composeRule.waitUntil(timeoutMillis = 5_000) { delivered.size == 4 }
+        assertEquals(4, delivered.map { it.id }.distinct().size)
     }
 }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -13,7 +14,10 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeUp
 import androidx.compose.ui.unit.dp
 import com.putnamworkbook.offline.data.user.ProblemProgress
 import com.putnamworkbook.offline.data.content.ContentDocument
@@ -25,6 +29,8 @@ import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.domain.model.ProblemStatus
 import com.putnamworkbook.offline.domain.model.ReferenceTab
 import com.putnamworkbook.offline.export.WorkbookExportOptions
+import com.putnamworkbook.offline.content.ui.LocalContentClientFactoryProvider
+import androidx.test.platform.app.InstrumentationRegistry
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.abs
 import org.junit.Assert.assertEquals
@@ -99,6 +105,88 @@ class WorkspaceScreenTest {
         val controls = composeRule.onNodeWithTag("prerequisite-controls").fetchSemanticsNode().boundsInRoot
         val body = composeRule.onNodeWithTag("reference-document-body").fetchSemanticsNode().boundsInRoot
         assertTrue("Prerequisite controls must end above the document body", controls.bottom <= body.top + 1f)
+    }
+
+    @Test
+    fun fixedReferenceHeadersSurviveDelayedLoadsScrollingFailuresTabsAndRendererRecreation() {
+        val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
+        ReferenceRendererFixture.requireRepresentativeKatex(targetContext)
+        val clientFactory = ControlledLocalContentClientFactory()
+        var state by mutableStateOf(ReferenceRendererFixture.state(ReferenceTab.HELP))
+        var showPane by mutableStateOf(true)
+        val integrityErrors = mutableListOf<String>()
+        composeRule.setContent {
+            CompositionLocalProvider(LocalContentClientFactoryProvider provides clientFactory) {
+                if (showPane) {
+                    MaterialTheme {
+                        ReferencePane(
+                            state = state,
+                            onSelectTab = { state = state.copy(selectedReferenceTab = it) },
+                            onRevealNextStage = {},
+                            onSelectHint = { state = state.copy(activeHintIndex = it) },
+                            onSelectPrerequisite = { state = state.copy(activePrerequisiteIndex = it) },
+                            onIntegrityError = integrityErrors::add,
+                            modifier = Modifier.width(650.dp).height(420.dp),
+                        )
+                    }
+                }
+            }
+        }
+
+        composeRule.onNodeWithTag("help-controls").assertExists()
+        composeRule.onNodeWithTag("math-content-ready").assertDoesNotExist()
+        composeRule.runOnIdle(clientFactory::releaseLoads)
+        composeRule.waitUntil(timeoutMillis = 5_000) {
+            composeRule.onAllNodesWithTag("math-content-ready").fetchSemanticsNodes().isNotEmpty()
+        }
+        composeRule.onNodeWithTag("reference-document-body").performTouchInput { swipeUp() }
+        composeRule.onNodeWithTag("help-controls").assertExists()
+
+        composeRule.runOnIdle(clientFactory::holdNextLoads)
+        composeRule.onNodeWithTag("help-hint-2").performClick()
+        composeRule.onNodeWithTag("help-controls").assertExists()
+        composeRule.runOnIdle(clientFactory::releaseLoads)
+        composeRule.onNodeWithTag("reference-tab-prerequisites").performClick()
+        composeRule.waitUntil(timeoutMillis = 5_000) {
+            composeRule.onAllNodesWithTag("math-content-ready").fetchSemanticsNodes().isNotEmpty()
+        }
+        composeRule.onNodeWithTag("prerequisite-controls").assertExists()
+
+        listOf(ReferenceTab.PROBLEM, ReferenceTab.SOLUTION).forEach { tab ->
+            composeRule.runOnIdle { state = state.copy(selectedReferenceTab = tab) }
+            composeRule.waitUntil(timeoutMillis = 5_000) {
+                composeRule.onAllNodesWithTag("math-content-ready").fetchSemanticsNodes().isNotEmpty()
+            }
+            composeRule.onNodeWithTag("reference-tabs").assertExists()
+        }
+
+        composeRule.runOnIdle(clientFactory::simulateRendererLoss)
+        composeRule.waitUntil(timeoutMillis = 5_000) {
+            composeRule.onAllNodesWithTag("math-content-ready").fetchSemanticsNodes().isNotEmpty()
+        }
+        composeRule.onNodeWithTag("reference-tabs").assertExists()
+
+        composeRule.runOnIdle { showPane = false }
+        composeRule.onNodeWithTag("reference-tabs").assertDoesNotExist()
+        composeRule.runOnIdle { showPane = true }
+        composeRule.waitUntil(timeoutMillis = 5_000) {
+            composeRule.onAllNodesWithTag("math-content-ready").fetchSemanticsNodes().isNotEmpty()
+        }
+        composeRule.onNodeWithTag("reference-tabs").assertExists()
+
+        composeRule.runOnIdle {
+            state = ReferenceRendererFixture.state(ReferenceTab.HELP).let { fixture ->
+                fixture.copy(
+                    content = fixture.content!!.copy(
+                        hints = fixture.content!!.hints.mapIndexed { index, hint ->
+                            if (index == 0) hint.copy(assetPath = "content/2025/problems/A1/missing.html") else hint
+                        },
+                    ),
+                )
+            }
+        }
+        composeRule.waitUntil(timeoutMillis = 5_000) { integrityErrors.isNotEmpty() }
+        composeRule.onNodeWithTag("help-controls").assertExists()
     }
 
     @Test

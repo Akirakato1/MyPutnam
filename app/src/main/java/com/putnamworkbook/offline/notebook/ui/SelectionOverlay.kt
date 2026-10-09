@@ -2,6 +2,7 @@ package com.putnamworkbook.offline.notebook.ui
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -15,6 +16,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.testTag
 import com.putnamworkbook.offline.notebook.edit.NotebookSelectionState
+import com.putnamworkbook.offline.notebook.edit.CanvasViewport
 import com.putnamworkbook.offline.notebook.edit.NormalizedPoint
 import com.putnamworkbook.offline.notebook.edit.NormalizedRect
 import com.putnamworkbook.offline.notebook.edit.SelectionCorner
@@ -25,12 +27,13 @@ const val SELECTION_OVERLAY_TEST_TAG = "notebook-selection-overlay"
 @Composable
 fun SelectionOverlay(
     selection: NotebookSelectionState?,
-    onSelect: (NormalizedRect) -> Unit,
+    onSelect: (NormalizedRect, CanvasViewport) -> Unit,
     onPreviewMove: (Float, Float) -> Unit,
     onCommitMove: (Float, Float) -> Unit,
     onPreviewScale: (SelectionCorner, NormalizedPoint) -> Unit,
     onCommitScale: (SelectionCorner, NormalizedPoint) -> Unit,
     onCancelPreview: () -> Unit,
+    onClearSelection: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var gesture by remember { mutableStateOf<SelectionGesture?>(null) }
@@ -38,6 +41,14 @@ fun SelectionOverlay(
     Canvas(
         modifier = modifier
             .testTag(SELECTION_OVERLAY_TEST_TAG)
+            .pointerInput(selection?.bounds) {
+                detectTapGestures { tap ->
+                    val point = tap.normalized(size.width, size.height)
+                    if (selection != null && !selection.bounds.contains(point)) {
+                        onClearSelection()
+                    }
+                }
+            }
             .pointerInput(selection?.selectedStrokeIds) {
                 detectDragGestures(
                     onDragStart = { start ->
@@ -64,7 +75,12 @@ fun SelectionOverlay(
                     onDragEnd = {
                         val end = currentPoint
                         when (val active = gesture) {
-                            is SelectionGesture.Marquee -> if (end != null) onSelect(NormalizedRect.fromPoints(active.start, end))
+                            is SelectionGesture.Marquee -> if (end != null) {
+                                onSelect(
+                                    NormalizedRect.fromPoints(active.start, end),
+                                    CanvasViewport(size.width.toFloat(), size.height.toFloat()),
+                                )
+                            }
                             is SelectionGesture.Move -> if (end != null) onCommitMove(end.x - active.start.x, end.y - active.start.y)
                             is SelectionGesture.Scale -> if (end != null) onCommitScale(active.corner, end)
                             null -> Unit
@@ -80,7 +96,8 @@ fun SelectionOverlay(
                 )
             },
     ) {
-        val previewBounds = selection?.previewStrokes?.selectionBounds()
+        val viewport = CanvasViewport(size.width, size.height)
+        val previewBounds = selection?.previewStrokes?.selectionBounds(viewport)
         val bounds = previewBounds ?: selection?.bounds
         bounds?.let {
             val topLeft = Offset(it.left * size.width, it.top * size.height)

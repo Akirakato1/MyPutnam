@@ -3,6 +3,7 @@ package com.putnamworkbook.offline.notebook.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.putnamworkbook.offline.data.user.SettingsRepository
+import com.putnamworkbook.offline.domain.model.BrushSpec
 import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.notebook.model.NotebookDocument
 import com.putnamworkbook.offline.notebook.model.NotebookEdit
@@ -11,6 +12,7 @@ import com.putnamworkbook.offline.notebook.model.NotebookReducer
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
 import com.putnamworkbook.offline.notebook.storage.NotebookRepository
 import com.putnamworkbook.offline.notebook.edit.NotebookClipboard
+import com.putnamworkbook.offline.notebook.edit.CanvasViewport
 import com.putnamworkbook.offline.notebook.edit.NotebookSelectionState
 import com.putnamworkbook.offline.notebook.edit.NotebookToolMode
 import com.putnamworkbook.offline.notebook.edit.NormalizedPoint
@@ -33,6 +35,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.delay
 import java.util.UUID
+import java.util.concurrent.atomic.AtomicLong
 
 class NotebookViewModel(
     private val repository: NotebookRepository,
@@ -44,8 +47,11 @@ class NotebookViewModel(
     private val scope = providedScope ?: viewModelScope
     private val mutableUiState = MutableStateFlow(NotebookUiState())
     private val operationMutex = Mutex()
+    private val brushUpdateMutex = Mutex()
     private var currentKey: ProblemKey? = null
     private var latestOperation: Job? = null
+    private var latestBrushUpdate: Job? = null
+    private val brushRevision = AtomicLong(0L)
     private val saveCoordinator = NotebookSaveCoordinator(
         scope = scope,
         wait = saveWait,
@@ -62,9 +68,42 @@ class NotebookViewModel(
     fun open(key: ProblemKey, initialPageIndex: Int = 0) {
         currentKey = key
         launchOperation(NotebookSaveState.LOADING) {
-            val defaultPaper = settingsRepository.observe().first().defaultPaperStyle
-            val document = repository.loadOrCreate(key, defaultPaper)
-            publishDocument(document, activePageIndex = initialPageIndex.coerceIn(document.pages.indices))
+            val openingBrushRevision = brushRevision.get()
+            val settings = settingsRepository.observe().first()
+            mutableUiState.update { current ->
+                if (brushRevision.get() == openingBrushRevision) {
+                    current.copy(brush = settings.brush)
+                } else {
+                    current
+                }
+            }
+            val document = repository.loadOrCreate(key, settings.defaultPaperStyle)
+            publishDocument(
+                document,
+                activePageIndex = initialPageIndex.coerceIn(document.pages.indices),
+            )
+        }
+    }
+
+    fun setBrush(brush: BrushSpec) {
+        brushRevision.incrementAndGet()
+        mutableUiState.value = mutableUiState.value.copy(brush = brush)
+        val previousUpdate = latestBrushUpdate
+        latestBrushUpdate = scope.launch {
+            previousUpdate?.join()
+            brushUpdateMutex.withLock {
+                try {
+                    val latestBrush = mutableUiState.value.brush
+                    settingsRepository.update { settings -> settings.copy(brush = latestBrush) }
+                } catch (error: CancellationException) {
+                    throw error
+                } catch (error: Exception) {
+                    mutableUiState.value = mutableUiState.value.copy(
+                        saveState = NotebookSaveState.ERROR,
+                        errorMessage = error.message ?: error::class.simpleName,
+                    )
+                }
+            }
         }
     }
 
@@ -84,51 +123,83 @@ class NotebookViewModel(
         mutableUiState.value = mutableUiState.value.copy(
             toolMode = mode,
             selection = if (mode == NotebookToolMode.PEN) null else mutableUiState.value.selection,
+            clipboardHasContent = clipboard.hasContent && mutableUiState.value.canvasViewport != null,
         )
     }
 
-    fun select(rect: NormalizedRect) {
-        val selected = mutableUiState.value.strokes.filter { it.intersects(rect) }
+    fun updateViewport(viewport: CanvasViewport) {
+        mutableUiState.update { current ->
+            val selectedIds = current.selection?.selectedStrokeIds
+            val selected = if (selectedIds == null) {
+                emptyList()
+            } else {
+                current.selection.previewStrokes
+                    ?: current.strokes.filter { it.id in selectedIds }
+            }
+            current.copy(
+                canvasViewport = viewport,
+                selection = current.selection?.let { selection ->
+                    selected.selectionBounds(viewport)?.let { bounds -> selection.copy(bounds = bounds) }
+                },
+                clipboardHasContent = clipboard.hasContent,
+            )
+        }
+    }
+
+    fun select(rect: NormalizedRect, viewport: CanvasViewport) {
+        updateViewport(viewport)
+        val selected = mutableUiState.value.strokes.filter { it.intersects(rect, viewport) }
         mutableUiState.value = mutableUiState.value.copy(
-            selection = selected.selectionState(),
+            selection = selected.selectionState(viewport),
         )
     }
 
     fun previewMove(dx: Float, dy: Float) {
+        val viewport = mutableUiState.value.canvasViewport ?: return
         val selected = selectedStrokes()
-        val replacements = StrokeTransform.move(selected, dx, dy) { "preview-${UUID.randomUUID()}" }
+        val replacements = StrokeTransform.move(selected, dx, dy, viewport) { "preview-${UUID.randomUUID()}" }
         updatePreview(replacements)
     }
 
     fun commitMove(dx: Float, dy: Float) {
+        val viewport = mutableUiState.value.canvasViewport ?: return
         val selected = selectedStrokes()
         if (selected.isEmpty()) return
-        commitReplacement(selected, StrokeTransform.move(selected, dx, dy) { UUID.randomUUID().toString() })
+        commitReplacement(
+            selected,
+            StrokeTransform.move(selected, dx, dy, viewport) { UUID.randomUUID().toString() },
+            viewport,
+        )
     }
 
     fun previewScale(corner: SelectionCorner, target: NormalizedPoint) {
+        val viewport = mutableUiState.value.canvasViewport ?: return
         val selection = mutableUiState.value.selection ?: return
         val replacements = StrokeTransform.scaleFromCorner(
-            selectedStrokes(), selection.bounds, corner, target,
+            selectedStrokes(), selection.bounds, corner, target, viewport,
         ) { "preview-${UUID.randomUUID()}" }
         updatePreview(replacements)
     }
 
     fun commitScale(corner: SelectionCorner, target: NormalizedPoint) {
+        val viewport = mutableUiState.value.canvasViewport ?: return
         val selection = mutableUiState.value.selection ?: return
         val selected = selectedStrokes()
         if (selected.isEmpty()) return
         commitReplacement(
             selected,
-            StrokeTransform.scaleFromCorner(selected, selection.bounds, corner, target) {
+            StrokeTransform.scaleFromCorner(selected, selection.bounds, corner, target, viewport) {
                 UUID.randomUUID().toString()
             },
+            viewport,
         )
     }
 
     fun copySelection() {
         clipboard.copy(selectedStrokes())
-        mutableUiState.value = mutableUiState.value.copy(clipboardHasContent = clipboard.hasContent)
+        mutableUiState.value = mutableUiState.value.copy(
+            clipboardHasContent = clipboard.hasContent && mutableUiState.value.canvasViewport != null,
+        )
     }
 
     fun cutSelection() {
@@ -137,14 +208,18 @@ class NotebookViewModel(
     }
 
     fun paste() {
-        val pasted = clipboard.createPaste(mutableUiState.value.strokes) { UUID.randomUUID().toString() }
+        val viewport = mutableUiState.value.canvasViewport ?: return
+        val pasted = clipboard.createPaste(
+            mutableUiState.value.strokes,
+            viewport,
+        ) { UUID.randomUUID().toString() }
         if (pasted.isEmpty()) return
         commitOptimisticEdit(
             NotebookEdit(
                 NotebookEditGroup(UUID.randomUUID().toString(), pasted.map { it.id }, emptyList()),
                 pasted,
             ),
-            selectionAfter = pasted.selectionState(),
+            selectionAfter = pasted.selectionState(viewport),
         )
     }
 
@@ -246,9 +321,11 @@ class NotebookViewModel(
     suspend fun awaitIdle() {
         while (true) {
             val operation = latestOperation
+            val brushUpdate = latestBrushUpdate
             operation?.join()
             saveCoordinator.awaitIdle()
-            if (operation === latestOperation) return
+            brushUpdate?.join()
+            if (operation === latestOperation && brushUpdate === latestBrushUpdate) return
         }
     }
 
@@ -337,7 +414,7 @@ class NotebookViewModel(
                         strokes = strokes,
                         pendingConfirmation = pendingConfirmation,
                         selection = null,
-                        clipboardHasContent = clipboard.hasContent,
+                        clipboardHasContent = clipboard.hasContent && current.canvasViewport != null,
                     )
                 }
             }
@@ -397,7 +474,11 @@ class NotebookViewModel(
     private fun NotebookDocument.replacePage(changedPage: com.putnamworkbook.offline.notebook.model.NotebookPage): NotebookDocument =
         copy(pages = pages.map { if (it.id == changedPage.id) changedPage else it })
 
-    private fun commitReplacement(originals: List<StrokeRecord>, replacements: List<StrokeRecord>) {
+    private fun commitReplacement(
+        originals: List<StrokeRecord>,
+        replacements: List<StrokeRecord>,
+        viewport: CanvasViewport,
+    ) {
         commitOptimisticEdit(
             NotebookEdit(
                 NotebookEditGroup(
@@ -407,7 +488,7 @@ class NotebookViewModel(
                 ),
                 replacements,
             ),
-            selectionAfter = replacements.selectionState(),
+            selectionAfter = replacements.selectionState(viewport),
         )
     }
 
@@ -456,8 +537,8 @@ class NotebookViewModel(
         )
     }
 
-    private fun List<StrokeRecord>.selectionState(): NotebookSelectionState? {
-        val bounds = selectionBounds() ?: return null
+    private fun List<StrokeRecord>.selectionState(viewport: CanvasViewport): NotebookSelectionState? {
+        val bounds = selectionBounds(viewport) ?: return null
         return NotebookSelectionState(mapTo(linkedSetOf()) { it.id }, bounds)
     }
 }

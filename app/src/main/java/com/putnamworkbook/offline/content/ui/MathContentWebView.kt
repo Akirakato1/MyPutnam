@@ -9,10 +9,38 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.viewinterop.AndroidView
+
+fun interface LocalContentClientFactory {
+    fun create(
+        assetContext: android.content.Context,
+        onIntegrityError: (String) -> Unit,
+        onRendererGone: () -> Unit,
+        onPageReady: (WebView) -> Unit,
+    ): LocalContentClient
+}
+
+private object DefaultLocalContentClientFactory : LocalContentClientFactory {
+    override fun create(
+        assetContext: android.content.Context,
+        onIntegrityError: (String) -> Unit,
+        onRendererGone: () -> Unit,
+        onPageReady: (WebView) -> Unit,
+    ) = LocalContentClient(
+        assetContext = assetContext,
+        onIntegrityError = onIntegrityError,
+        onRendererGone = onRendererGone,
+        onPageReady = onPageReady,
+    )
+}
+
+val LocalContentClientFactoryProvider = staticCompositionLocalOf<LocalContentClientFactory> {
+    DefaultLocalContentClientFactory
+}
 
 @Composable
 fun MathContentWebView(
@@ -21,11 +49,12 @@ fun MathContentWebView(
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
+    val clientFactory = LocalContentClientFactoryProvider.current
     val latestIntegrityError = rememberUpdatedState(onIntegrityError)
     var readyAssetPath by remember { mutableStateOf<String?>(null) }
     var renderGeneration by remember { mutableIntStateOf(0) }
-    val client = remember(context.applicationContext) {
-        LocalContentClient(
+    val client = remember(context.applicationContext, clientFactory) {
+        clientFactory.create(
             assetContext = context.applicationContext,
             onIntegrityError = { message -> latestIntegrityError.value(message) },
             onRendererGone = {

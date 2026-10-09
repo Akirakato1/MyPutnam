@@ -1,9 +1,11 @@
 package com.putnamworkbook.offline.notebook.ui
 
+import com.putnamworkbook.offline.domain.model.BrushSpec
 import com.putnamworkbook.offline.notebook.model.NotebookDocument
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
 import com.putnamworkbook.offline.notebook.edit.NotebookSelectionState
 import com.putnamworkbook.offline.notebook.edit.NotebookToolMode
+import com.putnamworkbook.offline.notebook.edit.CanvasViewport
 
 sealed interface PendingConfirmation {
     val pageId: String
@@ -33,4 +35,6 @@ data class NotebookUiState(
     val toolMode: NotebookToolMode = NotebookToolMode.PEN,
     val selection: NotebookSelectionState? = null,
     val clipboardHasContent: Boolean = false,
+    val brush: BrushSpec = BrushSpec(),
+    val canvasViewport: CanvasViewport? = null,
 )

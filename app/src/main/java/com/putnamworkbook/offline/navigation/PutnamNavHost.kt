@@ -29,7 +29,6 @@ import com.putnamworkbook.offline.backup.BackupCoordinator
 import com.putnamworkbook.offline.data.content.ContentRepository
 import com.putnamworkbook.offline.data.user.ProgressRepository
 import com.putnamworkbook.offline.data.user.SettingsRepository
-import com.putnamworkbook.offline.domain.model.AppSettings
 import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.feature.archive.ArchiveScreen
 import com.putnamworkbook.offline.feature.archive.ArchiveViewModel
@@ -203,7 +202,6 @@ private fun WorkspaceDestination(
     val scope = rememberCoroutineScope()
     val workspaceState by workspaceViewModel.uiState.collectAsState()
     val notebookState by notebookViewModel.uiState.collectAsState()
-    val settings by dependencies.settingsRepository.observe().collectAsState(initial = AppSettings())
     var notebookOpened by remember(key) { mutableStateOf(false) }
     var exportMessage by remember(key) { mutableStateOf<String?>(null) }
     var exportInProgress by remember(key) { mutableStateOf(false) }
@@ -342,7 +340,7 @@ private fun WorkspaceDestination(
         notebookContent = {
             NotebookPane(
                 state = notebookState,
-                brush = settings.brush,
+                brush = notebookState.brush,
                 onStrokeFinished = notebookViewModel::commitStroke,
                 onUndo = notebookViewModel::undo,
                 onRedo = notebookViewModel::redo,
@@ -354,7 +352,9 @@ private fun WorkspaceDestination(
                 onDismissConfirmation = notebookViewModel::dismissConfirmation,
                 onSelectPage = notebookViewModel::selectPage,
                 onSetToolMode = notebookViewModel::setToolMode,
+                onBrushChanged = notebookViewModel::setBrush,
                 onSelect = notebookViewModel::select,
+                onViewportChanged = notebookViewModel::updateViewport,
                 onPreviewMove = notebookViewModel::previewMove,
                 onCommitMove = notebookViewModel::commitMove,
                 onPreviewScale = notebookViewModel::previewScale,
@@ -364,7 +364,7 @@ private fun WorkspaceDestination(
                 onCopySelection = notebookViewModel::copySelection,
                 onPaste = notebookViewModel::paste,
                 onDeleteSelection = notebookViewModel::deleteSelection,
-                onCancelSelection = notebookViewModel::cancelSelection,
+                onClearSelection = notebookViewModel::cancelSelection,
             )
         },
     )

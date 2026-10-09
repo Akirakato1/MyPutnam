@@ -13,10 +13,11 @@ class NotebookClipboard {
 
     fun createPaste(
         pageStrokes: List<StrokeRecord>,
+        viewport: CanvasViewport,
         idFactory: () -> String,
     ): List<StrokeRecord> {
         if (copiedStrokes.isEmpty()) return emptyList()
         val offset = (0.03f + pageStrokes.size.coerceAtMost(4) * 0.01f)
-        return StrokeTransform.move(copiedStrokes, offset, offset, idFactory)
+        return StrokeTransform.move(copiedStrokes, offset, offset, viewport, idFactory)
     }
 }

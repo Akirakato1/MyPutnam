@@ -7,9 +7,11 @@ import com.putnamworkbook.offline.domain.model.PaperStyle
 import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
 import com.putnamworkbook.offline.notebook.model.StrokeSample
+import com.putnamworkbook.offline.notebook.model.NotebookDocument
 import com.putnamworkbook.offline.notebook.storage.FileNotebookRepository
 import com.putnamworkbook.offline.notebook.storage.NotebookRepository
 import com.putnamworkbook.offline.notebook.edit.NotebookClipboard
+import com.putnamworkbook.offline.notebook.edit.CanvasViewport
 import com.putnamworkbook.offline.notebook.edit.NormalizedRect
 import com.putnamworkbook.offline.notebook.edit.NotebookToolMode
 import kotlinx.coroutines.CompletableDeferred
@@ -18,6 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.delay
 import org.junit.Assert.assertEquals
@@ -204,8 +207,10 @@ class NotebookViewModelTest {
         viewModel.commitStroke(strokeAt("outside", 0.1f, 0.1f, 0.2f, 0.2f))
         viewModel.awaitIdle()
 
+        val viewport = CanvasViewport(320f, 640f)
+        viewModel.updateViewport(viewport)
         viewModel.setToolMode(NotebookToolMode.SELECT)
-        viewModel.select(NormalizedRect(0.45f, 0.45f, 0.55f, 0.55f))
+        viewModel.select(NormalizedRect(0.45f, 0.45f, 0.55f, 0.55f), viewport)
         assertEquals(setOf("crossing"), viewModel.uiState.value.selection!!.selectedStrokeIds)
 
         viewModel.deleteSelection()
@@ -224,10 +229,11 @@ class NotebookViewModelTest {
         val first = viewModel(firstRepository, FakeSettingsRepository(), wait = { }, clipboard = clipboard)
         first.open(key)
         first.awaitIdle()
+        first.updateViewport(CanvasViewport(320f, 640f))
         first.commitStroke(stroke("copied"))
         first.awaitIdle()
         first.setToolMode(NotebookToolMode.SELECT)
-        first.select(NormalizedRect(0f, 0f, 1f, 1f))
+        first.select(NormalizedRect(0f, 0f, 1f, 1f), CanvasViewport(320f, 640f))
         first.copySelection()
         first.close()
 
@@ -235,6 +241,9 @@ class NotebookViewModelTest {
         val second = viewModel(secondRepository, FakeSettingsRepository(), wait = { }, clipboard = clipboard)
         second.open(ProblemKey(2025, "A2"))
         second.awaitIdle()
+        assertFalse(second.uiState.value.clipboardHasContent)
+        second.updateViewport(CanvasViewport(1_200f, 600f))
+        assertTrue(second.uiState.value.clipboardHasContent)
         second.paste()
         assertEquals(1, second.uiState.value.strokes.size)
         assertNotEquals("copied", second.uiState.value.strokes.single().id)
@@ -242,6 +251,173 @@ class NotebookViewModelTest {
         second.setToolMode(NotebookToolMode.PEN)
         assertNull(second.uiState.value.selection)
         second.close()
+    }
+
+    @Test
+    fun viewportIsRetainedAcrossPagesAndResizeRecomputesWholeStrokeSelection() = runBlocking {
+        val repository = FileNotebookRepository(temporaryFolder.newFolder("viewport-selection").toPath())
+        val viewModel = viewModel(repository, FakeSettingsRepository(), wait = { })
+        val portrait = CanvasViewport(320f, 640f)
+        val landscape = CanvasViewport(1_200f, 600f)
+        viewModel.open(key)
+        viewModel.awaitIdle()
+        viewModel.updateViewport(portrait)
+        viewModel.commitStroke(
+            StrokeRecord(
+                id = "thick",
+                brush = BrushSpec(width = 20f),
+                samples = listOf(StrokeSample(0.4f, 0.4f, 0L, null)),
+            ),
+        )
+        viewModel.awaitIdle()
+        viewModel.setToolMode(NotebookToolMode.SELECT)
+        viewModel.select(NormalizedRect(0.39f, 0.39f, 0.41f, 0.41f), portrait)
+        val portraitBounds = viewModel.uiState.value.selection!!.bounds
+
+        viewModel.updateViewport(landscape)
+        val landscapeBounds = viewModel.uiState.value.selection!!.bounds
+        assertTrue(landscapeBounds.width < portraitBounds.width)
+        assertTrue(landscapeBounds.height > portraitBounds.height)
+
+        viewModel.copySelection()
+        viewModel.addPage()
+        viewModel.awaitIdle()
+        assertEquals(landscape, viewModel.uiState.value.canvasViewport)
+        assertNull(viewModel.uiState.value.selection)
+        viewModel.paste()
+        assertEquals(1, viewModel.uiState.value.strokes.size)
+        viewModel.awaitIdle()
+
+        viewModel.selectPage(0)
+        viewModel.awaitIdle()
+        assertEquals(landscape, viewModel.uiState.value.canvasViewport)
+        assertNull(viewModel.uiState.value.selection)
+        viewModel.close()
+    }
+
+    @Test
+    fun workspaceBrushLoadsFromSettingsAndPersistsTheLatestLiveChange() = runBlocking {
+        val initialBrush = BrushSpec(colorArgb = 0xFF1D4ED8L, width = 4f)
+        val settings = FakeSettingsRepository(AppSettings(brush = initialBrush))
+        val repository = FileNotebookRepository(temporaryFolder.newFolder("brush").toPath())
+        val viewModel = viewModel(repository, settings)
+
+        viewModel.open(key)
+        viewModel.awaitIdle()
+        assertEquals(initialBrush, viewModel.uiState.value.brush)
+
+        viewModel.setBrush(BrushSpec(colorArgb = 0xFFB91C1CL, width = 7f))
+        val finalBrush = BrushSpec(colorArgb = 0xFF15803DL, width = 9f)
+        viewModel.setBrush(finalBrush)
+
+        assertEquals(finalBrush, viewModel.uiState.value.brush)
+        viewModel.awaitIdle()
+        assertEquals(finalBrush, settings.observe().first().brush)
+        viewModel.close()
+    }
+
+    @Test
+    fun liveBrushWinsWhenLoadOrCreateFinishesAfterTheToolbarChange() = runBlocking {
+        assertBrushSurvivesDelayedOperation(
+            folder = "brush-load-or-create",
+            blockedCall = GatedCall.LOAD_OR_CREATE,
+            startOperation = { it.open(key) },
+        )
+    }
+
+    @Test
+    fun liveBrushWinsWhenLoadExistingFinishesAfterTheToolbarChange() = runBlocking {
+        assertBrushSurvivesDelayedOperation(
+            folder = "brush-load-existing",
+            blockedCall = GatedCall.LOAD_EXISTING,
+            startOperation = { it.open(key) },
+        )
+    }
+
+    @Test
+    fun liveBrushWinsWhenLoadStrokesFinishesAfterTheToolbarChange() = runBlocking {
+        assertBrushSurvivesDelayedOperation(
+            folder = "brush-load-strokes",
+            blockedCall = GatedCall.LOAD_STROKES,
+            startOperation = { it.open(key) },
+        )
+    }
+
+    @Test
+    fun liveBrushWinsWhenPageSelectionPublicationFinishesAfterTheToolbarChange() = runBlocking {
+        val fileRepository = FileNotebookRepository(temporaryFolder.newFolder("brush-page-select").toPath())
+        val repository = GatedNotebookRepository(fileRepository)
+        val settings = FakeSettingsRepository(AppSettings(brush = OLD_BRUSH))
+        val viewModel = viewModel(repository, settings, wait = { })
+        viewModel.open(key)
+        viewModel.awaitIdle()
+        viewModel.addPage()
+        viewModel.awaitIdle()
+        val gate = repository.blockNext(GatedCall.LOAD_EXISTING)
+
+        viewModel.selectPage(0)
+        gate.started.await()
+        viewModel.setBrush(NEW_BRUSH)
+        gate.release.complete(Unit)
+        viewModel.awaitIdle()
+
+        assertEquals(NEW_BRUSH, viewModel.uiState.value.brush)
+        assertEquals(NEW_BRUSH, settings.observe().first().brush)
+        viewModel.close()
+    }
+
+    @Test
+    fun liveBrushWinsWhenUndoFinishesAfterTheToolbarChange() = runBlocking {
+        val fileRepository = FileNotebookRepository(temporaryFolder.newFolder("brush-undo").toPath())
+        val repository = GatedNotebookRepository(fileRepository)
+        val settings = FakeSettingsRepository(AppSettings(brush = OLD_BRUSH))
+        val viewModel = viewModel(repository, settings, wait = { })
+        viewModel.open(key)
+        viewModel.awaitIdle()
+        viewModel.commitStroke(stroke("undo-brush"))
+        viewModel.awaitIdle()
+        val gate = repository.blockNext(GatedCall.UNDO)
+
+        viewModel.undo()
+        gate.started.await()
+        viewModel.setBrush(NEW_BRUSH)
+        gate.release.complete(Unit)
+        viewModel.awaitIdle()
+
+        assertEquals(NEW_BRUSH, viewModel.uiState.value.brush)
+        assertEquals(NEW_BRUSH, settings.observe().first().brush)
+        viewModel.close()
+    }
+
+    @Test
+    fun rapidBrushWritesPersistLatestAndRetryAfterASettingsFailure() = runBlocking {
+        val repository = FileNotebookRepository(temporaryFolder.newFolder("brush-retry").toPath())
+        val settings = FakeSettingsRepository(AppSettings(brush = OLD_BRUSH))
+        val viewModel = viewModel(repository, settings, wait = { })
+        viewModel.open(key)
+        viewModel.awaitIdle()
+        settings.failNextUpdate = true
+
+        viewModel.setBrush(BrushSpec(colorArgb = 0xFFB91C1CL, width = 5f))
+        viewModel.awaitIdle()
+        assertEquals(NotebookSaveState.ERROR, viewModel.uiState.value.saveState)
+
+        val writes = listOf(
+            BrushSpec(colorArgb = 0xFF15803DL, width = 6f),
+            BrushSpec(colorArgb = 0xFF7E22CEL, width = 8f),
+            NEW_BRUSH,
+        )
+        writes.forEach(viewModel::setBrush)
+        viewModel.awaitIdle()
+        assertEquals(NEW_BRUSH, viewModel.uiState.value.brush)
+        assertEquals(NEW_BRUSH, settings.observe().first().brush)
+        viewModel.close()
+
+        val reopened = viewModel(repository, settings, wait = { })
+        reopened.open(key)
+        reopened.awaitIdle()
+        assertEquals(NEW_BRUSH, reopened.uiState.value.brush)
+        reopened.close()
     }
 
     @Test
@@ -254,7 +430,9 @@ class NotebookViewModelTest {
         viewModel.commitStroke(strokeAt("right", 0.4f, 0.2f, 0.5f, 0.3f))
         viewModel.awaitIdle()
         viewModel.setToolMode(NotebookToolMode.SELECT)
-        viewModel.select(NormalizedRect(0.1f, 0.1f, 0.6f, 0.4f))
+        val viewport = CanvasViewport(1_000f, 1_000f)
+        viewModel.updateViewport(viewport)
+        viewModel.select(NormalizedRect(0.1f, 0.1f, 0.6f, 0.4f), viewport)
 
         viewModel.previewMove(0.2f, 0.1f)
         assertEquals(listOf("left", "right"), viewModel.uiState.value.strokes.map { it.id })
@@ -332,6 +510,28 @@ class NotebookViewModelTest {
         clipboard: NotebookClipboard = NotebookClipboard(),
     ) = NotebookViewModel(repository, settings, CoroutineScope(Dispatchers.Default), wait, clipboard)
 
+    private suspend fun assertBrushSurvivesDelayedOperation(
+        folder: String,
+        blockedCall: GatedCall,
+        startOperation: (NotebookViewModel) -> Unit,
+    ) {
+        val fileRepository = FileNotebookRepository(temporaryFolder.newFolder(folder).toPath())
+        val repository = GatedNotebookRepository(fileRepository)
+        val settings = FakeSettingsRepository(AppSettings(brush = OLD_BRUSH))
+        val viewModel = viewModel(repository, settings, wait = { })
+        val gate = repository.blockNext(blockedCall)
+
+        startOperation(viewModel)
+        gate.started.await()
+        viewModel.setBrush(NEW_BRUSH)
+        gate.release.complete(Unit)
+        viewModel.awaitIdle()
+
+        assertEquals(NEW_BRUSH, viewModel.uiState.value.brush)
+        assertEquals(NEW_BRUSH, settings.observe().first().brush)
+        viewModel.close()
+    }
+
     private fun stroke(id: String) = StrokeRecord(
         id = id,
         brush = BrushSpec(),
@@ -349,16 +549,84 @@ class NotebookViewModelTest {
             StrokeSample(x2, y2, 10L, null),
         ),
     )
+
+    private companion object {
+        val OLD_BRUSH = BrushSpec(colorArgb = 0xFF1D4ED8L, width = 4f)
+        val NEW_BRUSH = BrushSpec(colorArgb = 0xFF0F766EL, width = 11f)
+    }
 }
 
 private class FakeSettingsRepository(
     initial: AppSettings = AppSettings(),
 ) : SettingsRepository {
     private val settings = MutableStateFlow(initial)
+    var failNextUpdate: Boolean = false
 
     override fun observe(): Flow<AppSettings> = settings
 
     override suspend fun update(transform: (AppSettings) -> AppSettings) {
+        if (failNextUpdate) {
+            failNextUpdate = false
+            throw IOException("settings unavailable")
+        }
         settings.value = transform(settings.value)
+    }
+}
+
+private enum class GatedCall {
+    LOAD_OR_CREATE,
+    LOAD_EXISTING,
+    LOAD_STROKES,
+    UNDO,
+}
+
+private class OperationGate {
+    val started = CompletableDeferred<Unit>()
+    val release = CompletableDeferred<Unit>()
+
+    suspend fun pause() {
+        started.complete(Unit)
+        release.await()
+    }
+}
+
+private class GatedNotebookRepository(
+    private val delegate: NotebookRepository,
+) : NotebookRepository by delegate {
+    private var blockedCall: GatedCall? = null
+    private var gate: OperationGate? = null
+
+    fun blockNext(call: GatedCall): OperationGate = OperationGate().also {
+        check(gate == null) { "A repository operation is already blocked" }
+        blockedCall = call
+        gate = it
+    }
+
+    override suspend fun loadOrCreate(key: ProblemKey, defaultPaper: PaperStyle): NotebookDocument {
+        pauseIfBlocked(GatedCall.LOAD_OR_CREATE)
+        return delegate.loadOrCreate(key, defaultPaper)
+    }
+
+    override suspend fun loadExisting(key: ProblemKey): NotebookDocument? {
+        pauseIfBlocked(GatedCall.LOAD_EXISTING)
+        return delegate.loadExisting(key)
+    }
+
+    override suspend fun loadStrokes(key: ProblemKey, pageId: String): List<StrokeRecord> {
+        pauseIfBlocked(GatedCall.LOAD_STROKES)
+        return delegate.loadStrokes(key, pageId)
+    }
+
+    override suspend fun undo(key: ProblemKey, pageId: String): NotebookDocument {
+        pauseIfBlocked(GatedCall.UNDO)
+        return delegate.undo(key, pageId)
+    }
+
+    private suspend fun pauseIfBlocked(call: GatedCall) {
+        if (blockedCall != call) return
+        val pending = checkNotNull(gate)
+        blockedCall = null
+        gate = null
+        pending.pause()
     }
 }

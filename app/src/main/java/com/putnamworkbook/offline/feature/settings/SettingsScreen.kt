@@ -14,7 +14,6 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -25,7 +24,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.putnamworkbook.offline.domain.model.AppSettings
 import com.putnamworkbook.offline.domain.model.AppTheme
-import com.putnamworkbook.offline.domain.model.BrushSpec
 import com.putnamworkbook.offline.domain.model.PaperStyle
 
 @Composable
@@ -65,21 +63,7 @@ fun SettingsScreen(
                             onSettingsChanged(settings.copy(defaultPaperStyle = PaperStyle.BLANK))
                         }
                     }
-                    Text("Pen width ${"%.1f".format(settings.brush.width)}")
-                    Slider(
-                        value = settings.brush.width,
-                        onValueChange = { width -> onSettingsChanged(settings.copy(brush = settings.brush.copy(width = width))) },
-                        valueRange = 1f..12f,
-                        modifier = Modifier.testTag("settings-brush-width"),
-                    )
-                    ChoiceRow {
-                        BRUSH_COLORS.forEach { (label, color) ->
-                            Choice(label, settings.brush.colorArgb == color, "settings-brush-${label.lowercase()}") {
-                                onSettingsChanged(settings.copy(brush = BrushSpec(color, settings.brush.width)))
-                            }
-                        }
-                    }
-                    Text("These defaults apply only to new pages and new strokes.")
+                    Text("This default applies only to new notebook pages.")
                 }
             }
             item {
@@ -193,9 +177,3 @@ private fun AppTheme.label() = when (this) {
     AppTheme.LIGHT -> "Light"
     AppTheme.DARK -> "Dark"
 }
-
-private val BRUSH_COLORS = listOf(
-    "Ink" to 0xFF1F2937L,
-    "Blue" to 0xFF1D4ED8L,
-    "Red" to 0xFFB91C1CL,
-)

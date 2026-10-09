@@ -31,16 +31,18 @@ import com.putnamworkbook.offline.export.WorkbookExportOptions
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
 import com.putnamworkbook.offline.notebook.model.StrokeSample
 import com.putnamworkbook.offline.notebook.edit.selectionBounds
+import com.putnamworkbook.offline.notebook.edit.CanvasViewport
 import com.putnamworkbook.offline.notebook.ui.COPY_SELECTION_TEST_TAG
+import com.putnamworkbook.offline.notebook.ui.CUT_SELECTION_TEST_TAG
+import com.putnamworkbook.offline.notebook.ui.DELETE_SELECTION_TEST_TAG
 import com.putnamworkbook.offline.notebook.ui.NEXT_PAGE_TEST_TAG
 import com.putnamworkbook.offline.notebook.ui.NOTEBOOK_CANVAS_TEST_TAG
 import com.putnamworkbook.offline.notebook.ui.PASTE_SELECTION_TEST_TAG
-import com.putnamworkbook.offline.notebook.ui.PEN_MODE_TEST_TAG
 import com.putnamworkbook.offline.notebook.ui.PREVIOUS_PAGE_TEST_TAG
 import com.putnamworkbook.offline.notebook.ui.REDO_TEST_TAG
 import com.putnamworkbook.offline.notebook.ui.RenderedStrokeCountKey
 import com.putnamworkbook.offline.notebook.ui.SELECTION_OVERLAY_TEST_TAG
-import com.putnamworkbook.offline.notebook.ui.SELECT_MODE_TEST_TAG
+import com.putnamworkbook.offline.notebook.ui.TOOL_MODE_TOGGLE_TEST_TAG
 import com.putnamworkbook.offline.notebook.ui.UNDO_TEST_TAG
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -142,6 +144,8 @@ class OfflineWorkbookAcceptanceTest {
         composeRule.onNodeWithTag("reference-tab-solution").assertIsEnabled()
 
         composeRule.onNodeWithTag("reference-tab-original_paper").assertDoesNotExist()
+        composeRule.onNodeWithText("Original PDF").assertDoesNotExist()
+        composeRule.onNodeWithText("View original").assertDoesNotExist()
         composeRule.onNodeWithTag("palm-guard").assertDoesNotExist()
         composeRule.onNodeWithText("Move left").assertDoesNotExist()
         composeRule.onNodeWithText("Move right").assertDoesNotExist()
@@ -234,9 +238,9 @@ class OfflineWorkbookAcceptanceTest {
         waitForText("Page 2 of 2")
         waitForRenderedStrokeCount(1)
 
-        composeRule.onNodeWithTag(PEN_MODE_TEST_TAG).assertTextEquals("Pen ✓")
-        composeRule.onNodeWithTag(SELECT_MODE_TEST_TAG).performClick()
-        composeRule.onNodeWithTag(SELECT_MODE_TEST_TAG).assertTextEquals("Select ✓")
+        composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).assertTextEquals("Pen mode")
+        composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).performClick()
+        composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).assertTextEquals("Select mode")
 
         val overlay = composeRule.onNodeWithTag(SELECTION_OVERLAY_TEST_TAG)
         val overlayBounds = overlay.fetchSemanticsNode().boundsInRoot
@@ -282,7 +286,7 @@ class OfflineWorkbookAcceptanceTest {
             requireNotNull(
                 application.container.notebookRepository
                     .loadStrokes(key, notebook.pages.last().id)
-                    .selectionBounds(),
+                    .selectionBounds(CanvasViewport(selectedOverlayWidth, selectedOverlayHeight)),
             )
         }
         overlay.performTouchInput {
@@ -305,9 +309,16 @@ class OfflineWorkbookAcceptanceTest {
         composeRule.onNodeWithTag(REDO_TEST_TAG).performClick()
         waitForRenderedStrokeCount(2)
 
-        composeRule.onNodeWithTag(PEN_MODE_TEST_TAG).performClick()
-        composeRule.onNodeWithTag(PEN_MODE_TEST_TAG).assertTextEquals("Pen ✓")
-        composeRule.onNodeWithTag(COPY_SELECTION_TEST_TAG).assertIsNotEnabled()
+        composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).performClick()
+        composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).assertTextEquals("Pen mode")
+        listOf(
+            CUT_SELECTION_TEST_TAG,
+            COPY_SELECTION_TEST_TAG,
+            PASTE_SELECTION_TEST_TAG,
+            DELETE_SELECTION_TEST_TAG,
+        ).forEach { tag -> composeRule.onNodeWithTag(tag).assertDoesNotExist() }
+        composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).performClick()
+        composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).assertTextEquals("Select mode")
         composeRule.onNodeWithTag(PASTE_SELECTION_TEST_TAG).assertIsEnabled()
     }
 

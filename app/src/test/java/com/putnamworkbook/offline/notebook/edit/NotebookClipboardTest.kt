@@ -10,6 +10,8 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class NotebookClipboardTest {
+    private val viewport = CanvasViewport(1_000f, 1_000f)
+
     @Test
     fun copiedVectorsPasteWithFreshIdsAndAClampedOffset() {
         val clipboard = NotebookClipboard()
@@ -17,7 +19,7 @@ class NotebookClipboardTest {
         clipboard.copy(source)
         var next = 0
 
-        val pasted = clipboard.createPaste(emptyList()) { "paste-${next++}" }
+        val pasted = clipboard.createPaste(emptyList(), viewport) { "paste-${next++}" }
 
         assertTrue(clipboard.hasContent)
         assertEquals(2, pasted.size)
@@ -30,11 +32,11 @@ class NotebookClipboardTest {
     fun emptyClipboardProducesNoPasteAndCopyCanBeReusedAcrossContexts() {
         val clipboard = NotebookClipboard()
         assertFalse(clipboard.hasContent)
-        assertTrue(clipboard.createPaste(emptyList()) { "unused" }.isEmpty())
+        assertTrue(clipboard.createPaste(emptyList(), viewport) { "unused" }.isEmpty())
 
         clipboard.copy(listOf(stroke("source", 0.4f, 0.4f)))
-        val first = clipboard.createPaste(emptyList()) { "page-a" }
-        val second = clipboard.createPaste(first) { "problem-b" }
+        val first = clipboard.createPaste(emptyList(), viewport) { "page-a" }
+        val second = clipboard.createPaste(first, viewport) { "problem-b" }
 
         assertEquals("page-a", first.single().id)
         assertEquals("problem-b", second.single().id)

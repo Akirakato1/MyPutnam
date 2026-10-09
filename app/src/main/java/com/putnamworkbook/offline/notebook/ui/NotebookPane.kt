@@ -18,6 +18,7 @@ import androidx.compose.ui.platform.testTag
 import com.putnamworkbook.offline.domain.model.BrushSpec
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
 import com.putnamworkbook.offline.notebook.edit.NotebookToolMode
+import com.putnamworkbook.offline.notebook.edit.CanvasViewport
 import com.putnamworkbook.offline.notebook.edit.NormalizedPoint
 import com.putnamworkbook.offline.notebook.edit.NormalizedRect
 import com.putnamworkbook.offline.notebook.edit.SelectionCorner
@@ -42,7 +43,9 @@ fun NotebookPane(
     onDismissConfirmation: () -> Unit,
     onSelectPage: (Int) -> Unit,
     onSetToolMode: (NotebookToolMode) -> Unit = {},
-    onSelect: (NormalizedRect) -> Unit = {},
+    onBrushChanged: (BrushSpec) -> Unit = {},
+    onSelect: (NormalizedRect, CanvasViewport) -> Unit = { _, _ -> },
+    onViewportChanged: (CanvasViewport) -> Unit = {},
     onPreviewMove: (Float, Float) -> Unit = { _, _ -> },
     onCommitMove: (Float, Float) -> Unit = { _, _ -> },
     onPreviewScale: (SelectionCorner, NormalizedPoint) -> Unit = { _, _ -> },
@@ -52,7 +55,7 @@ fun NotebookPane(
     onCopySelection: () -> Unit = {},
     onPaste: () -> Unit = {},
     onDeleteSelection: () -> Unit = {},
-    onCancelSelection: () -> Unit = {},
+    onClearSelection: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     val document = state.document
@@ -65,17 +68,17 @@ fun NotebookPane(
         NotebookToolbar(
             saveState = state.saveState,
             toolMode = state.toolMode,
+            brush = brush,
             hasSelection = state.selection != null,
             clipboardHasContent = state.clipboardHasContent,
             onSetToolMode = onSetToolMode,
+            onBrushChanged = onBrushChanged,
             onCut = onCutSelection,
             onCopy = onCopySelection,
             onPaste = onPaste,
             onDeleteSelection = onDeleteSelection,
-            onCancelSelection = onCancelSelection,
             onUndo = onUndo,
             onRedo = onRedo,
-            onEraseLast = onUndo,
             onAddPage = onAddPage,
             onClearPage = { onRequestClearPage(page.id) },
             onDeletePage = { onRequestDeletePage(page.id) },
@@ -122,11 +125,13 @@ fun NotebookPane(
                 toolMode = state.toolMode,
                 selection = state.selection,
                 onSelect = onSelect,
+                onViewportChanged = onViewportChanged,
                 onPreviewMove = onPreviewMove,
                 onCommitMove = onCommitMove,
                 onPreviewScale = onPreviewScale,
                 onCommitScale = onCommitScale,
                 onCancelPreview = onCancelPreview,
+                onClearSelection = onClearSelection,
             )
         }
     }
