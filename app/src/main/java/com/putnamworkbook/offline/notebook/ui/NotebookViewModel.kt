@@ -52,6 +52,7 @@ class NotebookViewModel(
     private var latestOperation: Job? = null
     private var latestBrushUpdate: Job? = null
     private val brushRevision = AtomicLong(0L)
+    private var brushPersistenceFailure: BrushPersistenceFailure? = null
     private val saveCoordinator = NotebookSaveCoordinator(
         scope = scope,
         wait = saveWait,
@@ -95,12 +96,38 @@ class NotebookViewModel(
                 try {
                     val latestBrush = mutableUiState.value.brush
                     settingsRepository.update { settings -> settings.copy(brush = latestBrush) }
+                    val recoveredFailure = brushPersistenceFailure
+                    brushPersistenceFailure = null
+                    if (recoveredFailure != null) {
+                        mutableUiState.update { current ->
+                            if (
+                                current.saveState == NotebookSaveState.ERROR &&
+                                current.errorMessage == recoveredFailure.message
+                            ) {
+                                current.copy(
+                                    saveState = recoveredFailure.previousSaveState,
+                                    errorMessage = recoveredFailure.previousErrorMessage,
+                                )
+                            } else {
+                                current
+                            }
+                        }
+                    }
                 } catch (error: CancellationException) {
                     throw error
                 } catch (error: Exception) {
+                    val message = error.message ?: error::class.simpleName
+                    val current = mutableUiState.value
+                    if (brushPersistenceFailure == null) {
+                        brushPersistenceFailure = BrushPersistenceFailure(
+                            previousSaveState = current.saveState,
+                            previousErrorMessage = current.errorMessage,
+                            message = message,
+                        )
+                    }
                     mutableUiState.value = mutableUiState.value.copy(
                         saveState = NotebookSaveState.ERROR,
-                        errorMessage = error.message ?: error::class.simpleName,
+                        errorMessage = message,
                     )
                 }
             }
@@ -542,3 +569,9 @@ class NotebookViewModel(
         return NotebookSelectionState(mapTo(linkedSetOf()) { it.id }, bounds)
     }
 }
+
+private data class BrushPersistenceFailure(
+    val previousSaveState: NotebookSaveState,
+    val previousErrorMessage: String?,
+    val message: String?,
+)

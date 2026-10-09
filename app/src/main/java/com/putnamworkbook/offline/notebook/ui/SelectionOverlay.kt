@@ -53,13 +53,14 @@ fun SelectionOverlay(
                 detectDragGestures(
                     onDragStart = { start ->
                         val point = start.normalized(size.width, size.height)
-                        gesture = selection?.let { existing ->
-                            existing.hitCorner(start, size.width.toFloat(), size.height.toFloat())?.let {
-                                SelectionGesture.Scale(it, point)
-                            } ?: if (existing.bounds.contains(point)) {
-                                SelectionGesture.Move(point)
-                            } else null
-                        } ?: SelectionGesture.Marquee(point)
+                        val corner = selection?.hitCorner(start, size.width.toFloat(), size.height.toFloat())
+                        gesture = when (
+                            resolveSelectionDragIntent(selection?.bounds, point, corner != null)
+                        ) {
+                            SelectionDragIntent.MARQUEE -> SelectionGesture.Marquee(point)
+                            SelectionDragIntent.MOVE -> SelectionGesture.Move(point)
+                            SelectionDragIntent.SCALE -> SelectionGesture.Scale(requireNotNull(corner), point)
+                        }
                         currentPoint = point
                     },
                     onDrag = { change, _ ->
@@ -126,6 +127,22 @@ private sealed interface SelectionGesture {
     data class Marquee(val start: NormalizedPoint) : SelectionGesture
     data class Move(val start: NormalizedPoint) : SelectionGesture
     data class Scale(val corner: SelectionCorner, val start: NormalizedPoint) : SelectionGesture
+}
+
+internal enum class SelectionDragIntent {
+    MARQUEE,
+    MOVE,
+    SCALE,
+}
+
+internal fun resolveSelectionDragIntent(
+    selectionBounds: NormalizedRect?,
+    point: NormalizedPoint,
+    isCorner: Boolean,
+): SelectionDragIntent = when {
+    isCorner -> SelectionDragIntent.SCALE
+    selectionBounds?.contains(point) == true -> SelectionDragIntent.MOVE
+    else -> SelectionDragIntent.MARQUEE
 }
 
 private fun Offset.normalized(width: Int, height: Int): NormalizedPoint = NormalizedPoint(

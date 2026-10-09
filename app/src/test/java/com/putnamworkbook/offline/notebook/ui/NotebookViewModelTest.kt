@@ -411,6 +411,8 @@ class NotebookViewModelTest {
         viewModel.awaitIdle()
         assertEquals(NEW_BRUSH, viewModel.uiState.value.brush)
         assertEquals(NEW_BRUSH, settings.observe().first().brush)
+        assertEquals(NotebookSaveState.IDLE, viewModel.uiState.value.saveState)
+        assertNull(viewModel.uiState.value.errorMessage)
         viewModel.close()
 
         val reopened = viewModel(repository, settings, wait = { })
