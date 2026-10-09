@@ -1,8 +1,11 @@
 {
-  "schemaVersion": 2,
-  "year": 2025,
-  "code": "B4",
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2025",
+  "problemId": "B4",
+  "label": "B4",
   "ordinal": 10,
+  "topics": ["combinatorics"],
   "statement": {
     "blocks": [
       { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B4" }] },

@@ -1,8 +1,11 @@
 {
-  "schemaVersion": 2,
-  "year": 2025,
-  "code": "B3",
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2025",
+  "problemId": "B3",
+  "label": "B3",
   "ordinal": 9,
+  "topics": ["number-theory"],
   "statement": {
     "blocks": [
       { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B3" }] },

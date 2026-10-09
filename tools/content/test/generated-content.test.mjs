@@ -23,11 +23,13 @@ test('generated 2025 content preserves stages and renders every source math run'
 
     assert.equal(manifest.problems.length, 12);
     assert.equal(manifest.problems.flatMap(({ hints }) => hints).length, 48);
+    assert.equal(manifest.problems.flatMap(({ prerequisites }) => prerequisites).length, 36);
+    assert.ok(manifest.problems.every(({ topics }) => topics.length > 0));
     assert.equal(manifest.assets.some(({ path }) => path.endsWith('.pdf')), false);
 
     for (const generatedProblem of manifest.problems) {
       const source = JSON.parse(
-        await readFile(join(sourceRoot, 'problems', `${generatedProblem.code}.json`), 'utf8'),
+        await readFile(join(sourceRoot, 'problems', `${generatedProblem.problemId}.json`), 'utf8'),
       );
       assert.deepEqual(
         generatedProblem.hints.map(({ stage }) => stage),
@@ -37,7 +39,7 @@ test('generated 2025 content preserves stages and renders every source math run'
       for (const { path, document } of problemDocuments(source)) {
         const reference = generatedReference(generatedProblem, path);
         const html = await readFile(join(outputRoot, ...reference.assetPath.split('/')), 'utf8');
-        auditRenderedDocument(document, html, `${generatedProblem.code}${path}`);
+        auditRenderedDocument(document, html, `${generatedProblem.problemId}${path}`);
       }
     }
   } finally {

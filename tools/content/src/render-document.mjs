@@ -6,13 +6,21 @@ import { isSafeLocalPath } from './content-types.mjs';
 
 const template = readFileSync(new URL('../templates/document.html', import.meta.url), 'utf8');
 
-export function renderDocument(document) {
+export function renderDocument(document, options = {}) {
   if (!document || !Array.isArray(document.blocks) || document.blocks.length === 0) {
     throw new TypeError('RichDocument.blocks must be a non-empty array');
   }
 
   const content = document.blocks.map(renderBlock).join('\n');
-  const html = template.replace('{{CONTENT}}', content);
+  const sharedAssetPrefix = options.sharedAssetPrefix ?? '../../shared';
+  if (!/^(?:\.\.\/)+shared$/.test(sharedAssetPrefix)) {
+    throw new TypeError(`Unsafe shared asset prefix: ${sharedAssetPrefix}`);
+  }
+  const html = template
+    .replace('{{SHARED_ASSET_PREFIX}}', escapeAttribute(sharedAssetPrefix))
+    .replace('{{SHARED_ASSET_PREFIX}}', escapeAttribute(sharedAssetPrefix))
+    .replace('{{TITLE}}', escapeHtml(options.title ?? 'Offline Mathematics Workbook'))
+    .replace('{{CONTENT}}', content);
   auditRenderedDocument(document, html);
   return html;
 }

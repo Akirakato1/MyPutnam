@@ -25,15 +25,15 @@ test('missing codes and extra JSON files are both reported', async (t) => {
   assert.ok(errors.some((error) => error.includes('problems/notes.json') && error.includes('unexpected')), errors.join('\n'));
 });
 
-test('wrong year and wrong ordinal are reported at their record paths', async (t) => {
+test('wrong set and wrong ordinal are reported at their record paths', async (t) => {
   const { sourceRoot } = await createYearFixture(t);
   const A1 = await readProblem(sourceRoot, 'A1');
-  A1.year = 2023;
+  A1.setId = '2023';
   A1.ordinal = 2;
   await writeProblem(sourceRoot, 'A1', A1);
 
   const errors = await auditYear(sourceRoot, 2024);
-  assert.ok(errors.some((error) => error.includes('problems/A1.json.year') && error.includes('2024')), errors.join('\n'));
+  assert.ok(errors.some((error) => error.includes('problems/A1.json.setId') && error.includes('2024')), errors.join('\n'));
   assert.ok(errors.some((error) => error.includes('problems/A1.json.ordinal') && error.includes('1')), errors.join('\n'));
 });
 

@@ -1,8 +1,11 @@
 {
-  "schemaVersion": 2,
-  "year": 2025,
-  "code": "B2",
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2025",
+  "problemId": "B2",
+  "label": "B2",
   "ordinal": 8,
+  "topics": ["analysis", "calculus", "integrals", "geometry"],
   "statement": {
     "blocks": [
       { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B2" }] },

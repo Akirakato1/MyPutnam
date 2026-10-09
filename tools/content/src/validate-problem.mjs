@@ -6,9 +6,11 @@ import katex from 'katex';
 import {
   HINT_STAGES,
   isPlainObject,
+  isSafeId,
   isSafeLocalPath,
   problemDocuments,
 } from './content-types.mjs';
+import { validateLibraryCatalog } from './library-catalog.mjs';
 
 const schema = JSON.parse(
   readFileSync(new URL('../schema/problem.schema.json', import.meta.url), 'utf8'),
@@ -17,8 +19,14 @@ const ajv = new Ajv2020({ allErrors: true, strict: true });
 const validateSchema = ajv.compile(schema);
 const unsafeTexCommand = /\\(?:href|url|includegraphics|html(?:Class|Data|Id|Style)?|class|id|style)\b/;
 
-export function validateProblem(record) {
+export function validateProblem(record, catalog) {
   const errors = [];
+
+  if (catalog === undefined) {
+    errors.push('$catalog: library catalog is required');
+  } else {
+    errors.push(...validateLibraryCatalog(catalog).map((error) => `$catalog${error.slice(1)}`));
+  }
 
   if (!validateSchema(record)) {
     for (const error of validateSchema.errors ?? []) {
@@ -28,6 +36,26 @@ export function validateProblem(record) {
 
   if (!isPlainObject(record)) {
     return uniqueSorted(errors);
+  }
+
+  for (const field of ['collectionId', 'setId', 'problemId']) {
+    if (typeof record[field] === 'string' && !isSafeId(record[field])) {
+      errors.push(`$.${field}: unsafe ID`);
+    }
+  }
+  if (catalog !== undefined) {
+    const collection = catalog.collections?.find((candidate) => candidate.id === record.collectionId);
+    if (!collection) errors.push(`$.collectionId: unknown collection ${record.collectionId}`);
+    else if (!collection.sets?.some((candidate) => candidate.id === record.setId)) {
+      errors.push(`$.setId: unknown set ${record.setId} in collection ${record.collectionId}`);
+    }
+    const knownTopics = new Set((catalog.topics ?? []).map(({ id }) => id));
+    const seenTopics = new Set();
+    for (const [index, topic] of (record.topics ?? []).entries()) {
+      if (seenTopics.has(topic)) errors.push(`$.topics[${index}]: duplicate topic ${topic}`);
+      seenTopics.add(topic);
+      if (!knownTopics.has(topic)) errors.push(`$.topics[${index}]: unknown topic ${topic}`);
+    }
   }
 
   validateOrderedItems(record.hints, '$.hints', [1, 2, 3, 4], errors);

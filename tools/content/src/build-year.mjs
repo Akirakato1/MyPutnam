@@ -18,57 +18,31 @@ import { isSafeLocalPath, SCHEMA_VERSION } from './content-types.mjs';
 import { renderDocument } from './render-document.mjs';
 import { renderReview } from './render-review.mjs';
 import { validateProblem } from './validate-problem.mjs';
+import { buildSet } from './build-set.mjs';
+import { loadLibraryCatalog } from './library-catalog.mjs';
 
 const contentRoot = fileURLToPath(new URL('..', import.meta.url));
 const repositoryRoot = fileURLToPath(new URL('../../..', import.meta.url));
 
 export async function buildYear(sourceDir, outputDir, options = {}) {
-  const sourceRoot = resolve(sourceDir);
-  const outputRoot = resolve(outputDir);
-  assertSeparateTrees(sourceRoot, outputRoot);
+  const year = options.year ?? await inferYear(sourceDir);
+  const catalog = options.catalog ?? await loadLibraryCatalog(
+    options.catalogPath ?? join(repositoryRoot, 'content-src', 'library.json'),
+  );
+  return buildSet(sourceDir, outputDir, {
+    catalog,
+    collectionId: 'putnam',
+    setId: String(year),
+    contentVersion: options.contentVersion ?? `putnam-${year}.1`,
+    ...(options.problems ? { problems: options.problems } : {}),
+  });
+}
 
-  const records = await loadRecords(sourceRoot, options.problems);
-  const errors = validateRecords(records, options.year);
-  if (errors.length > 0) {
-    throw new Error(`Content validation failed:\n${errors.map((error) => `- ${error}`).join('\n')}`);
-  }
-
-  const year = options.year ?? records[0].record.year;
-  const parent = dirname(outputRoot);
-  await mkdir(parent, { recursive: true });
-  const stagingRoot = await mkdtemp(join(parent, `.${basename(outputRoot)}.tmp-`));
-
-  try {
-    const assets = new Map();
-    await copySharedAssets(stagingRoot, assets);
-
-    const problems = [];
-    for (const { fileName, record } of records) {
-      problems.push(await buildProblem(sourceRoot, stagingRoot, record, fileName, assets));
-    }
-
-    problems.sort(compareProblems);
-    const manifest = {
-      schemaVersion: SCHEMA_VERSION,
-      contentVersion: options.contentVersion ?? `${year}.1`,
-      year,
-      problems,
-      assets: [...assets.values()].sort((left, right) => left.path.localeCompare(right.path)),
-    };
-
-    await writeFile(
-      join(stagingRoot, 'manifest.json'),
-      `${JSON.stringify(manifest, null, 2)}\n`,
-      'utf8',
-    );
-
-    await rm(outputRoot, { recursive: true, force: true });
-    await rename(stagingRoot, outputRoot);
-    return manifest;
-  } catch (error) {
-    await rm(stagingRoot, { recursive: true, force: true });
-    throw error;
-  }
+async function inferYear(sourceDir) {
+  const records = await loadRecords(resolve(sourceDir));
+  const setId = records[0]?.record?.setId;
+  if (!/^\d{4}$/.test(setId ?? '')) throw new Error('Cannot infer Putnam year from setId');
+  return Number.parseInt(setId, 10);
 }
 
 async function loadRecords(sourceRoot, requestedProblems) {
@@ -374,6 +348,9 @@ function parseArguments(args) {
       case '--source':
         options.source = takeValue();
         break;
+      case '--catalog':
+        options.catalogPath = takeValue();
+        break;
       case '--output':
         options.output = takeValue();
         break;
@@ -400,7 +377,7 @@ async function main() {
   const options = parseArguments(process.argv.slice(2));
   const sourceDir = options.source ?? join(repositoryRoot, 'content-src', String(options.year));
   const outputDir = options.output
-    ?? join(repositoryRoot, 'app', 'src', 'main', 'assets', 'content', String(options.year));
+    ?? join(repositoryRoot, 'build', 'content-preview-assets', String(options.year));
   const manifest = await buildYear(sourceDir, outputDir, options);
 
   if (options.review) {
@@ -410,7 +387,7 @@ async function main() {
   }
 
   process.stdout.write(
-    `Built ${manifest.problems.length} problem(s) for ${manifest.year} at ${outputDir}\n`,
+    `Built ${manifest.problems.length} problem(s) for ${manifest.collectionId}/${manifest.setId} at ${outputDir}\n`,
   );
 }
 

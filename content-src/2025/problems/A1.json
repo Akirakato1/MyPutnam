@@ -1,8 +1,11 @@
 {
-  "schemaVersion": 2,
-  "year": 2025,
-  "code": "A1",
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2025",
+  "problemId": "A1",
+  "label": "A1",
   "ordinal": 1,
+  "topics": ["number-theory", "sequences-series"],
   "statement": {
     "blocks": [
       { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A1" }] },

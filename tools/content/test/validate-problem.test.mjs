@@ -3,14 +3,33 @@ import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import { SCHEMA_VERSION } from '../src/content-types.mjs';
-import { validateProblem } from '../src/validate-problem.mjs';
+import { validateProblem as validateProblemRecord } from '../src/validate-problem.mjs';
 
 const fixtureUrl = new URL('./fixtures/valid-problem.json', import.meta.url);
 const validProblem = JSON.parse(await readFile(fixtureUrl, 'utf8'));
+const catalog = {
+  schemaVersion: 1,
+  contentSchemaVersion: 3,
+  collections: [{
+    id: 'putnam',
+    title: 'William Lowell Putnam Mathematical Competition',
+    kind: 'competition',
+    displayOrder: 1,
+    sets: [{ id: '2025', title: '2025', displayOrder: 1, metadata: { competitionYear: 2025 } }],
+  }],
+  topics: [
+    { id: 'algebra', label: 'Algebra', displayOrder: 1 },
+    { id: 'integrals', label: 'Integrals', displayOrder: 2 },
+  ],
+};
+
+function validateProblem(record) {
+  return validateProblemRecord(record, catalog);
+}
 
 test('a complete problem record passes validation', () => {
-  assert.equal(SCHEMA_VERSION, 2);
-  assert.equal(validProblem.schemaVersion, 2);
+  assert.equal(SCHEMA_VERSION, 3);
+  assert.equal(validProblem.schemaVersion, 3);
   assert.equal('originalPdf' in validProblem, false);
   assert.deepEqual(validProblem.hints.map(({ stage }) => stage), [
     'nudge',
@@ -21,23 +40,23 @@ test('a complete problem record passes validation', () => {
   assert.deepEqual(validateProblem(validProblem), []);
 });
 
-test('the canonical problem template is a valid schema-v2 record', async () => {
+test('the canonical problem template is a valid schema-v3 record', async () => {
   const template = JSON.parse(
     await readFile(new URL('../templates/problem.template.json', import.meta.url), 'utf8'),
   );
 
-  assert.equal(template.schemaVersion, 2);
+  assert.equal(template.schemaVersion, 3);
   assert.deepEqual(validateProblem(template), []);
 });
 
-test('schema v1 and missing hint stages are rejected at exact paths', () => {
-  const schemaV1 = structuredClone(validProblem);
-  schemaV1.schemaVersion = 1;
+test('schema v2 and missing hint stages are rejected at exact paths', () => {
+  const schemaV2 = structuredClone(validProblem);
+  schemaV2.schemaVersion = 2;
   const missingStage = structuredClone(validProblem);
   delete missingStage.hints[0].stage;
 
   assert.ok(
-    validateProblem(schemaV1).some((error) => error.startsWith('$.schemaVersion:')),
+    validateProblem(schemaV2).some((error) => error.startsWith('$.schemaVersion:')),
   );
   assert.ok(
     validateProblem(missingStage).some((error) => error.startsWith('$.hints[0].stage:')),
@@ -85,13 +104,55 @@ test('hint stages are unique and fixed to their canonical orders', () => {
   );
 });
 
-test('originalPdf is not part of schema v2', () => {
+test('originalPdf is not part of schema v3', () => {
   const withOriginalPdf = structuredClone(validProblem);
   withOriginalPdf.originalPdf = { path: 'original/problems.pdf', pageIndex: 0 };
 
   const errors = validateProblem(withOriginalPdf);
 
   assert.ok(errors.some((error) => error.startsWith('$.originalPdf:')), errors.join('\n'));
+});
+
+test('generic ids, ordinals, topics, and prerequisites follow schema v3', () => {
+  const genericCatalog = structuredClone(catalog);
+  genericCatalog.collections.push({
+    id: 'course', title: 'Course', kind: 'course', displayOrder: 2,
+    sets: [{ id: 'chapter-1', title: 'Chapter One', displayOrder: 1 }],
+  });
+  const generic = structuredClone(validProblem);
+  Object.assign(generic, {
+    collectionId: 'course',
+    setId: 'chapter-1',
+    problemId: 'P17',
+    label: 'Challenge 17',
+    ordinal: 37,
+    topics: ['integrals', 'analysis-not-in-catalog'],
+  });
+
+  const unknownTopicErrors = validateProblemRecord(generic, genericCatalog);
+  assert.ok(unknownTopicErrors.some((error) => error.includes('unknown topic analysis-not-in-catalog')));
+  generic.topics = ['integrals'];
+  assert.deepEqual(validateProblemRecord(generic, genericCatalog), []);
+
+  generic.topics = ['integrals', 'integrals'];
+  assert.ok(validateProblemRecord(generic, genericCatalog).some((error) => error.includes('duplicate topic')));
+  generic.topics = [];
+  assert.ok(validateProblemRecord(generic, genericCatalog).some((error) => error.startsWith('$.topics:')));
+  generic.topics = ['integrals'];
+  generic.prerequisites = [];
+  assert.ok(validateProblemRecord(generic, genericCatalog).some((error) => error.startsWith('$.prerequisites:')));
+});
+
+test('catalog membership and every identity segment are mandatory and safe', () => {
+  for (const [field, value] of [
+    ['collectionId', 'unknown'],
+    ['setId', '../2025'],
+    ['problemId', 'A/1'],
+  ]) {
+    const record = structuredClone(validProblem);
+    record[field] = value;
+    assert.ok(validateProblem(record).some((error) => error.startsWith(`$.${field}:`)), field);
+  }
 });
 
 test('figures cannot refer to remote or escaping paths', () => {

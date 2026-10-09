@@ -1,12 +1,19 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "contentVersion": "2025.2",
-  "year": 2025,
+  "collectionId": "putnam",
+  "setId": "2025",
   "problems": [
     {
-      "year": 2025,
-      "code": "A1",
+      "key": "putnam/2025/A1",
+      "collectionId": "putnam",
+      "setId": "2025",
+      "problemId": "A1",
+      "label": "A1",
       "ordinal": 1,
+      "topics": [
+        "number-theory"
+      ],
       "sourceRecord": "A1.json",
       "statement": {
         "assetPath": "problems/A1/statement.html",
@@ -74,5 +81,7 @@
       ]
     }
   ],
-  "assets": []
+  "assets": [],
+  "catalogSha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+  "manifestSha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
 }

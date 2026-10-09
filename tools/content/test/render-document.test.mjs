@@ -27,7 +27,7 @@ test('renderer escapes prose and emits script-free HTML with a restrictive CSP',
       },
       { type: 'displayMath', tex: String.raw`\sum_{k=1}^{n} k` },
     ],
-  });
+  }, { sharedAssetPrefix: '../../../../shared', title: 'Course <One>' });
 
   assert.match(html, /&lt;script&gt;alert\(&quot;unsafe&quot;\)&lt;\/script&gt;/);
   assert.doesNotMatch(html, /<script(?:\s|>)/i);
@@ -35,6 +35,8 @@ test('renderer escapes prose and emits script-free HTML with a restrictive CSP',
   assert.match(html, /default-src 'none'/);
   assert.match(html, /object-src 'none'/);
   assert.match(html, /class="katex/);
+  assert.match(html, /\.\.\/\.\.\/\.\.\/\.\.\/shared\/content\.css/);
+  assert.match(html, /<title>Course &lt;One&gt;<\/title>/);
 });
 
 test('renderer supports every permitted block without allowing raw HTML', () => {

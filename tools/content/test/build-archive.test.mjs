@@ -19,20 +19,24 @@ import {
   buildArchive,
 } from '../src/build-archive.mjs';
 import { createYearFixture } from './helpers/year-fixture.mjs';
+import { loadLibraryCatalog } from '../src/library-catalog.mjs';
+
+const libraryCatalogUrl = new URL('../../../content-src/library.json', import.meta.url);
 
 test('a complete archive builds sorted manifests and one physical shared-asset set', async (t) => {
   const fixture = await createArchiveFixture(t);
   const outputRoot = join(fixture.root, 'output');
   const reviewRoot = join(fixture.root, 'review');
 
-  const result = await buildArchive(
-    fixture.catalog,
-    fixture.sourceRoot,
+  const result = await buildArchive({
+    archiveCatalog: fixture.catalog,
+    libraryCatalog: fixture.libraryCatalog,
+    sourceRoot: fixture.sourceRoot,
     outputRoot,
     reviewRoot,
-  );
+  });
 
-  assert.deepEqual(result.manifests.map(({ year }) => year), [2023, 2024]);
+  assert.deepEqual(result.manifests.map(({ setId }) => setId), ['2023', '2024']);
   assert.equal(result.archiveManifest.problemCount, 24);
   assert.deepEqual(result.archiveManifest.years, [2023, 2024]);
   assert.equal(
@@ -40,17 +44,17 @@ test('a complete archive builds sorted manifests and one physical shared-asset s
     result.archiveManifest.sharedAssets.length,
   );
 
-  await access(join(outputRoot, 'shared', 'content.css'));
-  await assert.rejects(access(join(outputRoot, '2023', 'shared')), { code: 'ENOENT' });
-  await assert.rejects(access(join(outputRoot, '2024', 'shared')), { code: 'ENOENT' });
+  await access(join(outputRoot, 'content', 'shared', 'content.css'));
+  await assert.rejects(access(join(outputRoot, 'content', 'putnam', '2023', 'shared')), { code: 'ENOENT' });
+  await assert.rejects(access(join(outputRoot, 'content', 'putnam', '2024', 'shared')), { code: 'ENOENT' });
   const html = await readFile(
-    join(outputRoot, '2023', 'problems', 'A1', 'statement.html'),
+    join(outputRoot, 'content', 'putnam', '2023', 'problems', 'A1', 'statement.html'),
     'utf8',
   );
-  assert.match(html, /href="\.\.\/\.\.\/\.\.\/shared\//);
+  assert.match(html, /href="\.\.\/\.\.\/\.\.\/\.\.\/shared\//);
 
   const onDiskArchive = JSON.parse(
-    await readFile(join(outputRoot, 'archive-manifest.json'), 'utf8'),
+    await readFile(join(outputRoot, 'content', 'archive-manifest.json'), 'utf8'),
   );
   assert.deepEqual(onDiskArchive, result.archiveManifest);
 });
@@ -60,18 +64,14 @@ test('identical inputs produce deterministic logical archive output', async (t) 
   const firstOutput = join(fixture.root, 'output-first');
   const secondOutput = join(fixture.root, 'output-second');
 
-  const first = await buildArchive(
-    fixture.catalog,
-    fixture.sourceRoot,
-    firstOutput,
-    join(fixture.root, 'review-first'),
-  );
-  const second = await buildArchive(
-    structuredClone(fixture.catalog),
-    fixture.sourceRoot,
-    secondOutput,
-    join(fixture.root, 'review-second'),
-  );
+  const first = await buildArchive({
+    archiveCatalog: fixture.catalog, libraryCatalog: fixture.libraryCatalog,
+    sourceRoot: fixture.sourceRoot, outputRoot: firstOutput, reviewRoot: join(fixture.root, 'review-first'),
+  });
+  const second = await buildArchive({
+    archiveCatalog: structuredClone(fixture.catalog), libraryCatalog: fixture.libraryCatalog,
+    sourceRoot: fixture.sourceRoot, outputRoot: secondOutput, reviewRoot: join(fixture.root, 'review-second'),
+  });
 
   assert.deepEqual(second, first);
   assert.deepEqual(await logicalTree(secondOutput), await logicalTree(firstOutput));
@@ -84,7 +84,7 @@ test('incomplete catalogs are rejected before any output is written', async (t) 
   const reviewRoot = join(fixture.root, 'review');
 
   await assert.rejects(
-    buildArchive(fixture.catalog, fixture.sourceRoot, outputRoot, reviewRoot),
+    buildArchive({ archiveCatalog: fixture.catalog, libraryCatalog: fixture.libraryCatalog, sourceRoot: fixture.sourceRoot, outputRoot, reviewRoot }),
     /incomplete/i,
   );
   await assert.rejects(access(outputRoot), { code: 'ENOENT' });
@@ -95,24 +95,14 @@ test('missing and extra numeric year directories are rejected', async (t) => {
   const missing = await createArchiveFixture(t);
   await rm(join(missing.sourceRoot, '2023'), { recursive: true, force: true });
   await assert.rejects(
-    buildArchive(
-      missing.catalog,
-      missing.sourceRoot,
-      join(missing.root, 'output'),
-      join(missing.root, 'review'),
-    ),
+    buildArchive({ archiveCatalog: missing.catalog, libraryCatalog: missing.libraryCatalog, sourceRoot: missing.sourceRoot, outputRoot: join(missing.root, 'output'), reviewRoot: join(missing.root, 'review') }),
     /missing.*2023/i,
   );
 
   const extra = await createArchiveFixture(t);
   await mkdir(join(extra.sourceRoot, '2022'));
   await assert.rejects(
-    buildArchive(
-      extra.catalog,
-      extra.sourceRoot,
-      join(extra.root, 'output'),
-      join(extra.root, 'review'),
-    ),
+    buildArchive({ archiveCatalog: extra.catalog, libraryCatalog: extra.libraryCatalog, sourceRoot: extra.sourceRoot, outputRoot: join(extra.root, 'output'), reviewRoot: join(extra.root, 'review') }),
     /extra.*2022/i,
   );
 });
@@ -120,10 +110,10 @@ test('missing and extra numeric year directories are rejected', async (t) => {
 test('repeated year and problem-code keys are rejected explicitly', () => {
   assert.throws(
     () => assertUniqueProblemKeys([
-      { year: 2024, problems: [{ year: 2024, code: 'A1' }] },
-      { year: 2024, problems: [{ year: 2024, code: 'A1' }] },
+      { collectionId: 'putnam', setId: '2024', problems: [{ key: 'putnam/2024/A1' }] },
+      { collectionId: 'putnam', setId: '2024', problems: [{ key: 'putnam/2024/A1' }] },
     ]),
-    /duplicate problem key.*2024.*A1/i,
+    /duplicate problem key.*putnam\/2024\/A1/i,
   );
 });
 
@@ -132,12 +122,10 @@ test('archive builds do not replace files outside supplied output and review roo
   const sentinel = join(fixture.root, 'sentinel.txt');
   await writeFile(sentinel, 'preserve me', 'utf8');
 
-  await buildArchive(
-    fixture.catalog,
-    fixture.sourceRoot,
-    join(fixture.root, 'output'),
-    join(fixture.root, 'review'),
-  );
+  await buildArchive({
+    archiveCatalog: fixture.catalog, libraryCatalog: fixture.libraryCatalog,
+    sourceRoot: fixture.sourceRoot, outputRoot: join(fixture.root, 'output'), reviewRoot: join(fixture.root, 'review'),
+  });
 
   assert.equal(await readFile(sentinel, 'utf8'), 'preserve me');
   assert.deepEqual(
@@ -162,11 +150,12 @@ async function createArchiveFixture(t) {
     sourceRoot,
     catalog: {
       schemaVersion: 1,
-      contentSchemaVersion: 2,
+      contentSchemaVersion: 3,
       contentVersion: 'archive-2023-2024.1',
       targetYears: [2023, 2024],
       completedYears: [2023, 2024],
     },
+    libraryCatalog: await loadLibraryCatalog(libraryCatalogUrl),
   };
 }
 

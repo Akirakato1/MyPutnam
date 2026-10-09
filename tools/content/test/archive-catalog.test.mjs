@@ -14,7 +14,7 @@ test('the canonical archive catalog targets every year from 1962 through 2025', 
   const catalog = await loadArchiveCatalog(catalogUrl);
 
   assert.equal(catalog.schemaVersion, 1);
-  assert.equal(catalog.contentSchemaVersion, 2);
+  assert.equal(catalog.contentSchemaVersion, 3);
   assert.equal(catalog.contentVersion, 'archive-1962-2025.1');
   assert.deepEqual(catalog.targetYears, targetYears);
   assert.deepEqual(catalog.completedYears, [2025]);
@@ -63,7 +63,7 @@ test('final archive validation rejects incomplete catalogs without an escape hat
 function validCatalog() {
   return {
     schemaVersion: 1,
-    contentSchemaVersion: 2,
+    contentSchemaVersion: 3,
     contentVersion: 'archive-1962-2025.1',
     targetYears: [...targetYears],
     completedYears: [2025],

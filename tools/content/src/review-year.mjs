@@ -13,6 +13,8 @@ export async function reviewYear({
   sourceRoot,
   previewRoot,
   reviewRoot,
+  catalog,
+  catalogPath,
   problems,
 }) {
   if (!Number.isInteger(year)) {
@@ -27,7 +29,7 @@ export async function reviewYear({
   const resolvedReview = resolve(reviewRoot);
   assertReviewRoots(resolvedSource, resolvedPreview, resolvedReview);
 
-  const errors = await auditYear(resolvedSource, year);
+  const errors = await auditYear(resolvedSource, year, { catalog, catalogPath });
   if (errors.length > 0) {
     throw new Error(
       'Year ' + year + ' audit failed:\n' + errors.map((error) => '- ' + error).join('\n'),
@@ -37,6 +39,8 @@ export async function reviewYear({
   const manifest = await buildYear(resolvedSource, resolvedPreview, {
     year,
     contentVersion: String(year) + '.review',
+    catalog,
+    catalogPath,
     ...(problems ? { problems } : {}),
   });
   const review = await renderReview(resolvedPreview, resolvedReview);
@@ -85,6 +89,8 @@ function parseArguments(args) {
       options.reviewRoot = takeValue();
     } else if (name === '--problems') {
       options.problems = takeValue().split(',').filter(Boolean);
+    } else if (name === '--catalog') {
+      options.catalogPath = takeValue();
     } else {
       throw new Error('Unknown argument: ' + argument);
     }
@@ -103,7 +109,7 @@ async function main() {
   const result = await reviewYear(parseArguments(process.argv.slice(2)));
   process.stdout.write(
     'Reviewed ' + result.manifest.problems.length + ' problem(s) for '
-      + result.manifest.year + '\n',
+      + result.manifest.collectionId + '/' + result.manifest.setId + '\n',
   );
 }
 

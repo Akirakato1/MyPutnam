@@ -25,7 +25,7 @@ test('local review writes only beneath caller-supplied preview and review roots'
 
   assert.equal(result.manifest.problems.length, 1);
   assert.equal(await readFile(sentinel, 'utf8'), 'keep');
-  await access(join(previewRoot, 'manifest.json'));
+  await access(join(previewRoot, 'content', 'putnam', '2024', 'manifest.json'));
   assert.ok((await readdir(reviewRoot)).some((name) => name.endsWith('.png')));
   assert.deepEqual(
     (await readdir(fixtureRoot)).sort(),

@@ -10,6 +10,7 @@ import {
   problemDocuments,
 } from './content-types.mjs';
 import { validateProblem } from './validate-problem.mjs';
+import { loadLibraryCatalog } from './library-catalog.mjs';
 
 const repositoryRoot = fileURLToPath(new URL('../../..', import.meta.url));
 
@@ -28,8 +29,11 @@ export const CANONICAL_PROBLEMS = Object.freeze([
   { code: 'B6', ordinal: 12 },
 ]);
 
-export async function auditYear(sourceRoot, expectedYear) {
+export async function auditYear(sourceRoot, expectedYear, options = {}) {
   const root = resolve(sourceRoot instanceof URL ? fileURLToPath(sourceRoot) : sourceRoot);
+  const catalog = options.catalog ?? await loadLibraryCatalog(
+    options.catalogPath ?? join(repositoryRoot, 'content-src', 'library.json'),
+  );
   const errors = [...await auditSourceLocks(root)];
   const sourceManifest = await readSourceManifest(root);
   const sourceUrls = new Set(
@@ -87,14 +91,17 @@ export async function auditYear(sourceRoot, expectedYear) {
       continue;
     }
 
-    for (const error of validateProblem(record)) {
+    for (const error of validateProblem(record, catalog)) {
       errors.push(recordPath + error.slice(1));
     }
-    if (record?.year !== expectedYear) {
-      errors.push(recordPath + '.year: expected ' + expectedYear);
+    if (record?.collectionId !== 'putnam') {
+      errors.push(recordPath + '.collectionId: expected putnam');
     }
-    if (record?.code !== expected.code) {
-      errors.push(recordPath + '.code: expected ' + expected.code);
+    if (record?.setId !== String(expectedYear)) {
+      errors.push(recordPath + '.setId: expected ' + expectedYear);
+    }
+    if (record?.problemId !== expected.code) {
+      errors.push(recordPath + '.problemId: expected ' + expected.code);
     }
     if (record?.ordinal !== expected.ordinal) {
       errors.push(recordPath + '.ordinal: expected ' + expected.ordinal);
@@ -189,6 +196,9 @@ async function validateReviewNote(root, year, code, sourceFiles, figures, errors
   if (!/^##\s+Hint separation\s*$/mi.test(review)) {
     errors.push(reviewPath + ': missing Hint separation review');
   }
+  if (!/^-\s*Topic review:\s*complete\b/mi.test(review)) {
+    errors.push(reviewPath + ': Topic review must be marked complete');
+  }
 
   const tick = String.fromCharCode(96);
   for (const label of ['Problem', 'Solution']) {
@@ -236,6 +246,8 @@ function parseArguments(args) {
       options.year = Number.parseInt(takeValue(), 10);
     } else if (name === '--source') {
       options.source = takeValue();
+    } else if (name === '--catalog') {
+      options.catalogPath = takeValue();
     } else {
       throw new Error('Unknown argument: ' + argument);
     }
@@ -249,7 +261,7 @@ function parseArguments(args) {
 async function main() {
   const options = parseArguments(process.argv.slice(2));
   const sourceRoot = options.source ?? join(repositoryRoot, 'content-src', String(options.year));
-  const errors = await auditYear(sourceRoot, options.year);
+  const errors = await auditYear(sourceRoot, options.year, { catalogPath: options.catalogPath });
   if (errors.length > 0) {
     throw new Error(
       'Year ' + options.year + ' audit failed:\n' + errors.map((error) => '- ' + error).join('\n'),

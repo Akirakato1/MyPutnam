@@ -1,8 +1,11 @@
 {
-  "schemaVersion": 2,
-  "year": 2025,
-  "code": "A1",
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2025",
+  "problemId": "A1",
+  "label": "A1",
   "ordinal": 1,
+  "topics": ["algebra"],
   "statement": {
     "blocks": [
       {

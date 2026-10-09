@@ -49,9 +49,12 @@ export async function createYearFixture(t, year = 2024) {
 
   for (const [index, code] of YEAR_CODES.entries()) {
     const record = structuredClone(baseProblem);
-    record.year = year;
-    record.code = code;
+    record.collectionId = 'putnam';
+    record.setId = String(year);
+    record.problemId = code;
+    record.label = code;
     record.ordinal = index + 1;
+    record.topics = ['algebra'];
     record.statement.blocks[0].runs[0].text = 'Problem ' + code;
     record.solution.blocks.push({
       type: 'paragraph',
@@ -90,6 +93,7 @@ export function reviewNote(year, code) {
     + '- Statement fidelity: complete — checked against the locked problem source.\n'
     + '- Mathematical review: complete — proof route and conclusion agree with the published solution.\n'
     + '- Render review: complete — all authored documents are legible at the reference-pane width.\n\n'
+    + '- Topic review: complete — `algebra` is a reviewed fixture topic.\n\n'
     + '## Hint separation\n\n'
     + 'The nudge preserves the key idea; strategy names the reduction; knowledge supplies the needed fact; '
     + 'outline gives the proof route without duplicating the solution.\n';

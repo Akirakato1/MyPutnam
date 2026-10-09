@@ -22,7 +22,9 @@ test('build manifest records the requested immutable content version', async () 
     });
 
     assert.equal(manifest.contentVersion, '2025-upgrade-baseline');
-    assert.equal(manifest.schemaVersion, 2);
+    assert.equal(manifest.schemaVersion, 3);
+    assert.equal(manifest.collectionId, 'putnam');
+    assert.equal(manifest.setId, '2025');
     assert.deepEqual(manifest.problems[0].hints.map(({ stage }) => stage), [
       'nudge',
       'strategy',
@@ -38,12 +40,12 @@ test('build manifest records the requested immutable content version', async () 
       assert.equal(createHash('sha256').update(bytes).digest('hex'), asset.sha256, asset.path);
     }
 
-    const katexCss = await readFile(join(outputRoot, 'shared', 'katex', 'katex.min.css'), 'utf8');
+    const katexCss = await readFile(join(outputRoot, 'content', 'shared', 'katex', 'katex.min.css'), 'utf8');
     const fontUrls = [...katexCss.matchAll(/url\((?:'|")?([^)'"?]+)(?:'|")?\)/g)]
       .map((match) => match[1]);
     assert.ok(fontUrls.length > 0, 'KaTeX CSS must reference bundled fonts');
     for (const fontUrl of fontUrls) {
-      await access(join(outputRoot, 'shared', 'katex', ...fontUrl.split('/')));
+      await access(join(outputRoot, 'content', 'shared', 'katex', ...fontUrl.split('/')));
     }
   } finally {
     await rm(temporaryRoot, { recursive: true, force: true });

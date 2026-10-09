@@ -28,33 +28,38 @@ import {
 } from './archive-catalog.mjs';
 import { auditYear } from './audit-year.mjs';
 import { buildYear } from './build-year.mjs';
+import { loadLibraryCatalog } from './library-catalog.mjs';
 
 const executeFile = promisify(execFile);
 const databaseBuilder = fileURLToPath(new URL('./build-content-db.py', import.meta.url));
 
-export async function buildArchive(catalog, sourceRoot, outputRoot, reviewRoot) {
-  assertFinalArchiveComplete(catalog);
-
+export async function buildArchive({
+  archiveCatalog,
+  libraryCatalog,
+  sourceRoot,
+  outputRoot,
+  reviewRoot,
+}) {
+  assertFinalArchiveComplete(archiveCatalog);
   const roots = {
     source: resolve(sourceRoot),
     output: resolve(outputRoot),
     review: resolve(reviewRoot),
   };
   assertSeparateSafeRoots(roots);
-  await assertSourceYears(roots.source, catalog.targetYears);
+  await assertSourceYears(roots.source, archiveCatalog.targetYears);
 
   const auditErrors = [];
-  for (const year of catalog.targetYears) {
-    for (const error of await auditYear(join(roots.source, String(year)), year)) {
-      auditErrors.push(String(year) + '/' + error);
+  for (const year of archiveCatalog.targetYears) {
+    for (const error of await auditYear(join(roots.source, String(year)), year, { catalog: libraryCatalog })) {
+      auditErrors.push(`${year}/${error}`);
     }
   }
   if (auditErrors.length > 0) {
     throw new Error(
       'Archive source audit failed:\n'
         + auditErrors.sort((left, right) => left.localeCompare(right))
-          .map((error) => '- ' + error)
-          .join('\n'),
+          .map((error) => `- ${error}`).join('\n'),
     );
   }
 
@@ -62,51 +67,72 @@ export async function buildArchive(catalog, sourceRoot, outputRoot, reviewRoot) 
     mkdir(dirname(roots.output), { recursive: true }),
     mkdir(dirname(roots.review), { recursive: true }),
   ]);
-  let outputStaging = await mkdtemp(
-    join(dirname(roots.output), '.' + basename(roots.output) + '.tmp-'),
-  );
-  let reviewStaging = await mkdtemp(
-    join(dirname(roots.review), '.' + basename(roots.review) + '.tmp-'),
-  );
-
+  let outputStaging = await mkdtemp(join(dirname(roots.output), `.${basename(roots.output)}.tmp-`));
+  let reviewStaging = await mkdtemp(join(dirname(roots.review), `.${basename(roots.review)}.tmp-`));
   try {
-    const builtManifests = [];
-    for (const year of catalog.targetYears) {
-      builtManifests.push(await buildYear(
-        join(roots.source, String(year)),
-        join(reviewStaging, String(year)),
-        {
-          year,
-          contentVersion: catalog.contentVersion,
-        },
-      ));
+    const manifests = [];
+    let sharedSignature = null;
+    let sharedAssets = [];
+    for (const year of archiveCatalog.targetYears) {
+      const yearRoot = join(reviewStaging, String(year));
+      const manifest = await buildYear(join(roots.source, String(year)), yearRoot, {
+        year,
+        catalog: libraryCatalog,
+        contentVersion: archiveCatalog.contentVersion,
+      });
+      manifests.push(manifest);
+      const currentShared = manifest.assets
+        .filter(({ path }) => path.startsWith('content/shared/'))
+        .sort((left, right) => left.path.localeCompare(right.path));
+      const signature = canonicalJson(currentShared);
+      if (sharedSignature === null) {
+        sharedSignature = signature;
+        sharedAssets = currentShared;
+        await cp(join(yearRoot, 'content', 'shared'), join(outputStaging, 'content', 'shared'), { recursive: true });
+      } else if (signature !== sharedSignature) {
+        throw new Error('Generated shared assets differ between archive years');
+      }
+      await cp(
+        join(yearRoot, 'content', 'putnam', String(year)),
+        join(outputStaging, 'content', 'putnam', String(year)),
+        { recursive: true },
+      );
     }
-    builtManifests.sort((left, right) => left.year - right.year);
-    assertArchiveManifests(catalog, builtManifests);
-
-    const normalized = await consolidateArchive(
-      catalog,
-      builtManifests,
-      reviewStaging,
-      outputStaging,
+    manifests.sort((left, right) => left.setId.localeCompare(right.setId));
+    assertArchiveManifests(archiveCatalog, manifests);
+    const manifestReferences = manifests.map((manifest) => ({
+      collectionId: manifest.collectionId,
+      setId: manifest.setId,
+      path: `content/${manifest.collectionId}/${manifest.setId}/manifest.json`,
+      sha256: manifest.manifestSha256,
+    }));
+    const archiveManifest = {
+      schemaVersion: 3,
+      contentVersion: archiveCatalog.contentVersion,
+      catalogSha256: sha256(Buffer.from(canonicalJson(libraryCatalog), 'utf8')),
+      archiveSha256: sha256(Buffer.from(canonicalJson({ archiveCatalog, manifests }), 'utf8')),
+      years: [...archiveCatalog.targetYears],
+      problemCount: manifests.reduce((count, manifest) => count + manifest.problems.length, 0),
+      manifests: manifestReferences,
+      sharedAssets,
+    };
+    await mkdir(join(outputStaging, 'content'), { recursive: true });
+    await writeFile(
+      join(outputStaging, 'content', 'archive-manifest.json'),
+      `${JSON.stringify(archiveManifest, null, 2)}\n`,
+      'utf8',
     );
 
     await rm(roots.output, { recursive: true, force: true });
     await rename(outputStaging, roots.output);
     outputStaging = null;
-
     await rm(roots.review, { recursive: true, force: true });
     await rename(reviewStaging, roots.review);
     reviewStaging = null;
-
-    return normalized;
+    return { archiveManifest, manifests };
   } finally {
-    if (outputStaging) {
-      await rm(outputStaging, { recursive: true, force: true });
-    }
-    if (reviewStaging) {
-      await rm(reviewStaging, { recursive: true, force: true });
-    }
+    if (outputStaging) await rm(outputStaging, { recursive: true, force: true });
+    if (reviewStaging) await rm(reviewStaging, { recursive: true, force: true });
   }
 }
 
@@ -114,12 +140,9 @@ export function assertUniqueProblemKeys(manifests) {
   const seen = new Set();
   for (const manifest of manifests) {
     for (const problem of manifest.problems ?? []) {
-      const key = String(problem.year) + ':' + String(problem.code);
+      const key = String(problem.key);
       if (seen.has(key)) {
-        throw new Error(
-          'Duplicate problem key in archive manifests: '
-            + problem.year + ' ' + problem.code,
-        );
+        throw new Error(`Duplicate problem key in archive manifests: ${key}`);
       }
       seen.add(key);
     }
@@ -127,7 +150,7 @@ export function assertUniqueProblemKeys(manifests) {
 }
 
 function assertArchiveManifests(catalog, manifests) {
-  const years = manifests.map(({ year }) => year);
+  const years = manifests.map(({ setId }) => Number.parseInt(setId, 10));
   if (canonicalJson(years) !== canonicalJson(catalog.targetYears)) {
     throw new Error(
       'Archive manifest years do not match catalog target years: '
@@ -136,11 +159,13 @@ function assertArchiveManifests(catalog, manifests) {
   }
 
   for (const manifest of manifests) {
+    if (manifest.collectionId !== 'putnam') {
+      throw new Error(`Archive manifest collection must be putnam: ${manifest.collectionId}`);
+    }
     for (const problem of manifest.problems ?? []) {
-      if (problem.year !== manifest.year) {
+      if (problem.collectionId !== manifest.collectionId || problem.setId !== manifest.setId) {
         throw new Error(
-          'Problem ' + problem.code + ' has year ' + problem.year
-            + ', expected ' + manifest.year,
+          `Problem ${problem.key} does not match manifest ${manifest.collectionId}/${manifest.setId}`,
         );
       }
     }
@@ -372,8 +397,10 @@ function parseArguments(args) {
       options.output = takeValue();
     } else if (name === '--review') {
       options.review = takeValue();
-    } else if (name === '--catalog') {
-      options.catalog = takeValue();
+    } else if (name === '--archive-catalog' || name === '--catalog') {
+      options.archiveCatalog = takeValue();
+    } else if (name === '--library-catalog') {
+      options.libraryCatalog = takeValue();
     } else if (name === '--database') {
       options.database = takeValue();
     } else {
@@ -381,7 +408,7 @@ function parseArguments(args) {
     }
   }
 
-  for (const name of ['source', 'output', 'review', 'catalog', 'database']) {
+  for (const name of ['source', 'output', 'review', 'archiveCatalog', 'libraryCatalog', 'database']) {
     if (!options[name]) {
       throw new Error('--' + name + ' is required');
     }
@@ -391,13 +418,15 @@ function parseArguments(args) {
 
 async function main() {
   const options = parseArguments(process.argv.slice(2));
-  const catalog = await loadArchiveCatalog(options.catalog);
-  const result = await buildArchive(
-    catalog,
-    options.source,
-    options.output,
-    options.review,
-  );
+  const archiveCatalog = await loadArchiveCatalog(options.archiveCatalog);
+  const libraryCatalog = await loadLibraryCatalog(options.libraryCatalog);
+  const result = await buildArchive({
+    archiveCatalog,
+    libraryCatalog,
+    sourceRoot: options.source,
+    outputRoot: options.output,
+    reviewRoot: options.review,
+  });
   const manifestPaths = result.archiveManifest.manifests.map(
     ({ path }) => join(resolve(options.output), ...path.split('/')),
   );
@@ -405,7 +434,9 @@ async function main() {
   const databaseArguments = [
     databaseBuilder,
     '--catalog',
-    resolve(options.catalog),
+    resolve(options.libraryCatalog),
+    '--archive-catalog',
+    resolve(options.archiveCatalog),
   ];
   for (const manifest of manifestPaths) {
     databaseArguments.push('--manifest', manifest);

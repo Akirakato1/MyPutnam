@@ -1,16 +1,17 @@
-# Putnam problem source schema v2
+# Offline mathematics problem source schema v3
 
 Each problem is authored as one JSON record validated by
 `schema/problem.schema.json`. Start from `templates/problem.template.json` and
-run `npm --prefix tools/content test` before building a year.
+run `npm --prefix tools/content test` before building a set.
 
 ## Top-level fields
 
-- `schemaVersion`: always `2`.
-- `year`: competition year, from 1938 through the schema's supported upper
-  bound.
-- `code`: `A1`–`A6` or `B1`–`B6`.
-- `ordinal`: display order from 1 through 12 within the year.
+- `schemaVersion`: always `3`.
+- `collectionId`, `setId`, and `problemId`: exact case-sensitive path-safe ID
+  segments. Their canonical identity is `collectionId/setId/problemId`.
+- `label`: concise display label, independent of the problem ID.
+- `ordinal`: positive display order within the collection and set.
+- `topics`: one or more unique IDs from `content-src/library.json`.
 - `statement`: the complete problem as a nonempty rich document.
 - `hints`: exactly four hint objects in the fixed progression below.
 - `prerequisites`: one or more prerequisite refreshers, ordered from 1.
@@ -72,7 +73,7 @@ SHA-256 digest, and optional PDF page count. These locked originals remain
 development-only and are never runtime assets.
 
 Each `review/<code>.md` records statement fidelity, mathematical review, render
-review, the exact local problem and solution sources checked, and explicit
+review, topic review, the exact local problem and solution sources checked, and explicit
 separation between the four hint stages. A referenced local figure must exist
 beneath that problem's directory and have its own completed figure-review line.
 
@@ -99,10 +100,9 @@ only years that passed the source, schema, mathematical, hint, prerequisite,
 and rendering gates. The final archive builder rejects the catalog unless
 those arrays are identical.
 
-The deterministic archive layout contains one root `shared/` tree for KaTeX
-fonts/styles, one `<year>/manifest.json` plus problem tree per year, and an
-`archive-manifest.json`. Year manifests retain problem-relative asset paths;
-the database builder prefixes them with `content/<year>/`. Archive database
+The deterministic asset layout contains `content/shared/` for KaTeX
+fonts/styles and `content/<collection>/<set>/manifest.json` plus each problem
+tree. Manifest asset paths are already relative to the Android asset root. Archive database
 metadata includes the global content version, sorted included years, range,
 year and problem counts, a catalog SHA-256, and a composite SHA-256 over the
 catalog plus sorted manifests.

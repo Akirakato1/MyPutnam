@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "contentSchemaVersion": 2,
+  "contentSchemaVersion": 3,
   "contentVersion": "archive-1962-2025.1",
   "targetYears": [
     1962,
@@ -72,4 +72,3 @@
     2025
   ]
 }
-
