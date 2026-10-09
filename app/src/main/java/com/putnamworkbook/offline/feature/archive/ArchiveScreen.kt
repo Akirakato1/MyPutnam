@@ -21,49 +21,136 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import com.putnamworkbook.offline.domain.model.ProblemKey
+import com.putnamworkbook.offline.domain.model.ProblemSetKey
 
 @Composable
 fun ArchiveScreen(
     state: ArchiveUiState,
     onBack: () -> Unit,
-    onSelectYear: (Int) -> Unit,
+    onSelectTopic: (String?) -> Unit,
+    onSelectSet: (ProblemSetKey) -> Unit,
+    onSelectProblem: (ProblemKey) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .testTag("archive-years-screen"),
+            .testTag("library-screen"),
     ) {
-        ArchiveHeader(title = "Select a year", onBack = onBack)
+        ArchiveHeader(title = "Select a problem", onBack = onBack)
+        TopicFilterRow(
+            topics = state.topics,
+            selectedTopicId = state.selectedTopicId,
+            onSelectTopic = onSelectTopic,
+        )
+        state.progressError?.let { error ->
+            Text(error, color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(horizontal = 16.dp))
+        }
+        if (state.selectedTopicId == null) {
+            AllProblemsBody(state, onSelectSet)
+        } else {
+            TopicProblemsBody(state, onSelectProblem)
+        }
+    }
+}
+
+@Composable
+private fun AllProblemsBody(
+    state: ArchiveUiState,
+    onSelectSet: (ProblemSetKey) -> Unit,
+) {
         when {
-            state.isLoadingYears -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            state.isLoadingCatalog -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
-            state.errorMessage != null -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(state.errorMessage, color = MaterialTheme.colorScheme.error)
+            state.catalogError != null -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(state.catalogError, color = MaterialTheme.colorScheme.error)
             }
-            state.years.isEmpty() -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("No archive years are available in this build")
+            state.collections.isEmpty() -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("No installed problem collections are available")
             }
             else -> LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .testTag("archive-years-list"),
+                    .testTag("library-catalog-list"),
             ) {
-                items(state.years, key = { it }) { year ->
-                    Surface(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { onSelectYear(year) }
-                            .testTag("archive-year-$year"),
-                    ) {
+                state.collections.forEach { collection ->
+                    item(key = "collection-${collection.id}") {
                         Text(
-                            text = year.toString(),
+                            text = collection.title,
                             style = MaterialTheme.typography.headlineSmall,
-                            modifier = Modifier.padding(horizontal = 32.dp, vertical = 20.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 24.dp, vertical = 14.dp)
+                                .testTag("library-collection-${collection.id}"),
                         )
                     }
-                    HorizontalDivider()
+                    items(
+                        items = state.setsByCollection[collection.id].orEmpty(),
+                        key = { it.key.canonical },
+                    ) { set ->
+                        Surface(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { onSelectSet(set.key) }
+                                .testTag("library-set-${set.key.canonical}"),
+                        ) {
+                            Text(
+                                text = set.title,
+                                style = MaterialTheme.typography.titleLarge,
+                                modifier = Modifier.padding(horizontal = 40.dp, vertical = 18.dp),
+                            )
+                        }
+                        HorizontalDivider()
+                    }
+                }
+            }
+        }
+}
+
+@Composable
+private fun TopicProblemsBody(
+    state: ArchiveUiState,
+    onSelectProblem: (ProblemKey) -> Unit,
+) {
+    when {
+        state.isLoadingTopicProblems -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+        state.topicError != null -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text(state.topicError, color = MaterialTheme.colorScheme.error)
+        }
+        state.topicProblems.isEmpty() -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text("No installed problems match this topic")
+        }
+        else -> LazyColumn(Modifier.fillMaxSize().testTag("library-topic-results")) {
+            state.collections.forEach { collection ->
+                state.setsByCollection[collection.id].orEmpty().forEach { set ->
+                    val rows = state.topicProblems.filter { it.summary.key.setKey == set.key }
+                    if (rows.isNotEmpty()) {
+                        item(key = "topic-heading-${set.key.canonical}") {
+                            Text(
+                                "${collection.title} — ${set.title}",
+                                style = MaterialTheme.typography.titleLarge,
+                                modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
+                            )
+                        }
+                        items(rows, key = { it.summary.key.canonical }) { row ->
+                            Surface(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable { onSelectProblem(row.summary.key) }
+                                    .testTag("library-problem-${row.summary.key.canonical}"),
+                            ) {
+                                Text(
+                                    "${row.summary.label} · ${row.progress.status.name.lowercase().replace('_', ' ')}",
+                                    modifier = Modifier.padding(horizontal = 40.dp, vertical = 16.dp),
+                                )
+                            }
+                            HorizontalDivider()
+                        }
+                    }
                 }
             }
         }

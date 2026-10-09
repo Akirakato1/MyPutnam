@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [ProblemProgressEntity::class, AppSettingEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = true,
 )
 abstract class UserDatabase : RoomDatabase() {

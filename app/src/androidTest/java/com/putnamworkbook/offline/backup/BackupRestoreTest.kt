@@ -7,6 +7,7 @@ import com.putnamworkbook.offline.PutnamApplication
 import com.putnamworkbook.offline.data.user.RoomProgressRepository
 import com.putnamworkbook.offline.data.user.RoomSettingsRepository
 import com.putnamworkbook.offline.data.user.UserDatabase
+import com.putnamworkbook.offline.di.initializeContent
 import com.putnamworkbook.offline.domain.model.AppTheme
 import com.putnamworkbook.offline.domain.model.Handedness
 import com.putnamworkbook.offline.domain.model.PaperStyle
@@ -59,7 +60,7 @@ class BackupRestoreTest {
         val settings = RoomSettingsRepository(database)
         val notebooks = FileNotebookRepository(notebookRoot)
         val coordinator = BackupCoordinator(database, notebookRoot)
-        val key = ProblemKey(2025, "A1")
+        val key = ProblemKey("putnam", "2025", "A1")
 
         progress.markOpened(key)
         progress.revealNextHint(key)
@@ -87,7 +88,7 @@ class BackupRestoreTest {
         assertSnapshotEquals(expectedNotebookBytes, snapshot(notebookRoot))
 
         val workspace = WorkspaceViewModel(
-            contentRepository = application.container.contentRepository,
+            contentRepository = application.container.initializeContent(),
             progressRepository = progress,
             scope = CoroutineScope(Dispatchers.Default),
         )

@@ -35,12 +35,11 @@ class ContentAssetUpgradeTest {
 
     @Test
     fun changedPackagedAssetReplacesOnlyTheImmutableContentDatabase() = runBlocking {
-        val initial = ContentDatabase.create(context, DATABASE_NAME, PREFERENCES_NAME)
-        val packagedVersion = initial.contentDao().meta("contentVersion")
-        assertEquals("2025.2", packagedVersion)
-        assertEquals("2", initial.contentDao().meta("contentSchemaVersion"))
+        val initial = ContentDatabase.create(context, DATABASE_NAME, PREFERENCES_NAME, FIXTURE_ASSET)
+        val packagedVersion = initial.contentDao().meta("content_version")
+        assertEquals("3", initial.contentDao().meta("schema_version"))
         initial.openHelper.writableDatabase.execSQL(
-            "UPDATE content_meta SET value = 'stale-version' WHERE `key` = 'contentVersion'",
+            "UPDATE content_meta SET value = 'stale-version' WHERE `key` = 'content_version'",
         )
         initial.close()
 
@@ -49,9 +48,9 @@ class ContentAssetUpgradeTest {
             .putString(ContentDatabase.CONTENT_ASSET_HASH_KEY, "obsolete-asset-hash")
             .commit()
 
-        val refreshed = ContentDatabase.create(context, DATABASE_NAME, PREFERENCES_NAME)
+        val refreshed = ContentDatabase.create(context, DATABASE_NAME, PREFERENCES_NAME, FIXTURE_ASSET)
         try {
-            assertEquals(packagedVersion, refreshed.contentDao().meta("contentVersion"))
+            assertEquals(packagedVersion, refreshed.contentDao().meta("content_version"))
         } finally {
             refreshed.close()
         }
@@ -60,5 +59,6 @@ class ContentAssetUpgradeTest {
     private companion object {
         const val DATABASE_NAME = "content-upgrade-test.db"
         const val PREFERENCES_NAME = "content-upgrade-test-state"
+        const val FIXTURE_ASSET = "databases/content-fixture.db"
     }
 }

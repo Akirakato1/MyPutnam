@@ -8,18 +8,23 @@ import java.security.MessageDigest
 
 @Database(
     entities = [
+        CollectionEntity::class,
+        ProblemSetEntity::class,
+        TopicEntity::class,
         ProblemEntity::class,
+        ProblemTopicEntity::class,
         HintEntity::class,
         PrerequisiteEntity::class,
         ContentMetaEntity::class,
     ],
-    version = 2,
+    version = 3,
     exportSchema = true,
 )
 abstract class ContentDatabase : RoomDatabase() {
     abstract fun contentDao(): ContentDao
 
     companion object {
+        const val SCHEMA_VERSION = 3
         internal const val DATABASE_NAME = "content.db"
         internal const val CONTENT_STATE_PREFERENCES = "immutable-content-state"
         internal const val CONTENT_ASSET_HASH_KEY = "asset-sha256"
@@ -36,9 +41,10 @@ abstract class ContentDatabase : RoomDatabase() {
             context: Context,
             databaseName: String,
             statePreferencesName: String,
+            contentAssetPath: String = CONTENT_ASSET_PATH,
         ): ContentDatabase {
             val applicationContext = context.applicationContext
-            val packagedHash = applicationContext.assets.open(CONTENT_ASSET_PATH).use { input ->
+            val packagedHash = applicationContext.assets.open(contentAssetPath).use { input ->
                 val digest = MessageDigest.getInstance("SHA-256")
                 val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
                 while (true) {
@@ -61,7 +67,7 @@ abstract class ContentDatabase : RoomDatabase() {
                 ContentDatabase::class.java,
                 databaseName,
             )
-                .createFromAsset(CONTENT_ASSET_PATH)
+                .createFromAsset(contentAssetPath)
                 .build()
             database.openHelper.writableDatabase
             state.edit().putString(CONTENT_ASSET_HASH_KEY, packagedHash).apply()

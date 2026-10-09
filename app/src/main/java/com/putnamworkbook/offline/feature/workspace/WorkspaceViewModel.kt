@@ -35,7 +35,7 @@ class WorkspaceViewModel(
     fun open(key: ProblemKey) = launchOperation {
         currentKey = key
         mutableUiState.value = WorkspaceUiState(key = key, isLoading = true)
-        val content = requireNotNull(contentRepository.problem(key)) { "Problem ${key.year} ${key.code} is unavailable" }
+        val content = requireNotNull(contentRepository.problem(key)) { "Problem ${key.canonical} is unavailable" }
         progressRepository.markOpened(key)
         var progress = progressRepository.observe(key).first()
         notebookPageCount = progress.notebookPageCount

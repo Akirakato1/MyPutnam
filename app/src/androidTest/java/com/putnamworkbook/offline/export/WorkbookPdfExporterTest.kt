@@ -14,11 +14,15 @@ import com.putnamworkbook.offline.data.content.ContentRepository
 import com.putnamworkbook.offline.data.content.HintContent
 import com.putnamworkbook.offline.data.content.ProblemContent
 import com.putnamworkbook.offline.data.content.ProblemSummary
+import com.putnamworkbook.offline.data.content.LibraryCollection
+import com.putnamworkbook.offline.data.content.ProblemSetSummary
+import com.putnamworkbook.offline.data.content.TopicSummary
 import com.putnamworkbook.offline.data.user.RoomProgressRepository
 import com.putnamworkbook.offline.data.user.UserDatabase
 import com.putnamworkbook.offline.domain.model.BrushSpec
 import com.putnamworkbook.offline.domain.model.PaperStyle
 import com.putnamworkbook.offline.domain.model.ProblemKey
+import com.putnamworkbook.offline.domain.model.ProblemSetKey
 import com.putnamworkbook.offline.domain.model.HintStage
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
 import com.putnamworkbook.offline.notebook.model.StrokeSample
@@ -44,7 +48,7 @@ import java.util.UUID
 
 @RunWith(AndroidJUnit4::class)
 class WorkbookPdfExporterTest {
-    private val key = ProblemKey(2025, "A1")
+    private val key = ProblemKey("putnam", "2025", "A1")
     private lateinit var database: UserDatabase
     private lateinit var testRoot: Path
     private lateinit var notebookRoot: Path
@@ -228,7 +232,7 @@ class WorkbookPdfExporterTest {
     }
 
     private fun problemContent() = ProblemContent(
-        summary = ProblemSummary(key, 1),
+        summary = ProblemSummary(key, "A1", 1, "Putnam Competition", "2025", 2025),
         statementAssetPath = "statement.html",
         statementSha256 = "statement",
         hints = (1..4).map { index ->
@@ -329,8 +333,11 @@ class WorkbookPdfExporterTest {
 private class FakeContentRepository(
     private val content: ProblemContent,
 ) : ContentRepository {
-    override suspend fun years() = listOf(content.summary.key.year)
-    override suspend fun problems(year: Int) = listOf(content.summary)
+    override suspend fun collections() = listOf(LibraryCollection("putnam", "Putnam Competition", "competition", 0))
+    override suspend fun sets(collectionId: String) = listOf(ProblemSetSummary(content.summary.key.setKey, "2025", 0, 2025))
+    override suspend fun topics() = listOf(TopicSummary("algebra", "Algebra", 0))
+    override suspend fun problems(setKey: ProblemSetKey) = listOf(content.summary)
+    override suspend fun problemsByTopic(topicId: String) = listOf(content.summary)
     override suspend fun problem(key: ProblemKey) = content.takeIf { it.summary.key == key }
 }
 

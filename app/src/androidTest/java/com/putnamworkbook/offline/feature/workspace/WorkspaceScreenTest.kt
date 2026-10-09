@@ -73,7 +73,7 @@ class WorkspaceScreenTest {
             activeHintIndex = 0,
             content = state.content!!.copy(
                 hints = state.content!!.hints.mapIndexed { index, hint ->
-                    if (index == 0) hint.copy(assetPath = "content/2025/problems/A1/missing-hint.html") else hint
+                    if (index == 0) hint.copy(assetPath = "content/putnam/2025/problems/A1/missing-hint.html") else hint
                 },
             ),
         )
@@ -179,7 +179,7 @@ class WorkspaceScreenTest {
                 fixture.copy(
                     content = fixture.content!!.copy(
                         hints = fixture.content!!.hints.mapIndexed { index, hint ->
-                            if (index == 0) hint.copy(assetPath = "content/2025/problems/A1/missing.html") else hint
+                            if (index == 0) hint.copy(assetPath = "content/putnam/2025/problems/A1/missing.html") else hint
                         },
                     ),
                 )
@@ -299,7 +299,7 @@ class WorkspaceScreenTest {
         revealedHints: Int = 0,
         solutionRevealed: Boolean = false,
     ): WorkspaceUiState {
-        val key = ProblemKey(2025, "A1")
+        val key = ProblemKey("putnam", "2025", "A1")
         return WorkspaceUiState(
             key = key,
             progress = ProblemProgress(
@@ -316,13 +316,13 @@ class WorkspaceScreenTest {
     }
 
     private fun referenceState(tab: ReferenceTab): WorkspaceUiState {
-        val key = ProblemKey(2025, "A1")
+        val key = ProblemKey("putnam", "2025", "A1")
         val hints = (1..4).map { index ->
             HintContent(
                 order = index,
                 stage = HintStage.entries[index - 1],
                 title = "Hint $index",
-                assetPath = "content/2025/problems/A1/hint-$index.html",
+                assetPath = "content/putnam/2025/problems/A1/hint-$index.html",
                 sha256 = index.toString().repeat(64),
             )
         }
@@ -330,25 +330,25 @@ class WorkspaceScreenTest {
             ContentDocument(
                 1,
                 "First theorem",
-                "content/2025/problems/A1/prerequisite-1.html",
+                "content/putnam/2025/problems/A1/prerequisite-1.html",
                 "a".repeat(64),
             ),
             ContentDocument(
                 2,
                 "Second theorem",
-                "content/2025/problems/A1/prerequisite-2.html",
+                "content/putnam/2025/problems/A1/prerequisite-2.html",
                 "b".repeat(64),
             ),
         )
         return WorkspaceUiState(
             key = key,
             content = ProblemContent(
-                summary = ProblemSummary(key, 1),
-                statementAssetPath = "content/2025/problems/A1/statement.html",
+                summary = ProblemSummary(key, "A1", 1, "Putnam Competition", "2025", 2025),
+                statementAssetPath = "content/putnam/2025/problems/A1/statement.html",
                 statementSha256 = "0".repeat(64),
                 hints = hints,
                 prerequisites = prerequisites,
-                solutionAssetPath = "content/2025/problems/A1/solution.html",
+                solutionAssetPath = "content/putnam/2025/problems/A1/solution.html",
                 solutionSha256 = "c".repeat(64),
                 attribution = emptyList(),
             ),

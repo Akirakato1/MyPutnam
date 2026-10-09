@@ -25,7 +25,7 @@ class FileNotebookRepositoryTest {
     @get:Rule
     val temporaryFolder = TemporaryFolder()
 
-    private val key = ProblemKey(2025, "A1")
+    private val key = ProblemKey("putnam", "2025", "A1")
 
     @Test
     fun tenEditsWriteEveryStrokeButReplaceTheManifestOnlyOnce() = runBlocking {
@@ -61,7 +61,7 @@ class FileNotebookRepositoryTest {
         val initialRepository = FileNotebookRepository(root, durableWriter)
         val before = initialRepository.loadOrCreate(key, PaperStyle.BLANK)
         val pageId = before.pages.single().id
-        val manifest = root.resolve("2025-A1/manifest.bin")
+        val manifest = root.resolve("putnam/2025/A1/manifest.bin")
         val beforeBytes = Files.readAllBytes(manifest)
         val edit = NotebookEdit(
             NotebookEditGroup("draw-retry", listOf("retry"), emptyList()),
@@ -134,7 +134,7 @@ class FileNotebookRepositoryTest {
             listOf("first", "third"),
             repository.loadStrokes(key, pageId).map { it.id },
         )
-        assertTrue(Files.exists(root.resolve("2025-A1/strokes/$pageId/second.stroke")))
+        assertTrue(Files.exists(root.resolve("putnam/2025/A1/strokes/$pageId/second.stroke")))
     }
 
     @Test
@@ -143,7 +143,7 @@ class FileNotebookRepositoryTest {
         val durableWriter = DurableAtomicFileWriter()
         val repository = FileNotebookRepository(root, durableWriter)
         val pageId = repository.loadOrCreate(key, PaperStyle.BLANK).pages.single().id
-        val manifest = root.resolve("2025-A1/manifest.bin")
+        val manifest = root.resolve("putnam/2025/A1/manifest.bin")
         val before = Files.readAllBytes(manifest)
         val failingWriter = AtomicFileWriter { target, bytes ->
             if (target.fileName.toString() == "manifest.bin") throw IOException("injected failure")
@@ -158,7 +158,7 @@ class FileNotebookRepositoryTest {
         }
         assertEquals("injected failure", error.message)
         assertArrayEquals(before, Files.readAllBytes(manifest))
-        assertTrue(Files.exists(root.resolve("2025-A1/strokes/$pageId/orphan.stroke")))
+        assertTrue(Files.exists(root.resolve("putnam/2025/A1/strokes/$pageId/orphan.stroke")))
         assertTrue(FileNotebookRepository(root).loadStrokes(key, pageId).isEmpty())
     }
 
@@ -167,63 +167,49 @@ class FileNotebookRepositoryTest {
         val root = temporaryFolder.newFolder("corrupt").toPath()
         val repository = FileNotebookRepository(root)
         repository.loadOrCreate(key, PaperStyle.BLANK)
-        val manifest = root.resolve("2025-A1/manifest.bin")
+        val manifest = root.resolve("putnam/2025/A1/manifest.bin")
         val corruptBytes = byteArrayOf(1, 2, 3, 4, 5)
         Files.write(manifest, corruptBytes)
 
         val recovered = repository.loadOrCreate(key, PaperStyle.SQUARE_GRID)
 
         assertEquals(PaperStyle.SQUARE_GRID, recovered.pages.single().paperStyle)
-        assertArrayEquals(corruptBytes, Files.readAllBytes(root.resolve("2025-A1/manifest.bin.corrupt")))
+        assertArrayEquals(corruptBytes, Files.readAllBytes(root.resolve("putnam/2025/A1/manifest.bin.corrupt")))
         assertFalse(Files.readAllBytes(manifest).contentEquals(corruptBytes))
     }
 
     @Test
-    fun versionOneManifestIsBackedUpOnceAndMigratedAtomically() = runBlocking {
+    fun versionOneManifestIsRejectedWithoutMigration() = runBlocking {
         val root = temporaryFolder.newFolder("migration").toPath()
-        val notebookDirectory = root.resolve("2025-A1")
+        val notebookDirectory = root.resolve("putnam/2025/A1")
         Files.createDirectories(notebookDirectory)
         val manifest = notebookDirectory.resolve("manifest.bin")
         val legacyBytes = versionOneManifest(listOf("visible" to true, "undone" to false))
         Files.write(manifest, legacyBytes)
 
-        val repository = FileNotebookRepository(root)
-        val migrated = repository.loadOrCreate(key, PaperStyle.SQUARE_GRID)
-
-        assertEquals(2, migrated.schemaVersion)
-        assertEquals(listOf("visible"), migrated.pages.single().strokes.map { it.strokeId })
-        val backup = notebookDirectory.resolve("manifest.bin.v1.bak")
-        assertArrayEquals(legacyBytes, Files.readAllBytes(backup))
-        assertFalse(legacyBytes.contentEquals(Files.readAllBytes(manifest)))
-
-        val sentinelBackup = byteArrayOf(9, 8, 7)
-        Files.write(backup, sentinelBackup)
-        FileNotebookRepository(root).loadExisting(key)
-        assertArrayEquals(sentinelBackup, Files.readAllBytes(backup))
+        assertThrows(IOException::class.java) {
+            runBlocking { FileNotebookRepository(root).loadExisting(key) }
+        }
+        assertArrayEquals(legacyBytes, Files.readAllBytes(manifest))
+        assertFalse(Files.exists(notebookDirectory.resolve("manifest.bin.v1.bak")))
     }
 
     @Test
-    fun failedVersionOneMigrationLeavesOriginalManifestInPlace() = runBlocking {
+    fun versionTwoManifestIsAlsoRejected() = runBlocking {
         val root = temporaryFolder.newFolder("failed-migration").toPath()
-        val notebookDirectory = root.resolve("2025-A1")
+        val notebookDirectory = root.resolve("putnam/2025/A1")
         Files.createDirectories(notebookDirectory)
         val manifest = notebookDirectory.resolve("manifest.bin")
-        val legacyBytes = versionOneManifest(listOf("visible" to true))
+        val legacyBytes = versionOneManifest(listOf("visible" to true)).copyOf().also { bytes ->
+            bytes[7] = 2
+        }
         Files.write(manifest, legacyBytes)
-        val durableWriter = DurableAtomicFileWriter()
-        val failingWriter = AtomicFileWriter { target, bytes ->
-            if (target.fileName.toString() == "manifest.bin") throw IOException("injected migration failure")
-            durableWriter.write(target, bytes)
-        }
 
-        val error = assertThrows(IOException::class.java) {
-            runBlocking { FileNotebookRepository(root, failingWriter).loadOrCreate(key, PaperStyle.BLANK) }
+        assertThrows(IOException::class.java) {
+            runBlocking { FileNotebookRepository(root).loadExisting(key) }
         }
-
-        assertEquals("injected migration failure", error.message)
         assertArrayEquals(legacyBytes, Files.readAllBytes(manifest))
-        assertFalse(Files.exists(notebookDirectory.resolve("manifest.bin.corrupt")))
-        assertArrayEquals(legacyBytes, Files.readAllBytes(notebookDirectory.resolve("manifest.bin.v1.bak")))
+        assertFalse(Files.exists(notebookDirectory.resolve("manifest.bin.v2.bak")))
     }
 
     @Test
@@ -256,8 +242,8 @@ class FileNotebookRepositoryTest {
             DataOutputStream(bytes).use { output ->
                 output.writeInt(0x50574E42)
                 output.writeInt(1)
-                output.writeInt(key.year)
-                output.writeUTF(key.code)
+                output.writeInt(2025)
+                output.writeUTF("A1")
                 output.writeInt(1)
                 output.writeUTF("legacy-page")
                 output.writeUTF(PaperStyle.BLANK.name)

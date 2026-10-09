@@ -1,6 +1,7 @@
 package com.putnamworkbook.offline.feature.home
 
-import com.putnamworkbook.offline.data.user.ProblemProgress
+import com.putnamworkbook.offline.data.content.ContentRepository
+import com.putnamworkbook.offline.data.content.ProblemSummary
 import com.putnamworkbook.offline.data.user.ProgressRepository
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -13,12 +14,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 data class HomeUiState(
-    val recentProblem: ProblemProgress? = null,
+    val recentProblem: ProblemSummary? = null,
     val errorMessage: String? = null,
 )
 
 class HomeViewModel(
     progressRepository: ProgressRepository,
+    private val contentRepository: ContentRepository,
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate),
 ) {
     private val mutableUiState = MutableStateFlow(HomeUiState())
@@ -28,7 +30,9 @@ class HomeViewModel(
         scope.launch {
             try {
                 progressRepository.observeRecent().collect { recent ->
-                    mutableUiState.value = HomeUiState(recentProblem = recent)
+                    mutableUiState.value = HomeUiState(
+                        recentProblem = recent?.let { contentRepository.problem(it.key)?.summary },
+                    )
                 }
             } catch (error: CancellationException) {
                 throw error

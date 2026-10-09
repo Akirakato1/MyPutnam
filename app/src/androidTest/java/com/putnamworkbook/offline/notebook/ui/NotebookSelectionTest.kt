@@ -285,7 +285,7 @@ class NotebookSelectionTest {
         brush: BrushSpec = BrushSpec(),
     ) = NotebookUiState(
         document = NotebookDocument(
-            key = ProblemKey(2025, "A1"),
+            key = ProblemKey("putnam", "2025", "A1"),
             pages = listOf(NotebookPage("page", PaperStyle.BLANK)),
         ),
         strokes = strokes,

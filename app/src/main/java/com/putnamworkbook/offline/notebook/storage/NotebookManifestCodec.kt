@@ -22,8 +22,7 @@ internal object NotebookManifestCodec {
         DataOutputStream(bytes).use { output ->
             output.writeInt(MAGIC)
             output.writeInt(document.schemaVersion)
-            output.writeInt(document.key.year)
-            output.writeUTF(document.key.code)
+            output.writeUTF(document.key.canonical)
             output.writeInt(document.pages.size)
             document.pages.forEach { page ->
                 output.writeUTF(page.id)
@@ -50,14 +49,12 @@ internal object NotebookManifestCodec {
             DataInputStream(ByteArrayInputStream(bytes)).use { input ->
                 if (input.readInt() != MAGIC) throw IOException("Invalid notebook manifest signature")
                 val sourceVersion = input.readInt()
-                if (sourceVersion !in SUPPORTED_VERSIONS) {
+                if (sourceVersion != NotebookDocument.SCHEMA_VERSION) {
                     throw IOException("Unsupported notebook schema version: $sourceVersion")
                 }
-                val key = ProblemKey(input.readInt(), input.readUTF())
+                val key = ProblemKey.parse(input.readUTF())
                 val pageCount = input.checkedCount("notebook page", MAX_PAGES, minimum = 1)
-                val pages = List(pageCount) {
-                    if (sourceVersion == LEGACY_VERSION) decodeLegacyPage(input) else decodeCurrentPage(input)
-                }
+                val pages = List(pageCount) { decodeCurrentPage(input) }
                 if (input.available() != 0) throw IOException("Notebook manifest contains trailing data")
                 DecodedNotebookManifest(
                     sourceVersion = sourceVersion,
@@ -69,33 +66,6 @@ internal object NotebookManifestCodec {
         } catch (error: RuntimeException) {
             throw IOException("Invalid notebook manifest", error)
         }
-
-    private fun decodeLegacyPage(input: DataInputStream): NotebookPage {
-        val id = input.readUTF()
-        val paperStyle = enumValue<PaperStyle>(input.readUTF(), "paper style")
-        val strokeCount = input.checkedCount("page stroke", MAX_STROKES_PER_PAGE)
-        val activeStrokes = List(strokeCount) {
-            StrokeReference(input.readUTF(), input.readBoolean())
-        }.filter { it.active }
-        val history = if (activeStrokes.isEmpty()) {
-            emptyList()
-        } else {
-            listOf(
-                NotebookEditGroup(
-                    id = LEGACY_EDIT_ID,
-                    activatedStrokeIds = activeStrokes.map { it.strokeId },
-                    deactivatedStrokeIds = emptyList(),
-                ),
-            )
-        }
-        return NotebookPage(
-            id = id,
-            paperStyle = paperStyle,
-            strokes = activeStrokes,
-            editHistory = history,
-            appliedEditCount = history.size,
-        )
-    }
 
     private fun decodeCurrentPage(input: DataInputStream): NotebookPage {
         val id = input.readUTF()
@@ -137,9 +107,6 @@ internal object NotebookManifestCodec {
         }
 
     private const val MAGIC = 0x50574E42
-    private const val LEGACY_VERSION = 1
-    private const val LEGACY_EDIT_ID = "legacy-initial"
-    private val SUPPORTED_VERSIONS = setOf(LEGACY_VERSION, NotebookDocument.SCHEMA_VERSION)
     private const val MAX_PAGES = 10_000
     private const val MAX_STROKES_PER_PAGE = 1_000_000
     private const val MAX_EDITS_PER_PAGE = 1_000_000

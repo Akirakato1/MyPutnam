@@ -42,7 +42,7 @@ class ProgressRepositoryTest {
 
     @Test
     fun openHintsSolutionAndCompletionHaveIndependentMonotonicState() = runBlocking {
-        val key = ProblemKey(2025, "A1")
+        val key = ProblemKey("putnam", "2025", "A1")
 
         val untouched = progress.observe(key).first()
         assertEquals(ProblemStatus.UNTOUCHED, untouched.status)
@@ -74,8 +74,8 @@ class ProgressRepositoryTest {
 
     @Test
     fun notebookStateAndRecentProblemAdvanceTogether() = runBlocking {
-        val first = ProblemKey(2025, "A1")
-        val second = ProblemKey(2025, "B1")
+        val first = ProblemKey("putnam", "2025", "A1")
+        val second = ProblemKey("course", "unit", "A1")
         progress.markOpened(first)
 
         now = 2_000L

@@ -10,6 +10,7 @@ import com.putnamworkbook.offline.domain.model.Handedness
 import com.putnamworkbook.offline.domain.model.PalmGuardSettings
 import com.putnamworkbook.offline.domain.model.PaperStyle
 import com.putnamworkbook.offline.domain.model.ProblemStatus
+import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.domain.model.ReferenceTab
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -155,10 +156,10 @@ private data class UserSnapshot(
 )
 
 private object UserSnapshotCodec {
-    private const val SCHEMA_VERSION = 1
+    private const val SCHEMA_VERSION = 2
 
     fun encode(snapshot: UserSnapshot): ByteArray {
-        val progress = snapshot.progress.sortedWith(compareBy(ProblemProgressEntity::year, ProblemProgressEntity::problemCode))
+        val progress = snapshot.progress.sortedBy(ProblemProgressEntity::problemKey)
         val root = JsonValue.ObjectValue(
             linkedMapOf(
                 "schemaVersion" to number(SCHEMA_VERSION),
@@ -174,10 +175,10 @@ private object UserSnapshotCodec {
         root.requireOnly("schemaVersion", "progress", "settings")
         val schema = root.requiredInt("schemaVersion")
         if (schema != SCHEMA_VERSION) throw BackupFormatException("Unsupported user snapshot schema version: $schema")
-        val seen = mutableSetOf<Pair<Int, String>>()
+        val seen = mutableSetOf<String>()
         val progress = root.requiredArray("progress").mapIndexed { index, value ->
             parseProgress(value.asObject("progress row $index")).also { row ->
-                if (!seen.add(row.year to row.problemCode)) {
+                if (!seen.add(row.problemKey)) {
                     throw BackupFormatException("User snapshot contains duplicate progress rows")
                 }
             }
@@ -191,8 +192,7 @@ private object UserSnapshotCodec {
 
     private fun progressToJson(row: ProblemProgressEntity) = JsonValue.ObjectValue(
         linkedMapOf(
-            "year" to number(row.year),
-            "problemCode" to string(row.problemCode),
+            "problemKey" to string(row.problemKey),
             "status" to string(row.status),
             "revealedHintCount" to number(row.revealedHintCount),
             "solutionRevealed" to boolean(row.solutionRevealed),
@@ -205,26 +205,26 @@ private object UserSnapshotCodec {
 
     private fun parseProgress(row: Map<String, JsonValue>): ProblemProgressEntity {
         row.requireOnly(
-            "year", "problemCode", "status", "revealedHintCount", "solutionRevealed",
+            "problemKey", "status", "revealedHintCount", "solutionRevealed",
             "notebookPageCount", "activePageIndex", "activeReferenceTab", "lastOpenedAt",
         )
-        val year = row.requiredInt("year")
-        val code = row.requiredString("problemCode")
+        val problemKey = row.requiredString("problemKey")
+        try {
+            ProblemKey.parse(problemKey)
+        } catch (error: IllegalArgumentException) {
+            throw BackupFormatException("Invalid problem key in user snapshot", error)
+        }
         val status = enumName<ProblemStatus>(row.requiredString("status"), "problem status")
         val hints = row.requiredInt("revealedHintCount")
         val pageCount = row.requiredInt("notebookPageCount")
         val pageIndex = row.requiredInt("activePageIndex")
         val reference = enumName<ReferenceTab>(row.requiredString("activeReferenceTab"), "reference tab")
         val lastOpened = row.requiredLong("lastOpenedAt")
-        if (year !in 1938..2100 || !code.matches(Regex("[AB][1-6]"))) {
-            throw BackupFormatException("Invalid problem key in user snapshot")
-        }
         if (hints !in 0..4 || pageCount < 1 || pageIndex !in 0 until pageCount || lastOpened < 0) {
             throw BackupFormatException("Invalid progress values in user snapshot")
         }
         return ProblemProgressEntity(
-            year = year,
-            problemCode = code,
+            problemKey = problemKey,
             status = status,
             revealedHintCount = hints,
             solutionRevealed = row.requiredBoolean("solutionRevealed"),

@@ -1,0 +1,145 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "62a4e3a8882963fda9e6a8aed9809f2a",
+    "entities": [
+      {
+        "tableName": "problem_progress",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`problem_key` TEXT NOT NULL, `status` TEXT NOT NULL, `revealed_hint_count` INTEGER NOT NULL, `solution_revealed` INTEGER NOT NULL, `notebook_page_count` INTEGER NOT NULL, `active_page_index` INTEGER NOT NULL, `active_reference_tab` TEXT NOT NULL, `last_opened_at` INTEGER NOT NULL, PRIMARY KEY(`problem_key`))",
+        "fields": [
+          {
+            "fieldPath": "problemKey",
+            "columnName": "problem_key",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "revealedHintCount",
+            "columnName": "revealed_hint_count",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "solutionRevealed",
+            "columnName": "solution_revealed",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "notebookPageCount",
+            "columnName": "notebook_page_count",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "activePageIndex",
+            "columnName": "active_page_index",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "activeReferenceTab",
+            "columnName": "active_reference_tab",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastOpenedAt",
+            "columnName": "last_opened_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "problem_key"
+          ]
+        }
+      },
+      {
+        "tableName": "app_setting",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `handedness` TEXT NOT NULL, `palm_guard_enabled` INTEGER NOT NULL, `palm_guard_width_fraction` REAL NOT NULL, `palm_guard_height_fraction` REAL NOT NULL, `default_paper_style` TEXT NOT NULL, `brush_color_argb` INTEGER NOT NULL, `brush_width` REAL NOT NULL, `theme` TEXT NOT NULL, `keep_awake_in_workspace` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "handedness",
+            "columnName": "handedness",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "palmGuardEnabled",
+            "columnName": "palm_guard_enabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "palmGuardWidthFraction",
+            "columnName": "palm_guard_width_fraction",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "palmGuardHeightFraction",
+            "columnName": "palm_guard_height_fraction",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "defaultPaperStyle",
+            "columnName": "default_paper_style",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "brushColorArgb",
+            "columnName": "brush_color_argb",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "brushWidth",
+            "columnName": "brush_width",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "theme",
+            "columnName": "theme",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "keepAwakeInWorkspace",
+            "columnName": "keep_awake_in_workspace",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '62a4e3a8882963fda9e6a8aed9809f2a')"
+    ]
+  }
+}

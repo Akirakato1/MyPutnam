@@ -1,6 +1,8 @@
 package com.putnamworkbook.offline.navigation
 
 import android.net.Uri
+import com.putnamworkbook.offline.domain.model.ProblemKey
+import com.putnamworkbook.offline.domain.model.ProblemSetKey
 
 sealed interface AppRoute {
     val path: String
@@ -9,20 +11,16 @@ sealed interface AppRoute {
         override val path = HOME
     }
 
-    data object ArchiveYears : AppRoute {
-        override val path = ARCHIVE_YEARS
+    data object Library : AppRoute {
+        override val path = LIBRARY
     }
 
-    data class YearProblems(val year: Int) : AppRoute {
-        override val path = "$YEAR_PROBLEMS_PREFIX/$year"
+    data class SetProblems(val key: ProblemSetKey) : AppRoute {
+        override val path = "$SET_PROBLEMS_PREFIX/${Uri.encode(key.collectionId)}/${Uri.encode(key.setId)}"
     }
 
-    data class Workspace(val year: Int, val code: String) : AppRoute {
-        init {
-            require(code.isNotBlank()) { "Problem code cannot be blank" }
-        }
-
-        override val path = "$WORKSPACE_PREFIX/$year/${Uri.encode(code)}"
+    data class Workspace(val key: ProblemKey) : AppRoute {
+        override val path = "$WORKSPACE_PREFIX/${Uri.encode(key.collectionId)}/${Uri.encode(key.setId)}/${Uri.encode(key.problemId)}"
     }
 
     data object Settings : AppRoute {
@@ -31,11 +29,11 @@ sealed interface AppRoute {
 
     companion object {
         const val HOME = "home"
-        const val ARCHIVE_YEARS = "archive"
-        const val YEAR_PROBLEMS_PREFIX = "archive/year"
-        const val YEAR_PROBLEMS_PATTERN = "$YEAR_PROBLEMS_PREFIX/{year}"
+        const val LIBRARY = "library"
+        const val SET_PROBLEMS_PREFIX = "library/set"
+        const val SET_PROBLEMS_PATTERN = "$SET_PROBLEMS_PREFIX/{collectionId}/{setId}"
         const val WORKSPACE_PREFIX = "workspace"
-        const val WORKSPACE_PATTERN = "$WORKSPACE_PREFIX/{year}/{code}"
+        const val WORKSPACE_PATTERN = "$WORKSPACE_PREFIX/{collectionId}/{setId}/{problemId}"
         const val SETTINGS = "settings"
     }
 }

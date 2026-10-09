@@ -19,8 +19,8 @@ class BackupArchiveTest {
     @Test
     fun validArchiveRoundTripsEveryPayload() {
         val payloads = linkedMapOf(
-            BackupArchive.USER_DATA_PATH to "{\"schemaVersion\":1}".encodeToByteArray(),
-            "notebooks/2025-A1/manifest.bin" to byteArrayOf(1, 2, 3, 4),
+            BackupArchive.USER_DATA_PATH to "{\"schemaVersion\":2}".encodeToByteArray(),
+            "notebooks/course/unit/P1/manifest.bin" to byteArrayOf(1, 2, 3, 4),
         )
         val bytes = ByteArrayOutputStream().also { BackupArchive().write(payloads, it) }.toByteArray()
         val staging = temporaryFolder.newFolder("round-trip").toPath()
@@ -34,10 +34,32 @@ class BackupArchiveTest {
     }
 
     @Test
+    fun caseDistinctCanonicalProblemPathsArePreservedInTheArchive() {
+        val bytes = ByteArrayOutputStream().also { output ->
+            BackupArchive().write(
+                linkedMapOf(
+                    BackupArchive.USER_DATA_PATH to "{\"schemaVersion\":2}".encodeToByteArray(),
+                    "notebooks/course/unit/P1/manifest.bin" to byteArrayOf(1),
+                    "notebooks/course/unit/p1/manifest.bin" to byteArrayOf(2),
+                ),
+                output,
+            )
+        }.toByteArray()
+
+        val names = buildList {
+            java.util.zip.ZipInputStream(ByteArrayInputStream(bytes)).use { zip ->
+                while (true) add((zip.nextEntry ?: break).name)
+            }
+        }
+        assertEquals(1, names.count { it == "notebooks/course/unit/P1/manifest.bin" })
+        assertEquals(1, names.count { it == "notebooks/course/unit/p1/manifest.bin" })
+    }
+
+    @Test
     fun tamperedHashIsRejected() {
         val userData = "{}".encodeToByteArray()
         val manifest = BackupManifest(
-            schemaVersion = 1,
+            schemaVersion = 2,
             members = listOf(
                 BackupMember(BackupArchive.USER_DATA_PATH, userData.size.toLong(), "0".repeat(64)),
             ),
@@ -70,7 +92,7 @@ class BackupArchiveTest {
     fun duplicateManifestMembersAreRejected() {
         val payload = byteArrayOf(7)
         val member = BackupMember("notebooks/a", 1, sha256(payload))
-        val manifest = BackupManifest(1, listOf(member, member))
+        val manifest = BackupManifest(2, listOf(member, member))
 
         assertFormatFailure(
             rawZip(
@@ -93,7 +115,7 @@ class BackupArchiveTest {
 
     @Test
     fun futureSchemaVersionFailsCleanly() {
-        val manifest = BackupManifest(schemaVersion = 2, members = emptyList())
+        val manifest = BackupManifest(schemaVersion = 3, members = emptyList())
         assertFormatFailure(rawZip(BackupArchive.MANIFEST_PATH to BackupManifestCodec.encode(manifest)))
     }
 

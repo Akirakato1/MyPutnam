@@ -6,9 +6,13 @@ import com.putnamworkbook.offline.data.content.ContentRepository
 import com.putnamworkbook.offline.data.content.HintContent
 import com.putnamworkbook.offline.data.content.ProblemContent
 import com.putnamworkbook.offline.data.content.ProblemSummary
+import com.putnamworkbook.offline.data.content.LibraryCollection
+import com.putnamworkbook.offline.data.content.ProblemSetSummary
+import com.putnamworkbook.offline.data.content.TopicSummary
 import com.putnamworkbook.offline.data.user.ProblemProgress
 import com.putnamworkbook.offline.data.user.ProgressRepository
 import com.putnamworkbook.offline.domain.model.ProblemKey
+import com.putnamworkbook.offline.domain.model.ProblemSetKey
 import com.putnamworkbook.offline.domain.model.HintStage
 import com.putnamworkbook.offline.domain.model.ProblemStatus
 import com.putnamworkbook.offline.domain.model.ReferenceTab
@@ -25,7 +29,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class WorkspaceViewModelTest {
-    private val key = ProblemKey(2025, "A1")
+    private val key = ProblemKey("putnam", "2025", "A1")
 
     @Test
     fun everyPrerequisiteCanBeSelected() = runBlocking {
@@ -152,10 +156,13 @@ class WorkspaceViewModelTest {
 private class FakeWorkspaceContentRepository(
     private val key: ProblemKey,
 ) : ContentRepository {
-    override suspend fun years() = listOf(key.year)
-    override suspend fun problems(year: Int) = listOf(ProblemSummary(key, 1))
+    override suspend fun collections() = listOf(LibraryCollection("putnam", "Putnam Competition", "competition", 0))
+    override suspend fun sets(collectionId: String) = listOf(ProblemSetSummary(key.setKey, "2025", 0, 2025))
+    override suspend fun topics() = listOf(TopicSummary("algebra", "Algebra", 0))
+    override suspend fun problems(setKey: ProblemSetKey) = listOf(summary())
+    override suspend fun problemsByTopic(topicId: String) = listOf(summary())
     override suspend fun problem(key: ProblemKey): ProblemContent = ProblemContent(
-        summary = ProblemSummary(key, 1),
+        summary = summary(),
         statementAssetPath = "statement.html",
         statementSha256 = "0".repeat(64),
         hints = (1..4).map { index ->
@@ -175,6 +182,8 @@ private class FakeWorkspaceContentRepository(
         solutionSha256 = "b".repeat(64),
         attribution = emptyList<Attribution>(),
     )
+
+    private fun summary() = ProblemSummary(key, "A1", 1, "Putnam Competition", "2025", 2025)
 }
 
 private class FakeWorkspaceProgressRepository(

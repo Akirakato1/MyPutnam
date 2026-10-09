@@ -18,6 +18,7 @@ import android.webkit.WebView
 import android.util.DisplayMetrics
 import com.putnamworkbook.offline.content.ui.LocalContentClient
 import com.putnamworkbook.offline.data.content.ContentRepository
+import com.putnamworkbook.offline.data.content.ProblemSummary
 import com.putnamworkbook.offline.data.user.ProgressRepository
 import com.putnamworkbook.offline.domain.model.PaperStyle
 import com.putnamworkbook.offline.domain.model.ProblemKey
@@ -91,7 +92,7 @@ class WorkbookPdfExporter(
         val pdf = PdfDocument()
         try {
             val content = contentRepository.problem(key)
-                ?: throw IOException("Problem ${key.year} ${key.code} is unavailable")
+                ?: throw IOException("Problem ${key.canonical} is unavailable")
             val progress = progressRepository.observe(key).first()
             val notebook = notebookRepository.loadExportSnapshot(key)
                 ?: throw IOException("Open this problem once before exporting its workbook")
@@ -112,7 +113,7 @@ class WorkbookPdfExporter(
                     try {
                         drawReferencePage(
                             canvas = page.canvas,
-                            key = key,
+                            summary = content.summary,
                             section = section,
                             isStatement = sectionIndex == 0,
                             isContinuation = sectionSliceIndex > 0,
@@ -133,7 +134,7 @@ class WorkbookPdfExporter(
                 try {
                     drawNotebookPage(
                         canvas = page.canvas,
-                        key = key,
+                        summary = content.summary,
                         paperStyle = notebookPage.paperStyle,
                         strokes = notebookPage.strokes,
                         workbookPage = index + 1,
@@ -162,7 +163,7 @@ class WorkbookPdfExporter(
 
     private fun drawReferencePage(
         canvas: Canvas,
-        key: ProblemKey,
+        summary: ProblemSummary,
         section: ExportSection,
         isStatement: Boolean,
         isContinuation: Boolean,
@@ -180,13 +181,13 @@ class WorkbookPdfExporter(
             textSize = 11f
         }
         val top = if (isStatement && !isContinuation) {
-            canvas.drawText("Putnam ${key.year} ${key.code}", PAGE_MARGIN, 46f, titlePaint)
+            canvas.drawText("${summary.collectionTitle} — ${summary.setTitle} ${summary.label}", PAGE_MARGIN, 46f, titlePaint)
             canvas.drawText(section.title, PAGE_MARGIN, 70f, labelPaint)
             canvas.drawLine(PAGE_MARGIN, 80f, PAGE_RIGHT, 80f, dividerPaint())
             STATEMENT_CONTENT_TOP
         } else {
             val heading = if (isContinuation) "${section.title} (continued)" else section.title
-            canvas.drawText("${key.year} ${key.code} - $heading", PAGE_MARGIN, 42f, titlePaint)
+            canvas.drawText("${summary.setTitle} ${summary.label} — $heading", PAGE_MARGIN, 42f, titlePaint)
             canvas.drawLine(PAGE_MARGIN, 54f, PAGE_RIGHT, 54f, dividerPaint())
             SECTION_CONTENT_TOP
         }
@@ -205,7 +206,7 @@ class WorkbookPdfExporter(
 
     private fun drawNotebookPage(
         canvas: Canvas,
-        key: ProblemKey,
+        summary: ProblemSummary,
         paperStyle: PaperStyle,
         strokes: List<StrokeRecord>,
         workbookPage: Int,
@@ -219,7 +220,7 @@ class WorkbookPdfExporter(
             typeface = android.graphics.Typeface.create(android.graphics.Typeface.DEFAULT, android.graphics.Typeface.BOLD)
         }
         canvas.drawText(
-            "${key.year} ${key.code} - Workbook page $workbookPage of $workbookPageCount",
+            "${summary.setTitle} ${summary.label} — Workbook page $workbookPage of $workbookPageCount",
             PAGE_MARGIN,
             36f,
             headingPaint,
@@ -284,7 +285,7 @@ class WorkbookPdfExporter(
             textSize = 9f
             textAlign = Paint.Align.RIGHT
         }
-        canvas.drawText("Putnam Workbook - PDF page $pageNumber", PAGE_RIGHT, 824f, paint)
+        canvas.drawText("Offline Math Workbook — PDF page $pageNumber", PAGE_RIGHT, 824f, paint)
     }
 
     private fun dividerPaint() = Paint(Paint.ANTI_ALIAS_FLAG).apply {

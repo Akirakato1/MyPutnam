@@ -18,9 +18,13 @@ import com.putnamworkbook.offline.data.content.ContentRepository
 import com.putnamworkbook.offline.data.content.HintContent
 import com.putnamworkbook.offline.data.content.ProblemContent
 import com.putnamworkbook.offline.data.content.ProblemSummary
+import com.putnamworkbook.offline.data.content.LibraryCollection
+import com.putnamworkbook.offline.data.content.ProblemSetSummary
+import com.putnamworkbook.offline.data.content.TopicSummary
 import com.putnamworkbook.offline.data.user.ProblemProgress
 import com.putnamworkbook.offline.data.user.ProgressRepository
 import com.putnamworkbook.offline.domain.model.ProblemKey
+import com.putnamworkbook.offline.domain.model.ProblemSetKey
 import com.putnamworkbook.offline.domain.model.ProblemStatus
 import com.putnamworkbook.offline.domain.model.ReferenceTab
 import kotlinx.coroutines.flow.Flow
@@ -34,12 +38,12 @@ class ArchiveNavigationTest {
     val composeRule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun yearFirstArchiveShowsProgressAndSystemBackFollowsTheHierarchy() {
+    fun librarySetShowsProgressAndSystemBackFollowsTheHierarchy() {
         val content = FakeContentRepository()
         val progress = FakeProgressRepository(
             mapOf(
-                ProblemKey(2025, "A2") to progress(2025, "A2", ProblemStatus.IN_PROGRESS, hints = 2, pages = 3),
-                ProblemKey(2025, "B6") to progress(2025, "B6", ProblemStatus.COMPLETED, hints = 4, pages = 5),
+                ProblemKey("putnam", "2025", "A2") to progress("A2", ProblemStatus.IN_PROGRESS, hints = 2, pages = 3),
+                ProblemKey("putnam", "2025", "B6") to progress("B6", ProblemStatus.COMPLETED, hints = 4, pages = 5),
             ),
         )
         composeRule.setContent {
@@ -53,52 +57,47 @@ class ArchiveNavigationTest {
         composeRule.onNodeWithTag("home-select-problem").assertIsEnabled().performClick()
 
         composeRule.waitUntil(timeoutMillis = 5_000) {
-            composeRule.onAllNodesWithTag("archive-year-2025").fetchSemanticsNodes().isNotEmpty()
+            composeRule.onAllNodesWithTag("library-set-putnam/2025").fetchSemanticsNodes().isNotEmpty()
         }
-        val newest = composeRule.onNodeWithTag("archive-year-2025").fetchSemanticsNode().boundsInRoot
-        val previous = composeRule.onNodeWithTag("archive-year-2024").fetchSemanticsNode().boundsInRoot
-        assertTrue("Years should be displayed newest first", newest.top < previous.top)
-
-        composeRule.onNodeWithTag("archive-year-2025").performClick()
+        composeRule.onNodeWithTag("library-set-putnam/2025").performClick()
         composeRule.waitUntil(timeoutMillis = 5_000) {
-            composeRule.onAllNodesWithTag("problem-position-0-A1").fetchSemanticsNodes().isNotEmpty()
+            composeRule.onAllNodesWithTag("library-problem-putnam/2025/A1").fetchSemanticsNodes().isNotEmpty()
         }
 
         val codes = listOf("A1", "A2", "A3", "A4", "A5", "A6", "B1", "B2", "B3", "B4", "B5", "B6")
         codes.forEachIndexed { index, code ->
-            composeRule.onNodeWithTag("problem-list").performScrollToNode(hasTestTag("problem-position-$index-$code"))
-            composeRule.onNodeWithTag("problem-position-$index-$code").assertExists()
+            composeRule.onNodeWithTag("problem-list").performScrollToNode(hasTestTag("library-problem-putnam/2025/$code"))
+            composeRule.onNodeWithTag("library-problem-putnam/2025/$code").assertExists()
         }
-        composeRule.onNodeWithTag("problem-list").performScrollToNode(hasTestTag("problem-position-0-A1"))
-        composeRule.onNodeWithTag("problem-status-A1", useUnmergedTree = true).assertTextEquals("Untouched")
-        composeRule.onNodeWithTag("problem-list").performScrollToNode(hasTestTag("problem-position-1-A2"))
-        composeRule.onNodeWithTag("problem-status-A2", useUnmergedTree = true).assertTextEquals("In progress")
-        composeRule.onNodeWithTag("problem-hints-A2", useUnmergedTree = true).assertTextEquals("2 hints revealed")
-        composeRule.onNodeWithTag("problem-pages-A2", useUnmergedTree = true).assertTextEquals("3 notebook pages")
-        composeRule.onNodeWithTag("problem-list").performScrollToNode(hasTestTag("problem-position-11-B6"))
-        composeRule.onNodeWithTag("problem-status-B6", useUnmergedTree = true).assertTextEquals("Completed")
+        composeRule.onNodeWithTag("problem-list").performScrollToNode(hasTestTag("library-problem-putnam/2025/A1"))
+        composeRule.onNodeWithTag("problem-status-putnam/2025/A1", useUnmergedTree = true).assertTextEquals("Untouched")
+        composeRule.onNodeWithTag("problem-list").performScrollToNode(hasTestTag("library-problem-putnam/2025/A2"))
+        composeRule.onNodeWithTag("problem-status-putnam/2025/A2", useUnmergedTree = true).assertTextEquals("In progress")
+        composeRule.onNodeWithTag("problem-hints-putnam/2025/A2", useUnmergedTree = true).assertTextEquals("2 hints revealed")
+        composeRule.onNodeWithTag("problem-pages-putnam/2025/A2", useUnmergedTree = true).assertTextEquals("3 notebook pages")
+        composeRule.onNodeWithTag("problem-list").performScrollToNode(hasTestTag("library-problem-putnam/2025/B6"))
+        composeRule.onNodeWithTag("problem-status-putnam/2025/B6", useUnmergedTree = true).assertTextEquals("Completed")
 
-        composeRule.onNodeWithTag("problem-list").performScrollToNode(hasTestTag("problem-position-0-A1"))
-        composeRule.onNodeWithTag("problem-position-0-A1").performClick()
-        composeRule.onNodeWithTag("workspace-placeholder-2025-A1").assertExists()
+        composeRule.onNodeWithTag("problem-list").performScrollToNode(hasTestTag("library-problem-putnam/2025/A1"))
+        composeRule.onNodeWithTag("library-problem-putnam/2025/A1").performClick()
+        composeRule.onNodeWithTag("workspace-placeholder-putnam/2025/A1").assertExists()
 
         pressBack()
         composeRule.onNodeWithTag("problem-list-screen").assertExists()
         pressBack()
-        composeRule.onNodeWithTag("archive-years-screen").assertExists()
+        composeRule.onNodeWithTag("library-screen").assertExists()
         pressBack()
         composeRule.onNodeWithTag("home-screen").assertExists()
         composeRule.onNodeWithTag("home-settings").assertExists()
     }
 
     private fun progress(
-        year: Int,
         code: String,
         status: ProblemStatus,
         hints: Int,
         pages: Int,
     ) = ProblemProgress(
-        key = ProblemKey(year, code),
+        key = ProblemKey("putnam", "2025", code),
         status = status,
         revealedHintCount = hints,
         solutionRevealed = status == ProblemStatus.COMPLETED,
@@ -111,20 +110,24 @@ class ArchiveNavigationTest {
 
 private class FakeContentRepository : ContentRepository {
     private val summaries = listOf("A1", "A2", "A3", "A4", "A5", "A6", "B1", "B2", "B3", "B4", "B5", "B6")
-        .mapIndexed { index, code -> ProblemSummary(ProblemKey(2025, code), ordinal = index + 1) }
+        .mapIndexed { index, code ->
+            ProblemSummary(ProblemKey("putnam", "2025", code), code, index + 1, "Putnam", "2025", 2025)
+        }
 
-    override suspend fun years(): List<Int> = listOf(1938, 2024, 2025)
-
-    override suspend fun problems(year: Int): List<ProblemSummary> = if (year == 2025) summaries else emptyList()
+    override suspend fun collections() = listOf(LibraryCollection("putnam", "Putnam", "competition", 0))
+    override suspend fun sets(collectionId: String) = listOf(ProblemSetSummary(ProblemSetKey("putnam", "2025"), "2025", 0, 2025))
+    override suspend fun topics() = listOf(TopicSummary("algebra", "Algebra", 0))
+    override suspend fun problems(setKey: ProblemSetKey): List<ProblemSummary> = summaries.takeIf { setKey == ProblemSetKey("putnam", "2025") }.orEmpty()
+    override suspend fun problemsByTopic(topicId: String): List<ProblemSummary> = summaries
 
     override suspend fun problem(key: ProblemKey): ProblemContent? = summaries.firstOrNull { it.key == key }?.let { summary ->
         ProblemContent(
             summary = summary,
-            statementAssetPath = "content/${key.year}/${key.code}/statement.html",
+            statementAssetPath = "content/${key.collectionId}/${key.setId}/${key.problemId}/statement.html",
             statementSha256 = "0".repeat(64),
             hints = emptyList<HintContent>(),
             prerequisites = emptyList<ContentDocument>(),
-            solutionAssetPath = "content/${key.year}/${key.code}/solution.html",
+            solutionAssetPath = "content/${key.collectionId}/${key.setId}/${key.problemId}/solution.html",
             solutionSha256 = "0".repeat(64),
             attribution = emptyList<Attribution>(),
         )

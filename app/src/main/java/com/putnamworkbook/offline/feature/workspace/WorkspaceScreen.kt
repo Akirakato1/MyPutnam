@@ -43,9 +43,9 @@ fun WorkspaceScreen(
     modifier: Modifier = Modifier,
 ) {
     var compactPane by remember { mutableStateOf(CompactPane.REFERENCE) }
-    var showExportOptions by rememberSaveable(state.key?.year, state.key?.code) { mutableStateOf(false) }
-    var includeHints by rememberSaveable(state.key?.year, state.key?.code) { mutableStateOf(true) }
-    var includeSolution by rememberSaveable(state.key?.year, state.key?.code) { mutableStateOf(true) }
+    var showExportOptions by rememberSaveable(state.key?.canonical) { mutableStateOf(false) }
+    var includeHints by rememberSaveable(state.key?.canonical) { mutableStateOf(true) }
+    var includeSolution by rememberSaveable(state.key?.canonical) { mutableStateOf(true) }
     if (showExportOptions) {
         AlertDialog(
             onDismissRequest = { showExportOptions = false },
@@ -104,7 +104,7 @@ fun WorkspaceScreen(
                 Text("Home")
             }
             Text(
-                text = state.key?.let { "${it.year} ${it.code}" } ?: "Problem workspace",
+                text = state.content?.summary?.let { "${it.setTitle} ${it.label}" } ?: "Problem workspace",
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.weight(1f),
             )

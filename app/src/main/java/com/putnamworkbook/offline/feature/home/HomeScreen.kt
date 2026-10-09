@@ -55,7 +55,7 @@ fun HomeScreen(
                     .testTag("home-continue"),
             ) {
                 val recent = state.recentProblem
-                Text(if (recent == null) "Continue most recent" else "Continue ${recent.key.year} ${recent.key.code}")
+                Text(if (recent == null) "Continue most recent" else "Continue ${recent.setTitle} ${recent.label}")
             }
             Button(
                 onClick = onSelectProblem,

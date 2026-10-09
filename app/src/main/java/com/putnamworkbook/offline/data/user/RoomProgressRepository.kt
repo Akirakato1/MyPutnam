@@ -14,7 +14,7 @@ class RoomProgressRepository(
     private val dao = database.userDao()
 
     override fun observe(key: ProblemKey): Flow<ProblemProgress> =
-        dao.observeProgress(key.year, key.code).map { it?.toDomain() ?: ProblemProgress.untouched(key) }
+        dao.observeProgress(key.canonical).map { it?.toDomain() ?: ProblemProgress.untouched(key) }
 
     override fun observeAll(): Flow<Map<ProblemKey, ProblemProgress>> =
         dao.observeAllProgress().map { rows -> rows.associate { it.toDomain().let { progress -> progress.key to progress } } }
@@ -25,7 +25,7 @@ class RoomProgressRepository(
     override suspend fun markOpened(key: ProblemKey) = mutate(key) { current -> current }
 
     override suspend fun revealNextHint(key: ProblemKey): Int = database.withTransaction {
-        val current = dao.progress(key.year, key.code) ?: newProgress(key)
+        val current = dao.progress(key.canonical) ?: newProgress(key)
         val revealedCount = (current.revealedHintCount + 1).coerceAtMost(MAX_HINTS)
         dao.upsertProgress(current.copy(revealedHintCount = revealedCount, lastOpenedAt = clock()))
         revealedCount
@@ -60,13 +60,12 @@ class RoomProgressRepository(
         key: ProblemKey,
         transform: (ProblemProgressEntity) -> ProblemProgressEntity,
     ) = database.withTransaction {
-        val current = dao.progress(key.year, key.code) ?: newProgress(key)
+        val current = dao.progress(key.canonical) ?: newProgress(key)
         dao.upsertProgress(transform(current).copy(lastOpenedAt = clock()))
     }
 
     private fun newProgress(key: ProblemKey) = ProblemProgressEntity(
-        year = key.year,
-        problemCode = key.code,
+        problemKey = key.canonical,
         status = ProblemStatus.IN_PROGRESS.name,
         revealedHintCount = 0,
         solutionRevealed = false,
@@ -82,7 +81,7 @@ class RoomProgressRepository(
 }
 
 private fun ProblemProgressEntity.toDomain() = ProblemProgress(
-    key = ProblemKey(year, problemCode),
+    key = ProblemKey.parse(problemKey),
     status = ProblemStatus.valueOf(status),
     revealedHintCount = revealedHintCount,
     solutionRevealed = solutionRevealed,

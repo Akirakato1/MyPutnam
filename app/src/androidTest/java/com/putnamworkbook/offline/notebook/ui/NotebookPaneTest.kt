@@ -31,7 +31,7 @@ class NotebookPaneTest {
     @Test
     fun onlyExplicitControlsTurnPagesAndHorizontalCanvasDragDoesNot() {
         val document = NotebookDocument(
-            key = ProblemKey(2025, "A1"),
+            key = ProblemKey("putnam", "2025", "A1"),
             pages = listOf(
                 NotebookPage("page-1", PaperStyle.BLANK),
                 NotebookPage("page-2", PaperStyle.SQUARE_GRID),
@@ -75,7 +75,7 @@ class NotebookPaneTest {
     @Test
     fun pageIndexAndBoundaryArrowsAreTopControlsWithoutNumberedOrReorderButtons() {
         val document = NotebookDocument(
-            key = ProblemKey(2025, "A1"),
+            key = ProblemKey("putnam", "2025", "A1"),
             pages = listOf(
                 NotebookPage("page-1", PaperStyle.BLANK),
                 NotebookPage("page-2", PaperStyle.BLANK),
@@ -109,7 +109,7 @@ class NotebookPaneTest {
     @Test
     fun everyCanvasCornerAcceptsPenInputWithoutAnInvisibleBlocker() {
         val document = NotebookDocument(
-            key = ProblemKey(2025, "A1"),
+            key = ProblemKey("putnam", "2025", "A1"),
             pages = listOf(NotebookPage("page-1", PaperStyle.BLANK)),
         )
         val delivered = mutableListOf<StrokeRecord>()

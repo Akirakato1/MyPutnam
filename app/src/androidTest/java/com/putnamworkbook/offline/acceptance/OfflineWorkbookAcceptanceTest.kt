@@ -21,6 +21,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.putnamworkbook.offline.MainActivity
 import com.putnamworkbook.offline.PutnamApplication
+import com.putnamworkbook.offline.di.initializeContent
 import com.putnamworkbook.offline.backup.BackupResult
 import com.putnamworkbook.offline.backup.RestoreResult
 import com.putnamworkbook.offline.domain.model.BrushSpec
@@ -83,17 +84,18 @@ class OfflineWorkbookAcceptanceTest {
     private fun openA1FromTheArchive() {
         composeRule.onNodeWithTag("home-screen").assertIsDisplayed()
         composeRule.onNodeWithTag("home-select-problem").performClick()
-        waitForTag("archive-year-2025")
-        composeRule.onNodeWithTag("archive-year-2025").performClick()
+        waitForTag("library-set-putnam/2025")
+        composeRule.onNodeWithTag("library-set-putnam/2025").performClick()
         waitForTag("problem-list")
 
         val codes = listOf("A1", "A2", "A3", "A4", "A5", "A6", "B1", "B2", "B3", "B4", "B5", "B6")
-        codes.forEachIndexed { index, code ->
-            composeRule.onNodeWithTag("problem-list").performScrollToNode(hasTestTag("problem-position-$index-$code"))
-            composeRule.onNodeWithTag("problem-position-$index-$code").assertExists()
+        codes.forEach { code ->
+            val tag = "library-problem-putnam/2025/$code"
+            composeRule.onNodeWithTag("problem-list").performScrollToNode(hasTestTag(tag))
+            composeRule.onNodeWithTag(tag).assertExists()
         }
-        composeRule.onNodeWithTag("problem-list").performScrollToNode(hasTestTag("problem-position-0-A1"))
-        composeRule.onNodeWithTag("problem-position-0-A1").performClick()
+        composeRule.onNodeWithTag("problem-list").performScrollToNode(hasTestTag("library-problem-putnam/2025/A1"))
+        composeRule.onNodeWithTag("library-problem-putnam/2025/A1").performClick()
         waitForTag("workspace-screen")
         waitForTag("math-content-ready")
     }
@@ -109,7 +111,7 @@ class OfflineWorkbookAcceptanceTest {
     private fun revealAllHintsAndSolution() {
         val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
         val application = targetContext.applicationContext as PutnamApplication
-        val key = ProblemKey(2025, "A1")
+        val key = ProblemKey("putnam", "2025", "A1")
         runBlocking {
             repeat(4) { expected ->
                 assertEquals(expected + 1, application.container.progressRepository.revealNextHint(key))
@@ -138,7 +140,7 @@ class OfflineWorkbookAcceptanceTest {
         }
         composeRule.onNodeWithTag("help-hint-1").performClick()
         waitForTag("math-content-ready")
-        val hintHtml = targetContext.assets.open("content/2025/problems/A1/hint-1.html")
+        val hintHtml = targetContext.assets.open("content/putnam/2025/problems/A1/hint-1.html")
             .bufferedReader().use { it.readText() }
         assertTrue("Hint HTML should contain pre-rendered KaTeX", hintHtml.contains("class=\"katex\""))
         composeRule.onNodeWithTag("reference-tab-solution").assertIsEnabled()
@@ -161,7 +163,7 @@ class OfflineWorkbookAcceptanceTest {
     private fun createStrokeBackupAndPdf() {
         val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
         val application = targetContext.applicationContext as PutnamApplication
-        val key = ProblemKey(2025, "A1")
+        val key = ProblemKey("putnam", "2025", "A1")
 
         runBlocking {
             val notebook = application.container.notebookRepository.loadExisting(key)
@@ -197,7 +199,10 @@ class OfflineWorkbookAcceptanceTest {
             lateinit var activity: MainActivity
             composeRule.activityRule.scenario.onActivity { activity = it }
             val pdf = ByteArrayOutputStream()
-            val export = application.container.createExportCoordinator(activity).export(
+            val export = application.container.createExportCoordinator(
+                activity,
+                application.container.initializeContent(),
+            ).export(
                 key,
                 WorkbookExportOptions(includeRevealedHints = true, includeRevealedSolution = true),
                 pdf,
@@ -221,7 +226,7 @@ class OfflineWorkbookAcceptanceTest {
         val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
         val application = targetContext.applicationContext as PutnamApplication
         runBlocking {
-            val progress = application.container.progressRepository.observe(ProblemKey(2025, "A1")).first()
+            val progress = application.container.progressRepository.observe(ProblemKey("putnam", "2025", "A1")).first()
             assertEquals(ReferenceTab.PROBLEM, progress.activeReferenceTab)
             assertEquals(4, progress.revealedHintCount)
             assertTrue(progress.solutionRevealed)
@@ -271,7 +276,7 @@ class OfflineWorkbookAcceptanceTest {
             runBlocking {
                 val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
                 val application = targetContext.applicationContext as PutnamApplication
-                val key = ProblemKey(2025, "A1")
+                val key = ProblemKey("putnam", "2025", "A1")
                 val notebook = application.container.notebookRepository.loadExisting(key) ?: return@runBlocking false
                 val stored = application.container.notebookRepository.loadStrokes(key, notebook.pages.last().id)
                 stored.size == 1 && stored.none { it.id == "acceptance-stroke" }
@@ -281,7 +286,7 @@ class OfflineWorkbookAcceptanceTest {
         val movedBounds = runBlocking {
             val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
             val application = targetContext.applicationContext as PutnamApplication
-            val key = ProblemKey(2025, "A1")
+            val key = ProblemKey("putnam", "2025", "A1")
             val notebook = requireNotNull(application.container.notebookRepository.loadExisting(key))
             requireNotNull(
                 application.container.notebookRepository
@@ -333,7 +338,7 @@ class OfflineWorkbookAcceptanceTest {
         val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
         val application = targetContext.applicationContext as PutnamApplication
         runBlocking {
-            val key = ProblemKey(2025, "A1")
+            val key = ProblemKey("putnam", "2025", "A1")
             val notebook = requireNotNull(application.container.notebookRepository.loadExisting(key))
             val strokes = application.container.notebookRepository.loadStrokes(key, notebook.pages.last().id)
             assertEquals(2, strokes.size)

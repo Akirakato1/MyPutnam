@@ -14,10 +14,10 @@ import java.io.DataOutputStream
 import java.io.IOException
 
 class NotebookManifestCodecTest {
-    private val key = ProblemKey(2025, "A1")
+    private val key = ProblemKey("course", "chapter-1", "P1")
 
     @Test
-    fun versionTwoRoundTripsEditHistoryAndCursor() {
+    fun versionThreeRoundTripsCanonicalKeyEditHistoryAndCursor() {
         val document = NotebookDocument(
             key = key,
             pages = listOf(
@@ -39,36 +39,22 @@ class NotebookManifestCodecTest {
 
         val decoded = NotebookManifestCodec.decode(NotebookManifestCodec.encode(document))
 
-        assertEquals(2, decoded.sourceVersion)
+        assertEquals(3, decoded.sourceVersion)
         assertEquals(document, decoded.document)
     }
 
     @Test
-    fun versionOneMigratesOnlyActiveStrokesIntoOneInitialHistoryState() {
-        val decoded = NotebookManifestCodec.decode(
-            versionOneManifest(
-                listOf(
-                    "visible" to true,
-                    "legacy-undone" to false,
-                    "also-visible" to true,
-                ),
-            ),
-        )
-
-        assertEquals(1, decoded.sourceVersion)
-        assertEquals(NotebookDocument.SCHEMA_VERSION, decoded.document.schemaVersion)
-        val page = decoded.document.pages.single()
-        assertEquals(listOf("visible", "also-visible"), page.strokes.map { it.strokeId })
-        assertEquals(listOf(true, true), page.strokes.map { it.active })
-        assertEquals(1, page.editHistory.size)
-        assertEquals(listOf("visible", "also-visible"), page.editHistory.single().activatedStrokeIds)
-        assertEquals(emptyList<String>(), page.editHistory.single().deactivatedStrokeIds)
-        assertEquals(1, page.appliedEditCount)
+    fun versionsOneAndTwoAreRejectedWithoutLegacyDecodeBranches() {
+        listOf(1, 2).forEach { version ->
+            assertThrows(IOException::class.java) {
+                NotebookManifestCodec.decode(legacyHeader(version))
+            }
+        }
     }
 
     @Test
     fun invalidHistoryCursorIsRejected() {
-        val bytes = versionTwoManifest(
+        val bytes = versionThreeManifest(
             appliedEditCount = 2,
             activated = listOf("stroke"),
             deactivated = emptyList(),
@@ -79,7 +65,7 @@ class NotebookManifestCodecTest {
 
     @Test
     fun editGroupCannotActivateAndDeactivateTheSameStroke() {
-        val bytes = versionTwoManifest(
+        val bytes = versionThreeManifest(
             appliedEditCount = 1,
             activated = listOf("stroke"),
             deactivated = listOf("stroke"),
@@ -90,7 +76,7 @@ class NotebookManifestCodecTest {
 
     @Test
     fun trailingDataIsRejected() {
-        val bytes = versionTwoManifest(
+        val bytes = versionThreeManifest(
             appliedEditCount = 1,
             activated = listOf("stroke"),
             deactivated = emptyList(),
@@ -99,35 +85,24 @@ class NotebookManifestCodecTest {
         assertThrows(IOException::class.java) { NotebookManifestCodec.decode(bytes) }
     }
 
-    private fun versionOneManifest(strokes: List<Pair<String, Boolean>>): ByteArray =
+    private fun legacyHeader(version: Int): ByteArray =
         ByteArrayOutputStream().use { bytes ->
             DataOutputStream(bytes).use { output ->
                 output.writeInt(MAGIC)
-                output.writeInt(1)
-                output.writeInt(key.year)
-                output.writeUTF(key.code)
-                output.writeInt(1)
-                output.writeUTF("page-one")
-                output.writeUTF(PaperStyle.BLANK.name)
-                output.writeInt(strokes.size)
-                strokes.forEach { (id, active) ->
-                    output.writeUTF(id)
-                    output.writeBoolean(active)
-                }
+                output.writeInt(version)
             }
             bytes.toByteArray()
         }
 
-    private fun versionTwoManifest(
+    private fun versionThreeManifest(
         appliedEditCount: Int,
         activated: List<String>,
         deactivated: List<String>,
     ): ByteArray = ByteArrayOutputStream().use { bytes ->
         DataOutputStream(bytes).use { output ->
             output.writeInt(MAGIC)
-            output.writeInt(2)
-            output.writeInt(key.year)
-            output.writeUTF(key.code)
+            output.writeInt(3)
+            output.writeUTF(key.canonical)
             output.writeInt(1)
             output.writeUTF("page-one")
             output.writeUTF(PaperStyle.BLANK.name)

@@ -3,6 +3,8 @@ package com.putnamworkbook.offline.di
 import android.content.Context
 import com.putnamworkbook.offline.backup.BackupCoordinator
 import com.putnamworkbook.offline.data.content.ContentDatabase
+import com.putnamworkbook.offline.data.content.ContentInitializer
+import com.putnamworkbook.offline.data.content.ContentIntegrityValidator
 import com.putnamworkbook.offline.data.content.ContentRepository
 import com.putnamworkbook.offline.data.content.RoomContentRepository
 import com.putnamworkbook.offline.data.user.ProgressRepository
@@ -17,11 +19,19 @@ import com.putnamworkbook.offline.notebook.storage.FileNotebookRepository
 import com.putnamworkbook.offline.notebook.storage.NotebookRepository
 import com.putnamworkbook.offline.notebook.edit.NotebookClipboard
 import java.nio.file.Path
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-class AppContainer(context: Context) {
+class AppContainer(
+    context: Context,
+    initializer: ContentInitializer? = null,
+) {
     val applicationContext: Context = context.applicationContext
-    val contentDatabase: ContentDatabase by lazy { ContentDatabase.create(applicationContext) }
-    val contentRepository: ContentRepository by lazy { RoomContentRepository(contentDatabase) }
+    private val contentDatabase: ContentDatabase by lazy { ContentDatabase.create(applicationContext) }
+    internal val contentInitializer: ContentInitializer = initializer ?: ContentInitializer {
+        ContentIntegrityValidator(contentDatabase).validate()
+        RoomContentRepository(contentDatabase)
+    }
     val userDatabase: UserDatabase by lazy { UserDatabase.create(applicationContext) }
     val progressRepository: ProgressRepository by lazy { RoomProgressRepository(userDatabase) }
     val settingsRepository: SettingsRepository by lazy { RoomSettingsRepository(userDatabase) }
@@ -33,7 +43,10 @@ class AppContainer(context: Context) {
     val backupCoordinator: BackupCoordinator by lazy {
         BackupCoordinator(userDatabase, notebookRoot)
     }
-    fun createExportCoordinator(renderingContext: Context): ExportCoordinator =
+    fun createExportCoordinator(
+        renderingContext: Context,
+        contentRepository: ContentRepository,
+    ): ExportCoordinator =
         ExportCoordinator(
             WorkbookPdfExporter(
                 contentRepository = contentRepository,
@@ -42,4 +55,8 @@ class AppContainer(context: Context) {
                 contentRasterizer = WebViewContentRasterizer(renderingContext),
             ),
         )
+}
+
+suspend fun AppContainer.initializeContent(): ContentRepository = withContext(Dispatchers.IO) {
+    contentInitializer.initialize()
 }

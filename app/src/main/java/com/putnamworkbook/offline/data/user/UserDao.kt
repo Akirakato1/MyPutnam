@@ -7,20 +7,20 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDao {
-    @Query("SELECT * FROM problem_progress WHERE year = :year AND problem_code = :code")
-    fun observeProgress(year: Int, code: String): Flow<ProblemProgressEntity?>
+    @Query("SELECT * FROM problem_progress WHERE problem_key = :key")
+    fun observeProgress(key: String): Flow<ProblemProgressEntity?>
 
-    @Query("SELECT * FROM problem_progress ORDER BY year DESC, problem_code")
+    @Query("SELECT * FROM problem_progress ORDER BY problem_key")
     fun observeAllProgress(): Flow<List<ProblemProgressEntity>>
 
-    @Query("SELECT * FROM problem_progress ORDER BY year, problem_code")
+    @Query("SELECT * FROM problem_progress ORDER BY problem_key")
     suspend fun allProgressForBackup(): List<ProblemProgressEntity>
 
-    @Query("SELECT * FROM problem_progress ORDER BY last_opened_at DESC, year DESC, problem_code LIMIT 1")
+    @Query("SELECT * FROM problem_progress ORDER BY last_opened_at DESC, problem_key LIMIT 1")
     fun observeRecentProgress(): Flow<ProblemProgressEntity?>
 
-    @Query("SELECT * FROM problem_progress WHERE year = :year AND problem_code = :code")
-    suspend fun progress(year: Int, code: String): ProblemProgressEntity?
+    @Query("SELECT * FROM problem_progress WHERE problem_key = :key")
+    suspend fun progress(key: String): ProblemProgressEntity?
 
     @Upsert
     suspend fun upsertProgress(progress: ProblemProgressEntity)

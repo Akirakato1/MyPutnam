@@ -7,8 +7,6 @@ import java.io.OutputStream
 import java.nio.file.Files
 import java.nio.file.Path
 import java.security.MessageDigest
-import java.text.Normalizer
-import java.util.Locale
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
@@ -207,7 +205,7 @@ class BackupArchive(
     }
 
     companion object {
-        const val CURRENT_SCHEMA_VERSION = 1
+        const val CURRENT_SCHEMA_VERSION = 2
         const val MANIFEST_PATH = "backup-manifest.json"
         const val USER_DATA_PATH = "user-data.json"
     }
@@ -229,8 +227,7 @@ private fun validateMemberPath(path: String) {
     }
 }
 
-private fun canonicalPath(path: String): String =
-    Normalizer.normalize(path, Normalizer.Form.NFC).lowercase(Locale.ROOT)
+private fun canonicalPath(path: String): String = path
 
 private fun prepareEmptyDirectory(directory: Path) {
     Files.createDirectories(directory)

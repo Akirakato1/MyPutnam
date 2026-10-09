@@ -25,11 +25,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import android.net.Uri
 import com.putnamworkbook.offline.backup.BackupCoordinator
 import com.putnamworkbook.offline.data.content.ContentRepository
 import com.putnamworkbook.offline.data.user.ProgressRepository
 import com.putnamworkbook.offline.data.user.SettingsRepository
 import com.putnamworkbook.offline.domain.model.ProblemKey
+import com.putnamworkbook.offline.domain.model.ProblemSetKey
 import com.putnamworkbook.offline.feature.archive.ArchiveScreen
 import com.putnamworkbook.offline.feature.archive.ArchiveViewModel
 import com.putnamworkbook.offline.feature.archive.ProblemListScreen
@@ -89,7 +91,9 @@ fun PutnamNavHost(
     modifier: Modifier = Modifier,
 ) {
     val navController = rememberNavController()
-    val homeViewModel = remember(progressRepository) { HomeViewModel(progressRepository) }
+    val homeViewModel = remember(progressRepository, contentRepository) {
+        HomeViewModel(progressRepository, contentRepository)
+    }
     val archiveViewModel = remember(contentRepository, progressRepository) {
         ArchiveViewModel(contentRepository, progressRepository)
     }
@@ -111,48 +115,60 @@ fun PutnamNavHost(
         composable(AppRoute.HOME) {
             HomeScreen(
                 state = homeState,
-                onContinue = { key -> navController.navigate(AppRoute.Workspace(key.year, key.code).path) },
-                onSelectProblem = { navController.navigate(AppRoute.ArchiveYears.path) },
+                onContinue = { key -> navController.navigate(AppRoute.Workspace(key).path) },
+                onSelectProblem = { navController.navigate(AppRoute.Library.path) },
                 onSettings = { navController.navigate(AppRoute.Settings.path) },
             )
         }
-        composable(AppRoute.ARCHIVE_YEARS) {
+        composable(AppRoute.LIBRARY) {
             ArchiveScreen(
                 state = archiveState,
                 onBack = { navController.popBackStack() },
-                onSelectYear = { year -> navController.navigate(AppRoute.YearProblems(year).path) },
+                onSelectTopic = archiveViewModel::selectTopic,
+                onSelectSet = { key -> navController.navigate(AppRoute.SetProblems(key).path) },
+                onSelectProblem = { key -> navController.navigate(AppRoute.Workspace(key).path) },
             )
         }
         composable(
-            route = AppRoute.YEAR_PROBLEMS_PATTERN,
-            arguments = listOf(navArgument("year") { type = NavType.IntType }),
+            route = AppRoute.SET_PROBLEMS_PATTERN,
+            arguments = listOf(
+                navArgument("collectionId") { type = NavType.StringType },
+                navArgument("setId") { type = NavType.StringType },
+            ),
         ) { entry ->
-            val year = requireNotNull(entry.arguments?.getInt("year"))
-            LaunchedEffect(year) { archiveViewModel.selectYear(year) }
+            val setKey = ProblemSetKey(
+                Uri.decode(requireNotNull(entry.arguments?.getString("collectionId"))),
+                Uri.decode(requireNotNull(entry.arguments?.getString("setId"))),
+            )
+            LaunchedEffect(setKey) { archiveViewModel.selectSet(setKey) }
             ProblemListScreen(
-                year = year,
+                setKey = setKey,
                 state = archiveState,
                 onBack = { navController.popBackStack() },
-                onSelectProblem = { key -> navController.navigate(AppRoute.Workspace(key.year, key.code).path) },
+                onSelectProblem = { key -> navController.navigate(AppRoute.Workspace(key).path) },
             )
         }
         composable(
             route = AppRoute.WORKSPACE_PATTERN,
             arguments = listOf(
-                navArgument("year") { type = NavType.IntType },
-                navArgument("code") { type = NavType.StringType },
+                navArgument("collectionId") { type = NavType.StringType },
+                navArgument("setId") { type = NavType.StringType },
+                navArgument("problemId") { type = NavType.StringType },
             ),
         ) { entry ->
-            val year = requireNotNull(entry.arguments?.getInt("year"))
-            val code = requireNotNull(entry.arguments?.getString("code"))
+            val key = ProblemKey(
+                Uri.decode(requireNotNull(entry.arguments?.getString("collectionId"))),
+                Uri.decode(requireNotNull(entry.arguments?.getString("setId"))),
+                Uri.decode(requireNotNull(entry.arguments?.getString("problemId"))),
+            )
             if (workspaceDependencies == null) {
                 Placeholder(
-                    text = "Workspace $year $code",
-                    tag = "workspace-placeholder-$year-$code",
+                    text = "Workspace ${key.canonical}",
+                    tag = "workspace-placeholder-${key.canonical}",
                 )
             } else {
                 WorkspaceDestination(
-                    key = ProblemKey(year, code),
+                    key = key,
                     contentRepository = contentRepository,
                     progressRepository = progressRepository,
                     dependencies = workspaceDependencies,
@@ -195,7 +211,7 @@ private fun WorkspaceDestination(
     val notebookFactory = remember(dependencies) { NotebookViewModelFactory(dependencies) }
     val notebookViewModel = remember(viewModelStoreOwner, key, notebookFactory) {
         ViewModelProvider(viewModelStoreOwner, notebookFactory).get(
-            "notebook-${key.year}-${key.code}",
+            "notebook-${key.canonical}",
             NotebookViewModel::class.java,
         )
     }
@@ -205,9 +221,9 @@ private fun WorkspaceDestination(
     var notebookOpened by remember(key) { mutableStateOf(false) }
     var exportMessage by remember(key) { mutableStateOf<String?>(null) }
     var exportInProgress by remember(key) { mutableStateOf(false) }
-    var hasPendingExport by rememberSaveable(key.year, key.code) { mutableStateOf(false) }
-    var pendingIncludeHints by rememberSaveable(key.year, key.code) { mutableStateOf(true) }
-    var pendingIncludeSolution by rememberSaveable(key.year, key.code) { mutableStateOf(true) }
+    var hasPendingExport by rememberSaveable(key.canonical) { mutableStateOf(false) }
+    var pendingIncludeHints by rememberSaveable(key.canonical) { mutableStateOf(true) }
+    var pendingIncludeSolution by rememberSaveable(key.canonical) { mutableStateOf(true) }
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val exportPdf = rememberLauncherForActivityResult(
@@ -323,7 +339,7 @@ private fun WorkspaceDestination(
             pendingIncludeHints = options.includeRevealedHints
             pendingIncludeSolution = options.includeRevealedSolution
             hasPendingExport = true
-            exportPdf.launch("putnam-${key.year}-${key.code}-workbook.pdf")
+            exportPdf.launch("${key.canonical.replace("/", "%2F")}-workbook.pdf")
         },
         exportMessage = exportMessage,
         exportInProgress = exportInProgress,

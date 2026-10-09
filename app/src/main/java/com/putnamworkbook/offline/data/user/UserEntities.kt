@@ -5,11 +5,10 @@ import androidx.room.Entity
 
 @Entity(
     tableName = "problem_progress",
-    primaryKeys = ["year", "problem_code"],
 )
 data class ProblemProgressEntity(
-    val year: Int,
-    @ColumnInfo(name = "problem_code") val problemCode: String,
+    @androidx.room.PrimaryKey
+    @ColumnInfo(name = "problem_key") val problemKey: String,
     val status: String,
     @ColumnInfo(name = "revealed_hint_count") val revealedHintCount: Int,
     @ColumnInfo(name = "solution_revealed") val solutionRevealed: Boolean,

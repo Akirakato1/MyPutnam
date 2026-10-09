@@ -80,10 +80,10 @@ class LocalContentClientTest {
     fun generatedHintAndItsKatexStylesAndFontResolveOffline() {
         val client = LocalContentClient(appContext)
         val generatedPaths = listOf(
-            "content/2025/problems/A1/hint-1.html",
-            "content/2025/shared/content.css",
-            "content/2025/shared/katex/katex.min.css",
-            "content/2025/shared/katex/fonts/KaTeX_Main-Regular.woff2",
+            "content/putnam/2025/problems/A1/hint-1.html",
+            "content/shared/content.css",
+            "content/shared/katex/katex.min.css",
+            "content/shared/katex/fonts/KaTeX_Main-Regular.woff2",
         )
 
         generatedPaths.forEach { path ->

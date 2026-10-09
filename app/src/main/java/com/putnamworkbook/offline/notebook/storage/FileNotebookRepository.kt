@@ -199,11 +199,11 @@ class FileNotebookRepository(
                 pages = listOf(NotebookPage(idFactory(), defaultPaper)),
             ).also { writeManifest(it) }
         }
-        return migrateIfNeeded(key, decoded)
+        return decoded.document
     }
 
     private fun loadExistingDocument(key: ProblemKey): NotebookDocument {
-        return migrateIfNeeded(key, readDecodedManifest(key))
+        return readDecodedManifest(key).document
     }
 
     private fun readDecodedManifest(key: ProblemKey): DecodedNotebookManifest {
@@ -212,19 +212,6 @@ class FileNotebookRepository(
         return NotebookManifestCodec.decode(Files.readAllBytes(manifest)).also { decoded ->
             if (decoded.document.key != key) throw IOException("Notebook manifest key does not match its directory")
         }
-    }
-
-    private fun migrateIfNeeded(
-        key: ProblemKey,
-        decoded: DecodedNotebookManifest,
-    ): NotebookDocument {
-        if (decoded.sourceVersion == NotebookDocument.SCHEMA_VERSION) return decoded.document
-        val manifest = manifestPath(key)
-        val legacyBytes = Files.readAllBytes(manifest)
-        val backup = manifest.resolveSibling("$MANIFEST_FILE.v1.bak")
-        if (!Files.exists(backup)) writer.write(backup, legacyBytes)
-        writer.write(manifest, NotebookManifestCodec.encode(decoded.document))
-        return decoded.document
     }
 
     private fun preserveCorruptManifest(manifest: Path) {
@@ -245,8 +232,14 @@ class FileNotebookRepository(
         notebookDirectory(key).resolve("strokes").resolve(pageId).resolve("$strokeId.stroke")
 
     private fun notebookDirectory(key: ProblemKey): Path {
-        require(key.year in 1938..2100 && key.code.matches(PROBLEM_CODE)) { "Invalid problem key" }
-        return root.resolve("${key.year}-${key.code}")
+        val normalizedRoot = root.toAbsolutePath().normalize()
+        val directory = normalizedRoot
+            .resolve(key.collectionId)
+            .resolve(key.setId)
+            .resolve(key.problemId)
+            .normalize()
+        require(directory.startsWith(normalizedRoot)) { "Notebook path escapes its configured root" }
+        return directory
     }
 
     private suspend fun <T> locked(block: () -> T): T =
@@ -260,6 +253,5 @@ class FileNotebookRepository(
 
     private companion object {
         const val MANIFEST_FILE = "manifest.bin"
-        val PROBLEM_CODE = Regex("[AB][1-6]")
     }
 }

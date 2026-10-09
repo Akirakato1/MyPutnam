@@ -20,11 +20,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.putnamworkbook.offline.domain.model.ProblemKey
+import com.putnamworkbook.offline.domain.model.ProblemSetKey
 import com.putnamworkbook.offline.domain.model.ProblemStatus
 
 @Composable
 fun ProblemListScreen(
-    year: Int,
+    setKey: ProblemSetKey,
     state: ArchiveUiState,
     onBack: () -> Unit,
     onSelectProblem: (ProblemKey) -> Unit,
@@ -35,19 +36,19 @@ fun ProblemListScreen(
             .fillMaxSize()
             .testTag("problem-list-screen"),
     ) {
-        ArchiveHeader(title = "$year problems", onBack = onBack)
+        ArchiveHeader(title = state.selectedSet?.title ?: setKey.setId, onBack = onBack)
         when {
-            state.isLoadingProblems || state.selectedYear != year -> Box(
+            state.isLoadingSetProblems || state.selectedSet?.key != setKey -> Box(
                 Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center,
             ) {
                 CircularProgressIndicator()
             }
-            state.errorMessage != null -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(state.errorMessage, color = MaterialTheme.colorScheme.error)
+            state.setError != null -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(state.setError, color = MaterialTheme.colorScheme.error)
             }
-            state.problems.isEmpty() -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("No problems are available for $year")
+            state.setProblems.isEmpty() -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("No problems are available for ${state.selectedSet?.title ?: setKey.setId}")
             }
             else -> LazyColumn(
                 modifier = Modifier
@@ -56,7 +57,7 @@ fun ProblemListScreen(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 contentPadding = androidx.compose.foundation.layout.PaddingValues(16.dp),
             ) {
-                itemsIndexed(state.problems, key = { _, row -> row.summary.key.code }) { index, row ->
+                itemsIndexed(state.setProblems, key = { _, row -> row.summary.key.canonical }) { index, row ->
                     ProblemRow(index, row, onSelectProblem)
                 }
             }
@@ -70,12 +71,12 @@ private fun ProblemRow(
     row: ProblemRowUiState,
     onSelectProblem: (ProblemKey) -> Unit,
 ) {
-    val code = row.summary.key.code
+    val label = row.summary.label
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onSelectProblem(row.summary.key) }
-            .testTag("problem-position-$index-$code"),
+            .testTag("library-problem-${row.summary.key.canonical}"),
     ) {
         Row(
             modifier = Modifier
@@ -84,23 +85,23 @@ private fun ProblemRow(
             horizontalArrangement = Arrangement.spacedBy(24.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(code, style = MaterialTheme.typography.headlineSmall)
+            Text(label, style = MaterialTheme.typography.headlineSmall)
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = row.progress.status.displayName(),
                     style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.testTag("problem-status-$code"),
+                    modifier = Modifier.testTag("problem-status-${row.summary.key.canonical}"),
                 )
                 Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
                     Text(
                         text = "${row.progress.revealedHintCount} ${plural(row.progress.revealedHintCount, "hint", "hints")} revealed",
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.testTag("problem-hints-$code"),
+                        modifier = Modifier.testTag("problem-hints-${row.summary.key.canonical}"),
                     )
                     Text(
                         text = "${row.progress.notebookPageCount} notebook ${plural(row.progress.notebookPageCount, "page", "pages")}",
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.testTag("problem-pages-$code"),
+                        modifier = Modifier.testTag("problem-pages-${row.summary.key.canonical}"),
                     )
                 }
             }

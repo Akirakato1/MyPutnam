@@ -37,7 +37,7 @@ class NotebookViewModelTest {
     @get:Rule
     val temporaryFolder = TemporaryFolder()
 
-    private val key = ProblemKey(2025, "A1")
+    private val key = ProblemKey("putnam", "2025", "A1")
 
     @Test
     fun firstOpenAutosavesBufferedStrokeAndUndoRedoSurviveReload() = runBlocking {
@@ -239,7 +239,7 @@ class NotebookViewModelTest {
 
         val secondRepository = FileNotebookRepository(temporaryFolder.newFolder("clipboard-b").toPath())
         val second = viewModel(secondRepository, FakeSettingsRepository(), wait = { }, clipboard = clipboard)
-        second.open(ProblemKey(2025, "A2"))
+        second.open(ProblemKey("putnam", "2025", "A2"))
         second.awaitIdle()
         assertFalse(second.uiState.value.clipboardHasContent)
         second.updateViewport(CanvasViewport(1_200f, 600f))

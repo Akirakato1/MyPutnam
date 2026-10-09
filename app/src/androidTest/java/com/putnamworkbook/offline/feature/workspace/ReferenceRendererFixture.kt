@@ -15,17 +15,17 @@ import com.putnamworkbook.offline.domain.model.ProblemStatus
 import com.putnamworkbook.offline.domain.model.ReferenceTab
 
 internal object ReferenceRendererFixture {
-    const val STATEMENT = "content/2025/problems/A1/statement.html"
-    const val SOLUTION = "content/2025/problems/A1/solution.html"
-    val HINTS = (1..4).map { "content/2025/problems/A1/hint-$it.html" }
-    val PREREQUISITES = (1..2).map { "content/2025/problems/A1/prerequisite-$it.html" }
+    const val STATEMENT = "content/putnam/2025/problems/A1/statement.html"
+    const val SOLUTION = "content/putnam/2025/problems/A1/solution.html"
+    val HINTS = (1..4).map { "content/putnam/2025/problems/A1/hint-$it.html" }
+    val PREREQUISITES = (1..2).map { "content/putnam/2025/problems/A1/prerequisite-$it.html" }
 
     fun state(tab: ReferenceTab): WorkspaceUiState {
-        val key = ProblemKey(2025, "A1")
+        val key = ProblemKey("putnam", "2025", "A1")
         return WorkspaceUiState(
             key = key,
             content = ProblemContent(
-                summary = ProblemSummary(key, 1),
+                summary = ProblemSummary(key, "A1", 1, "Putnam Competition", "2025", 2025),
                 statementAssetPath = STATEMENT,
                 statementSha256 = "0".repeat(64),
                 hints = HINTS.mapIndexed { index, path ->

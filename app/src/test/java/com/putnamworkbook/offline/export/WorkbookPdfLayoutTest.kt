@@ -17,7 +17,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class WorkbookPdfLayoutTest {
-    private val key = ProblemKey(2025, "A1")
+    private val key = ProblemKey("putnam", "2025", "A1")
 
     @Test
     fun optionalSectionsNeverIncludeUnrevealedMaterial() {
@@ -89,7 +89,7 @@ class WorkbookPdfLayoutTest {
     }
 
     private fun content() = ProblemContent(
-        summary = ProblemSummary(key, 1),
+        summary = ProblemSummary(key, "A1", 1, "Putnam Competition", "2025", 2025),
         statementAssetPath = "statement.html",
         statementSha256 = "a",
         hints = (1..4).map { index ->

@@ -6,13 +6,72 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 
 @Entity(
+    tableName = "collection",
+    indices = [Index(value = ["display_order"], unique = true)],
+)
+data class CollectionEntity(
+    @androidx.room.PrimaryKey val id: String,
+    val title: String,
+    val kind: String,
+    @ColumnInfo(name = "display_order") val displayOrder: Int,
+)
+
+@Entity(
+    tableName = "problem_set",
+    primaryKeys = ["collection_id", "set_id"],
+    foreignKeys = [
+        ForeignKey(
+            entity = CollectionEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["collection_id"],
+            onDelete = ForeignKey.CASCADE,
+        ),
+    ],
+    indices = [
+        Index(value = ["collection_id"]),
+        Index(value = ["collection_id", "display_order"], unique = true),
+    ],
+)
+data class ProblemSetEntity(
+    @ColumnInfo(name = "collection_id") val collectionId: String,
+    @ColumnInfo(name = "set_id") val setId: String,
+    val title: String,
+    @ColumnInfo(name = "display_order") val displayOrder: Int,
+    @ColumnInfo(name = "competition_year") val competitionYear: Int?,
+)
+
+@Entity(
+    tableName = "topic",
+    indices = [Index(value = ["display_order"], unique = true)],
+)
+data class TopicEntity(
+    @androidx.room.PrimaryKey val id: String,
+    val label: String,
+    @ColumnInfo(name = "display_order") val displayOrder: Int,
+)
+
+@Entity(
     tableName = "problem",
-    primaryKeys = ["year", "code"],
-    indices = [Index(value = ["year", "ordinal"], unique = true)],
+    foreignKeys = [
+        ForeignKey(
+            entity = ProblemSetEntity::class,
+            parentColumns = ["collection_id", "set_id"],
+            childColumns = ["collection_id", "set_id"],
+            onDelete = ForeignKey.CASCADE,
+        ),
+    ],
+    indices = [
+        Index(value = ["collection_id", "set_id"]),
+        Index(value = ["collection_id", "set_id", "problem_id"], unique = true),
+        Index(value = ["collection_id", "set_id", "ordinal"], unique = true),
+    ],
 )
 data class ProblemEntity(
-    val year: Int,
-    val code: String,
+    @androidx.room.PrimaryKey val key: String,
+    @ColumnInfo(name = "collection_id") val collectionId: String,
+    @ColumnInfo(name = "set_id") val setId: String,
+    @ColumnInfo(name = "problem_id") val problemId: String,
+    val label: String,
     val ordinal: Int,
     @ColumnInfo(name = "statement_asset_path") val statementAssetPath: String,
     @ColumnInfo(name = "statement_sha256") val statementSha256: String,
@@ -22,21 +81,44 @@ data class ProblemEntity(
 )
 
 @Entity(
-    tableName = "hint",
-    primaryKeys = ["year", "problem_code", "hint_order"],
+    tableName = "problem_topic",
+    primaryKeys = ["problem_key", "topic_id"],
     foreignKeys = [
         ForeignKey(
             entity = ProblemEntity::class,
-            parentColumns = ["year", "code"],
-            childColumns = ["year", "problem_code"],
+            parentColumns = ["key"],
+            childColumns = ["problem_key"],
+            onDelete = ForeignKey.CASCADE,
+        ),
+        ForeignKey(
+            entity = TopicEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["topic_id"],
+            onDelete = ForeignKey.RESTRICT,
+        ),
+    ],
+    indices = [Index(value = ["topic_id"])],
+)
+data class ProblemTopicEntity(
+    @ColumnInfo(name = "problem_key") val problemKey: String,
+    @ColumnInfo(name = "topic_id") val topicId: String,
+)
+
+@Entity(
+    tableName = "hint",
+    primaryKeys = ["problem_key", "hint_order"],
+    foreignKeys = [
+        ForeignKey(
+            entity = ProblemEntity::class,
+            parentColumns = ["key"],
+            childColumns = ["problem_key"],
             onDelete = ForeignKey.CASCADE,
         ),
     ],
-    indices = [Index(value = ["year", "problem_code"])],
+    indices = [Index(value = ["problem_key"])],
 )
 data class HintEntity(
-    val year: Int,
-    @ColumnInfo(name = "problem_code") val problemCode: String,
+    @ColumnInfo(name = "problem_key") val problemKey: String,
     @ColumnInfo(name = "hint_order") val order: Int,
     val stage: String,
     val title: String,
@@ -46,20 +128,19 @@ data class HintEntity(
 
 @Entity(
     tableName = "prerequisite",
-    primaryKeys = ["year", "problem_code", "prerequisite_order"],
+    primaryKeys = ["problem_key", "prerequisite_order"],
     foreignKeys = [
         ForeignKey(
             entity = ProblemEntity::class,
-            parentColumns = ["year", "code"],
-            childColumns = ["year", "problem_code"],
+            parentColumns = ["key"],
+            childColumns = ["problem_key"],
             onDelete = ForeignKey.CASCADE,
         ),
     ],
-    indices = [Index(value = ["year", "problem_code"])],
+    indices = [Index(value = ["problem_key"])],
 )
 data class PrerequisiteEntity(
-    val year: Int,
-    @ColumnInfo(name = "problem_code") val problemCode: String,
+    @ColumnInfo(name = "problem_key") val problemKey: String,
     @ColumnInfo(name = "prerequisite_order") val order: Int,
     val title: String,
     @ColumnInfo(name = "asset_path") val assetPath: String,

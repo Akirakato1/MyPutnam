@@ -1,11 +1,14 @@
 package com.putnamworkbook.offline
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
@@ -17,9 +20,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import com.putnamworkbook.offline.di.AppContainer
+import com.putnamworkbook.offline.di.initializeContent
+import com.putnamworkbook.offline.data.content.ContentRepository
 import com.putnamworkbook.offline.domain.model.AppSettings
 import com.putnamworkbook.offline.domain.model.AppTheme
 import com.putnamworkbook.offline.navigation.PutnamNavHost
@@ -34,8 +41,7 @@ fun PutnamApp(
     val appVersion = remember(context) {
         context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: "unknown"
     }
-    var contentVersion by remember { mutableStateOf("loading") }
-    val exportCoordinator = remember(container, context) { container.createExportCoordinator(context) }
+    var contentState by remember(container) { mutableStateOf<ContentStartupState>(ContentStartupState.Loading) }
     val settings by container.settingsRepository.observe().collectAsState(initial = AppSettings())
     var workspaceActive by remember { mutableStateOf(false) }
     val useDarkTheme = when (settings.theme) {
@@ -46,8 +52,13 @@ fun PutnamApp(
     LaunchedEffect(workspaceActive, settings.keepAwakeInWorkspace) {
         onKeepScreenAwakeChanged(workspaceActive && settings.keepAwakeInWorkspace)
     }
-    LaunchedEffect(container.contentRepository) {
-        contentVersion = container.contentRepository.contentVersion()
+    LaunchedEffect(container) {
+        contentState = try {
+            val repository = container.initializeContent()
+            ContentStartupState.Ready(repository, repository.contentVersion())
+        } catch (error: Exception) {
+            ContentStartupState.Error(error)
+        }
     }
     DisposableEffect(Unit) {
         onDispose { onKeepScreenAwakeChanged(false) }
@@ -61,20 +72,53 @@ fun PutnamApp(
                 .testTag("app-root"),
             color = MaterialTheme.colorScheme.background,
         ) {
-            PutnamNavHost(
-                contentRepository = container.contentRepository,
-                progressRepository = container.progressRepository,
-                workspaceDependencies = WorkspaceDependencies(
-                    settingsRepository = container.settingsRepository,
-                    notebookRepository = container.notebookRepository,
-                    notebookClipboard = container.notebookClipboard,
-                    backupCoordinator = container.backupCoordinator,
-                    exportCoordinator = exportCoordinator,
-                    appVersion = appVersion,
-                    contentVersion = contentVersion,
-                ),
-                onWorkspaceActiveChanged = { workspaceActive = it },
-            )
+            when (val state = contentState) {
+                ContentStartupState.Loading -> Box(
+                    modifier = Modifier.fillMaxSize().testTag("content-startup-loading"),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text("Preparing offline library…")
+                }
+
+                is ContentStartupState.Error -> Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(24.dp)
+                        .testTag("content-startup-error"),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text("Offline library could not be opened. Reinstall this development build and try again.")
+                }
+
+                is ContentStartupState.Ready -> {
+                    val exportCoordinator = remember(container, context, state.repository) {
+                        container.createExportCoordinator(context, state.repository)
+                    }
+                    PutnamNavHost(
+                        contentRepository = state.repository,
+                        progressRepository = container.progressRepository,
+                        workspaceDependencies = WorkspaceDependencies(
+                            settingsRepository = container.settingsRepository,
+                            notebookRepository = container.notebookRepository,
+                            notebookClipboard = container.notebookClipboard,
+                            backupCoordinator = container.backupCoordinator,
+                            exportCoordinator = exportCoordinator,
+                            appVersion = appVersion,
+                            contentVersion = state.contentVersion,
+                        ),
+                        onWorkspaceActiveChanged = { workspaceActive = it },
+                    )
+                }
+            }
         }
     }
+}
+
+private sealed interface ContentStartupState {
+    data object Loading : ContentStartupState
+    data class Ready(
+        val repository: ContentRepository,
+        val contentVersion: String,
+    ) : ContentStartupState
+    data class Error(val cause: Throwable) : ContentStartupState
 }

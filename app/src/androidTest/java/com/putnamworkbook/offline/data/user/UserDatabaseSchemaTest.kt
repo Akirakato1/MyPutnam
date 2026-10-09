@@ -31,7 +31,7 @@ class UserDatabaseSchemaTest {
             assertTrue("problem_progress" in tableNames)
             assertTrue("app_setting" in tableNames)
             assertFalse("problem" in tableNames)
-            assertEquals(1, sqlite.version)
+            assertEquals(2, sqlite.version)
         } finally {
             database.close()
         }
