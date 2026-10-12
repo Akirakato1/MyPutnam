@@ -67,6 +67,24 @@ export async function renderReview(contentDir, screenshotDir, options = {}) {
           katexErrors: [...document.querySelectorAll('.katex-error')]
             .map((element) => element.textContent?.trim() || 'unknown KaTeX error'),
           containsReplacementGlyph: document.body.innerText.includes('\uFFFD'),
+          overflowingElements: [...document.querySelectorAll('body *')]
+            .filter((element) => {
+              if (element.closest('.katex-mathml')) return false;
+              const style = getComputedStyle(element);
+              if (style.display === 'none' || style.visibility === 'hidden') return false;
+              const rect = element.getBoundingClientRect();
+              return rect.width > 0 && rect.height > 0
+                && (rect.left < -1 || rect.right > window.innerWidth + 1);
+            })
+            .slice(0, 10)
+            .map((element) => {
+              const rect = element.getBoundingClientRect();
+              const label = element.id
+                ? element.tagName.toLowerCase() + '#' + element.id
+                : element.tagName.toLowerCase()
+                  + [...element.classList].slice(0, 2).map((name) => '.' + name).join('');
+              return label + ' [' + Math.round(rect.left) + ', ' + Math.round(rect.right) + ']';
+            }),
           }));
 
           if (inspection.blank) pageFailures.push('document body is blank');
@@ -76,6 +94,9 @@ export async function renderReview(contentDir, screenshotDir, options = {}) {
           for (const katexError of inspection.katexErrors) pageFailures.push(`KaTeX error: ${katexError}`);
           if (inspection.containsReplacementGlyph) {
             pageFailures.push('document contains a missing-glyph replacement character');
+          }
+          for (const element of inspection.overflowingElements) {
+            pageFailures.push('element exceeds viewport: ' + element);
           }
 
           const screenshot = `${relativePath.replaceAll('/', '__').replace(/\.html$/i, '')}--w${width}.png`;

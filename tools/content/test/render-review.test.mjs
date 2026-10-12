@@ -44,3 +44,20 @@ test('render review rejects external requests', async (t) => {
     /external request/i,
   );
 });
+
+test('render review rejects content clipped inside an overflow-hidden container', async (t) => {
+  const root = await mkdtemp(join(tmpdir(), 'putnam-render-clipped-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const content = join(root, 'content-root');
+  await mkdir(content, { recursive: true });
+  await writeFile(
+    join(content, 'clipped.html'),
+    '<!doctype html><style>body{overflow:hidden}.clip{overflow:hidden;width:100%}.wide{width:2000px}</style><div class="clip"><div class="wide">Clipped formula</div></div>',
+    'utf8',
+  );
+
+  await assert.rejects(
+    renderReview(content, join(root, 'screenshots'), { widths: [480] }),
+    /element exceeds viewport/i,
+  );
+});
