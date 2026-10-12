@@ -1,0 +1,240 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2024",
+  "problemId": "A1",
+  "label": "A1",
+  "ordinal": 1,
+  "topics": ["number-theory", "algebra"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A1" }] },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Determine all positive integers " },
+          { "type": "inlineMath", "tex": "n" },
+          { "type": "text", "text": " for which there exist positive integers " },
+          { "type": "inlineMath", "tex": "a" },
+          { "type": "text", "text": ", " },
+          { "type": "inlineMath", "tex": "b" },
+          { "type": "text", "text": ", and " },
+          { "type": "inlineMath", "tex": "c" },
+          { "type": "text", "text": " satisfying" }
+        ]
+      },
+      { "type": "displayMath", "tex": "2a^n+3b^n=4c^n." }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Remove a common scale",
+      "document": { "blocks": [{
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "If one solution exists, divide " },
+          { "type": "inlineMath", "tex": "a,b,c" },
+          { "type": "text", "text": " by their greatest common divisor. What parity information follows immediately from the resulting primitive equation?" }
+        ]
+      }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Split off the quadratic case",
+      "document": { "blocks": [{
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "For " },
+          { "type": "inlineMath", "tex": "n\\ge 3" },
+          { "type": "text", "text": ", parity alone forces all three variables to be even. The borderline case " },
+          { "type": "inlineMath", "tex": "n=2" },
+          { "type": "text", "text": " needs a second modulus." }
+        ]
+      }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Use square residues modulo three",
+      "document": { "blocks": [
+        {
+          "type": "paragraph",
+          "runs": [
+            { "type": "text", "text": "When " },
+            { "type": "inlineMath", "tex": "n=2" },
+            { "type": "text", "text": ", rearrange the equation modulo " },
+            { "type": "inlineMath", "tex": "3" },
+            { "type": "text", "text": " as" }
+          ]
+        },
+        { "type": "displayMath", "tex": "a^2+c^2\\equiv 0\\pmod 3." },
+        { "type": "paragraph", "runs": [{ "type": "text", "text": "A square modulo three is only zero or one, so both squares must vanish modulo three." }] }
+      ] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Outline the contradiction",
+      "document": { "blocks": [{
+        "type": "list",
+        "ordered": true,
+        "items": [
+          [{ "type": "text", "text": "Exhibit a solution for " }, { "type": "inlineMath", "tex": "n=1" }, { "type": "text", "text": "." }],
+          [{ "type": "text", "text": "Assume a primitive solution for " }, { "type": "inlineMath", "tex": "n\\ge 2" }, { "type": "text", "text": " and use parity to show " }, { "type": "inlineMath", "tex": "a" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "b" }, { "type": "text", "text": " are even." }],
+          [{ "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "n\\ge 3" }, { "type": "text", "text": ", divide out the powers of two and force " }, { "type": "inlineMath", "tex": "c" }, { "type": "text", "text": " even." }],
+          [{ "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "n=2" }, { "type": "text", "text": ", use squares modulo three to force all three variables divisible by three." }]
+        ]
+      }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Primitive homogeneous solutions",
+      "document": { "blocks": [{
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "A homogeneous equation of degree " },
+          { "type": "inlineMath", "tex": "n" },
+          { "type": "text", "text": " is unchanged after dividing every variable by their common gcd. Thus a positive-integer solution yields one with " },
+          { "type": "inlineMath", "tex": "\\gcd(a,b,c)=1" },
+          { "type": "text", "text": "." }
+        ]
+      }] }
+    },
+    {
+      "order": 2,
+      "title": "Parity of powers",
+      "document": { "blocks": [{
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "x^n" },
+          { "type": "text", "text": " is even, then " }, { "type": "inlineMath", "tex": "x" },
+          { "type": "text", "text": " is even. For " }, { "type": "inlineMath", "tex": "n\\ge 3" },
+          { "type": "text", "text": ", an even " }, { "type": "inlineMath", "tex": "x" },
+          { "type": "text", "text": " makes " }, { "type": "inlineMath", "tex": "x^n" },
+          { "type": "text", "text": " divisible by " }, { "type": "inlineMath", "tex": "8" },
+          { "type": "text", "text": "." }
+        ]
+      }] }
+    },
+    {
+      "order": 3,
+      "title": "Squares modulo three",
+      "document": { "blocks": [{
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Every integer square is congruent to " },
+          { "type": "inlineMath", "tex": "0" }, { "type": "text", "text": " or " },
+          { "type": "inlineMath", "tex": "1\\pmod 3" },
+          { "type": "text", "text": ". Therefore " },
+          { "type": "inlineMath", "tex": "x^2+y^2\\equiv0\\pmod3" },
+          { "type": "text", "text": " forces both " },
+          { "type": "inlineMath", "tex": "x" }, { "type": "text", "text": " and " },
+          { "type": "inlineMath", "tex": "y" }, { "type": "text", "text": " to be divisible by three." }
+        ]
+      }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "The only answer is " },
+          { "type": "inlineMath", "tex": "n=1" },
+          { "type": "text", "text": ". Indeed, " },
+          { "type": "inlineMath", "tex": "(a,b,c)=(1,2,2)" },
+          { "type": "text", "text": " gives " },
+          { "type": "inlineMath", "tex": "2a+3b=4c" },
+          { "type": "text", "text": "." }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Suppose now that " },
+          { "type": "inlineMath", "tex": "n\\ge2" },
+          { "type": "text", "text": " and a solution exists. Because the equation is homogeneous, divide by the common gcd and assume " },
+          { "type": "inlineMath", "tex": "\\gcd(a,b,c)=1" },
+          { "type": "text", "text": ". From" }
+        ]
+      },
+      { "type": "displayMath", "tex": "3b^n=4c^n-2a^n" },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "we see that " }, { "type": "inlineMath", "tex": "b^n" },
+          { "type": "text", "text": " is even, hence " }, { "type": "inlineMath", "tex": "b" },
+          { "type": "text", "text": " is even. Since " }, { "type": "inlineMath", "tex": "n\\ge2" },
+          { "type": "text", "text": ", the term " }, { "type": "inlineMath", "tex": "3b^n" },
+          { "type": "text", "text": " is divisible by four. The original equation then makes " },
+          { "type": "inlineMath", "tex": "2a^n" }, { "type": "text", "text": " divisible by four, so " },
+          { "type": "inlineMath", "tex": "a" }, { "type": "text", "text": " is even as well." }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "First take " }, { "type": "inlineMath", "tex": "n\\ge3" },
+          { "type": "text", "text": ". Write " }, { "type": "inlineMath", "tex": "a=2a_1" },
+          { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "b=2b_1" },
+          { "type": "text", "text": ". Dividing the equation by four gives" }
+        ]
+      },
+      { "type": "displayMath", "tex": "2^{n-1}a_1^n+3\\cdot2^{n-2}b_1^n=c^n." },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "Both terms on the left are even, so " },
+          { "type": "inlineMath", "tex": "c^n" }, { "type": "text", "text": " and hence " },
+          { "type": "inlineMath", "tex": "c" },
+          { "type": "text", "text": " are even. This contradicts primitivity." }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "It remains to rule out " },
+          { "type": "inlineMath", "tex": "n=2" },
+          { "type": "text", "text": ". Reducing " },
+          { "type": "inlineMath", "tex": "2a^2+3b^2=4c^2" },
+          { "type": "text", "text": " modulo three and multiplying by the inverse of " },
+          { "type": "inlineMath", "tex": "2" },
+          { "type": "text", "text": " gives" }
+        ]
+      },
+      { "type": "displayMath", "tex": "a^2+c^2\\equiv0\\pmod3." },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "The only square residues modulo three are zero and one, so " },
+          { "type": "inlineMath", "tex": "3\\mid a" }, { "type": "text", "text": " and " },
+          { "type": "inlineMath", "tex": "3\\mid c" },
+          { "type": "text", "text": ". Writing " }, { "type": "inlineMath", "tex": "a=3a_1" },
+          { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "c=3c_1" },
+          { "type": "text", "text": ", the equation becomes" }
+        ]
+      },
+      { "type": "displayMath", "tex": "b^2=3\\left(4c_1^2-2a_1^2\\right)," },
+      {
+        "type": "paragraph",
+        "runs": [
+          { "type": "text", "text": "so " }, { "type": "inlineMath", "tex": "3\\mid b^2" },
+          { "type": "text", "text": " and therefore " }, { "type": "inlineMath", "tex": "3\\mid b" },
+          { "type": "text", "text": ". Again all three variables have a common divisor, a contradiction. Thus no " },
+          { "type": "inlineMath", "tex": "n\\ge2" },
+          { "type": "text", "text": " works, completing the proof." }
+        ]
+      }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2024 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2024 problems and solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2024 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2024s.tex" }
+  ]
+}

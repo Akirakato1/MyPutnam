@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2024",
+  "problemId": "A3",
+  "label": "A3",
+  "ordinal": 3,
+  "topics": ["combinatorics", "probability"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A3" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "S" },
+        { "type": "text", "text": " be the set of bijections" }
+      ] },
+      { "type": "displayMath", "tex": "T:\\{1,2,3\\}\\times\\{1,2,\\ldots,2024\\}" },
+      { "type": "displayMath", "tex": "\\longrightarrow\\{1,2,\\ldots,6072\\}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "such that " }, { "type": "inlineMath", "tex": "T(1,j)<T(2,j)<T(3,j)" },
+        { "type": "text", "text": " for all " }, { "type": "inlineMath", "tex": "j\\in\\{1,2,\\ldots,2024\\}" },
+        { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "T(i,j)<T(i,j+1)" },
+        { "type": "text", "text": " for all " }, { "type": "inlineMath", "tex": "i\\in\\{1,2,3\\}" },
+        { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "j\\in\\{1,2,\\ldots,2023\\}" },
+        { "type": "text", "text": ". Do there exist " }, { "type": "inlineMath", "tex": "a,c\\in\\{1,2,3\\}" },
+        { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "b,d\\in\\{1,2,\\ldots,2024\\}" },
+        { "type": "text", "text": " such that the fraction of elements " }, { "type": "inlineMath", "tex": "T\\in S" },
+        { "type": "text", "text": " for which " }, { "type": "inlineMath", "tex": "T(a,b)<T(c,d)" },
+        { "type": "text", "text": " is at least " }, { "type": "inlineMath", "tex": "1/3" },
+        { "type": "text", "text": " and at most " }, { "type": "inlineMath", "tex": "2/3" }, { "type": "text", "text": "?" }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Compare the two cells next to the minimum",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Generalize to a " }, { "type": "inlineMath", "tex": "3\\times n" },
+        { "type": "text", "text": " increasing array. Since " }, { "type": "inlineMath", "tex": "T(1,1)=1" },
+        { "type": "text", "text": ", the entry " }, { "type": "inlineMath", "tex": "2" },
+        { "type": "text", "text": " must lie in one of the two cells " }, { "type": "inlineMath", "tex": "(2,1)" },
+        { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "(1,2)" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Turn the fraction into a tableau ratio",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Choose " }, { "type": "inlineMath", "tex": "(a,b)=(2,1)" },
+        { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "(c,d)=(1,2)" },
+        { "type": "text", "text": ". The desired event is exactly " }, { "type": "inlineMath", "tex": "T(2,1)=2" },
+        { "type": "text", "text": ". Count all rectangular tableaux, then count those with the first two entries fixed." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Use the three-row hook-length formula",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "For left-justified row lengths " }, { "type": "inlineMath", "tex": "n_1\\ge n_2\\ge n_3\\ge0" },
+          { "type": "text", "text": ", the number of standard tableaux is" }
+        ] },
+        { "type": "displayMath", "tex": "\\begin{aligned} f(n_1,n_2,n_3)&=\\frac{n_1-n_2+1}{(n_1+2)!}\\frac{n_1-n_3+2}{(n_2+1)!}\\\\ &\\quad\\cdot\\frac{(n_2-n_3+1)(n_1+n_2+n_3)!}{n_3!}. \\end{aligned}" },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "After deleting the fixed entries " }, { "type": "inlineMath", "tex": "1,2" },
+          { "type": "text", "text": ", complementing labels, and rotating the diagram, the remaining shape has row lengths " },
+          { "type": "inlineMath", "tex": "(n,n-1,n-1)" }, { "type": "text", "text": "." }
+        ] }
+      ] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Outline the probability calculation",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Interpret S as the standard tableaux of a " }, { "type": "inlineMath", "tex": "3\\times n" }, { "type": "text", "text": " rectangle." }],
+        [{ "type": "text", "text": "Show the chosen comparison occurs exactly when " }, { "type": "inlineMath", "tex": "T(2,1)=2" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Express its probability as " }, { "type": "inlineMath", "tex": "f(n,n-1,n-1)/f(n,n,n)" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Simplify the ratio and check the bounds when " }, { "type": "inlineMath", "tex": "n=2024" }, { "type": "text", "text": "." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Increasing arrays as standard Young tableaux",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "A standard Young tableau fills a left-justified diagram with " },
+        { "type": "inlineMath", "tex": "1,2,\\ldots,N" },
+        { "type": "text", "text": " so entries increase along rows and down columns. Thus the maps in this problem are precisely tableaux of rectangular shape " },
+        { "type": "inlineMath", "tex": "(n,n,n)" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "title": "Hook-length formula for three rows",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [{ "type": "text", "text": "The hook-length formula counts standard tableaux. In the three-row case it simplifies to" }] },
+        { "type": "displayMath", "tex": "\\begin{aligned} f(u,v,w)&=\\frac{u-v+1}{(u+2)!}\\frac{u-w+2}{(v+1)!}\\\\ &\\quad\\cdot\\frac{(v-w+1)(u+v+w)!}{w!}. \\end{aligned}" },
+        { "type": "paragraph", "runs": [{ "type": "text", "text": "It can also be proved directly by induction, placing the largest entry at the right end of one row and using the resulting three-term recurrence." }] }
+      ] }
+    },
+    {
+      "order": 3,
+      "title": "Probability by uniform counting",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For a finite set with the uniform distribution, the probability of an event is its number of favorable objects divided by the total number of objects. A bijection between favorable objects and tableaux of another shape turns the probability into a ratio of tableau counts." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Yes. We will use " }, { "type": "inlineMath", "tex": "(a,b)=(2,1)" },
+        { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "(c,d)=(1,2)" },
+        { "type": "text", "text": ". Work first with a general " }, { "type": "inlineMath", "tex": "3\\times n" },
+        { "type": "text", "text": " array and put " }, { "type": "inlineMath", "tex": "n=2024" }, { "type": "text", "text": " at the end." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Every admissible array is a standard Young tableau of rectangular shape " },
+        { "type": "inlineMath", "tex": "(n,n,n)" }, { "type": "text", "text": ". Its smallest entry must be " },
+        { "type": "inlineMath", "tex": "T(1,1)=1" }, { "type": "text", "text": ". Once that cell is occupied, the only available cells for the next entry are " },
+        { "type": "inlineMath", "tex": "(2,1)" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "(1,2)" },
+        { "type": "text", "text": ". Hence" }
+      ] },
+      { "type": "displayMath", "tex": "T(2,1)<T(1,2)\\quad\\Longleftrightarrow\\quad T(2,1)=2." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "f(n_1,n_2,n_3)" },
+        { "type": "text", "text": " denote the number of standard tableaux with left-justified row lengths " },
+        { "type": "inlineMath", "tex": "n_1\\ge n_2\\ge n_3" }, { "type": "text", "text": ". The three-row hook-length formula is" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned} f(n_1,n_2,n_3)&=\\frac{n_1-n_2+1}{(n_1+2)!}\\frac{n_1-n_3+2}{(n_2+1)!}\\\\ &\\quad\\cdot\\frac{(n_2-n_3+1)(n_1+n_2+n_3)!}{n_3!}. \\end{aligned}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The total number of arrays is " }, { "type": "inlineMath", "tex": "f(n,n,n)" },
+        { "type": "text", "text": ". For a favorable array, remove the cells containing " }, { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "2" },
+        { "type": "text", "text": ". Replace each remaining label " }, { "type": "inlineMath", "tex": "i" },
+        { "type": "text", "text": " by " }, { "type": "inlineMath", "tex": "3n+1-i" },
+        { "type": "text", "text": " and rotate the array by 180 degrees. This is a reversible transformation to a standard tableau with row lengths " },
+        { "type": "inlineMath", "tex": "(n,n-1,n-1)" }, { "type": "text", "text": ". Therefore the desired fraction is" }
+      ] },
+      { "type": "displayMath", "tex": "\\frac{f(n,n-1,n-1)}{f(n,n,n)}." },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Substitution in the formula gives" }] },
+      { "type": "displayMath", "tex": "f(n,n,n)=\\frac{2(3n)!}{(n+2)!(n+1)!n!}," },
+      { "type": "displayMath", "tex": "f(n,n-1,n-1)=\\frac{6(3n-2)!}{(n+2)!n!(n-1)!}," },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "and hence" }] },
+      { "type": "displayMath", "tex": "\\frac{f(n,n-1,n-1)}{f(n,n,n)}=\\frac{n+1}{3n-1}=\\frac13+\\frac{4}{9n-3}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "n=2024" },
+        { "type": "text", "text": " this is " }, { "type": "inlineMath", "tex": "2025/6071" },
+        { "type": "text", "text": ", which is greater than " }, { "type": "inlineMath", "tex": "1/3" },
+        { "type": "text", "text": " and less than " }, { "type": "inlineMath", "tex": "2/3" },
+        { "type": "text", "text": ". Thus the displayed choices of " }, { "type": "inlineMath", "tex": "a,b,c,d" },
+        { "type": "text", "text": " answer the question affirmatively." }
+      ] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2024 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2024 problems and solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2024 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2024s.tex" }
+  ]
+}

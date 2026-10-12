@@ -1,0 +1,57 @@
+{
+  "year": 2024,
+  "publisher": "Mathematical Association of America",
+  "usage": "Personal, noncommercial offline study only.",
+  "sources": [
+    {
+      "id": "problems",
+      "title": "2024 William Lowell Putnam Mathematical Competition — Problems for Sessions A and B",
+      "publisher": "Mathematical Association of America",
+      "requestUrl": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Problems.pdf",
+      "url": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Problems.pdf",
+      "mediaType": "application/pdf",
+      "retrievedOn": "2026-10-12",
+      "file": "original/2024-problems.pdf",
+      "byteLength": 581050,
+      "pageCount": 2,
+      "sha256": "a5077a5727dc6f1a3de408c109f86cd239bba204b67333af78f3bc452884d9eb"
+    },
+    {
+      "id": "solutions",
+      "title": "2024 William Lowell Putnam Mathematical Competition — Official Problems and Solutions",
+      "publisher": "Mathematical Association of America",
+      "requestUrl": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Solutions.pdf",
+      "url": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Solutions.pdf",
+      "mediaType": "application/pdf",
+      "retrievedOn": "2026-10-12",
+      "file": "original/2024-solutions.pdf",
+      "byteLength": 453072,
+      "pageCount": 26,
+      "sha256": "371aca1b4d1356247c12d537a549c8dd6fb083acd6ce194d0dd70fedb4f8d6c2"
+    },
+    {
+      "id": "kedlaya-statements",
+      "title": "Putnam 2024 problem statements — TeX cross-check",
+      "publisher": "Kiran S. Kedlaya",
+      "requestUrl": "https://kskedlaya.org/putnam-archive/2024.tex",
+      "url": "https://kskedlaya.org/putnam-archive/2024.tex",
+      "mediaType": "application/x-tex",
+      "retrievedOn": "2026-10-12",
+      "file": "original/2024.tex",
+      "byteLength": 4121,
+      "sha256": "837c992fde085edbad47bd9a5019f7127dd20d796b4f472c7729fb080a3378fe"
+    },
+    {
+      "id": "kedlaya-solutions",
+      "title": "Putnam 2024 solutions — TeX cross-check",
+      "publisher": "Kiran S. Kedlaya",
+      "requestUrl": "https://kskedlaya.org/putnam-archive/2024s.tex",
+      "url": "https://kskedlaya.org/putnam-archive/2024s.tex",
+      "mediaType": "application/x-tex",
+      "retrievedOn": "2026-10-12",
+      "file": "original/2024s.tex",
+      "byteLength": 39240,
+      "sha256": "6d8c250d2caea78ce84126e02de0318826dceae919a1b2b0320460b3ca0697ef"
+    }
+  ]
+}

@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2024",
+  "problemId": "A2",
+  "label": "A2",
+  "ordinal": 2,
+  "topics": ["algebra", "polynomials", "functional-equations"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A2" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For which real polynomials " }, { "type": "inlineMath", "tex": "p" },
+        { "type": "text", "text": " is there a real polynomial " }, { "type": "inlineMath", "tex": "q" },
+        { "type": "text", "text": " such that" }
+      ] },
+      { "type": "displayMath", "tex": "p(p(x))-x=(p(x)-x)^2q(x)" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "for all real " }, { "type": "inlineMath", "tex": "x" }, { "type": "text", "text": "?" }] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Name the repeated factor",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Set " }, { "type": "inlineMath", "tex": "r(x)=p(x)-x" },
+        { "type": "text", "text": ". The condition says that " }, { "type": "inlineMath", "tex": "p(p(x))-x" },
+        { "type": "text", "text": " vanishes to second order in the polynomial " }, { "type": "inlineMath", "tex": "r" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Work modulo the square",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Since " }, { "type": "inlineMath", "tex": "p(x)=x+r(x)" },
+        { "type": "text", "text": ", expand " }, { "type": "inlineMath", "tex": "p(x+r(x))" },
+        { "type": "text", "text": " only through terms linear in " }, { "type": "inlineMath", "tex": "r(x)" },
+        { "type": "text", "text": ", because all higher terms are multiples of " }, { "type": "inlineMath", "tex": "r(x)^2" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Polynomial Taylor congruence",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "p(x+r(x))\\equiv p(x)+p'(x)r(x)\\pmod{r(x)^2}." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "Consequently the required divisibility forces either " }, { "type": "inlineMath", "tex": "r=0" },
+          { "type": "text", "text": " or " }, { "type": "inlineMath", "tex": "r\\mid(1+p')" }, { "type": "text", "text": ". Compare degrees." }
+        ] }
+      ] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Outline the classification",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Introduce " }, { "type": "inlineMath", "tex": "r=p-x" }, { "type": "text", "text": " and reduce the composition modulo " }, { "type": "inlineMath", "tex": "r^2" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Derive " }, { "type": "inlineMath", "tex": "r\\mid(1+p')" }, { "type": "text", "text": " unless " }, { "type": "inlineMath", "tex": "r=0" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Handle constant " }, { "type": "inlineMath", "tex": "r" }, { "type": "text", "text": ", then use degree comparison for nonconstant " }, { "type": "inlineMath", "tex": "r" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Verify directly that both resulting affine families admit a polynomial " }, { "type": "inlineMath", "tex": "q" }, { "type": "text", "text": "." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Divisibility in a polynomial ring",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For real polynomials, " }, { "type": "inlineMath", "tex": "f\\equiv g\\pmod h" },
+        { "type": "text", "text": " means " }, { "type": "inlineMath", "tex": "h" }, { "type": "text", "text": " divides " },
+        { "type": "inlineMath", "tex": "f-g" }, { "type": "text", "text": ". If a nonzero polynomial divides another, its degree cannot be larger." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "title": "First-order polynomial expansion",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For polynomials " }, { "type": "inlineMath", "tex": "f" }, { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "u" }, { "type": "text", "text": ", the difference " },
+        { "type": "inlineMath", "tex": "f(x+u)-f(x)-f'(x)u" }, { "type": "text", "text": " is divisible by " },
+        { "type": "inlineMath", "tex": "u^2" }, { "type": "text", "text": ". This is the finite Taylor formula, so no convergence issue is involved." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "title": "Degrees after subtracting x",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "\\deg p\\ge2" }, { "type": "text", "text": ", then " },
+        { "type": "inlineMath", "tex": "\\deg(p-x)=\\deg p" }, { "type": "text", "text": " while " },
+        { "type": "inlineMath", "tex": "\\deg(1+p')\\le\\deg p-1" },
+        { "type": "text", "text": ". Linear polynomials must be checked separately because their leading term can cancel with " },
+        { "type": "inlineMath", "tex": "x" }, { "type": "text", "text": "." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "The solutions are exactly" }] },
+      { "type": "displayMath", "tex": "p(x)=x+c\\quad\\text{or}\\quad p(x)=-x+c,\\qquad c\\in\\mathbb R." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "r(x)=p(x)-x" },
+        { "type": "text", "text": ". The given identity is equivalent to" }
+      ] },
+      { "type": "displayMath", "tex": "r(x)^2\\mid p(p(x))-x." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Since " }, { "type": "inlineMath", "tex": "p(x)=x+r(x)" },
+        { "type": "text", "text": ", the finite Taylor expansion gives" }
+      ] },
+      { "type": "displayMath", "tex": "p(p(x))=p(x+r(x))," },
+      { "type": "displayMath", "tex": "p(x+r(x))\\equiv p(x)+p'(x)r(x)\\pmod{r(x)^2}." },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Subtracting x therefore yields" }] },
+      { "type": "displayMath", "tex": "p(p(x))-x\\equiv r(x)(1+p'(x))\\pmod{r(x)^2}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "r=0" }, { "type": "text", "text": ", then " },
+        { "type": "inlineMath", "tex": "p=x" }, { "type": "text", "text": ". Otherwise cancellation in " },
+        { "type": "inlineMath", "tex": "\\mathbb R[x]" }, { "type": "text", "text": " gives " },
+        { "type": "inlineMath", "tex": "r\\mid(1+p')" }, { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "r" }, { "type": "text", "text": " is constant, then " },
+        { "type": "inlineMath", "tex": "p=x+c" }, { "type": "text", "text": ". If " }, { "type": "inlineMath", "tex": "r" },
+        { "type": "text", "text": " is nonconstant and " }, { "type": "inlineMath", "tex": "d=\\deg p\\ge2" },
+        { "type": "text", "text": ", then " }, { "type": "inlineMath", "tex": "\\deg r=d" }, { "type": "text", "text": " but " },
+        { "type": "inlineMath", "tex": "\\deg(1+p')\\le d-1" }, { "type": "text", "text": ", impossible." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Thus the remaining case is " }, { "type": "inlineMath", "tex": "p(x)=ax+b" },
+        { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "a\\ne1" },
+        { "type": "text", "text": ". The degree-one polynomial " }, { "type": "inlineMath", "tex": "r=(a-1)x+b" },
+        { "type": "text", "text": " divides the constant " }, { "type": "inlineMath", "tex": "1+p'=1+a" },
+        { "type": "text", "text": " only if that constant is zero. Hence " }, { "type": "inlineMath", "tex": "a=-1" },
+        { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "p=-x+b" }, { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Both families work. For " }, { "type": "inlineMath", "tex": "p=x+c" },
+        { "type": "text", "text": ", take " }, { "type": "inlineMath", "tex": "q=2/c" },
+        { "type": "text", "text": " if " }, { "type": "inlineMath", "tex": "c\\ne0" },
+        { "type": "text", "text": "; if " }, { "type": "inlineMath", "tex": "c=0" }, { "type": "text", "text": ", both sides vanish. For " },
+        { "type": "inlineMath", "tex": "p=-x+c" }, { "type": "text", "text": ", the left side vanishes, so " },
+        { "type": "inlineMath", "tex": "q=0" }, { "type": "text", "text": " works." }
+      ] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2024 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2024 problems and solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2024 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2024s.tex" }
+  ]
+}
