@@ -7,6 +7,8 @@ import { auditYear } from '../src/audit-year.mjs';
 import {
   createYearFixture,
   readProblem,
+  reviewNote,
+  YEAR_CODES,
   writeProblem,
 } from './helpers/year-fixture.mjs';
 
@@ -69,6 +71,49 @@ test('an absent review note and an incomplete review check are rejected', async 
   const errors = await auditYear(sourceRoot, 2024);
   assert.ok(errors.some((error) => error.includes('review/A4.md') && error.includes('missing')), errors.join('\n'));
   assert.ok(errors.some((error) => error.includes('review/A5.md') && error.includes('Mathematical review')), errors.join('\n'));
+});
+
+test('authoring preview audits an explicit subset without requiring absent records or render sign-off', async (t) => {
+  const { sourceRoot } = await createYearFixture(t);
+  for (const code of YEAR_CODES.slice(3)) {
+    await rm(join(sourceRoot, 'problems', code + '.json'));
+    await rm(join(sourceRoot, 'review', code + '.md'));
+  }
+  for (const code of YEAR_CODES.slice(0, 3)) {
+    await writeFile(
+      join(sourceRoot, 'review', code + '.md'),
+      reviewNote(2024, code).replace('Render review: complete', 'Render review: pending'),
+      'utf8',
+    );
+  }
+
+  const strictErrors = await auditYear(sourceRoot, 2024);
+  assert.ok(strictErrors.some((error) => error.includes('problems/A4.json') && error.includes('missing')), strictErrors.join('\n'));
+  assert.ok(strictErrors.some((error) => error.includes('review/A1.md') && error.includes('Render review')), strictErrors.join('\n'));
+
+  assert.deepEqual(await auditYear(sourceRoot, 2024, {
+    problems: ['A1', 'A2', 'A3'],
+    requireCompleteYear: false,
+    requireRenderReview: false,
+  }), []);
+});
+
+test('review evidence requires prerequisite judgment and both reference widths', async (t) => {
+  const { sourceRoot } = await createYearFixture(t);
+  const reviewPath = join(sourceRoot, 'review', 'A1.md');
+  const review = await readFile(reviewPath, 'utf8');
+  await writeFile(
+    reviewPath,
+    review
+      .replace(/^- Prerequisite review:.*\n/m, '')
+      .replace('480 CSS px and 720 CSS px', '600 CSS px'),
+    'utf8',
+  );
+
+  const errors = await auditYear(sourceRoot, 2024);
+  assert.ok(errors.some((error) => error.includes('review/A1.md') && error.includes('Prerequisite review')), errors.join('\n'));
+  assert.ok(errors.some((error) => error.includes('review/A1.md') && error.includes('480')), errors.join('\n'));
+  assert.ok(errors.some((error) => error.includes('review/A1.md') && error.includes('720')), errors.join('\n'));
 });
 
 test('a record missing its solution citation is rejected', async (t) => {

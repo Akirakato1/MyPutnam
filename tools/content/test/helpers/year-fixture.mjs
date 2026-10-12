@@ -92,7 +92,8 @@ export function reviewNote(year, code) {
     + '## Checks\n\n'
     + '- Statement fidelity: complete — checked against the locked problem source.\n'
     + '- Mathematical review: complete — proof route and conclusion agree with the published solution.\n'
-    + '- Render review: complete — all authored documents are legible at the reference-pane width.\n\n'
+    + '- Prerequisite review: complete — each refresher supplies reusable background rather than restating the solution.\n'
+    + '- Render review: complete — all authored documents are legible at 480 CSS px and 720 CSS px.\n\n'
     + '- Topic review: complete — `algebra` is a reviewed fixture topic.\n\n'
     + '## Hint separation\n\n'
     + 'The nudge preserves the key idea; strategy names the reduction; knowledge supplies the needed fact; '
@@ -104,7 +105,9 @@ function sourceLock(id, file, url, bytes) {
     id,
     title: 'Fixture ' + id,
     publisher: 'Fixture publisher',
+    requestUrl: url,
     url,
+    mediaType: 'application/x-tex',
     retrievedOn: '2026-10-02',
     file,
     byteLength: bytes.byteLength,

@@ -2,6 +2,9 @@ import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { extname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { TextDecoder } from 'node:util';
+
+import { PDFDocument } from 'pdf-lib';
 
 import { isPlainObject, isSafeLocalPath } from './content-types.mjs';
 
@@ -48,8 +51,14 @@ export async function auditSourceLocks(sourceRoot) {
       seenIds.set(source.id, index);
     }
 
+    if (typeof source.requestUrl !== 'string' || !source.requestUrl.startsWith('https://')) {
+      errors.push(path + '.requestUrl: initial source requests must use https://');
+    }
     if (typeof source.url !== 'string' || !source.url.startsWith('https://')) {
       errors.push(path + '.url: source citations must use https://');
+    }
+    if (!['application/pdf', 'application/x-tex'].includes(source.mediaType)) {
+      errors.push(path + '.mediaType: expected application/pdf or application/x-tex');
     }
     if (typeof source.retrievedOn !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(source.retrievedOn)) {
       errors.push(path + '.retrievedOn: expected YYYY-MM-DD');
@@ -60,9 +69,11 @@ export async function auditSourceLocks(sourceRoot) {
     if (typeof source.sha256 !== 'string' || !/^[a-f0-9]{64}$/.test(source.sha256)) {
       errors.push(path + '.sha256: expected a lowercase SHA-256 digest');
     }
-    if (source.pageCount !== undefined
+    if (source.mediaType === 'application/pdf'
         && (!Number.isSafeInteger(source.pageCount) || source.pageCount <= 0)) {
-      errors.push(path + '.pageCount: expected a positive integer when provided');
+      errors.push(path + '.pageCount: a positive parsed page count is required for PDF sources');
+    } else if (source.mediaType !== 'application/pdf' && source.pageCount !== undefined) {
+      errors.push(path + '.pageCount: page counts are supported only for PDF sources');
     }
 
     if (!isSafeLocalPath(source.file)) {
@@ -92,16 +103,37 @@ export async function auditSourceLocks(sourceRoot) {
       }
     }
 
-    if (source.pageCount !== undefined) {
-      if (extname(source.file).toLowerCase() !== '.pdf') {
-        errors.push(path + '.pageCount: page counts are supported only for PDF sources');
-      } else if (bytes.subarray(0, 5).toString('ascii') !== '%PDF-') {
-        errors.push(path + '.pageCount: locked source is not a PDF');
+    const extension = extname(source.file).toLowerCase();
+    if (extension === '.pdf' && source.mediaType !== 'application/pdf') {
+      errors.push(path + '.mediaType: expected application/pdf for a .pdf source');
+    }
+    if (extension === '.tex' && source.mediaType !== 'application/x-tex') {
+      errors.push(path + '.mediaType: expected application/x-tex for a .tex source');
+    }
+
+    if (source.mediaType === 'application/pdf') {
+      if (bytes.subarray(0, 5).toString('ascii') !== '%PDF-') {
+        errors.push(path + ': locked source is not a PDF');
       } else {
-        const actualPageCount = [...bytes.toString('latin1').matchAll(/\/Type\s*\/Page\b/g)].length;
-        if (actualPageCount !== source.pageCount) {
-          errors.push(path + '.pageCount: expected ' + source.pageCount + ', found ' + actualPageCount);
+        try {
+          const document = await PDFDocument.load(bytes, {
+            ignoreEncryption: false,
+            updateMetadata: false,
+          });
+          const actualPageCount = document.getPageCount();
+          if (Number.isSafeInteger(source.pageCount) && actualPageCount !== source.pageCount) {
+            errors.push(path + '.pageCount: expected ' + source.pageCount + ', found ' + actualPageCount);
+          }
+        } catch (error) {
+          errors.push(path + ': locked PDF cannot be parsed (' + error.message + ')');
         }
+      }
+    } else if (source.mediaType === 'application/x-tex') {
+      try {
+        const text = new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+        if (text.length === 0) errors.push(path + ': locked TeX source is empty');
+      } catch (error) {
+        errors.push(path + ': locked TeX source is not valid UTF-8 (' + error.message + ')');
       }
     }
   }

@@ -16,6 +16,9 @@ export async function reviewYear({
   catalog,
   catalogPath,
   problems,
+  widths = [480, 720],
+  requireCompleteYear = true,
+  requireRenderReview = true,
 }) {
   if (!Number.isInteger(year)) {
     throw new Error('year must be an integer');
@@ -29,7 +32,13 @@ export async function reviewYear({
   const resolvedReview = resolve(reviewRoot);
   assertReviewRoots(resolvedSource, resolvedPreview, resolvedReview);
 
-  const errors = await auditYear(resolvedSource, year, { catalog, catalogPath });
+  const errors = await auditYear(resolvedSource, year, {
+    catalog,
+    catalogPath,
+    problems,
+    requireCompleteYear,
+    requireRenderReview,
+  });
   if (errors.length > 0) {
     throw new Error(
       'Year ' + year + ' audit failed:\n' + errors.map((error) => '- ' + error).join('\n'),
@@ -43,7 +52,7 @@ export async function reviewYear({
     catalogPath,
     ...(problems ? { problems } : {}),
   });
-  const review = await renderReview(resolvedPreview, resolvedReview);
+  const review = await renderReview(resolvedPreview, resolvedReview, { widths });
   return { manifest, review };
 }
 
@@ -91,6 +100,10 @@ function parseArguments(args) {
       options.problems = takeValue().split(',').filter(Boolean);
     } else if (name === '--catalog') {
       options.catalogPath = takeValue();
+    } else if (name === '--widths') {
+      options.widths = takeValue().split(',').map((value) => Number.parseInt(value, 10));
+    } else if (name === '--preview') {
+      options.preview = true;
     } else {
       throw new Error('Unknown argument: ' + argument);
     }
@@ -102,6 +115,15 @@ function parseArguments(args) {
   options.sourceRoot ??= join(repositoryRoot, 'content-src', String(options.year));
   options.previewRoot ??= join(repositoryRoot, 'build', 'content-preview', String(options.year));
   options.reviewRoot ??= join(repositoryRoot, 'build', 'content-review', String(options.year));
+  if (options.preview) {
+    if (!options.problems?.length) throw new Error('--preview requires an explicit --problems subset');
+    options.requireCompleteYear = false;
+    options.requireRenderReview = false;
+  } else {
+    options.requireCompleteYear = true;
+    options.requireRenderReview = true;
+  }
+  delete options.preview;
   return options;
 }
 

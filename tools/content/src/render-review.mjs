@@ -1,4 +1,4 @@
-import { mkdir, readdir, rm } from 'node:fs/promises';
+import { mkdir, readdir, rm, writeFile } from 'node:fs/promises';
 import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 
@@ -8,6 +8,7 @@ export async function renderReview(contentDir, screenshotDir, options = {}) {
   const contentRoot = resolve(contentDir);
   const screenshotRoot = resolve(screenshotDir);
   assertDisposableDirectory(screenshotRoot);
+  const widths = validateWidths(options.widths ?? [480, 720]);
 
   const htmlFiles = await findHtmlFiles(contentRoot);
   if (htmlFiles.length === 0) {
@@ -19,29 +20,41 @@ export async function renderReview(contentDir, screenshotDir, options = {}) {
 
   const browser = await chromium.launch({ headless: true });
   const failures = [];
+  const screenshots = [];
+  const entries = [];
   try {
     for (const htmlFile of htmlFiles) {
-      const page = await browser.newPage({
-        viewport: options.viewport ?? { width: 860, height: 1100 },
-        deviceScaleFactor: 1,
-      });
       const relativePath = relative(contentRoot, htmlFile).replaceAll('\\', '/');
-      const pageFailures = [];
+      for (const width of widths) {
+        const page = await browser.newPage({
+          viewport: { width, height: options.height ?? 1100 },
+          deviceScaleFactor: 1,
+        });
+        const pageFailures = [];
 
-      page.on('console', (message) => {
-        if (message.type() === 'error') {
-          pageFailures.push(`console: ${message.text()}`);
-        }
-      });
-      page.on('pageerror', (error) => pageFailures.push(`page: ${error.message}`));
-      page.on('requestfailed', (request) => {
-        pageFailures.push(`asset: ${request.url()} (${request.failure()?.errorText ?? 'failed'})`);
-      });
+        page.on('console', (message) => {
+          if (message.type() === 'error') {
+            pageFailures.push(`console: ${message.text()}`);
+          }
+        });
+        page.on('pageerror', (error) => pageFailures.push(`page: ${error.message}`));
+        page.on('requestfailed', (request) => {
+          pageFailures.push(`asset: ${request.url()} (${request.failure()?.errorText ?? 'failed'})`);
+        });
+        await page.route('**/*', async (route) => {
+          const url = route.request().url();
+          if (/^https?:/i.test(url)) {
+            pageFailures.push(`external request: ${url}`);
+            await route.abort('blockedbyclient');
+          } else {
+            await route.continue();
+          }
+        });
 
-      try {
-        await page.emulateMedia({ reducedMotion: 'reduce' });
-        await page.goto(pathToFileURL(htmlFile).href, { waitUntil: 'load' });
-        const inspection = await page.evaluate(() => ({
+        try {
+          await page.emulateMedia({ reducedMotion: 'reduce' });
+          await page.goto(pathToFileURL(htmlFile).href, { waitUntil: 'load' });
+          const inspection = await page.evaluate(() => ({
           blank: document.body.innerText.trim().length === 0,
           horizontalOverflow:
             document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
@@ -54,40 +67,36 @@ export async function renderReview(contentDir, screenshotDir, options = {}) {
           katexErrors: [...document.querySelectorAll('.katex-error')]
             .map((element) => element.textContent?.trim() || 'unknown KaTeX error'),
           containsReplacementGlyph: document.body.innerText.includes('\uFFFD'),
-        }));
+          }));
 
-        if (inspection.blank) {
-          pageFailures.push('document body is blank');
-        }
-        if (inspection.horizontalOverflow) {
-          pageFailures.push('document has horizontal overflow');
-        }
-        for (const image of inspection.brokenImages) {
-          pageFailures.push(`broken image: ${image}`);
-        }
-        for (const stylesheet of inspection.brokenStylesheets) {
-          pageFailures.push(`broken stylesheet: ${stylesheet}`);
-        }
-        for (const katexError of inspection.katexErrors) {
-          pageFailures.push(`KaTeX error: ${katexError}`);
-        }
-        if (inspection.containsReplacementGlyph) {
-          pageFailures.push('document contains a missing-glyph replacement character');
+          if (inspection.blank) pageFailures.push('document body is blank');
+          if (inspection.horizontalOverflow) pageFailures.push('document has horizontal overflow');
+          for (const image of inspection.brokenImages) pageFailures.push(`broken image: ${image}`);
+          for (const stylesheet of inspection.brokenStylesheets) pageFailures.push(`broken stylesheet: ${stylesheet}`);
+          for (const katexError of inspection.katexErrors) pageFailures.push(`KaTeX error: ${katexError}`);
+          if (inspection.containsReplacementGlyph) {
+            pageFailures.push('document contains a missing-glyph replacement character');
+          }
+
+          const screenshot = `${relativePath.replaceAll('/', '__').replace(/\.html$/i, '')}--w${width}.png`;
+          const screenshotPath = join(screenshotRoot, screenshot);
+          await mkdir(dirname(screenshotPath), { recursive: true });
+          await page.screenshot({ path: screenshotPath, fullPage: true, animations: 'disabled' });
+          screenshots.push(screenshot);
+          entries.push({
+            file: relativePath,
+            problemKey: problemKeyFromPath(relativePath),
+            width,
+            screenshot,
+          });
+        } catch (error) {
+          pageFailures.push(error.message);
+        } finally {
+          await page.close();
         }
 
-        const screenshotPath = join(
-          screenshotRoot,
-          `${relativePath.replaceAll('/', '__').replace(/\.html$/i, '')}.png`,
-        );
-        await mkdir(dirname(screenshotPath), { recursive: true });
-        await page.screenshot({ path: screenshotPath, fullPage: true, animations: 'disabled' });
-      } catch (error) {
-        pageFailures.push(error.message);
-      } finally {
-        await page.close();
+        failures.push(...pageFailures.map((failure) => `${relativePath} @ ${width}px: ${failure}`));
       }
-
-      failures.push(...pageFailures.map((failure) => `${relativePath}: ${failure}`));
     }
   } finally {
     await browser.close();
@@ -97,10 +106,35 @@ export async function renderReview(contentDir, screenshotDir, options = {}) {
     throw new Error(`Render review failed:\n${failures.map((failure) => `- ${failure}`).join('\n')}`);
   }
 
+  await writeFile(
+    join(screenshotRoot, 'review-index.json'),
+    JSON.stringify({ schemaVersion: 1, widths, entries }, null, 2) + '\n',
+    'utf8',
+  );
+
   return {
     files: htmlFiles.map((file) => relative(contentRoot, file).replaceAll('\\', '/')),
+    widths,
+    screenshots,
     screenshotDir: screenshotRoot,
   };
+}
+
+function validateWidths(values) {
+  if (!Array.isArray(values) || values.length === 0) throw new Error('widths must be a non-empty array');
+  const widths = values.map((value) => {
+    if (!Number.isInteger(value) || value < 240 || value > 2400) {
+      throw new Error('review widths must be integers from 240 through 2400 CSS px');
+    }
+    return value;
+  });
+  if (new Set(widths).size !== widths.length) throw new Error('review widths must be unique');
+  return widths;
+}
+
+function problemKeyFromPath(path) {
+  const match = path.match(/^content\/([^/]+)\/([^/]+)\/problems\/([^/]+)\//);
+  return match ? `${match[1]}/${match[2]}/${match[3]}` : null;
 }
 
 async function findHtmlFiles(root) {

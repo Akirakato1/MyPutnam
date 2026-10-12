@@ -35,6 +35,28 @@ export async function auditYear(sourceRoot, expectedYear, options = {}) {
     options.catalogPath ?? join(repositoryRoot, 'content-src', 'library.json'),
   );
   const errors = [...await auditSourceLocks(root)];
+  const requireCompleteYear = options.requireCompleteYear ?? true;
+  const requireRenderReview = options.requireRenderReview ?? true;
+  if (typeof requireCompleteYear !== 'boolean' || typeof requireRenderReview !== 'boolean') {
+    throw new Error('requireCompleteYear and requireRenderReview must be booleans');
+  }
+  const requestedProblems = options.problems ?? CANONICAL_PROBLEMS.map(({ code }) => code);
+  if (!Array.isArray(requestedProblems) || requestedProblems.length === 0) {
+    throw new Error('problems must be a non-empty array');
+  }
+  if (!requireCompleteYear && options.problems === undefined) {
+    throw new Error('An explicit problem subset is required when requireCompleteYear is false');
+  }
+  const canonicalByCode = new Map(CANONICAL_PROBLEMS.map((problem) => [problem.code, problem]));
+  const selectedProblems = [];
+  const seenProblems = new Set();
+  for (const code of requestedProblems) {
+    if (!canonicalByCode.has(code)) throw new Error('Unknown Putnam problem ID: ' + code);
+    if (seenProblems.has(code)) throw new Error('Duplicate requested problem ID: ' + code);
+    seenProblems.add(code);
+    selectedProblems.push(canonicalByCode.get(code));
+  }
+  const auditedProblems = requireCompleteYear ? CANONICAL_PROBLEMS : selectedProblems;
   const sourceManifest = await readSourceManifest(root);
   const sourceUrls = new Set(
     Array.isArray(sourceManifest?.sources)
@@ -75,7 +97,7 @@ export async function auditYear(sourceRoot, expectedYear, options = {}) {
     }
   }
 
-  for (const expected of CANONICAL_PROBLEMS) {
+  for (const expected of auditedProblems) {
     const fileName = expected.code + '.json';
     const recordPath = 'problems/' + fileName;
     if (!jsonFiles.includes(fileName)) {
@@ -119,7 +141,15 @@ export async function auditYear(sourceRoot, expectedYear, options = {}) {
     validateSourceCitations(record, recordPath, sourceUrls, errors);
     const figures = collectFigurePaths(record);
     await validateFigureFiles(root, expected.code, figures, recordPath, errors);
-    await validateReviewNote(root, expectedYear, expected.code, sourceFiles, figures, errors);
+    await validateReviewNote(
+      root,
+      expectedYear,
+      expected.code,
+      sourceFiles,
+      figures,
+      errors,
+      { requireRenderReview },
+    );
   }
 
   return uniqueSorted(errors);
@@ -169,7 +199,7 @@ async function validateFigureFiles(root, code, figures, recordPath, errors) {
   }
 }
 
-async function validateReviewNote(root, year, code, sourceFiles, figures, errors) {
+async function validateReviewNote(root, year, code, sourceFiles, figures, errors, { requireRenderReview }) {
   const reviewPath = 'review/' + code + '.md';
   let review;
   try {
@@ -187,10 +217,21 @@ async function validateReviewNote(root, year, code, sourceFiles, figures, errors
   if (!heading.test(review)) {
     errors.push(reviewPath + ': missing canonical review heading');
   }
-  for (const label of ['Statement fidelity', 'Mathematical review', 'Render review']) {
+  for (const label of ['Statement fidelity', 'Mathematical review', 'Prerequisite review']) {
     const pattern = new RegExp('^-\\s*' + escapeRegExp(label) + ':\\s*complete\\b', 'mi');
     if (!pattern.test(review)) {
       errors.push(reviewPath + ': ' + label + ' must be marked complete');
+    }
+  }
+  if (requireRenderReview) {
+    if (!/^-\s*Render review:\s*complete\b/mi.test(review)) {
+      errors.push(reviewPath + ': Render review must be marked complete');
+    }
+    for (const width of [480, 720]) {
+      const widthPattern = new RegExp('\\b' + width + '\\s+(?:CSS\\s+)?px\\b', 'i');
+      if (!widthPattern.test(review)) {
+        errors.push(reviewPath + ': Render review must record ' + width + ' CSS px evidence');
+      }
     }
   }
   if (!/^##\s+Hint separation\s*$/mi.test(review)) {
