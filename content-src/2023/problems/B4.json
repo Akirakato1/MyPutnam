@@ -1,0 +1,184 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2023",
+  "problemId": "B4",
+  "label": "B4",
+  "ordinal": 10,
+  "topics": ["calculus", "inequalities"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B4" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For a nonnegative integer " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " and a strictly increasing sequence of real numbers " },
+      { "type": "inlineMath", "tex": "t_0,t_1,\\ldots,t_n" },
+      { "type": "text", "text": ", let " }, { "type": "inlineMath", "tex": "f(t)" },
+      { "type": "text", "text": " be the corresponding real-valued function defined for " },
+      { "type": "inlineMath", "tex": "t\\ge t_0" }, { "type": "text", "text": " by the following properties:" }
+    ] },
+    { "type": "list", "ordered": false, "items": [
+      [{ "type": "text", "text": "(a) " }, { "type": "inlineMath", "tex": "f(t)" }, { "type": "text", "text": " is continuous for " }, { "type": "inlineMath", "tex": "t\\ge t_0" }, { "type": "text", "text": ", and is twice differentiable for all " }, { "type": "inlineMath", "tex": "t>t_0" }, { "type": "text", "text": " other than " }, { "type": "inlineMath", "tex": "t_1,\\ldots,t_n" }, { "type": "text", "text": "." }],
+      [{ "type": "text", "text": "(b) " }, { "type": "inlineMath", "tex": "f(t_0)=\\frac12" }, { "type": "text", "text": "." }],
+      [{ "type": "text", "text": "(c) " }, { "type": "inlineMath", "tex": "\\lim_{t\\to t_k^+}f'(t)=0" }, { "type": "text", "text": " for " }, { "type": "inlineMath", "tex": "0\\le k\\le n" }, { "type": "text", "text": "." }],
+      [{ "type": "text", "text": "(d) For " }, { "type": "inlineMath", "tex": "0\\le k\\le n-1" }, { "type": "text", "text": ", we have " }, { "type": "inlineMath", "tex": "f''(t)=k+1" }, { "type": "text", "text": " when " }, { "type": "inlineMath", "tex": "t_k<t<t_{k+1}" }, { "type": "text", "text": ", and " }, { "type": "inlineMath", "tex": "f''(t)=n+1" }, { "type": "text", "text": " when " }, { "type": "inlineMath", "tex": "t>t_n" }, { "type": "text", "text": "." }]
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Considering all choices of " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "t_0,t_1,\\ldots,t_n" },
+      { "type": "text", "text": " such that " }, { "type": "inlineMath", "tex": "t_k\\ge t_{k-1}+1" },
+      { "type": "text", "text": " for " }, { "type": "inlineMath", "tex": "1\\le k\\le n" },
+      { "type": "text", "text": ", what is the least possible value of " }, { "type": "inlineMath", "tex": "T" },
+      { "type": "text", "text": " for which " }, { "type": "inlineMath", "tex": "f(t_0+T)=2023" }, { "type": "text", "text": "?" }
+    ] }
+  ] },
+  "hints": [
+    {
+      "order": 1, "stage": "nudge", "title": "Measure the interval lengths",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Set " }, { "type": "inlineMath", "tex": "t_{n+1}=t_0+T" },
+        { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "s_k=t_k-t_{k-1}" },
+        { "type": "text", "text": ". Integrate the constant second derivative on each interval, remembering that the right derivative resets to zero at its left endpoint." }
+      ] }] }
+    },
+    {
+      "order": 2, "stage": "strategy", "title": "Turn the problem into an optimization",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The endpoint condition becomes " },
+        { "type": "inlineMath", "tex": "\\sum_{k=1}^{n+1}k s_k^2=4045" },
+        { "type": "text", "text": ", while " }, { "type": "inlineMath", "tex": "T=\\sum s_k" },
+        { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "s_k\\ge1" },
+        { "type": "text", "text": " for " }, { "type": "inlineMath", "tex": "k\\le n" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3, "stage": "knowledge", "title": "Use an exchange argument",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "At a minimizing configuration, first show " }, { "type": "inlineMath", "tex": "s_{n+1}\\ge1" },
+        { "type": "text", "text": ". Then moving any excess " }, { "type": "inlineMath", "tex": "s_k-1" },
+        { "type": "text", "text": " from an earlier interval into the last interval keeps the total time fixed and increases the weighted sum of squares. What must all the earlier lengths equal?" }
+      ] }] }
+    },
+    {
+      "order": 4, "stage": "outline", "title": "Reduce to one integer",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Prove the minimizing lengths satisfy " }, { "type": "inlineMath", "tex": "s_1=\\cdots=s_n=1" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Derive " }, { "type": "inlineMath", "tex": "T=n+\\sqrt{4045/(n+1)-n/2}" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Check " }, { "type": "inlineMath", "tex": "n=9" }, { "type": "text", "text": " and compare every other integer " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " by squaring the inequality against the proposed minimum." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1, "title": "Integrating constant acceleration",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "u''(t)=c" },
+        { "type": "text", "text": " on an interval of length " }, { "type": "inlineMath", "tex": "s" },
+        { "type": "text", "text": " and the right derivative at its left endpoint is zero, then the function rises by " },
+        { "type": "inlineMath", "tex": "cs^2/2" }, { "type": "text", "text": " across that interval." }
+      ] }] }
+    },
+    {
+      "order": 2, "title": "Fixed-sum exchange arguments",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "To identify an extremal configuration, move a small or finite amount between two variables while preserving their sum. The sign of the resulting change in the objective shows which variable must lie on its constraint boundary." }
+      ] }] }
+    },
+    {
+      "order": 3, "title": "Safe squaring of inequalities",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "An inequality " }, { "type": "inlineMath", "tex": "\\sqrt{x}\\ge y" },
+        { "type": "text", "text": " may be squared without changing its meaning when " }, { "type": "inlineMath", "tex": "x\\ge0" },
+        { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "y\\ge0" }, { "type": "text", "text": "." }
+      ] }] }
+    }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The least possible value is " }, { "type": "inlineMath", "tex": "29" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Discard any breakpoints after the endpoint, set " }, { "type": "inlineMath", "tex": "t_{n+1}=t_0+T" },
+      { "type": "text", "text": ", and write " }, { "type": "inlineMath", "tex": "s_k=t_k-t_{k-1}" },
+      { "type": "text", "text": " for " }, { "type": "inlineMath", "tex": "1\\le k\\le n+1" },
+      { "type": "text", "text": ". On the " }, { "type": "inlineMath", "tex": "k" },
+      { "type": "text", "text": "th interval, " }, { "type": "inlineMath", "tex": "f'(t)=k(t-t_{k-1})" },
+      { "type": "text", "text": ", so the rise of " }, { "type": "inlineMath", "tex": "f" },
+      { "type": "text", "text": " is " }, { "type": "inlineMath", "tex": "ks_k^2/2" }, { "type": "text", "text": ". Hence" }
+    ] },
+    { "type": "displayMath", "tex": "\\sum_{k=1}^{n+1}k s_k^2=2\\left(2023-\\frac12\\right)=4045," },
+    { "type": "displayMath", "tex": "T=\\sum_{k=1}^{n+1}s_k," },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "with " }, { "type": "inlineMath", "tex": "s_k\\ge1" },
+      { "type": "text", "text": " for " }, { "type": "inlineMath", "tex": "k\\le n" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "s_{n+1}\\ge0" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "A minimum exists: the equation bounds " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " because " }, { "type": "inlineMath", "tex": "1+2+\\cdots+n\\le4045" },
+      { "type": "text", "text": ", and for each fixed " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " it bounds every " }, { "type": "inlineMath", "tex": "s_k" },
+      { "type": "text", "text": ". Also, if another spacing pattern had the same total time but a weighted sum greater than " },
+      { "type": "inlineMath", "tex": "4045" }, { "type": "text", "text": ", its nondecreasing function would pass through " },
+      { "type": "inlineMath", "tex": "2023" }, { "type": "text", "text": " earlier, contradicting minimality." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Choose, among the minimizing representations, one with as few breakpoints as possible. Then " }, { "type": "inlineMath", "tex": "s_{n+1}\\ge1" },
+      { "type": "text", "text": ". If " }, { "type": "inlineMath", "tex": "s_{n+1}=0" },
+      { "type": "text", "text": ", the last breakpoint can simply be removed. If " }, { "type": "inlineMath", "tex": "0<s_{n+1}<1" },
+      { "type": "text", "text": ", remove that breakpoint and replace the final two lengths by " },
+      { "type": "inlineMath", "tex": "s_n+s_{n+1}" }, { "type": "text", "text": ". The total time is unchanged, while the weighted sum changes by" }
+    ] },
+    { "type": "displayMath", "tex": "s_{n+1}(2n s_n-s_{n+1})>0." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The case " }, { "type": "inlineMath", "tex": "n=0" },
+      { "type": "text", "text": " gives " }, { "type": "inlineMath", "tex": "T=\\sqrt{4045}>29" },
+      { "type": "text", "text": ", so it cannot be the minimizer once the construction below is known." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Next, if " }, { "type": "inlineMath", "tex": "s_k>1" },
+      { "type": "text", "text": " for some " }, { "type": "inlineMath", "tex": "k\\le n" },
+      { "type": "text", "text": ", replace " }, { "type": "inlineMath", "tex": "(s_k,s_{n+1})" },
+      { "type": "text", "text": " by " }, { "type": "inlineMath", "tex": "(1,s_{n+1}+s_k-1)" },
+      { "type": "text", "text": ". The weighted sum increases by" }
+    ] },
+    { "type": "displayMath", "tex": "\\begin{aligned}\\Delta&=(s_k-1)\\bigl((n+1-k)(s_k+1)\\\\&\\qquad+2(n+1)(s_{n+1}-1)\\bigr)>0.\\end{aligned}" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "again impossible at a minimum. Therefore " },
+      { "type": "inlineMath", "tex": "s_1=\\cdots=s_n=1" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Now " }, { "type": "inlineMath", "tex": "s_{n+1}=T-n" },
+      { "type": "text", "text": ", and the endpoint equation becomes" }
+    ] },
+    { "type": "displayMath", "tex": "\\frac{n(n+1)}2+(n+1)(T-n)^2=4045," },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "so" }] },
+    { "type": "displayMath", "tex": "T=n+\\sqrt{\\frac{4045}{n+1}-\\frac n2}." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "n=9" },
+      { "type": "text", "text": ", this gives " }, { "type": "inlineMath", "tex": "T=9+20=29" },
+      { "type": "text", "text": ". Thus nine intervals of length " }, { "type": "inlineMath", "tex": "1" },
+      { "type": "text", "text": " followed by one of length " }, { "type": "inlineMath", "tex": "20" },
+      { "type": "text", "text": " attain the claimed value." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "It remains to show no other integer " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " does better. For " }, { "type": "inlineMath", "tex": "n\\ge30" },
+      { "type": "text", "text": ", clearly " }, { "type": "inlineMath", "tex": "T\\ge n\\ge30" },
+      { "type": "text", "text": ". For " }, { "type": "inlineMath", "tex": "0\\le n\\le29" },
+      { "type": "text", "text": ", both sides are nonnegative, and " }, { "type": "inlineMath", "tex": "T\\ge29" },
+      { "type": "text", "text": " is equivalent after squaring and simplifying to" }
+    ] },
+    { "type": "displayMath", "tex": "(9-n)\\left(n^2-\\frac{95}{2}n+356\\right)\\ge0." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The quadratic factor is positive for integer " }, { "type": "inlineMath", "tex": "n\\le9" },
+      { "type": "text", "text": " and negative for " }, { "type": "inlineMath", "tex": "10\\le n\\le29" },
+      { "type": "text", "text": ", while " }, { "type": "inlineMath", "tex": "9-n" },
+      { "type": "text", "text": " has the corresponding signs. The product is therefore always nonnegative, completing the proof." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2023 problems", "url": "https://maa.org/wp-content/uploads/2025/02/2023-Putnam-Problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2023 problems and solutions", "url": "https://maa.org/wp-content/uploads/2025/02/2023-Putnam-Problems-and-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2023 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2023s.tex" }
+  ]
+}

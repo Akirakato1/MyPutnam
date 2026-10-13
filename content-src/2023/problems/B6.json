@@ -1,0 +1,200 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2023",
+  "problemId": "B6",
+  "label": "B6",
+  "ordinal": 12,
+  "topics": ["linear-algebra", "number-theory"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B6" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " be a positive integer. For " }, { "type": "inlineMath", "tex": "i" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "j" },
+      { "type": "text", "text": " in " }, { "type": "inlineMath", "tex": "\\{1,2,\\ldots,n\\}" },
+      { "type": "text", "text": ", let " }, { "type": "inlineMath", "tex": "s(i,j)" },
+      { "type": "text", "text": " be the number of pairs " }, { "type": "inlineMath", "tex": "(a,b)" },
+      { "type": "text", "text": " of nonnegative integers satisfying " }, { "type": "inlineMath", "tex": "ai+bj=n" },
+      { "type": "text", "text": ". Let " }, { "type": "inlineMath", "tex": "S" },
+      { "type": "text", "text": " be the " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": "-by-" }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " matrix whose " }, { "type": "inlineMath", "tex": "(i,j)" },
+      { "type": "text", "text": " entry is " }, { "type": "inlineMath", "tex": "s(i,j)" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For example, when " }, { "type": "inlineMath", "tex": "n=5" }, { "type": "text", "text": ", we have" }
+    ] },
+    { "type": "displayMath", "tex": "S=\\begin{bmatrix}6&3&2&2&2\\\\3&0&1&0&1\\\\2&1&0&0&1\\\\2&0&0&0&1\\\\2&1&1&1&2\\end{bmatrix}." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Compute the determinant of " }, { "type": "inlineMath", "tex": "S" }, { "type": "text", "text": "." }
+    ] }
+  ] },
+  "hints": [
+    {
+      "order": 1, "stage": "nudge", "title": "Factor through the total contribution",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For a solution " }, { "type": "inlineMath", "tex": "ai+bj=n" },
+        { "type": "text", "text": ", set " }, { "type": "inlineMath", "tex": "k=ai" },
+        { "type": "text", "text": ". Then " }, { "type": "inlineMath", "tex": "0\\le k\\le n" },
+        { "type": "text", "text": ", with " }, { "type": "inlineMath", "tex": "i\\mid k" },
+        { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "j\\mid n-k" },
+        { "type": "text", "text": ". Use these two divisibility conditions to factor " }, { "type": "inlineMath", "tex": "S" }, { "type": "text", "text": " into rectangular matrices." }
+      ] }] }
+    },
+    {
+      "order": 2, "stage": "strategy", "title": "Apply Cauchy–Binet",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The factorization uses " }, { "type": "inlineMath", "tex": "n+1" },
+        { "type": "text", "text": " intermediate columns. Cauchy–Binet expresses " }, { "type": "inlineMath", "tex": "\\det S" },
+        { "type": "text", "text": " as a sum of " }, { "type": "inlineMath", "tex": "n+1" },
+        { "type": "text", "text": " products of maximal minors, one for each omitted column." }
+      ] }] }
+    },
+    {
+      "order": 3, "stage": "knowledge", "title": "Evaluate the divisibility minors",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "v_k" },
+        { "type": "text", "text": " is the column with entries " }, { "type": "inlineMath", "tex": "\\mathbf 1_{i\\mid k}" },
+        { "type": "text", "text": ", then " }, { "type": "inlineMath", "tex": "v_k=\\sum_{d\\mid k}e_d" },
+        { "type": "text", "text": ". Möbius inversion expands the all-ones column " }, { "type": "inlineMath", "tex": "v_0" },
+        { "type": "text", "text": " in the basis " }, { "type": "inlineMath", "tex": "v_1,\\ldots,v_n" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 4, "stage": "outline", "title": "Collapse the remaining convolution",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Set " }, { "type": "inlineMath", "tex": "C_k=\\sum_{d\\le n/k}\\mu(d)" }, { "type": "text", "text": " and express each omitted-column minor using " }, { "type": "inlineMath", "tex": "C_k" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Use " }, { "type": "inlineMath", "tex": "C_k=1" }, { "type": "text", "text": " for " }, { "type": "inlineMath", "tex": "k>n/2" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "C_{n/2}=0" }, { "type": "text", "text": " when " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " is even." }],
+        [{ "type": "text", "text": "Evaluate " }, { "type": "inlineMath", "tex": "\\sum_{k=1}^n C_k" }, { "type": "text", "text": " by reversing the order of summation and using " }, { "type": "inlineMath", "tex": "\\sum_{d\\mid r}\\mu(d)" }, { "type": "text", "text": "." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1, "title": "Cauchy–Binet formula",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "A" },
+        { "type": "text", "text": " is " }, { "type": "inlineMath", "tex": "n\\times m" },
+        { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "B" },
+        { "type": "text", "text": " is " }, { "type": "inlineMath", "tex": "m\\times n" },
+        { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "m\\ge n" },
+        { "type": "text", "text": ", then " }, { "type": "inlineMath", "tex": "\\det(AB)" },
+        { "type": "text", "text": " is the sum, over all choices of " }, { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " intermediate indices, of the product of the corresponding maximal minors of " }, { "type": "inlineMath", "tex": "A" },
+        { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "B" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2, "title": "Möbius inversion on divisors",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "F(r)=\\sum_{d\\mid r}G(d)" },
+        { "type": "paragraph", "runs": [{ "type": "text", "text": "is equivalent, by Möbius inversion, to" }] },
+        { "type": "displayMath", "tex": "G(r)=\\sum_{d\\mid r}\\mu(d)F(r/d)." },
+        { "type": "paragraph", "runs": [{ "type": "text", "text": "Here " }, { "type": "inlineMath", "tex": "\\mu" }, { "type": "text", "text": " is the Möbius function." }] }
+      ] }
+    },
+    {
+      "order": 3, "title": "Divisor-sum cancellation",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "\\sum_{d\\mid r}\\mu(d)=\\begin{cases}1,&r=1,\\\\0,&r>1.\\end{cases}" },
+        { "type": "paragraph", "runs": [{ "type": "text", "text": "This identity often turns a double sum over products " }, { "type": "inlineMath", "tex": "dk\\le n" }, { "type": "text", "text": " into a single surviving term." }] }
+      ] }
+    }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The determinant is" }
+    ] },
+    { "type": "displayMath", "tex": "\\det S=(-1)^{\\lceil n/2\\rceil-1}\\,2\\left\\lceil\\frac n2\\right\\rceil." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The formula is immediate for " }, { "type": "inlineMath", "tex": "n=1" },
+      { "type": "text", "text": ", so assume " }, { "type": "inlineMath", "tex": "n\\ge2" },
+      { "type": "text", "text": ". Define an " }, { "type": "inlineMath", "tex": "n\\times(n+1)" },
+      { "type": "text", "text": " matrix " }, { "type": "inlineMath", "tex": "A" },
+      { "type": "text", "text": " and an " }, { "type": "inlineMath", "tex": "(n+1)\\times n" },
+      { "type": "text", "text": " matrix " }, { "type": "inlineMath", "tex": "B" }, { "type": "text", "text": " by" }
+    ] },
+    { "type": "displayMath", "tex": "A_{ik}=\\mathbf 1_{i\\mid k}\\qquad(1\\le i\\le n,\\ 0\\le k\\le n)," },
+    { "type": "displayMath", "tex": "B_{kj}=\\mathbf 1_{j\\mid(n-k)}\\qquad(0\\le k\\le n,\\ 1\\le j\\le n)." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Choosing " }, { "type": "inlineMath", "tex": "k=ai" },
+      { "type": "text", "text": " shows that " }, { "type": "inlineMath", "tex": "S=AB" },
+      { "type": "text", "text": ". Moreover, " }, { "type": "inlineMath", "tex": "B^{\\mathsf T}" },
+      { "type": "text", "text": " is obtained from " }, { "type": "inlineMath", "tex": "A" },
+      { "type": "text", "text": " by reversing its " }, { "type": "inlineMath", "tex": "n+1" }, { "type": "text", "text": " columns." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "A_k" },
+      { "type": "text", "text": " be the square matrix obtained from " }, { "type": "inlineMath", "tex": "A" },
+      { "type": "text", "text": " by omitting column " }, { "type": "inlineMath", "tex": "k" },
+      { "type": "text", "text": ". Reversing the " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " retained columns has sign " }, { "type": "inlineMath", "tex": "(-1)^{n(n-1)/2}" },
+      { "type": "text", "text": ", so Cauchy–Binet gives" }
+    ] },
+    { "type": "displayMath", "tex": "\\det S=(-1)^{n(n-1)/2}\\sum_{k=0}^n\\det(A_k)\\det(A_{n-k})." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Write " }, { "type": "inlineMath", "tex": "v_k" },
+      { "type": "text", "text": " for column " }, { "type": "inlineMath", "tex": "k" },
+      { "type": "text", "text": " of " }, { "type": "inlineMath", "tex": "A" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "e_1,\\ldots,e_n" },
+      { "type": "text", "text": " for the standard basis. The matrix " }, { "type": "inlineMath", "tex": "A_0=[v_1\\ \\cdots\\ v_n]" },
+      { "type": "text", "text": " is upper triangular with diagonal entries " }, { "type": "inlineMath", "tex": "1" },
+      { "type": "text", "text": ", so " }, { "type": "inlineMath", "tex": "\\det(A_0)=1" }, { "type": "text", "text": ". Also" }
+    ] },
+    { "type": "displayMath", "tex": "v_k=\\sum_{d\\mid k}e_d,\\qquad e_k=\\sum_{d\\mid k}\\mu(d)v_{k/d}." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Since " }, { "type": "inlineMath", "tex": "v_0=e_1+\\cdots+e_n" },
+      { "type": "text", "text": ", summing the inverted relation gives" }
+    ] },
+    { "type": "displayMath", "tex": "v_0=\\sum_{h=1}^n C_hv_h,\\qquad C_h=\\sum_{1\\le d\\le\\lfloor n/h\\rfloor}\\mu(d)." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Expand the first column of " }, { "type": "inlineMath", "tex": "A_h" },
+      { "type": "text", "text": " using this relation. Every term except the one containing " }, { "type": "inlineMath", "tex": "v_h" },
+      { "type": "text", "text": " repeats another column and vanishes. Moving " }, { "type": "inlineMath", "tex": "v_h" },
+      { "type": "text", "text": " back to its natural position uses " }, { "type": "inlineMath", "tex": "h-1" },
+      { "type": "text", "text": " swaps, hence" }
+    ] },
+    { "type": "displayMath", "tex": "\\det(A_h)=(-1)^{h-1}C_h\\qquad(1\\le h\\le n)." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Because " }, { "type": "inlineMath", "tex": "C_n=1" },
+      { "type": "text", "text": ", the two endpoint terms " }, { "type": "inlineMath", "tex": "k=0,n" },
+      { "type": "text", "text": " combine with the interior terms to give" }
+    ] },
+    { "type": "displayMath", "tex": "\\det S=(-1)^{n(n-1)/2+n-2}\\left(-2+\\sum_{k=1}^{n-1}C_kC_{n-k}\\right)." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "k>n/2" },
+      { "type": "text", "text": ", we have " }, { "type": "inlineMath", "tex": "C_k=1" },
+      { "type": "text", "text": ". When " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " is even, " }, { "type": "inlineMath", "tex": "C_{n/2}=\\mu(1)+\\mu(2)=0" },
+      { "type": "text", "text": ". Pairing the remaining indices therefore yields" }
+    ] },
+    { "type": "displayMath", "tex": "\\sum_{k=1}^{n-1}C_kC_{n-k}=2\\sum_{k=1}^{\\lfloor n/2\\rfloor}C_k." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Finally, reverse the order of summation:" }
+    ] },
+    { "type": "displayMath", "tex": "\\sum_{k=1}^n C_k=\\sum_{r=1}^n\\sum_{d\\mid r}\\mu(d)=1." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "There are " }, { "type": "inlineMath", "tex": "\\lceil n/2\\rceil" },
+      { "type": "text", "text": " indices " }, { "type": "inlineMath", "tex": "k>n/2" },
+      { "type": "text", "text": ", each contributing " }, { "type": "inlineMath", "tex": "C_k=1" },
+      { "type": "text", "text": ". Thus" }
+    ] },
+    { "type": "displayMath", "tex": "\\sum_{k=1}^{\\lfloor n/2\\rfloor}C_k=1-\\left\\lceil\\frac n2\\right\\rceil." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Substitution gives" }
+    ] },
+    { "type": "displayMath", "tex": "\\det S=(-1)^{n(n-1)/2+n-1}\\,2\\left\\lceil\\frac n2\\right\\rceil." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For even and odd " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " separately, the exponent " }, { "type": "inlineMath", "tex": "n(n-1)/2+n-1" },
+      { "type": "text", "text": " has the same parity as " }, { "type": "inlineMath", "tex": "\\lceil n/2\\rceil-1" },
+      { "type": "text", "text": ", proving the stated formula." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2023 problems", "url": "https://maa.org/wp-content/uploads/2025/02/2023-Putnam-Problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2023 problems and solutions", "url": "https://maa.org/wp-content/uploads/2025/02/2023-Putnam-Problems-and-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2023 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2023s.tex" }
+  ]
+}

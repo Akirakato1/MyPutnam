@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2023",
+  "problemId": "B5",
+  "label": "B5",
+  "ordinal": 11,
+  "topics": ["algebra", "number-theory"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B5" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Determine which positive integers " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " have the following property:" }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For all integers " }, { "type": "inlineMath", "tex": "m" },
+      { "type": "text", "text": " that are relatively prime to " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": ", there exists a permutation " },
+      { "type": "inlineMath", "tex": "\\pi:\\{1,2,\\ldots,n\\}\\to\\{1,2,\\ldots,n\\}" },
+      { "type": "text", "text": " such that " }, { "type": "inlineMath", "tex": "\\pi(\\pi(k))\\equiv mk\\pmod n" },
+      { "type": "text", "text": " for all " }, { "type": "inlineMath", "tex": "k\\in\\{1,2,\\ldots,n\\}" }, { "type": "text", "text": "." }
+    ] }
+  ] },
+  "hints": [
+    {
+      "order": 1, "stage": "nudge", "title": "Ask for a permutation square root",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Identify " }, { "type": "inlineMath", "tex": "\\{1,\\ldots,n\\}" },
+        { "type": "text", "text": " with the residue classes " }, { "type": "inlineMath", "tex": "\\mathbb Z/n\\mathbb Z" },
+        { "type": "text", "text": ". Multiplication by a unit " }, { "type": "inlineMath", "tex": "m" },
+        { "type": "text", "text": " is a permutation; the requested " }, { "type": "inlineMath", "tex": "\\pi" },
+        { "type": "text", "text": " is precisely a square root of that permutation." }
+      ] }] }
+    },
+    {
+      "order": 2, "stage": "strategy", "title": "Inspect even cycles",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "When a cycle is squared, an odd cycle stays one cycle, while a cycle of even length splits into two equal cycles. Deduce a parity criterion for the number of cycles of each even length in a permutation square." }
+      ] }] }
+    },
+    {
+      "order": 3, "stage": "knowledge", "title": "Use an odd prime-power factor",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For odd " }, { "type": "inlineMath", "tex": "n>1" },
+        { "type": "text", "text": ", write " }, { "type": "inlineMath", "tex": "n=p^e q" },
+        { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "\\gcd(p,q)=1" },
+        { "type": "text", "text": " and use a primitive root modulo " }, { "type": "inlineMath", "tex": "p^e" },
+        { "type": "text", "text": " together with the identity modulo " }, { "type": "inlineMath", "tex": "q" },
+        { "type": "text", "text": ". Count the cycles of maximal length among residues whose coordinate modulo " },
+        { "type": "inlineMath", "tex": "p^e" }, { "type": "text", "text": " is a unit." }
+      ] }] }
+    },
+    {
+      "order": 4, "stage": "outline", "title": "Split the even cases",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "n=2q" }, { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "q" }, { "type": "text", "text": " odd, use the two CRT slices modulo " }, { "type": "inlineMath", "tex": "2" }, { "type": "text", "text": " to pair every cycle." }],
+        [{ "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "4\\mid n" }, { "type": "text", "text": ", test multiplication by " }, { "type": "inlineMath", "tex": "-1" }, { "type": "text", "text": " and count its transpositions." }],
+        [{ "type": "text", "text": "Handle " }, { "type": "inlineMath", "tex": "n=1" }, { "type": "text", "text": " separately." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1, "title": "Cycle structure under squaring",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The square of an odd " }, { "type": "inlineMath", "tex": "r" },
+        { "type": "text", "text": "-cycle is again one " }, { "type": "inlineMath", "tex": "r" },
+        { "type": "text", "text": "-cycle. The square of a " }, { "type": "inlineMath", "tex": "2r" },
+        { "type": "text", "text": "-cycle is a pair of " }, { "type": "inlineMath", "tex": "r" }, { "type": "text", "text": "-cycles." }
+      ] }] }
+    },
+    {
+      "order": 2, "title": "Chinese remainder theorem",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "When " }, { "type": "inlineMath", "tex": "\\gcd(a,b)=1" },
+        { "type": "text", "text": ", the ring " }, { "type": "inlineMath", "tex": "\\mathbb Z/(ab)\\mathbb Z" },
+        { "type": "text", "text": " is identified with " }, { "type": "inlineMath", "tex": "\\mathbb Z/a\\mathbb Z\\times\\mathbb Z/b\\mathbb Z" },
+        { "type": "text", "text": ", and multiplication acts componentwise." }
+      ] }] }
+    },
+    {
+      "order": 3, "title": "Primitive roots modulo odd prime powers",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For an odd prime " }, { "type": "inlineMath", "tex": "p" },
+        { "type": "text", "text": ", the unit group modulo " }, { "type": "inlineMath", "tex": "p^e" },
+        { "type": "text", "text": " is cyclic of order " }, { "type": "inlineMath", "tex": "\\varphi(p^e)=p^{e-1}(p-1)" },
+        { "type": "text", "text": ". Multiplication by a generator cycles through all units in one orbit." }
+      ] }] }
+    }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The property holds exactly for " }, { "type": "inlineMath", "tex": "n=1" },
+      { "type": "text", "text": " and for " }, { "type": "inlineMath", "tex": "n\\equiv2\\pmod4" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Identify the given set with " }, { "type": "inlineMath", "tex": "\\mathbb Z/n\\mathbb Z" },
+      { "type": "text", "text": " by representing the zero class by " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": ". For every unit " }, { "type": "inlineMath", "tex": "m" },
+      { "type": "text", "text": ", let " }, { "type": "inlineMath", "tex": "\\sigma_m(x)=mx" },
+      { "type": "text", "text": ". The problem asks exactly when every " }, { "type": "inlineMath", "tex": "\\sigma_m" },
+      { "type": "text", "text": " has a square root as a permutation." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "We use the following criterion: a permutation has a square root if and only if, for every even positive integer " },
+      { "type": "inlineMath", "tex": "r" }, { "type": "text", "text": ", it has an even number of " },
+      { "type": "inlineMath", "tex": "r" }, { "type": "text", "text": "-cycles. For necessity, a cycle of even length in a square can only arise paired with another such cycle from one cycle of twice that length. Conversely, pair cycles of every even length and interlace each pair into one cycle of twice the length; each odd cycle is itself the square of a suitable power of that cycle." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "First suppose " }, { "type": "inlineMath", "tex": "n>1" },
+      { "type": "text", "text": " is odd. Choose an odd prime-power divisor exactly, writing " },
+      { "type": "inlineMath", "tex": "n=p^e q" }, { "type": "text", "text": " with " },
+      { "type": "inlineMath", "tex": "\\gcd(p,q)=1" }, { "type": "text", "text": ". By the Chinese remainder theorem," }
+    ] },
+    { "type": "displayMath", "tex": "\\mathbb Z/n\\mathbb Z\\cong\\mathbb Z/p^e\\mathbb Z\\times\\mathbb Z/q\\mathbb Z." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Choose " }, { "type": "inlineMath", "tex": "m" },
+      { "type": "text", "text": " to be a generator of " }, { "type": "inlineMath", "tex": "(\\mathbb Z/p^e\\mathbb Z)^\\times" },
+      { "type": "text", "text": " in the first coordinate and " }, { "type": "inlineMath", "tex": "1" },
+      { "type": "text", "text": " in the second. On the elements whose first coordinate is a unit, multiplication by " },
+      { "type": "inlineMath", "tex": "m" }, { "type": "text", "text": " has exactly " },
+      { "type": "inlineMath", "tex": "q" }, { "type": "text", "text": " cycles of length " },
+      { "type": "inlineMath", "tex": "p^{e-1}(p-1)" }, { "type": "text", "text": ": one for each second coordinate. All elements with nonunit first coordinate have shorter cycles. The displayed length is even and " },
+      { "type": "inlineMath", "tex": "q" }, { "type": "text", "text": " is odd, so the cycle criterion rules out a square root. Thus no odd " },
+      { "type": "inlineMath", "tex": "n>1" }, { "type": "text", "text": " works." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Now let " }, { "type": "inlineMath", "tex": "n=2q" },
+      { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "q" },
+      { "type": "text", "text": " odd. Then" }
+    ] },
+    { "type": "displayMath", "tex": "\\mathbb Z/n\\mathbb Z\\cong\\mathbb Z/2\\mathbb Z\\times\\mathbb Z/q\\mathbb Z." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Every unit " }, { "type": "inlineMath", "tex": "m" },
+      { "type": "text", "text": " is " }, { "type": "inlineMath", "tex": "1" },
+      { "type": "text", "text": " modulo " }, { "type": "inlineMath", "tex": "2" },
+      { "type": "text", "text": ", so " }, { "type": "inlineMath", "tex": "\\sigma_m" },
+      { "type": "text", "text": " has identical actions on the two slices " },
+      { "type": "inlineMath", "tex": "\\{0\\}\\times\\mathbb Z/q\\mathbb Z" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "\\{1\\}\\times\\mathbb Z/q\\mathbb Z" },
+      { "type": "text", "text": ". Every cycle therefore occurs in a matching pair. The criterion gives a square root for every " },
+      { "type": "inlineMath", "tex": "m" }, { "type": "text", "text": ", so every " },
+      { "type": "inlineMath", "tex": "n\\equiv2\\pmod4" }, { "type": "text", "text": " works." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Finally suppose " }, { "type": "inlineMath", "tex": "4\\mid n" },
+      { "type": "text", "text": ". For " }, { "type": "inlineMath", "tex": "m=-1" },
+      { "type": "text", "text": ", multiplication fixes exactly " }, { "type": "inlineMath", "tex": "0" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "n/2" },
+      { "type": "text", "text": "; the other residues form " }, { "type": "inlineMath", "tex": "n/2-1" },
+      { "type": "text", "text": " transpositions. This number is odd, so the cycle criterion again rules out a square root." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "n=1" },
+      { "type": "text", "text": ", the only permutation is the identity, which is its own square root. These cases exhaust all positive integers " },
+      { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": "." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2023 problems", "url": "https://maa.org/wp-content/uploads/2025/02/2023-Putnam-Problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2023 problems and solutions", "url": "https://maa.org/wp-content/uploads/2025/02/2023-Putnam-Problems-and-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2023 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2023s.tex" }
+  ]
+}
