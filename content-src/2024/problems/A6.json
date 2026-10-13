@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2024",
+  "problemId": "A6",
+  "label": "A6",
+  "ordinal": 6,
+  "topics": ["algebra", "linear-algebra", "sequences-series"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A6" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "c_0,c_1,c_2,\\ldots" },
+      { "type": "text", "text": " be the sequence defined so that" }
+    ] },
+    { "type": "displayMath", "tex": "\\frac{1-3x-\\sqrt{1-14x+9x^2}}{4}=\\sum_{k=0}^{\\infty}c_kx^k" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "for sufficiently small " }, { "type": "inlineMath", "tex": "x" },
+      { "type": "text", "text": ". For a positive integer " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": ", let " }, { "type": "inlineMath", "tex": "A" },
+      { "type": "text", "text": " be the " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": "-by-" }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " matrix with " }, { "type": "inlineMath", "tex": "i,j" },
+      { "type": "text", "text": "-entry " }, { "type": "inlineMath", "tex": "c_{i+j-1}" },
+      { "type": "text", "text": " for " }, { "type": "inlineMath", "tex": "i,j\\in\\{1,\\ldots,n\\}" },
+      { "type": "text", "text": ". Find " }, { "type": "inlineMath", "tex": "\\det A" }, { "type": "text", "text": "." }
+    ] }
+  ] },
+  "hints": [
+    {
+      "order": 1, "stage": "nudge", "title": "Look for a Hankel determinant identity",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Because the entry depends only on " }, { "type": "inlineMath", "tex": "i+j" },
+        { "type": "text", "text": ", this is a Hankel matrix. Such determinants interact especially well with Jacobi continued fractions for the coefficient-generating series." }
+      ] }] }
+    },
+    {
+      "order": 2, "stage": "strategy", "title": "Expose the periodic continued fraction",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "Let " },
+          { "type": "inlineMath", "tex": "g(x)=(1-7x-\\sqrt{1-14x+9x^2})/(2x)" },
+          { "type": "text", "text": ". Verify the two identities" }
+        ] },
+        { "type": "displayMath", "tex": "f(x)=\\frac{1}{x^{-1}-5-g(x)}," },
+        { "type": "displayMath", "tex": "g(x)=\\frac{10}{x^{-1}-7-g(x)}." }
+      ] }
+    },
+    {
+      "order": 3, "stage": "knowledge", "title": "Use the continued-fraction determinant lemma",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "If a series with first coefficient 1 has a Jacobi fraction whose successive numerators are " },
+          { "type": "inlineMath", "tex": "a_1,a_2,\\ldots" }, { "type": "text", "text": ", then its size-" },
+          { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " Hankel determinant is" }
+        ] },
+        { "type": "displayMath", "tex": "(-1)^{n(n-1)/2}\\prod_{j=1}^{n-1}a_j^{n-j}." }
+      ] }
+    },
+    {
+      "order": 4, "stage": "outline", "title": "Track the signs",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Read " }, { "type": "inlineMath", "tex": "a_j=-10" }, { "type": "text", "text": " for every " }, { "type": "inlineMath", "tex": "j\\ge1" }, { "type": "text", "text": " from the two functional identities." }],
+        [{ "type": "text", "text": "Use " }, { "type": "inlineMath", "tex": "\\sum_{j=1}^{n-1}(n-j)=n(n-1)/2" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Observe that the sign from the lemma cancels the sign of the product." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1, "title": "Formal power series",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Power-series identities may be proved by algebra around " }, { "type": "inlineMath", "tex": "x=0" },
+        { "type": "text", "text": " without discussing numerical convergence. Here the square-root branch is the one with constant term 1, so the displayed series has constant term 0 and linear coefficient 1." }
+      ] }] }
+    },
+    {
+      "order": 2, "title": "Jacobi continued fractions",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "A Jacobi fraction has nested denominators linear in " }, { "type": "inlineMath", "tex": "x^{-1}" },
+        { "type": "text", "text": " and constant numerators. Its denominator polynomials satisfy a three-term recurrence and form an orthogonal polynomial system for the coefficient functional." }
+      ] }] }
+    },
+    {
+      "order": 3, "title": "Gram matrices and triangular basis changes",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The Hankel matrix is the Gram matrix of " }, { "type": "inlineMath", "tex": "1,x,\\ldots,x^{n-1}" },
+        { "type": "text", "text": " for a suitable linear functional. Replacing these monomials by monic polynomials uses a unit triangular change-of-basis matrix, so it does not change the determinant." }
+      ] }] }
+    }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The determinant is " }, { "type": "inlineMath", "tex": "10^{n(n-1)/2}" }, { "type": "text", "text": ". We first record the Hankel-determinant fact that will evaluate it." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Suppose " }, { "type": "inlineMath", "tex": "f(x)=\\sum_{m\\ge1}d_mx^m" },
+      { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "d_1=1" },
+      { "type": "text", "text": " has the Jacobi fraction" }
+    ] },
+    { "type": "displayMath", "tex": "f(x)=\\cfrac{1}{x^{-1}+b_0+\\cfrac{a_1}{x^{-1}+b_1+\\cfrac{a_2}{x^{-1}+b_2+\\ddots}}}." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Then, for " }, { "type": "inlineMath", "tex": "H_n=(d_{i+j-1})_{i,j=1}^n" }, { "type": "text", "text": "," }
+    ] },
+    { "type": "displayMath", "tex": "\\det H_n=(-1)^{n(n-1)/2}\\prod_{j=1}^{n-1}a_j^{n-j}." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Here is a proof. Let " }, { "type": "inlineMath", "tex": "B_j" },
+      { "type": "text", "text": " be the monic denominator polynomial of degree " }, { "type": "inlineMath", "tex": "j" },
+      { "type": "text", "text": " from the convergents, and define the linear functional " },
+      { "type": "inlineMath", "tex": "L(x^k)=d_{k+1}" }, { "type": "text", "text": ". The convergent approximation and three-term recurrence give" }
+    ] },
+    { "type": "displayMath", "tex": "L(B_iB_j)=0\\quad(i\\ne j)," },
+    { "type": "displayMath", "tex": "L(B_j^2)=(-1)^j a_1a_2\\cdots a_j." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Thus the Gram matrix becomes diagonal in the monic basis " },
+      { "type": "inlineMath", "tex": "B_0,B_1,\\ldots,B_{n-1}" },
+      { "type": "text", "text": ". The change from monomials is unit triangular, so taking the product of the diagonal entries proves the formula." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Now let " }, { "type": "inlineMath", "tex": "f" },
+      { "type": "text", "text": " be the series in the problem and set" }
+    ] },
+    { "type": "displayMath", "tex": "g(x)=\\frac{1-7x-\\sqrt{1-14x+9x^2}}{2x}." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Direct algebra gives" }
+    ] },
+    { "type": "displayMath", "tex": "f(x)=\\frac{1}{x^{-1}-5-g(x)}," },
+    { "type": "displayMath", "tex": "g(x)=\\frac{10}{x^{-1}-7-g(x)}." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Substituting the second identity repeatedly into the first produces a Jacobi fraction with " },
+      { "type": "inlineMath", "tex": "a_j=-10" }, { "type": "text", "text": " for all " },
+      { "type": "inlineMath", "tex": "j\\ge1" }, { "type": "text", "text": ". Therefore, writing " },
+      { "type": "inlineMath", "tex": "N=n(n-1)/2" }, { "type": "text", "text": ", the lemma yields" }
+    ] },
+    { "type": "displayMath", "tex": "\\det A=(-1)^N(-10)^N=10^N=10^{n(n-1)/2}." }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2024 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2024 problems and solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2024 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2024s.tex" }
+  ]
+}

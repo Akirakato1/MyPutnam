@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2024",
+  "problemId": "A4",
+  "label": "A4",
+  "ordinal": 4,
+  "topics": ["number-theory", "algebra"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A4" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Find all primes " }, { "type": "inlineMath", "tex": "p>5" },
+      { "type": "text", "text": " for which there exist integers " }, { "type": "inlineMath", "tex": "a" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "r" },
+      { "type": "text", "text": " satisfying " }, { "type": "inlineMath", "tex": "1\\le r\\le p-1" },
+      { "type": "text", "text": " with the following property: the sequence" }
+    ] },
+    { "type": "displayMath", "tex": "1,a,a^2,\\ldots,a^{p-5}" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "can be rearranged to form " }, { "type": "inlineMath", "tex": "b_0,b_1,\\ldots,b_{p-5}" },
+      { "type": "text", "text": " such that " }, { "type": "inlineMath", "tex": "b_n-b_{n-1}-r" },
+      { "type": "text", "text": " is divisible by " }, { "type": "inlineMath", "tex": "p" },
+      { "type": "text", "text": " for " }, { "type": "inlineMath", "tex": "1\\le n\\le p-5" }, { "type": "text", "text": "." }
+    ] }
+  ] },
+  "hints": [
+    {
+      "order": 1, "stage": "nudge", "title": "Test the first eligible prime",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "p=7" },
+        { "type": "text", "text": ", try " }, { "type": "inlineMath", "tex": "a=3" },
+        { "type": "text", "text": " and reorder " }, { "type": "inlineMath", "tex": "1,3,9" },
+        { "type": "text", "text": ". Then turn to primes " }, { "type": "inlineMath", "tex": "p\\ge11" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2, "stage": "strategy", "title": "Force a primitive root",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The terms occupy " }, { "type": "inlineMath", "tex": "p-4" },
+        { "type": "text", "text": " distinct places in a nonzero-step arithmetic progression modulo " }, { "type": "inlineMath", "tex": "p" },
+        { "type": "text", "text": ". Hence the powers are distinct. Use that every proper divisor of " },
+        { "type": "inlineMath", "tex": "p-1" }, { "type": "text", "text": " is at most " },
+        { "type": "inlineMath", "tex": "(p-1)/2" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3, "stage": "knowledge", "title": "Examine the four omitted residues",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Once " }, { "type": "inlineMath", "tex": "a" },
+        { "type": "text", "text": " is primitive, complete both the power list and the arithmetic progression to full residue systems. With " },
+        { "type": "inlineMath", "tex": "c=a^{-1}" }, { "type": "text", "text": ", conclude that " },
+        { "type": "inlineMath", "tex": "\\{0,1,c,c^2\\}" }, { "type": "text", "text": " can be arranged as a four-term arithmetic progression." }
+      ] }] }
+    },
+    {
+      "order": 4, "stage": "outline", "title": "Outline the finite case check",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Verify " }, { "type": "inlineMath", "tex": "p=7" }, { "type": "text", "text": " directly." }],
+        [{ "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "p\\ge11" }, { "type": "text", "text": ", prove " }, { "type": "inlineMath", "tex": "a" }, { "type": "text", "text": " has order " }, { "type": "inlineMath", "tex": "p-1" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Put zero at an endpoint of the progression on " }, { "type": "inlineMath", "tex": "\\{0,1,c,c^2\\}" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Check the four nontrivial orders; each forces " }, { "type": "inlineMath", "tex": "p=5" }, { "type": "text", "text": " or " }, { "type": "inlineMath", "tex": "p=7" }, { "type": "text", "text": "." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1, "title": "Multiplicative order modulo a prime",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "p\\nmid a" },
+        { "type": "text", "text": ", the order of " }, { "type": "inlineMath", "tex": "a" },
+        { "type": "text", "text": " divides " }, { "type": "inlineMath", "tex": "p-1" },
+        { "type": "text", "text": ". More than " }, { "type": "inlineMath", "tex": "(p-1)/2" },
+        { "type": "text", "text": " distinct successive powers therefore force order " }, { "type": "inlineMath", "tex": "p-1" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2, "title": "Arithmetic progressions in a finite field",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "r\\not\\equiv0\\pmod p" },
+        { "type": "text", "text": ", then " }, { "type": "inlineMath", "tex": "x,x+r,\\ldots,x+(p-1)r" },
+        { "type": "text", "text": " runs through every residue modulo " }, { "type": "inlineMath", "tex": "p" },
+        { "type": "text", "text": " exactly once. Translation, nonzero scaling, and reversal preserve this property." }
+      ] }] }
+    },
+    {
+      "order": 3, "title": "Four-term progression test",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "A sequence " }, { "type": "inlineMath", "tex": "0,x,y,z" },
+        { "type": "text", "text": " is an arithmetic progression precisely when " },
+        { "type": "inlineMath", "tex": "y=2x" }, { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "z=3x" }, { "type": "text", "text": ". Each possible ordering thus gives two short congruences." }
+      ] }] }
+    }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The only prime is " }, { "type": "inlineMath", "tex": "p=7" },
+      { "type": "text", "text": ". With " }, { "type": "inlineMath", "tex": "a=3" },
+      { "type": "text", "text": ", reorder " }, { "type": "inlineMath", "tex": "1,3,9" },
+      { "type": "text", "text": " as " }, { "type": "inlineMath", "tex": "1,9,3" },
+      { "type": "text", "text": ". Both differences are " }, { "type": "inlineMath", "tex": "1\\pmod7" },
+      { "type": "text", "text": ", so " }, { "type": "inlineMath", "tex": "r=1" }, { "type": "text", "text": " works." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Suppose " }, { "type": "inlineMath", "tex": "p\\ge11" },
+      { "type": "text", "text": " works. The nonzero-step progression " },
+      { "type": "inlineMath", "tex": "b_0,b_0+r,\\ldots,b_0+(p-5)r" },
+      { "type": "text", "text": " has distinct terms modulo " }, { "type": "inlineMath", "tex": "p" },
+      { "type": "text", "text": ", so " }, { "type": "inlineMath", "tex": "1,a,\\ldots,a^{p-5}" },
+      { "type": "text", "text": " are distinct. Thus the order of " }, { "type": "inlineMath", "tex": "a" },
+      { "type": "text", "text": " exceeds " }, { "type": "inlineMath", "tex": "p-5>(p-1)/2" },
+      { "type": "text", "text": ". Since it divides " }, { "type": "inlineMath", "tex": "p-1" },
+      { "type": "text", "text": ", the order is " }, { "type": "inlineMath", "tex": "p-1" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The powers with exponents " }, { "type": "inlineMath", "tex": "-3,-2,-1,0,\\ldots,p-5" },
+      { "type": "text", "text": " now give every nonzero residue. Completing the given arithmetic progression by four positions on the left shows that its missing residues are" }
+    ] },
+    { "type": "displayMath", "tex": "\\{0,a^{-3},a^{-2},a^{-1}\\}." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Set " }, { "type": "inlineMath", "tex": "c=a^{-1}" },
+      { "type": "text", "text": " and scale by " }, { "type": "inlineMath", "tex": "c^{-1}" },
+      { "type": "text", "text": ". Hence " }, { "type": "inlineMath", "tex": "\\{0,1,c,c^2\\}" },
+      { "type": "text", "text": " can be ordered as a four-term arithmetic progression." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Zero must be an endpoint. If it were internal, its neighbors would be negatives, forcing " },
+      { "type": "inlineMath", "tex": "c=-1" }, { "type": "text", "text": " or " },
+      { "type": "inlineMath", "tex": "c^2=-1" }, { "type": "text", "text": ", contrary to " },
+      { "type": "inlineMath", "tex": "\\operatorname{ord}(c)=p-1\\ge10" },
+      { "type": "text", "text": ". Reverse the progression so zero is first." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The orders " }, { "type": "inlineMath", "tex": "0,1,c,c^2" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "0,c^2,c,1" },
+      { "type": "text", "text": " both imply " }, { "type": "inlineMath", "tex": "c-1=c^2-c" },
+      { "type": "text", "text": ", hence " }, { "type": "inlineMath", "tex": "c=1" }, { "type": "text", "text": ", impossible. The remaining orders give:" }
+    ] },
+    { "type": "list", "ordered": false, "items": [
+      [{ "type": "inlineMath", "tex": "0,1,c^2,c" }, { "type": "text", "text": ": " }, { "type": "inlineMath", "tex": "c^2=2, c=3" }, { "type": "text", "text": ", so " }, { "type": "inlineMath", "tex": "p\\mid7" }, { "type": "text", "text": ";" }],
+      [{ "type": "inlineMath", "tex": "0,c^2,1,c" }, { "type": "text", "text": ": " }, { "type": "inlineMath", "tex": "1=2c^2, c=3c^2" }, { "type": "text", "text": ", so " }, { "type": "inlineMath", "tex": "p\\mid7" }, { "type": "text", "text": ";" }],
+      [{ "type": "inlineMath", "tex": "0,c,1,c^2" }, { "type": "text", "text": ": " }, { "type": "inlineMath", "tex": "1=2c, c^2=3c" }, { "type": "text", "text": ", so " }, { "type": "inlineMath", "tex": "p\\mid5" }, { "type": "text", "text": ";" }],
+      [{ "type": "inlineMath", "tex": "0,c,c^2,1" }, { "type": "text", "text": ": " }, { "type": "inlineMath", "tex": "c^2=2c, 1=3c" }, { "type": "text", "text": ", so " }, { "type": "inlineMath", "tex": "p\\mid5" }, { "type": "text", "text": "." }]
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "All cases contradict " }, { "type": "inlineMath", "tex": "p\\ge11" },
+      { "type": "text", "text": ". Therefore " }, { "type": "inlineMath", "tex": "p=7" }, { "type": "text", "text": " is unique." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2024 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2024 problems and solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2024 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2024s.tex" }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2024",
+  "problemId": "A5",
+  "label": "A5",
+  "ordinal": 5,
+  "topics": ["geometry", "probability", "calculus"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A5" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Consider a circle " }, { "type": "inlineMath", "tex": "\\Omega" },
+      { "type": "text", "text": " with radius 9 and center at the origin " }, { "type": "inlineMath", "tex": "(0,0)" },
+      { "type": "text", "text": ", and a disc " }, { "type": "inlineMath", "tex": "\\Delta" },
+      { "type": "text", "text": " with radius 1 and center at " }, { "type": "inlineMath", "tex": "(r,0)" },
+      { "type": "text", "text": ", where " }, { "type": "inlineMath", "tex": "0\\le r\\le8" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Two points " }, { "type": "inlineMath", "tex": "P" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "Q" },
+      { "type": "text", "text": " are chosen independently and uniformly at random on " }, { "type": "inlineMath", "tex": "\\Omega" },
+      { "type": "text", "text": ". Which value(s) of " }, { "type": "inlineMath", "tex": "r" },
+      { "type": "text", "text": " minimize the probability that the chord " }, { "type": "inlineMath", "tex": "\\overline{PQ}" },
+      { "type": "text", "text": " intersects " }, { "type": "inlineMath", "tex": "\\Delta" }, { "type": "text", "text": "?" }
+    ] }
+  ] },
+  "hints": [
+    {
+      "order": 1, "stage": "nudge", "title": "Condition on the chord's direction",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Fix the angle " }, { "type": "inlineMath", "tex": "\\theta" },
+        { "type": "text", "text": " that the chord makes with the vertical, then rotate the picture until the chord is vertical. Only the horizontal coordinate of the rotated disc center matters." }
+      ] }] }
+    },
+    {
+      "order": 2, "stage": "strategy", "title": "Measure the permitted arc",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Write " }, { "type": "inlineMath", "tex": "s=r\\cos\\theta" },
+        { "type": "text", "text": ". The vertical chord intersects the unit disc exactly when its horizontal coordinate lies between " },
+        { "type": "inlineMath", "tex": "s-1" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "s+1" },
+        { "type": "text", "text": ". Convert that interval into an interval of angles on the radius-9 circle." }
+      ] }] }
+    },
+    {
+      "order": 3, "stage": "knowledge", "title": "A one-variable monotonicity test",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "The relevant angular width is the even function" }
+        ] },
+        { "type": "displayMath", "tex": "h(s)=\\arccos\\!\\left(\\frac{s-1}{9}\\right)-\\arccos\\!\\left(\\frac{s+1}{9}\\right)." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "Differentiate it for " }, { "type": "inlineMath", "tex": "0<s<8" },
+          { "type": "text", "text": " and compare the two square-root denominators." }
+        ] }
+      ] }
+    },
+    {
+      "order": 4, "stage": "outline", "title": "Finish by averaging",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Find the conditional probability for a fixed chord direction." }],
+        [{ "type": "text", "text": "Prove " }, { "type": "inlineMath", "tex": "h(s)\\ge h(0)" }, { "type": "text", "text": ", with equality only at " }, { "type": "inlineMath", "tex": "s=0" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Average over " }, { "type": "inlineMath", "tex": "\\theta" }, { "type": "text", "text": " and use strictness for almost every direction when " }, { "type": "inlineMath", "tex": "r>0" }, { "type": "text", "text": "." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1, "title": "Rotational invariance and chord coordinates",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Conditioning on a chord direction and rotating the entire configuration preserves uniform arc measure. A vertical chord has endpoints " },
+        { "type": "inlineMath", "tex": "(9\\cos\\phi,\\mathbin{\\pm}9\\sin\\phi)" },
+        { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "\\phi" }, { "type": "text", "text": " uniform on " },
+        { "type": "inlineMath", "tex": "(0,\\pi)" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2, "title": "Derivative of inverse cosine",
+      "document": { "blocks": [{ "type": "displayMath", "tex": "\\frac{d}{dx}\\arccos x=-\\frac{1}{\\sqrt{1-x^2}}\\qquad(-1<x<1)." }] }
+    },
+    {
+      "order": 3, "title": "Conditional probability",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The total probability is the average of the conditional probability over chord directions. If every conditional value is at least a fixed value, and it is strictly larger on a set of positive measure, then its average is strictly larger too." }
+      ] }] }
+    }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "We prove that the unique minimizing value is " }, { "type": "inlineMath", "tex": "r=0" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Condition on the chord making angle " }, { "type": "inlineMath", "tex": "\\theta" },
+      { "type": "text", "text": " with the vertical, where " }, { "type": "inlineMath", "tex": "-\\pi/2<\\theta\\le\\pi/2" },
+      { "type": "text", "text": ". Rotate by " }, { "type": "inlineMath", "tex": "-\\theta" },
+      { "type": "text", "text": ". The chord is now vertical and the disc center has horizontal coordinate " },
+      { "type": "inlineMath", "tex": "s=r\\cos\\theta" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The upper endpoint of the chord is " },
+      { "type": "inlineMath", "tex": "(9\\cos\\phi,9\\sin\\phi)" },
+      { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "\\phi" },
+      { "type": "text", "text": " uniform on " }, { "type": "inlineMath", "tex": "(0,\\pi)" },
+      { "type": "text", "text": ". The vertical chord meets the unit disc precisely when" }
+    ] },
+    { "type": "displayMath", "tex": "s-1\\le9\\cos\\phi\\le s+1." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Therefore its conditional intersection probability is " },
+      { "type": "inlineMath", "tex": "h(s)/\\pi" }, { "type": "text", "text": ", where" }
+    ] },
+    { "type": "displayMath", "tex": "h(s)=\\arccos\\!\\left(\\frac{s-1}{9}\\right)-\\arccos\\!\\left(\\frac{s+1}{9}\\right)." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The identity " }, { "type": "inlineMath", "tex": "\\arccos(-x)=\\pi-\\arccos x" },
+      { "type": "text", "text": " shows that " }, { "type": "inlineMath", "tex": "h" },
+      { "type": "text", "text": " is even. For " }, { "type": "inlineMath", "tex": "0<s<8" }, { "type": "text", "text": "," }
+    ] },
+    { "type": "displayMath", "tex": "\\begin{aligned}h'(s)&=\\frac{1}{\\sqrt{81-(s+1)^2}}\\\\&\\quad-\\frac{1}{\\sqrt{81-(s-1)^2}}>0.\\end{aligned}" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Indeed, the first positive denominator is smaller. Continuity handles " },
+      { "type": "inlineMath", "tex": "s=8" }, { "type": "text", "text": ", so " },
+      { "type": "inlineMath", "tex": "h(s)\\ge h(0)" }, { "type": "text", "text": " for " },
+      { "type": "inlineMath", "tex": "|s|\\le8" }, { "type": "text", "text": ", with equality only when " },
+      { "type": "inlineMath", "tex": "s=0" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "When " }, { "type": "inlineMath", "tex": "r=0" },
+      { "type": "text", "text": ", every direction has " }, { "type": "inlineMath", "tex": "s=0" },
+      { "type": "text", "text": ". When " }, { "type": "inlineMath", "tex": "r>0" },
+      { "type": "text", "text": ", we have " }, { "type": "inlineMath", "tex": "r\\cos\\theta>0" },
+      { "type": "text", "text": " for almost every allowed direction, so the conditional probability is strictly larger for almost every direction. Averaging proves that every " },
+      { "type": "inlineMath", "tex": "r>0" }, { "type": "text", "text": " gives a larger total probability. Hence " },
+      { "type": "inlineMath", "tex": "r=0" }, { "type": "text", "text": " is the unique minimizer." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2024 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2024 problems and solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2024 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2024s.tex" }
+  ]
+}
