@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2023",
+  "problemId": "A2",
+  "label": "A2",
+  "ordinal": 2,
+  "topics": ["polynomials", "algebra"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A2" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " be an even positive integer. Let " }, { "type": "inlineMath", "tex": "p" },
+      { "type": "text", "text": " be a monic, real polynomial of degree " }, { "type": "inlineMath", "tex": "2n" },
+      { "type": "text", "text": "; that is to say," }
+    ] },
+    { "type": "displayMath", "tex": "p(x)=x^{2n}+a_{2n-1}x^{2n-1}+\\cdots+a_1x+a_0" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "for some real coefficients " }, { "type": "inlineMath", "tex": "a_0,\\ldots,a_{2n-1}" },
+      { "type": "text", "text": ". Suppose that " }, { "type": "inlineMath", "tex": "p(1/k)=k^2" },
+      { "type": "text", "text": " for all integers " }, { "type": "inlineMath", "tex": "k" },
+      { "type": "text", "text": " such that " }, { "type": "inlineMath", "tex": "1\\le |k|\\le n" },
+      { "type": "text", "text": ". Find all other real numbers " }, { "type": "inlineMath", "tex": "x" },
+      { "type": "text", "text": " for which " }, { "type": "inlineMath", "tex": "p(1/x)=x^2" }, { "type": "text", "text": "." }
+    ] }
+  ] },
+  "hints": [
+    { "order": 1, "stage": "nudge", "title": "Clear the reciprocal", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Construct a polynomial whose nonzero roots are exactly the candidate values " },
+      { "type": "inlineMath", "tex": "x" }, { "type": "text", "text": ". Multiplying " },
+      { "type": "inlineMath", "tex": "p(1/x)-x^2" }, { "type": "text", "text": " by a suitable power of " },
+      { "type": "inlineMath", "tex": "x" }, { "type": "text", "text": " removes all negative exponents." }
+    ] }] } },
+    { "order": 2, "stage": "strategy", "title": "Use the known roots", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "q(x)=x^{2n+2}-x^{2n}p(1/x)" },
+      { "type": "text", "text": ", the given values imply roots " }, { "type": "inlineMath", "tex": "\\pm1,\\ldots,\\pm n" },
+      { "type": "text", "text": ". Compare degrees to see that only one monic quadratic factor remains." }
+    ] }] } },
+    { "order": 3, "stage": "knowledge", "title": "Compare two coefficients", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Write " }, { "type": "inlineMath", "tex": "q(x)=(x^2+ax+b)\\prod_{j=1}^n(x^2-j^2)" },
+      { "type": "text", "text": ". The coefficient of " }, { "type": "inlineMath", "tex": "x^{2n+1}" },
+      { "type": "text", "text": " and the constant term determine " }, { "type": "inlineMath", "tex": "a" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "b" }, { "type": "text", "text": "." }
+    ] }] } },
+    { "order": 4, "stage": "outline", "title": "Read the remaining roots", "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+      [{ "type": "text", "text": "Clear the reciprocal equation to form the monic degree-" }, { "type": "inlineMath", "tex": "2n+2" }, { "type": "text", "text": " polynomial " }, { "type": "inlineMath", "tex": "q" }, { "type": "text", "text": "." }],
+      [{ "type": "text", "text": "Factor out the " }, { "type": "inlineMath", "tex": "2n" }, { "type": "text", "text": " known roots." }],
+      [{ "type": "text", "text": "Use the missing odd leading coefficient and " }, { "type": "inlineMath", "tex": "q(0)=-1" }, { "type": "text", "text": "." }],
+      [{ "type": "text", "text": "Solve the remaining quadratic and verify its roots are genuinely new." }]
+    ] }] } }
+  ],
+  "prerequisites": [
+    { "order": 1, "title": "Reciprocal-polynomial transform", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "p" }, { "type": "text", "text": " has degree " },
+      { "type": "inlineMath", "tex": "2n" }, { "type": "text", "text": ", then " },
+      { "type": "inlineMath", "tex": "x^{2n}p(1/x)" }, { "type": "text", "text": " is a polynomial for " },
+      { "type": "inlineMath", "tex": "x\\ne0" }, { "type": "text", "text": ", and multiplying by powers of " },
+      { "type": "inlineMath", "tex": "x" }, { "type": "text", "text": " preserves the nonzero solutions of an equation." }
+    ] }] } },
+    { "order": 2, "title": "Factor theorem with degree count", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "A degree-" }, { "type": "inlineMath", "tex": "d" },
+      { "type": "text", "text": " polynomial with listed distinct roots factors by their linear factors; after accounting for all but two degrees, the remaining factor is quadratic." }
+    ] }] } },
+    { "order": 3, "title": "Constant term of the symmetric product", "document": { "blocks": [{ "type": "displayMath", "tex": "\\prod_{j=1}^n(0-j^2)=(-1)^n(n!)^2." }] } }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The other real numbers are " }, { "type": "inlineMath", "tex": "x=\\pm1/n!" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "x\\ne0" }, { "type": "text", "text": ", define" }
+    ] },
+    { "type": "displayMath", "tex": "q(x)=x^{2n+2}-x^{2n}p(1/x)." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Because " }, { "type": "inlineMath", "tex": "p" },
+      { "type": "text", "text": " is monic of degree " }, { "type": "inlineMath", "tex": "2n" },
+      { "type": "text", "text": ", this expression extends to a monic polynomial of degree " },
+      { "type": "inlineMath", "tex": "2n+2" }, { "type": "text", "text": ", its " },
+      { "type": "inlineMath", "tex": "x^{2n+1}" }, { "type": "text", "text": " coefficient is zero, and " },
+      { "type": "inlineMath", "tex": "q(0)=-1" }, { "type": "text", "text": ". Moreover, for nonzero " },
+      { "type": "inlineMath", "tex": "x" }, { "type": "text", "text": "," }
+    ] },
+    { "type": "displayMath", "tex": "q(x)=0\\quad\\Longleftrightarrow\\quad p(1/x)=x^2." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The hypothesis therefore supplies the " }, { "type": "inlineMath", "tex": "2n" },
+      { "type": "text", "text": " roots " }, { "type": "inlineMath", "tex": "\\pm1,\\ldots,\\pm n" },
+      { "type": "text", "text": ". Degree and leading-coefficient comparison give" }
+    ] },
+    { "type": "displayMath", "tex": "q(x)=(x^2+ax+b)\\prod_{j=1}^n(x^2-j^2)" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "for some real " }, { "type": "inlineMath", "tex": "a,b" },
+      { "type": "text", "text": ". The product is even and monic, so the coefficient of " },
+      { "type": "inlineMath", "tex": "x^{2n+1}" }, { "type": "text", "text": " on the right is " },
+      { "type": "inlineMath", "tex": "a" }, { "type": "text", "text": ". Hence " },
+      { "type": "inlineMath", "tex": "a=0" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Evaluating at zero and using that " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " is even gives" }
+    ] },
+    { "type": "displayMath", "tex": "-1=q(0)=b(-1)^n(n!)^2=b(n!)^2," },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "so " }, { "type": "inlineMath", "tex": "b=-1/(n!)^2" },
+      { "type": "text", "text": ". The remaining factor is therefore" }
+    ] },
+    { "type": "displayMath", "tex": "x^2-\\frac{1}{(n!)^2}," },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "whose roots are " }, { "type": "inlineMath", "tex": "\\pm1/n!" },
+      { "type": "text", "text": ". Since an even positive " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " satisfies " }, { "type": "inlineMath", "tex": "n\\ge2" },
+      { "type": "text", "text": ", these are distinct from the already known integers " },
+      { "type": "inlineMath", "tex": "\\pm1,\\ldots,\\pm n" }, { "type": "text", "text": "." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2023 problems", "url": "https://maa.org/wp-content/uploads/2025/02/2023-Putnam-Problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2023 problems and solutions", "url": "https://maa.org/wp-content/uploads/2025/02/2023-Putnam-Problems-and-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2023 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2023s.tex" }
+  ]
+}

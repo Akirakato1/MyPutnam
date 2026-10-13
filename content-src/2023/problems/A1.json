@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2023",
+  "problemId": "A1",
+  "label": "A1",
+  "ordinal": 1,
+  "topics": ["calculus", "sequences-series"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A1" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For a positive integer " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": ", let" }
+    ] },
+    { "type": "displayMath", "tex": "f_n(x)=\\cos(x)\\cos(2x)\\cos(3x)\\cdots\\cos(nx)." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Find the smallest " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " such that " }, { "type": "inlineMath", "tex": "|f_n''(0)|>2023" }, { "type": "text", "text": "." }
+    ] }
+  ] },
+  "hints": [
+    { "order": 1, "stage": "nudge", "title": "Differentiate at the special point", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "At " }, { "type": "inlineMath", "tex": "x=0" },
+      { "type": "text", "text": ", every cosine factor equals " }, { "type": "inlineMath", "tex": "1" },
+      { "type": "text", "text": " and every first derivative of a cosine factor equals " }, { "type": "inlineMath", "tex": "0" },
+      { "type": "text", "text": ". Use this before expanding the full product rule." }
+    ] }] } },
+    { "order": 2, "stage": "strategy", "title": "Identify the surviving terms", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "In the second derivative of the product, terms differentiating two distinct factors once vanish at zero. Only terms differentiating one factor twice survive." }
+    ] }] } },
+    { "order": 3, "stage": "knowledge", "title": "Recognize the sum", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "The factor " }, { "type": "inlineMath", "tex": "\\cos(mx)" },
+      { "type": "text", "text": " contributes " }, { "type": "inlineMath", "tex": "-m^2" },
+      { "type": "text", "text": ". Use the formula for " }, { "type": "inlineMath", "tex": "\\sum_{m=1}^n m^2" }, { "type": "text", "text": "." }
+    ] }] } },
+    { "order": 4, "stage": "outline", "title": "Locate the first crossing", "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+      [{ "type": "text", "text": "Show " }, { "type": "inlineMath", "tex": "|f_n''(0)|=\\sum_{m=1}^n m^2" }, { "type": "text", "text": "." }],
+      [{ "type": "text", "text": "Replace the sum by " }, { "type": "inlineMath", "tex": "n(n+1)(2n+1)/6" }, { "type": "text", "text": "." }],
+      [{ "type": "text", "text": "Use its strict increase for positive integers." }],
+      [{ "type": "text", "text": "Compare the values at " }, { "type": "inlineMath", "tex": "n=17" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "n=18" }, { "type": "text", "text": "." }]
+    ] }] } }
+  ],
+  "prerequisites": [
+    { "order": 1, "title": "Second derivative of a product at zero", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "When every factor has first derivative zero at a point, all mixed terms in the product's second derivative vanish there; the surviving terms differentiate exactly one factor twice." }
+    ] }] } },
+    { "order": 2, "title": "Cosine derivatives", "document": { "blocks": [{ "type": "displayMath", "tex": "\\left.\\frac{d^2}{dx^2}\\cos(mx)\\right|_{x=0}=-m^2." }] } },
+    { "order": 3, "title": "Sum of squares", "document": { "blocks": [{ "type": "displayMath", "tex": "1^2+2^2+\\cdots+n^2=\\frac{n(n+1)(2n+1)}{6}." }] } }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The smallest value is " }, { "type": "inlineMath", "tex": "n=18" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Differentiate the product twice. A term in which two distinct factors are each differentiated once contains two sine factors, so it vanishes at " },
+      { "type": "inlineMath", "tex": "x=0" }, { "type": "text", "text": ". If only the factor " },
+      { "type": "inlineMath", "tex": "\\cos(mx)" }, { "type": "text", "text": " is differentiated twice, its value at zero is " },
+      { "type": "inlineMath", "tex": "-m^2" }, { "type": "text", "text": ", while every other factor equals " },
+      { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": ". Therefore" }
+    ] },
+    { "type": "displayMath", "tex": "f_n''(0)=-\\sum_{m=1}^n m^2=-\\frac{n(n+1)(2n+1)}{6}." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The absolute value is strictly increasing with the positive integer " },
+      { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": ". At the two relevant consecutive values," }
+    ] },
+    { "type": "displayMath", "tex": "|f_{17}''(0)|=\\frac{17\\cdot18\\cdot35}{6}=1785" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "whereas" }] },
+    { "type": "displayMath", "tex": "|f_{18}''(0)|=\\frac{18\\cdot19\\cdot37}{6}=2109>2023." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Thus no positive integer below " }, { "type": "inlineMath", "tex": "18" },
+      { "type": "text", "text": " works, and " }, { "type": "inlineMath", "tex": "18" }, { "type": "text", "text": " does." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2023 problems", "url": "https://maa.org/wp-content/uploads/2025/02/2023-Putnam-Problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2023 problems and solutions", "url": "https://maa.org/wp-content/uploads/2025/02/2023-Putnam-Problems-and-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2023 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2023s.tex" }
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2023",
+  "problemId": "A3",
+  "label": "A3",
+  "ordinal": 3,
+  "topics": ["calculus", "inequalities"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A3" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Determine the smallest positive real number " }, { "type": "inlineMath", "tex": "r" },
+      { "type": "text", "text": " such that there exist differentiable functions " },
+      { "type": "inlineMath", "tex": "f:\\mathbb R\\to\\mathbb R" }, { "type": "text", "text": " and " },
+      { "type": "inlineMath", "tex": "g:\\mathbb R\\to\\mathbb R" }, { "type": "text", "text": " satisfying" }
+    ] },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "(a) " }, { "type": "inlineMath", "tex": "f(0)>0" }, { "type": "text", "text": "," }] },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "(b) " }, { "type": "inlineMath", "tex": "g(0)=0" }, { "type": "text", "text": "," }] },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "(c) " }, { "type": "inlineMath", "tex": "|f'(x)|\\le |g(x)|" }, { "type": "text", "text": " for all " }, { "type": "inlineMath", "tex": "x" }, { "type": "text", "text": "," }] },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "(d) " }, { "type": "inlineMath", "tex": "|g'(x)|\\le |f(x)|" }, { "type": "text", "text": " for all " }, { "type": "inlineMath", "tex": "x" }, { "type": "text", "text": ", and" }] },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "(e) " }, { "type": "inlineMath", "tex": "f(r)=0" }, { "type": "text", "text": "." }] }
+  ] },
+  "hints": [
+    { "order": 1, "stage": "nudge", "title": "Find a sharp example", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Try the basic sine-cosine pair. It gives an admissible value of " },
+      { "type": "inlineMath", "tex": "r" }, { "type": "text", "text": " and therefore an upper bound for the answer." }
+    ] }] } },
+    { "order": 2, "stage": "strategy", "title": "Work up to the first zero", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "For an arbitrary admissible pair, replace " }, { "type": "inlineMath", "tex": "r" },
+      { "type": "text", "text": " by the first positive zero " }, { "type": "inlineMath", "tex": "r_0" },
+      { "type": "text", "text": " of " }, { "type": "inlineMath", "tex": "f" }, { "type": "text", "text": ". Study " },
+      { "type": "inlineMath", "tex": "h=f^2+g^2" }, { "type": "text", "text": " to rule out simultaneous vanishing." }
+    ] }] } },
+    { "order": 3, "stage": "knowledge", "title": "Track the phase", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "On " }, { "type": "inlineMath", "tex": "[0,r_0)" },
+      { "type": "text", "text": ", one has " }, { "type": "inlineMath", "tex": "f>0" },
+      { "type": "text", "text": ". Define " }, { "type": "inlineMath", "tex": "\\theta=\\arctan(g/f)" },
+      { "type": "text", "text": " and differentiate it. The two derivative bounds imply " },
+      { "type": "inlineMath", "tex": "|\\theta'|\\le1" }, { "type": "text", "text": "." }
+    ] }] } },
+    { "order": 4, "stage": "outline", "title": "Reach the endpoint angle", "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+      [{ "type": "text", "text": "Use " }, { "type": "inlineMath", "tex": "|h'|\\le2h" }, { "type": "text", "text": " to show " }, { "type": "inlineMath", "tex": "h" }, { "type": "text", "text": " never vanishes." }],
+      [{ "type": "text", "text": "Integrate " }, { "type": "inlineMath", "tex": "|\\theta'|\\le1" }, { "type": "text", "text": " from zero." }],
+      [{ "type": "text", "text": "As " }, { "type": "inlineMath", "tex": "x\\to r_0^-" }, { "type": "text", "text": ", use " }, { "type": "inlineMath", "tex": "f(x)\\to0^+" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "g(r_0)\\ne0" }, { "type": "text", "text": " to identify the limiting phase magnitude." }],
+      [{ "type": "text", "text": "Compare that phase change with the elapsed interval and match it to the sine-cosine example." }]
+    ] }] } }
+  ],
+  "prerequisites": [
+    { "order": 1, "title": "First-zero reduction", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "If a continuous function starts positive and has a zero at " },
+      { "type": "inlineMath", "tex": "r>0" }, { "type": "text", "text": ", its zero set in " },
+      { "type": "inlineMath", "tex": "[0,r]" }, { "type": "text", "text": " has a least element " },
+      { "type": "inlineMath", "tex": "r_0>0" }, { "type": "text", "text": "; the function remains positive on " },
+      { "type": "inlineMath", "tex": "[0,r_0)" }, { "type": "text", "text": "." }
+    ] }] } },
+    { "order": 2, "title": "Integrating-factor inequality", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "From " }, { "type": "inlineMath", "tex": "h'\\ge-2h" },
+      { "type": "text", "text": ", it follows that " }, { "type": "inlineMath", "tex": "(e^{2x}h(x))'\\ge0" },
+      { "type": "text", "text": " and hence " }, { "type": "inlineMath", "tex": "h(x)\\ge h(0)e^{-2x}" },
+      { "type": "text", "text": " for " }, { "type": "inlineMath", "tex": "x\\ge0" }, { "type": "text", "text": "." }
+    ] }] } },
+    { "order": 3, "title": "Derivative of a phase angle", "document": { "blocks": [{ "type": "displayMath", "tex": "\\frac{d}{dx}\\arctan\\!\\left(\\frac{g}{f}\\right)=\\frac{g'f-gf'}{f^2+g^2}\\qquad(f\\ne0)." }] } }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The answer is " }, { "type": "inlineMath", "tex": "r=\\pi/2" },
+      { "type": "text", "text": ". Indeed, " }, { "type": "inlineMath", "tex": "f(x)=\\cos x" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "g(x)=\\sin x" },
+      { "type": "text", "text": " satisfy all five conditions with " }, { "type": "inlineMath", "tex": "r=\\pi/2" },
+      { "type": "text", "text": ", so it remains to prove that no smaller value works." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Take any admissible functions and any positive " },
+      { "type": "inlineMath", "tex": "r" }, { "type": "text", "text": " with " },
+      { "type": "inlineMath", "tex": "f(r)=0" }, { "type": "text", "text": ". Let " },
+      { "type": "inlineMath", "tex": "r_0" }, { "type": "text", "text": " be the first zero of " },
+      { "type": "inlineMath", "tex": "f" }, { "type": "text", "text": " in " },
+      { "type": "inlineMath", "tex": "(0,r]" }, { "type": "text", "text": ". Then " },
+      { "type": "inlineMath", "tex": "f(x)>0" }, { "type": "text", "text": " for " },
+      { "type": "inlineMath", "tex": "0\\le x<r_0" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Set " }, { "type": "inlineMath", "tex": "h=f^2+g^2" },
+      { "type": "text", "text": ". The derivative bounds and " }, { "type": "inlineMath", "tex": "2|fg|\\le f^2+g^2" },
+      { "type": "text", "text": " give" }
+    ] },
+    { "type": "displayMath", "tex": "|h'|\\le2|f||f'|+2|g||g'|\\le4|fg|\\le2h." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "In particular " }, { "type": "inlineMath", "tex": "h'\\ge-2h" },
+      { "type": "text", "text": ", so " }, { "type": "inlineMath", "tex": "e^{2x}h(x)" },
+      { "type": "text", "text": " is nondecreasing for " }, { "type": "inlineMath", "tex": "x\\ge0" }, { "type": "text", "text": ". Therefore" }
+    ] },
+    { "type": "displayMath", "tex": "h(x)\\ge h(0)e^{-2x}=f(0)^2e^{-2x}>0." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Thus " }, { "type": "inlineMath", "tex": "f" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "g" },
+      { "type": "text", "text": " never vanish simultaneously; in particular, " },
+      { "type": "inlineMath", "tex": "g(r_0)\\ne0" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "On " }, { "type": "inlineMath", "tex": "[0,r_0)" },
+      { "type": "text", "text": ", define the phase" }
+    ] },
+    { "type": "displayMath", "tex": "\\theta(x)=\\arctan\\!\\left(\\frac{g(x)}{f(x)}\\right)." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Since " }, { "type": "inlineMath", "tex": "\\theta(0)=0" }, { "type": "text", "text": " and" }
+    ] },
+    { "type": "displayMath", "tex": "\\theta'(x)=\\frac{g'(x)f(x)-g(x)f'(x)}{f(x)^2+g(x)^2}," },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "the hypotheses imply" }
+    ] },
+    { "type": "displayMath", "tex": "|\\theta'(x)|\\le\\frac{|g'||f|+|g||f'|}{f^2+g^2}\\le1." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Hence " }, { "type": "inlineMath", "tex": "|\\theta(x)|\\le x" },
+      { "type": "text", "text": " for " }, { "type": "inlineMath", "tex": "0\\le x<r_0" },
+      { "type": "text", "text": ". As " }, { "type": "inlineMath", "tex": "x\\to r_0^-" },
+      { "type": "text", "text": ", we have " }, { "type": "inlineMath", "tex": "f(x)\\to0^+" },
+      { "type": "text", "text": " while " }, { "type": "inlineMath", "tex": "g(x)\\to g(r_0)\\ne0" },
+      { "type": "text", "text": ". Consequently " }, { "type": "inlineMath", "tex": "|\\theta(x)|\\to\\pi/2" },
+      { "type": "text", "text": ", and passage to the limit gives" }
+    ] },
+    { "type": "displayMath", "tex": "\\frac{\\pi}{2}\\le r_0\\le r." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Every admissible " }, { "type": "inlineMath", "tex": "r" },
+      { "type": "text", "text": " is therefore at least " }, { "type": "inlineMath", "tex": "\\pi/2" },
+      { "type": "text", "text": ", and the sine-cosine example attains equality." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2023 problems", "url": "https://maa.org/wp-content/uploads/2025/02/2023-Putnam-Problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2023 problems and solutions", "url": "https://maa.org/wp-content/uploads/2025/02/2023-Putnam-Problems-and-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2023 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2023s.tex" }
+  ]
+}
