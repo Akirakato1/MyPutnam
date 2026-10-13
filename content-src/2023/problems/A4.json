@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2023",
+  "problemId": "A4",
+  "label": "A4",
+  "ordinal": 4,
+  "topics": ["geometry", "number-theory"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A4" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "v_1,\\ldots,v_{12}" },
+      { "type": "text", "text": " be unit vectors in " }, { "type": "inlineMath", "tex": "\\mathbb{R}^3" },
+      { "type": "text", "text": " from the origin to the vertices of a regular icosahedron. Show that for every vector " },
+      { "type": "inlineMath", "tex": "v\\in\\mathbb{R}^3" }, { "type": "text", "text": " and every " },
+      { "type": "inlineMath", "tex": "\\varepsilon>0" }, { "type": "text", "text": ", there exist integers " },
+      { "type": "inlineMath", "tex": "a_1,\\ldots,a_{12}" }, { "type": "text", "text": " such that" }
+    ] },
+    { "type": "displayMath", "tex": "\\left\\|a_1v_1+\\cdots+a_{12}v_{12}-v\\right\\|<\\varepsilon." }
+  ] },
+  "hints": [
+    {
+      "order": 1, "stage": "nudge", "title": "Choose useful coordinates",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Density is unchanged by rotating or uniformly scaling all twelve vectors. Use the standard icosahedron coordinates built from " },
+        { "type": "inlineMath", "tex": "\\phi=(1+\\sqrt5)/2" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2, "stage": "strategy", "title": "Generate one coordinate at a time",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The vertices include cyclic permutations of " },
+        { "type": "inlineMath", "tex": "(\\pm1/2,\\pm\\phi/2,0)" },
+        { "type": "text", "text": ". Add and subtract suitable pairs to obtain vectors whose only nonzero coordinate is " },
+        { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": " or " },
+        { "type": "inlineMath", "tex": "\\phi" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3, "stage": "knowledge", "title": "Use irrational density",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "\\alpha" },
+        { "type": "text", "text": " is irrational, the additive subgroup " },
+        { "type": "inlineMath", "tex": "\\mathbb{Z}+\\alpha\\mathbb{Z}" },
+        { "type": "text", "text": " is dense in " }, { "type": "inlineMath", "tex": "\\mathbb{R}" },
+        { "type": "text", "text": ". Apply this with " }, { "type": "inlineMath", "tex": "\\alpha=\\phi" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 4, "stage": "outline", "title": "Finish coordinatewise",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Show that the integer span of the vertex vectors contains " }, { "type": "inlineMath", "tex": "G^3" }, { "type": "text", "text": ", where " }, { "type": "inlineMath", "tex": "G=\\mathbb{Z}+\\phi\\mathbb{Z}" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Prove " }, { "type": "inlineMath", "tex": "G" }, { "type": "text", "text": " is dense using arbitrarily small nonzero elements of " }, { "type": "inlineMath", "tex": "G" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Approximate the three coordinates of the target independently." }],
+        [{ "type": "text", "text": "Undo the harmless common scaling of the coordinate model." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1, "title": "Icosahedron coordinates",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Up to rotation and common scaling, the twelve vertices of a regular icosahedron are the cyclic coordinate permutations of " },
+        { "type": "inlineMath", "tex": "(\\pm1/2,\\pm\\phi/2,0)" },
+        { "type": "text", "text": ", where " }, { "type": "inlineMath", "tex": "\\phi=(1+\\sqrt5)/2" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2, "title": "Integer spans of an irrational pair",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For irrational " }, { "type": "inlineMath", "tex": "\\alpha" },
+        { "type": "text", "text": ", the pigeonhole principle produces nonzero numbers " },
+        { "type": "inlineMath", "tex": "q\\alpha-p" }, { "type": "text", "text": " arbitrarily close to zero. Integer multiples of such a number approximate every real number, so " },
+        { "type": "inlineMath", "tex": "\\mathbb{Z}+\\alpha\\mathbb{Z}" }, { "type": "text", "text": " is dense." }
+      ] }] }
+    },
+    {
+      "order": 3, "title": "Coordinatewise approximation",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "G" },
+        { "type": "text", "text": " is dense in " }, { "type": "inlineMath", "tex": "\\mathbb{R}" },
+        { "type": "text", "text": ", then " }, { "type": "inlineMath", "tex": "G^3" },
+        { "type": "text", "text": " is dense in " }, { "type": "inlineMath", "tex": "\\mathbb{R}^3" },
+        { "type": "text", "text": ": approximate each coordinate within " }, { "type": "inlineMath", "tex": "\\varepsilon/\\sqrt3" }, { "type": "text", "text": "." }
+      ] }] }
+    }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "A rotation or a common nonzero scaling of all vertex vectors preserves the density claim. We may therefore use the standard coordinate model whose twelve vertices are the cyclic permutations of" }
+    ] },
+    { "type": "displayMath", "tex": "(\\pm\\tfrac12,\\pm\\tfrac{\\phi}{2},0),\\qquad \\phi=\\frac{1+\\sqrt5}{2}," },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "with the two signs chosen independently. Let " },
+      { "type": "inlineMath", "tex": "H" }, { "type": "text", "text": " be the additive subgroup of " },
+      { "type": "inlineMath", "tex": "\\mathbb{R}^3" }, { "type": "text", "text": " generated by these twelve vectors." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Adding the vertices " }, { "type": "inlineMath", "tex": "(1/2,\\phi/2,0)" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "(1/2,-\\phi/2,0)" },
+      { "type": "text", "text": " gives " }, { "type": "inlineMath", "tex": "(1,0,0)" },
+      { "type": "text", "text": ", while subtracting them gives " }, { "type": "inlineMath", "tex": "(0,\\phi,0)" },
+      { "type": "text", "text": ". Using sign choices and cyclic permutations in the same way yields" }
+    ] },
+    { "type": "displayMath", "tex": "(1,0,0),(\\phi,0,0)\\in H," },
+    { "type": "displayMath", "tex": "(0,1,0),(0,\\phi,0)\\in H," },
+    { "type": "displayMath", "tex": "(0,0,1),(0,0,\\phi)\\in H." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Consequently " }, { "type": "inlineMath", "tex": "G^3\\subseteq H" },
+      { "type": "text", "text": ", where " }, { "type": "inlineMath", "tex": "G=\\mathbb{Z}+\\phi\\mathbb{Z}" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Because " }, { "type": "inlineMath", "tex": "\\phi" },
+      { "type": "text", "text": " is irrational, " }, { "type": "inlineMath", "tex": "G" },
+      { "type": "text", "text": " is dense in " }, { "type": "inlineMath", "tex": "\\mathbb{R}" },
+      { "type": "text", "text": ". Indeed, the pigeonhole principle applied to the fractional parts of " },
+      { "type": "inlineMath", "tex": "0,\\phi,2\\phi,\\ldots,N\\phi" },
+      { "type": "text", "text": " gives a nonzero " }, { "type": "inlineMath", "tex": "\\delta=q\\phi-p\\in G" },
+      { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "|\\delta|<1/N" },
+      { "type": "text", "text": ". For any real " }, { "type": "inlineMath", "tex": "x" },
+      { "type": "text", "text": ", an integer multiple of " }, { "type": "inlineMath", "tex": "\\delta" },
+      { "type": "text", "text": " lies within " }, { "type": "inlineMath", "tex": "|\\delta|/2" },
+      { "type": "text", "text": " of " }, { "type": "inlineMath", "tex": "x" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Thus " }, { "type": "inlineMath", "tex": "G^3" },
+      { "type": "text", "text": " is dense in " }, { "type": "inlineMath", "tex": "\\mathbb{R}^3" },
+      { "type": "text", "text": ". Given " }, { "type": "inlineMath", "tex": "v=(x,y,z)" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "\\varepsilon>0" },
+      { "type": "text", "text": ", choose three elements of " }, { "type": "inlineMath", "tex": "G" },
+      { "type": "text", "text": " approximating " }, { "type": "inlineMath", "tex": "x,y,z" },
+      { "type": "text", "text": " within " }, { "type": "inlineMath", "tex": "\\varepsilon/\\sqrt3" },
+      { "type": "text", "text": ". The resulting element of " }, { "type": "inlineMath", "tex": "G^3\\subseteq H" },
+      { "type": "text", "text": " is within " }, { "type": "inlineMath", "tex": "\\varepsilon" },
+      { "type": "text", "text": " of " }, { "type": "inlineMath", "tex": "v" },
+      { "type": "text", "text": " and is an integer linear combination of the twelve vertex vectors. Returning to unit scale proves the claim." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2023 problems", "url": "https://maa.org/wp-content/uploads/2025/02/2023-Putnam-Problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2023 problems and solutions", "url": "https://maa.org/wp-content/uploads/2025/02/2023-Putnam-Problems-and-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2023 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2023s.tex" }
+  ]
+}

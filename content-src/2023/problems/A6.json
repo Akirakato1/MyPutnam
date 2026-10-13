@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2023",
+  "problemId": "A6",
+  "label": "A6",
+  "ordinal": 6,
+  "topics": ["combinatorics"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A6" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Alice and Bob play a game in which they take turns choosing integers from " },
+      { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": " to " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": ". Before any integers are chosen, Bob selects a goal of \"odd\" or \"even\". On the first turn, Alice chooses one of the " },
+      { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " integers. On the second turn, Bob chooses one of the remaining integers. They continue alternately choosing an integer that has not yet been chosen, until the forced " },
+      { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": "th turn ends the game." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Bob wins if the parity of" }
+    ] },
+    { "type": "displayMath", "tex": "\\{k:k\\text{ was chosen on turn }k\\}" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "matches his goal. For which values of " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " does Bob have a winning strategy?" }
+    ] }
+  ] },
+  "hints": [
+    {
+      "order": 1, "stage": "nudge", "title": "Think in fixed points",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The completed play is a permutation: the number chosen on turn " },
+        { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": " is its value at position " },
+        { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": ". The set in the problem is exactly the set of fixed points." }
+      ] }] }
+    },
+    {
+      "order": 2, "stage": "strategy", "title": "Pair the even case",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "When " }, { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " is even, pair the values as " },
+        { "type": "inlineMath", "tex": "\\{1,2\\},\\{3,4\\},\\ldots,\\{n-1,n\\}" },
+        { "type": "text", "text": ". Bob can always answer Alice with the other member of her pair; examine fixed points two turns at a time." }
+      ] }] }
+    },
+    {
+      "order": 3, "stage": "knowledge", "title": "Start the odd case recursively",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For odd " }, { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": ", use induction on odd sizes. If Alice first chooses " },
+        { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": " or " },
+        { "type": "inlineMath", "tex": "2" }, { "type": "text", "text": ", Bob can remove that pair and restart on " },
+        { "type": "inlineMath", "tex": "n-2" }, { "type": "text", "text": " positions. Otherwise, let her first choice be " },
+        { "type": "inlineMath", "tex": "k>2" }, { "type": "text", "text": " and have Bob choose " },
+        { "type": "inlineMath", "tex": "2" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 4, "stage": "outline", "title": "Maintain odd parity or restart",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "As long as Alice chooses the current odd turn number, Bob usually chooses the following even number." }],
+        [{ "type": "text", "text": "If that following number is the initial choice " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": ", Bob chooses " }, { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": " and restarts on the untouched tail." }],
+        [{ "type": "text", "text": "Once Alice fails to make a fixed point, Bob prevents both his present turn and Alice's next turn from becoming fixed." }],
+        [{ "type": "text", "text": "Track the parity at each transition and verify Bob always has a legal choice." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1, "title": "A play is a permutation",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Because each value is chosen exactly once, listing the chosen values in turn order gives a permutation of " },
+        { "type": "inlineMath", "tex": "\\{1,\\ldots,n\\}" }, { "type": "text", "text": ". A successful match at turn " },
+        { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": " is a fixed point of that permutation." }
+      ] }] }
+    },
+    {
+      "order": 2, "title": "Pairing strategies",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If a finite set is partitioned into pairs and one player always answers by taking the mate of the preceding move, the reply is legal: no pair can have been entered earlier with exactly one member left behind." }
+      ] }] }
+    },
+    {
+      "order": 3, "title": "Restarting an untouched tail",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "r" },
+        { "type": "text", "text": " is even and the used values and used turn numbers are the same initial block " },
+        { "type": "inlineMath", "tex": "\\{1,\\ldots,r\\}" }, { "type": "text", "text": ", subtracting " },
+        { "type": "inlineMath", "tex": "r" }, { "type": "text", "text": " from every remaining value and turn produces the identical game of size " },
+        { "type": "inlineMath", "tex": "n-r" }, { "type": "text", "text": ". Fixed points in the tail are preserved." }
+      ] }] }
+    }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Bob has a winning strategy for every positive integer " },
+      { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": ". He chooses the goal \"even\" when " },
+      { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " is even and \"odd\" when " },
+      { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " is odd." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "First suppose " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " is even. Pair the values as " },
+      { "type": "inlineMath", "tex": "\\{1,2\\},\\{3,4\\},\\ldots,\\{n-1,n\\}" },
+      { "type": "text", "text": ". Whenever Alice chooses one member of a pair, Bob chooses the other. On turns " },
+      { "type": "inlineMath", "tex": "2j-1" }, { "type": "text", "text": " and " },
+      { "type": "inlineMath", "tex": "2j" }, { "type": "text", "text": ", either Alice chose " },
+      { "type": "inlineMath", "tex": "2j-1" }, { "type": "text", "text": " and Bob then chooses " },
+      { "type": "inlineMath", "tex": "2j" }, { "type": "text", "text": ", creating two fixed points, or neither turn is fixed. Hence the final number of fixed points is even." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Now suppose " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " is odd. We give an induction on odd " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": ". The case " }, { "type": "inlineMath", "tex": "n=1" },
+      { "type": "text", "text": " is forced and has one fixed point. Assume the strategy is known for smaller odd sizes, and let Alice's first choice be " },
+      { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "k\\in\\{1,2\\}" },
+      { "type": "text", "text": ", Bob chooses the other member of " }, { "type": "inlineMath", "tex": "\\{1,2\\}" },
+      { "type": "text", "text": ". Those two turns contribute either zero or two fixed points. The remaining values and turn numbers are both " },
+      { "type": "inlineMath", "tex": "3,\\ldots,n" }, { "type": "text", "text": "; after subtracting two, Bob follows the inductive strategy for the odd game of size " },
+      { "type": "inlineMath", "tex": "n-2" }, { "type": "text", "text": ". The tail contributes an odd number of fixed points, so the total is odd." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "It remains to treat " }, { "type": "inlineMath", "tex": "k>2" },
+      { "type": "text", "text": ". Bob chooses " }, { "type": "inlineMath", "tex": "2" },
+      { "type": "text", "text": " on turn two, creating exactly one fixed point. Consider a later Alice turn " },
+      { "type": "inlineMath", "tex": "j\\ge3" }, { "type": "text", "text": ", where " },
+      { "type": "inlineMath", "tex": "j" }, { "type": "text", "text": " is odd." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "As long as Alice chooses " }, { "type": "inlineMath", "tex": "j" },
+      { "type": "text", "text": " on turn " }, { "type": "inlineMath", "tex": "j" },
+      { "type": "text", "text": ", if " }, { "type": "inlineMath", "tex": "j+1<k" },
+      { "type": "text", "text": " Bob chooses " }, { "type": "inlineMath", "tex": "j+1" },
+      { "type": "text", "text": ". These two turns add two fixed points, so the running parity remains odd." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "If instead " }, { "type": "inlineMath", "tex": "j+1=k" },
+      { "type": "text", "text": ", then " }, { "type": "inlineMath", "tex": "k" },
+      { "type": "text", "text": " is even and Bob chooses " }, { "type": "inlineMath", "tex": "1" },
+      { "type": "text", "text": ". At that moment the first " }, { "type": "inlineMath", "tex": "k" },
+      { "type": "text", "text": " values have been used in the first " }, { "type": "inlineMath", "tex": "k" },
+      { "type": "text", "text": " turns, and exactly " }, { "type": "inlineMath", "tex": "k-2" },
+      { "type": "text", "text": " of those turns were fixed, an even number. The untouched tail is an odd game of size " },
+      { "type": "inlineMath", "tex": "n-k" }, { "type": "text", "text": ". Bob applies the inductive odd strategy there, making the total odd." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Finally, suppose that at some odd turn " }, { "type": "inlineMath", "tex": "j" },
+      { "type": "text", "text": " Alice does not choose " }, { "type": "inlineMath", "tex": "j" },
+      { "type": "text", "text": ". The running number of fixed points is then odd. From this point on, on each Bob turn " },
+      { "type": "inlineMath", "tex": "t" }, { "type": "text", "text": " he chooses " },
+      { "type": "inlineMath", "tex": "t+1" }, { "type": "text", "text": " if it is available; otherwise he chooses any available value other than " },
+      { "type": "inlineMath", "tex": "t" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "This is always legal: before any Bob turn there are at least two available values, so when " },
+      { "type": "inlineMath", "tex": "t+1" }, { "type": "text", "text": " is unavailable, at most one available value equals " },
+      { "type": "inlineMath", "tex": "t" }, { "type": "text", "text": ". Bob's move is not fixed, and " },
+      { "type": "inlineMath", "tex": "t+1" }, { "type": "text", "text": " is unavailable on Alice's next turn, so her next move is not fixed either. No further fixed points are created, and the final parity stays odd." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The cases are exhaustive: if " }, { "type": "inlineMath", "tex": "k" },
+      { "type": "text", "text": " is even, the restart occurs at " }, { "type": "inlineMath", "tex": "j=k-1" },
+      { "type": "text", "text": " unless Alice deviates earlier; if " }, { "type": "inlineMath", "tex": "k" },
+      { "type": "text", "text": " is odd, Alice must deviate by turn " }, { "type": "inlineMath", "tex": "j=k" },
+      { "type": "text", "text": " because the value " }, { "type": "inlineMath", "tex": "k" },
+      { "type": "text", "text": " was already used on turn one. Thus Bob can force his chosen parity for every " },
+      { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": "." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2023 problems", "url": "https://maa.org/wp-content/uploads/2025/02/2023-Putnam-Problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2023 problems and solutions", "url": "https://maa.org/wp-content/uploads/2025/02/2023-Putnam-Problems-and-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2023 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2023s.tex" }
+  ]
+}
