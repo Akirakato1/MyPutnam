@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2024",
+  "problemId": "B1",
+  "label": "B1",
+  "ordinal": 7,
+  "topics": ["combinatorics", "algebra"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B1" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "k" },
+      { "type": "text", "text": " be positive integers. The square in the " }, { "type": "inlineMath", "tex": "i" },
+      { "type": "text", "text": "th row and " }, { "type": "inlineMath", "tex": "j" },
+      { "type": "text", "text": "th column of an " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": "-by-" }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " grid contains the number " }, { "type": "inlineMath", "tex": "i+j-k" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For which " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "k" },
+      { "type": "text", "text": " is it possible to select " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " squares from the grid, no two in the same row or column, such that the numbers contained in the selected squares are exactly " },
+      { "type": "inlineMath", "tex": "1,2,\\ldots,n" }, { "type": "text", "text": "?" }
+    ] }
+  ] },
+  "hints": [
+    {
+      "order": 1, "stage": "nudge", "title": "Sum the selected entries",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Because every row and every column is used once, the selected row indices and column indices are both permutations of " },
+        { "type": "inlineMath", "tex": "1,2,\\ldots,n" }, { "type": "text", "text": ". Compare the sum of the selected entries with " },
+        { "type": "inlineMath", "tex": "1+2+\\cdots+n" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2, "stage": "strategy", "title": "Extract the necessary condition",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If the chosen column in row " }, { "type": "inlineMath", "tex": "i" },
+        { "type": "text", "text": " is " }, { "type": "inlineMath", "tex": "w(i)" },
+        { "type": "text", "text": ", write the sum as " },
+        { "type": "inlineMath", "tex": "\\sum_{i=1}^n(i+w(i)-k)" },
+        { "type": "text", "text": ". This forces both the parity of " }, { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " and the value of " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3, "stage": "knowledge", "title": "Use a cyclic column shift",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "When " }, { "type": "inlineMath", "tex": "n=2k-1" },
+        { "type": "text", "text": ", try assigning columns in the order" }
+      ] }, { "type": "displayMath", "tex": "k,k+1,\\ldots,n,1,2,\\ldots,k-1." }] }
+    },
+    {
+      "order": 4, "stage": "outline", "title": "Separate odd and even values",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Prove necessity by summing all selected entries." }],
+        [{ "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "1\\le i\\le k" }, { "type": "text", "text": ", select column " }, { "type": "inlineMath", "tex": "k+i-1" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "k+1\\le i\\le n" }, { "type": "text", "text": ", select column " }, { "type": "inlineMath", "tex": "i-k" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Show that the first block produces the odd target values and the second produces the even ones." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1, "title": "One-per-row and one-per-column selections",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Choosing exactly one square in each row and column is equivalent to choosing a permutation " },
+        { "type": "inlineMath", "tex": "w" }, { "type": "text", "text": " and selecting " },
+        { "type": "inlineMath", "tex": "(i,w(i))" }, { "type": "text", "text": " for every row " },
+        { "type": "inlineMath", "tex": "i" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2, "title": "Permutation sums",
+      "document": { "blocks": [{ "type": "displayMath", "tex": "\\sum_{i=1}^n i=\\sum_{i=1}^n w(i)=\\frac{n(n+1)}{2}." }] }
+    },
+    {
+      "order": 3, "title": "Cyclic shifts are permutations",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Moving the ordered list " }, { "type": "inlineMath", "tex": "1,2,\\ldots,n" },
+        { "type": "text", "text": " cyclically preserves every value exactly once. This is a convenient way to build a legal column assignment." }
+      ] }] }
+    }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The selection is possible exactly when " }, { "type": "inlineMath", "tex": "n=2k-1" },
+      { "type": "text", "text": ", equivalently when " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " is odd and " }, { "type": "inlineMath", "tex": "k=(n+1)/2" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Suppose a valid selection exists. Write its squares as " },
+      { "type": "inlineMath", "tex": "(i,w(i))" }, { "type": "text", "text": ", where " },
+      { "type": "inlineMath", "tex": "w" }, { "type": "text", "text": " is a permutation of " },
+      { "type": "inlineMath", "tex": "\\{1,2,\\ldots,n\\}" }, { "type": "text", "text": ". Summing their entries in two ways gives" }
+    ] },
+    { "type": "displayMath", "tex": "\\frac{n(n+1)}{2}=\\sum_{i=1}^n(i+w(i)-k)" },
+    { "type": "displayMath", "tex": "=n(n+1)-nk." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Hence " }, { "type": "inlineMath", "tex": "k=(n+1)/2" },
+      { "type": "text", "text": ", so " }, { "type": "inlineMath", "tex": "n=2k-1" },
+      { "type": "text", "text": " and in particular " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " is odd." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Conversely, suppose " }, { "type": "inlineMath", "tex": "n=2k-1" },
+      { "type": "text", "text": ". Define the chosen column in row " }, { "type": "inlineMath", "tex": "i" },
+      { "type": "text", "text": " by" }
+    ] },
+    { "type": "displayMath", "tex": "w(i)=\\begin{cases}k+i-1,&1\\le i\\le k,\\\\i-k,&k+1\\le i\\le n.\\end{cases}" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The column list is " }, { "type": "inlineMath", "tex": "k,k+1,\\ldots,n,1,\\ldots,k-1" },
+      { "type": "text", "text": ", so every column occurs exactly once. For " }, { "type": "inlineMath", "tex": "1\\le i\\le k" },
+      { "type": "text", "text": ", the selected entry is" }
+    ] },
+    { "type": "displayMath", "tex": "i+w(i)-k=2i-1," },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "which gives " }, { "type": "inlineMath", "tex": "1,3,\\ldots,n" },
+      { "type": "text", "text": ". For " }, { "type": "inlineMath", "tex": "k+1\\le i\\le n" },
+      { "type": "text", "text": ", the entry is" }
+    ] },
+    { "type": "displayMath", "tex": "i+w(i)-k=2(i-k)," },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "which gives " }, { "type": "inlineMath", "tex": "2,4,\\ldots,n-1" },
+      { "type": "text", "text": ". Together these are exactly " }, { "type": "inlineMath", "tex": "1,2,\\ldots,n" },
+      { "type": "text", "text": ", proving sufficiency." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2024 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2024 problems and solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2024 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2024s.tex" }
+  ]
+}

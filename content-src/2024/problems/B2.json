@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2024",
+  "problemId": "B2",
+  "label": "B2",
+  "ordinal": 8,
+  "topics": ["geometry", "combinatorics"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B2" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Two convex quadrilaterals are called partners if they have three vertices in common and they can be labeled " },
+      { "type": "inlineMath", "tex": "ABCD" }, { "type": "text", "text": " and " },
+      { "type": "inlineMath", "tex": "ABCE" }, { "type": "text", "text": " so that " },
+      { "type": "inlineMath", "tex": "E" }, { "type": "text", "text": " is the reflection of " },
+      { "type": "inlineMath", "tex": "D" }, { "type": "text", "text": " across the perpendicular bisector of the diagonal " },
+      { "type": "inlineMath", "tex": "\\overline{AC}" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "figure", "path": "partner-diagram.svg", "alt": "Diagram of partner quadrilaterals ABCD and ABCE: D and E are reflections across the perpendicular bisector of diagonal AC.", "caption": [
+      { "type": "text", "text": "The two partner quadrilaterals share " },
+      { "type": "inlineMath", "tex": "A,B,C" },
+      { "type": "text", "text": "; reflection across the dashed perpendicular bisector sends " },
+      { "type": "inlineMath", "tex": "D" }, { "type": "text", "text": " to " },
+      { "type": "inlineMath", "tex": "E" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Is there an infinite sequence of convex quadrilaterals such that each quadrilateral is a partner of its successor and no two elements of the sequence are congruent?" }
+    ] }
+  ] },
+  "hints": [
+    {
+      "order": 1, "stage": "nudge", "title": "Find data preserved by partnership",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "A reflection across the perpendicular bisector of " }, { "type": "inlineMath", "tex": "AC" },
+        { "type": "text", "text": " swaps " }, { "type": "inlineMath", "tex": "A" },
+        { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "C" },
+        { "type": "text", "text": ". Track the four side lengths and a sum of opposite interior angles." }
+      ] }] }
+    },
+    {
+      "order": 2, "stage": "strategy", "title": "Encode a quadrilateral by five numbers",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "ABCD" },
+        { "type": "text", "text": ", record " }, { "type": "inlineMath", "tex": "(w,x,y,z,\\theta)" },
+        { "type": "text", "text": ", where the first four entries are " },
+        { "type": "inlineMath", "tex": "AB,BC,CD,DA" }, { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "\\theta=\\angle B+\\angle D" },
+        { "type": "text", "text": ". Show that partnership permits only finitely many such records." }
+      ] }] }
+    },
+    {
+      "order": 3, "stage": "knowledge", "title": "Recover the shape from the record",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "\\phi=\\angle B" },
+        { "type": "text", "text": ". Apply the law of cosines to the common diagonal " },
+        { "type": "inlineMath", "tex": "AC" }, { "type": "text", "text": " in triangles " },
+        { "type": "inlineMath", "tex": "ABC" }, { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "ADC" }, { "type": "text", "text": ". One side of the resulting equation increases with " },
+        { "type": "inlineMath", "tex": "\\phi" }, { "type": "text", "text": "; the other decreases." }
+      ] }] }
+    },
+    {
+      "order": 4, "stage": "outline", "title": "Finish with finiteness",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Show partners preserve the multiset of side lengths and one of the two opposite-angle sums." }],
+        [{ "type": "text", "text": "Conclude that only finitely many ordered five-number records can occur." }],
+        [{ "type": "text", "text": "Use the law-of-cosines monotonicity to show each record determines at most one congruence class." }],
+        [{ "type": "text", "text": "Apply the pigeonhole principle to any infinite sequence." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1, "title": "Perpendicular-bisector reflection",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Reflection across the perpendicular bisector of a segment swaps its endpoints and preserves distances and angles. Thus reflecting " },
+        { "type": "inlineMath", "tex": "D" }, { "type": "text", "text": " to " },
+        { "type": "inlineMath", "tex": "E" }, { "type": "text", "text": " across the perpendicular bisector of " },
+        { "type": "inlineMath", "tex": "AC" }, { "type": "text", "text": " sends " },
+        { "type": "inlineMath", "tex": "CD,DA" }, { "type": "text", "text": " to " },
+        { "type": "inlineMath", "tex": "AE,EC" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2, "title": "Law of cosines",
+      "document": { "blocks": [{ "type": "displayMath", "tex": "c^2=a^2+b^2-2ab\\cos C." }] }
+    },
+    {
+      "order": 3, "title": "Strict monotonicity and uniqueness",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "On " }, { "type": "inlineMath", "tex": "(0,\\pi)" },
+        { "type": "text", "text": ", cosine is strictly decreasing. Consequently, an equation whose left side is strictly increasing in a variable and whose right side is strictly decreasing has at most one solution." }
+      ] }] }
+    }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "No such infinite sequence exists." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Say that the ordered quintuple " }, { "type": "inlineMath", "tex": "(w,x,y,z,\\theta)" },
+      { "type": "text", "text": " represents the convex quadrilateral " }, { "type": "inlineMath", "tex": "ABCD" },
+      { "type": "text", "text": " when" }
+    ] },
+    { "type": "displayMath", "tex": "w=AB,\\quad x=BC,\\quad y=CD,\\quad z=DA," },
+    { "type": "displayMath", "tex": "\\theta=\\angle ABC+\\angle CDA." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "We first show that a fixed quintuple represents at most one congruence class. Put " },
+      { "type": "inlineMath", "tex": "\\phi=\\angle ABC" }, { "type": "text", "text": ", so " },
+      { "type": "inlineMath", "tex": "\\angle CDA=\\theta-\\phi" }, { "type": "text", "text": ". The law of cosines in the two triangles cut by diagonal " },
+      { "type": "inlineMath", "tex": "AC" }, { "type": "text", "text": " gives" }
+    ] },
+    { "type": "displayMath", "tex": "w^2+x^2-2wx\\cos\\phi" },
+    { "type": "displayMath", "tex": "=y^2+z^2-2yz\\cos(\\theta-\\phi)." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Convexity gives " }, { "type": "inlineMath", "tex": "0<\\phi<\\pi" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "0<\\theta-\\phi<\\pi" },
+      { "type": "text", "text": ". As " }, { "type": "inlineMath", "tex": "\\phi" },
+      { "type": "text", "text": " increases, the left side increases strictly while the right side decreases strictly. Thus at most one " },
+      { "type": "inlineMath", "tex": "\\phi" }, { "type": "text", "text": " works. The two triangles are then fixed by side-angle-side, and convexity fixes them on opposite sides of " },
+      { "type": "inlineMath", "tex": "AC" }, { "type": "text", "text": ", so the quadrilateral is determined up to congruence." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Now consider partners " }, { "type": "inlineMath", "tex": "ABCD" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "ABCE" },
+      { "type": "text", "text": ". The defining reflection swaps " }, { "type": "inlineMath", "tex": "A" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "C" },
+      { "type": "text", "text": ", so " }, { "type": "inlineMath", "tex": "CD=AE" },
+      { "type": "text", "text": ", " }, { "type": "inlineMath", "tex": "DA=EC" },
+      { "type": "text", "text": ", and " }, { "type": "inlineMath", "tex": "\\angle CDA=\\angle AEC" },
+      { "type": "text", "text": ". Hence if " }, { "type": "inlineMath", "tex": "(w,x,y,z,\\theta)" },
+      { "type": "text", "text": " represents the first quadrilateral, then " },
+      { "type": "inlineMath", "tex": "(w,x,z,y,\\theta)" }, { "type": "text", "text": " represents its partner." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Relabeling vertices only permutes the four side lengths, while the recorded opposite-angle sum is one of " },
+      { "type": "inlineMath", "tex": "\\theta" }, { "type": "text", "text": " and " },
+      { "type": "inlineMath", "tex": "2\\pi-\\theta" }, { "type": "text", "text": ". Therefore every member of a partner sequence is represented by one of finitely many quintuples formed from the original four side lengths and those two angle sums." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "If the sequence were infinite, two members would share a representing quintuple. By the uniqueness just proved, those two quadrilaterals would be congruent, contradicting the requirement. Thus the answer is no." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2024 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2024 problems and solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2024 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2024s.tex" }
+  ]
+}

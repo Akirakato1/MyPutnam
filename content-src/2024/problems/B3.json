@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2024",
+  "problemId": "B3",
+  "label": "B3",
+  "ordinal": 9,
+  "topics": ["calculus", "inequalities"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B3" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "r_n" },
+      { "type": "text", "text": " be the " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": "th smallest positive solution to " }, { "type": "inlineMath", "tex": "\\tan x=x" },
+      { "type": "text", "text": ", where the argument of tangent is in radians. Prove that" }
+    ] },
+    { "type": "displayMath", "tex": "0<r_{n+1}-r_n-\\pi<\\frac{1}{(n^2+n)\\pi}" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "for " }, { "type": "inlineMath", "tex": "n\\ge1" }, { "type": "text", "text": "." }
+    ] }
+  ] },
+  "hints": [
+    {
+      "order": 1, "stage": "nudge", "title": "Locate one root in each positive branch",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Study " }, { "type": "inlineMath", "tex": "\\tan x-x" },
+        { "type": "text", "text": " on " }, { "type": "inlineMath", "tex": "(n\\pi,n\\pi+\\pi/2)" },
+        { "type": "text", "text": ". Its derivative and endpoint behavior show that this interval contains exactly one root." }
+      ] }] }
+    },
+    {
+      "order": 2, "stage": "strategy", "title": "Compare offsets within consecutive periods",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Write " }, { "type": "inlineMath", "tex": "r_n=n\\pi+\\alpha_n" },
+        { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "0<\\alpha_n<\\pi/2" },
+        { "type": "text", "text": ". Since " }, { "type": "inlineMath", "tex": "\\tan\\alpha_n=r_n" },
+        { "type": "text", "text": ", compare " }, { "type": "inlineMath", "tex": "\\alpha_{n+1}" },
+        { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "\\alpha_n" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3, "stage": "knowledge", "title": "Use the tangent difference formula",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Set " }, { "type": "inlineMath", "tex": "\\delta=r_{n+1}-r_n-\\pi" },
+        { "type": "text", "text": ". Once " }, { "type": "inlineMath", "tex": "0<\\delta<\\pi/2" },
+        { "type": "text", "text": ", combine " }, { "type": "inlineMath", "tex": "\\delta<\\tan\\delta" },
+        { "type": "text", "text": " with the tangent formula applied to " },
+        { "type": "inlineMath", "tex": "r_{n+1}-(r_n+\\pi)" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 4, "stage": "outline", "title": "Isolate the error term",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Locate " }, { "type": "inlineMath", "tex": "r_n" }, { "type": "text", "text": " between " }, { "type": "inlineMath", "tex": "n\\pi" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "n\\pi+\\pi/2" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Use increasing tangent to prove the consecutive offsets increase, giving the lower bound." }],
+        [{ "type": "text", "text": "Compute " }, { "type": "inlineMath", "tex": "\\tan\\delta=(\\pi+\\delta)/(1+r_nr_{n+1})" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Isolate " }, { "type": "inlineMath", "tex": "\\delta" }, { "type": "text", "text": " and use the two root-location lower bounds." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1, "title": "Monotonicity on a tangent branch",
+      "document": { "blocks": [{ "type": "displayMath", "tex": "\\frac{d}{dx}(\\tan x-x)=\\tan^2x\\ge0." }, { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Together with the vertical asymptote, this locates a unique positive root in each interval " },
+        { "type": "inlineMath", "tex": "(n\\pi,n\\pi+\\pi/2)" }, { "type": "text", "text": " for " },
+        { "type": "inlineMath", "tex": "n\\ge1" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2, "title": "Tangent of a difference",
+      "document": { "blocks": [{ "type": "displayMath", "tex": "\\tan(u-v)=\\frac{\\tan u-\\tan v}{1+\\tan u\\tan v}." }] }
+    },
+    {
+      "order": 3, "title": "Tangent lies above the diagonal",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "0<x<\\pi/2" },
+        { "type": "text", "text": ", one has " }, { "type": "inlineMath", "tex": "x<\\tan x" },
+        { "type": "text", "text": ". For example, the derivative of " }, { "type": "inlineMath", "tex": "\\tan x-x" },
+        { "type": "text", "text": " is positive away from zero." }
+      ] }] }
+    }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "On each interval " }, { "type": "inlineMath", "tex": "(n\\pi,n\\pi+\\pi/2)" },
+      { "type": "text", "text": ", the function " }, { "type": "inlineMath", "tex": "\\tan x-x" },
+      { "type": "text", "text": " increases from " }, { "type": "inlineMath", "tex": "-n\\pi" },
+      { "type": "text", "text": " to positive infinity. Hence there is exactly one root there, and" }
+    ] },
+    { "type": "displayMath", "tex": "n\\pi<r_n<n\\pi+\\frac{\\pi}{2}." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Write " }, { "type": "inlineMath", "tex": "r_n=n\\pi+\\alpha_n" },
+      { "type": "text", "text": ", where " }, { "type": "inlineMath", "tex": "0<\\alpha_n<\\pi/2" },
+      { "type": "text", "text": ". Periodicity and the root equation give " },
+      { "type": "inlineMath", "tex": "\\tan\\alpha_n=\\tan r_n=r_n" }, { "type": "text", "text": ". Since " },
+      { "type": "inlineMath", "tex": "r_{n+1}>r_n" }, { "type": "text", "text": " and tangent is strictly increasing on " },
+      { "type": "inlineMath", "tex": "(0,\\pi/2)" }, { "type": "text", "text": ", we have " },
+      { "type": "inlineMath", "tex": "\\alpha_{n+1}>\\alpha_n" }, { "type": "text", "text": ". Therefore" }
+    ] },
+    { "type": "displayMath", "tex": "\\delta:=r_{n+1}-r_n-\\pi=\\alpha_{n+1}-\\alpha_n>0." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Also " }, { "type": "inlineMath", "tex": "0<\\delta<\\pi/2" },
+      { "type": "text", "text": ", so " }, { "type": "inlineMath", "tex": "\\delta<\\tan\\delta" },
+      { "type": "text", "text": ". Using the tangent difference formula and " },
+      { "type": "inlineMath", "tex": "\\tan r_j=r_j" }, { "type": "text", "text": "," }
+    ] },
+    { "type": "displayMath", "tex": "\\tan\\delta=\\tan\\!\\bigl(r_{n+1}-(r_n+\\pi)\\bigr)" },
+    { "type": "displayMath", "tex": "=\\frac{r_{n+1}-r_n}{1+r_nr_{n+1}}=\\frac{\\pi+\\delta}{1+r_nr_{n+1}}." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Consequently" }
+    ] },
+    { "type": "displayMath", "tex": "\\delta<\\frac{\\pi+\\delta}{1+r_nr_{n+1}}," },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "which simplifies to " }, { "type": "inlineMath", "tex": "\\delta r_nr_{n+1}<\\pi" },
+      { "type": "text", "text": ". Finally, the root locations give " }, { "type": "inlineMath", "tex": "r_n>n\\pi" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "r_{n+1}>(n+1)\\pi" }, { "type": "text", "text": ", so" }
+    ] },
+    { "type": "displayMath", "tex": "\\delta<\\frac{\\pi}{r_nr_{n+1}}<\\frac{1}{n(n+1)\\pi}." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Together with " }, { "type": "inlineMath", "tex": "\\delta>0" },
+      { "type": "text", "text": ", this is the required double inequality." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2024 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2024 problems and solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2024 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2024s.tex" }
+  ]
+}
