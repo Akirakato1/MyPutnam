@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2024",
+  "problemId": "B5",
+  "label": "B5",
+  "ordinal": 11,
+  "topics": ["combinatorics", "algebra"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B5" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "k" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "m" },
+      { "type": "text", "text": " be positive integers. For each positive integer " },
+      { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": ", let " },
+      { "type": "inlineMath", "tex": "f(n)" }, { "type": "text", "text": " be the number of integer sequences " },
+      { "type": "inlineMath", "tex": "x_1,\\ldots,x_k,y_1,\\ldots,y_m,z" },
+      { "type": "text", "text": " satisfying" }
+    ] },
+    { "type": "displayMath", "tex": "1\\le x_1\\le\\cdots\\le x_k\\le z\\le n" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "and" }] },
+    { "type": "displayMath", "tex": "1\\le y_1\\le\\cdots\\le y_m\\le z\\le n." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Show that " }, { "type": "inlineMath", "tex": "f(n)" },
+      { "type": "text", "text": " is a polynomial in " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " with nonnegative coefficients." }
+    ] }
+  ] },
+  "hints": [
+    { "order": 1, "stage": "nudge", "title": "Condition on the last entry", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Fix " }, { "type": "inlineMath", "tex": "z" },
+      { "type": "text", "text": ". Count the two nondecreasing sequences independently using combinations with repetition, then sum over " },
+      { "type": "inlineMath", "tex": "z=1,\\ldots,n" }, { "type": "text", "text": "." }
+    ] }] } },
+    { "order": 2, "stage": "strategy", "title": "Build an induction", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Define " },
+      { "type": "inlineMath", "tex": "p_{k,m}(n)=\\sum_{i=0}^{n-1}\\binom{i+k}{k}\\binom{i+m}{m}" },
+      { "type": "text", "text": ". By symmetry you may assume " }, { "type": "inlineMath", "tex": "k\\ge m" },
+      { "type": "text", "text": " and induct on " }, { "type": "inlineMath", "tex": "m" }, { "type": "text", "text": "." }
+    ] }] } },
+    { "order": 3, "stage": "knowledge", "title": "Use hockey-stick twice", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Reverse the order in a double sum obtained from " },
+      { "type": "inlineMath", "tex": "\\binom{i+m+1}{m+1}=\\sum_{j=0}^{i}\\binom{j+m}{m}" },
+      { "type": "text", "text": ". This relates " }, { "type": "inlineMath", "tex": "p_{k,m+1}" },
+      { "type": "text", "text": " to a product of two binomial polynomials and to " },
+      { "type": "inlineMath", "tex": "p_{k+1,m}" }, { "type": "text", "text": "." }
+    ] }] } },
+    { "order": 4, "stage": "outline", "title": "Eliminate the unwanted term", "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+      [{ "type": "text", "text": "Derive a relation among " }, { "type": "inlineMath", "tex": "p_{k,m+1}" }, { "type": "text", "text": ", " }, { "type": "inlineMath", "tex": "p_{k+1,m}" }, { "type": "text", "text": ", and " }, { "type": "inlineMath", "tex": "p_{k,m}" }, { "type": "text", "text": "." }],
+      [{ "type": "text", "text": "At the summand level, split " }, { "type": "inlineMath", "tex": "(i+k+1)/(k+1)" }, { "type": "text", "text": " into a multiple of " }, { "type": "inlineMath", "tex": "(i+m+1)/(m+1)" }, { "type": "text", "text": " plus a nonnegative constant." }],
+      [{ "type": "text", "text": "Substitute to express " }, { "type": "inlineMath", "tex": "p_{k,m+1}" }, { "type": "text", "text": " as a positive multiple of a product plus a positive multiple of " }, { "type": "inlineMath", "tex": "p_{k,m}" }, { "type": "text", "text": "." }],
+      [{ "type": "text", "text": "Finish the induction from the case " }, { "type": "inlineMath", "tex": "m=0" }, { "type": "text", "text": "." }]
+    ] }] } }
+  ],
+  "prerequisites": [
+    { "order": 1, "title": "Combinations with repetition", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "The number of nondecreasing " }, { "type": "inlineMath", "tex": "k" },
+      { "type": "text", "text": "-tuples chosen from " }, { "type": "inlineMath", "tex": "\\{1,\\ldots,z\\}" },
+      { "type": "text", "text": " is " }, { "type": "inlineMath", "tex": "\\binom{z+k-1}{k}" }, { "type": "text", "text": "." }
+    ] }] } },
+    { "order": 2, "title": "Hockey-stick identity", "document": { "blocks": [{ "type": "displayMath", "tex": "\\sum_{j=0}^{i}\\binom{j+r}{r}=\\binom{i+r+1}{r+1}." }] } },
+    { "order": 3, "title": "Nonnegative-coefficient closure", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Sums, products, and nonnegative scalar multiples of polynomials with nonnegative coefficients again have nonnegative coefficients." }
+    ] }] } }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For fixed " }, { "type": "inlineMath", "tex": "z" },
+      { "type": "text", "text": ", combinations with repetition give " },
+      { "type": "inlineMath", "tex": "\\binom{z+k-1}{k}" }, { "type": "text", "text": " choices for the " },
+      { "type": "inlineMath", "tex": "x" }, { "type": "text", "text": "-sequence and " },
+      { "type": "inlineMath", "tex": "\\binom{z+m-1}{m}" }, { "type": "text", "text": " choices for the " },
+      { "type": "inlineMath", "tex": "y" }, { "type": "text", "text": "-sequence. Thus, with " },
+      { "type": "inlineMath", "tex": "i=z-1" }, { "type": "text", "text": "," }
+    ] },
+    { "type": "displayMath", "tex": "f(n)=p_{k,m}(n):=\\sum_{i=0}^{n-1}\\binom{i+k}{k}\\binom{i+m}{m}." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The expression is symmetric in " }, { "type": "inlineMath", "tex": "k,m" },
+      { "type": "text", "text": ", so assume " }, { "type": "inlineMath", "tex": "k\\ge m" },
+      { "type": "text", "text": ". We prove by induction on " }, { "type": "inlineMath", "tex": "m" },
+      { "type": "text", "text": " that " }, { "type": "inlineMath", "tex": "p_{k,m}(n)" },
+      { "type": "text", "text": " is a polynomial in " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " with nonnegative coefficients." }
+    ] },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "For the base case, hockey-stick gives" }] },
+    { "type": "displayMath", "tex": "p_{k,0}(n)=\\sum_{i=0}^{n-1}\\binom{i+k}{k}=\\binom{n+k}{k+1}," },
+    { "type": "displayMath", "tex": "\\binom{n+k}{k+1}=\\frac{n(n+1)\\cdots(n+k)}{(k+1)!}," },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "which plainly has nonnegative coefficients." }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For the induction step, apply hockey-stick inside the sum and reverse the order of summation:" }
+    ] },
+    { "type": "displayMath", "tex": "p_{k,m+1}(n)=\\sum_{i=0}^{n-1}\\binom{i+k}{k}\\sum_{j=0}^{i}\\binom{j+m}{m}" },
+    { "type": "displayMath", "tex": "=\\binom{n+k}{k+1}\\binom{n+m}{m+1}-p_{k+1,m}(n)+p_{k,m}(n)." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "A second relation follows term by term from" }
+    ] },
+    { "type": "displayMath", "tex": "\\frac{i+k+1}{k+1}=\\frac{m+1}{k+1}\\frac{i+m+1}{m+1}+\\frac{k-m}{k+1}." },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "Multiplying by the summand of " }, { "type": "inlineMath", "tex": "p_{k,m}" }, { "type": "text", "text": " and summing yields" }] },
+    { "type": "displayMath", "tex": "p_{k+1,m}(n)=\\frac{m+1}{k+1}p_{k,m+1}(n)+\\frac{k-m}{k+1}p_{k,m}(n)." },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "Substitution and rearrangement now give" }] },
+    { "type": "displayMath", "tex": "\\begin{aligned}p_{k,m+1}(n)&=\\frac{k+1}{k+m+2}\\binom{n+k}{k+1}\\binom{n+m}{m+1}\\\\&\\quad+\\frac{m+1}{k+m+2}p_{k,m}(n).\\end{aligned}" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Each binomial factor on the right is a positive constant times a product of terms " },
+      { "type": "inlineMath", "tex": "n+j" }, { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "j\\ge0" },
+      { "type": "text", "text": ", so their product has nonnegative coefficients. The induction hypothesis gives the same property for " },
+      { "type": "inlineMath", "tex": "p_{k,m}(n)" }, { "type": "text", "text": ", and both scalar coefficients are positive. This proves the claim." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2024 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2024 problems and solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2024 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2024s.tex" }
+  ]
+}

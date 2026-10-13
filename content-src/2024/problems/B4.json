@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2024",
+  "problemId": "B4",
+  "label": "B4",
+  "ordinal": 10,
+  "topics": ["probability", "sequences-series"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B4" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " be a positive integer. Set " },
+      { "type": "inlineMath", "tex": "a_{n,0}=1" }, { "type": "text", "text": ". For " },
+      { "type": "inlineMath", "tex": "k\\ge0" }, { "type": "text", "text": ", choose an integer " },
+      { "type": "inlineMath", "tex": "m_{n,k}" }, { "type": "text", "text": " uniformly at random from " },
+      { "type": "inlineMath", "tex": "\\{1,\\ldots,n\\}" }, { "type": "text", "text": ", and let" }
+    ] },
+    { "type": "displayMath", "tex": "a_{n,k+1}=\\begin{cases}a_{n,k}+1,&m_{n,k}>a_{n,k},\\\\a_{n,k},&m_{n,k}=a_{n,k},\\\\a_{n,k}-1,&m_{n,k}<a_{n,k}.\\end{cases}" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "E(n)" },
+      { "type": "text", "text": " be the expected value of " }, { "type": "inlineMath", "tex": "a_{n,n}" },
+      { "type": "text", "text": ". Determine " }, { "type": "inlineMath", "tex": "\\lim_{n\\to\\infty}E(n)/n" }, { "type": "text", "text": "." }
+    ] }
+  ] },
+  "hints": [
+    { "order": 1, "stage": "nudge", "title": "Replace the walk by light bulbs", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Imagine one permanently lit red bulb and " }, { "type": "inlineMath", "tex": "n-1" },
+      { "type": "text", "text": " ordinary bulbs. At each step choose one of all " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " bulbs uniformly; do nothing to the red bulb and toggle any ordinary bulb chosen." }
+    ] }] } },
+    { "order": 2, "stage": "strategy", "title": "Identify the state variable", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Show that after " }, { "type": "inlineMath", "tex": "k" },
+      { "type": "text", "text": " choices, the number of lit bulbs has the same transition probabilities as " },
+      { "type": "inlineMath", "tex": "a_{n,k}" }, { "type": "text", "text": ". Then use linearity of expectation over bulbs." }
+    ] }] } },
+    { "order": 3, "stage": "knowledge", "title": "Compute odd parity", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "For one ordinary bulb, let " }, { "type": "inlineMath", "tex": "J" },
+      { "type": "text", "text": " be its number of selections in " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " trials. Evaluate " }, { "type": "inlineMath", "tex": "\\mathbb E[(-1)^J]" },
+      { "type": "text", "text": " to obtain the probability that " }, { "type": "inlineMath", "tex": "J" }, { "type": "text", "text": " is odd." }
+    ] }] } },
+    { "order": 4, "stage": "outline", "title": "Take the limit", "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+      [{ "type": "text", "text": "Couple the process to the light-bulb model." }],
+      [{ "type": "text", "text": "Find the odd-toggle probability " }, { "type": "inlineMath", "tex": "\\frac12(1-(1-2/n)^n)" }, { "type": "text", "text": "." }],
+      [{ "type": "text", "text": "Add the red bulb and the " }, { "type": "inlineMath", "tex": "n-1" }, { "type": "text", "text": " identical ordinary-bulb contributions." }],
+      [{ "type": "text", "text": "Divide by " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " and use the exponential limit." }]
+    ] }] } }
+  ],
+  "prerequisites": [
+    { "order": 1, "title": "Linearity of expectation", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "For indicator variables " }, { "type": "inlineMath", "tex": "I_j" },
+      { "type": "text", "text": ", one has " }, { "type": "inlineMath", "tex": "\\mathbb E[\\sum I_j]=\\sum\\mathbb E[I_j]" },
+      { "type": "text", "text": " without requiring independence." }
+    ] }] } },
+    { "order": 2, "title": "Parity from a signed moment", "document": { "blocks": [{ "type": "displayMath", "tex": "\\Pr(J\\text{ odd})=\\frac{1-\\mathbb E[(-1)^J]}{2}." }] } },
+    { "order": 3, "title": "The exponential limit", "document": { "blocks": [{ "type": "displayMath", "tex": "\\lim_{n\\to\\infty}\\left(1-\\frac{2}{n}\\right)^n=e^{-2}." }] } }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The limit is " }, { "type": "inlineMath", "tex": "(1-e^{-2})/2" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Use one red bulb, initially lit and never toggled, together with " },
+      { "type": "inlineMath", "tex": "n-1" }, { "type": "text", "text": " ordinary bulbs, initially unlit. At each step choose one of the " },
+      { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " bulbs uniformly; choosing red does nothing, while choosing an ordinary bulb toggles it." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "If exactly " }, { "type": "inlineMath", "tex": "j" },
+      { "type": "text", "text": " bulbs are lit, then there are " }, { "type": "inlineMath", "tex": "j-1" },
+      { "type": "text", "text": " lit ordinary bulbs, one red bulb, and " }, { "type": "inlineMath", "tex": "n-j" },
+      { "type": "text", "text": " unlit bulbs. Thus the next count decreases, stays fixed, or increases with exactly the probabilities in the definition of " },
+      { "type": "inlineMath", "tex": "a_{n,k}" }, { "type": "text", "text": ". The number lit after " },
+      { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": " steps therefore has the same distribution as " },
+      { "type": "inlineMath", "tex": "a_{n,k}" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Fix one ordinary bulb, and let " }, { "type": "inlineMath", "tex": "J" },
+      { "type": "text", "text": " be the number of times it is chosen in the first " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " steps. Then " }, { "type": "inlineMath", "tex": "J\\sim\\operatorname{Bin}(n,1/n)" },
+      { "type": "text", "text": " and" }
+    ] },
+    { "type": "displayMath", "tex": "\\mathbb E[(-1)^J]=\\left(1-\\frac{2}{n}\\right)^n." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The bulb is lit exactly when " }, { "type": "inlineMath", "tex": "J" }, { "type": "text", "text": " is odd, so" }
+    ] },
+    { "type": "displayMath", "tex": "\\Pr(J\\text{ odd})=\\frac12\\left[1-\\left(1-\\frac{2}{n}\\right)^n\\right]." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "By linearity of expectation, the red bulb contributes 1 and the other bulbs contribute equally. Hence" }
+    ] },
+    { "type": "displayMath", "tex": "E(n)=1+\\frac{n-1}{2}\\left[1-\\left(1-\\frac{2}{n}\\right)^n\\right]." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "After division by " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " and passage to the limit, " }, { "type": "inlineMath", "tex": "(1-2/n)^n\\to e^{-2}" },
+      { "type": "text", "text": ", giving " }, { "type": "inlineMath", "tex": "(1-e^{-2})/2" }, { "type": "text", "text": "." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2024 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2024 problems and solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2024 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2024s.tex" }
+  ]
+}

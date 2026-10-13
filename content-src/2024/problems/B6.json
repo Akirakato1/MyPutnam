@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2024",
+  "problemId": "B6",
+  "label": "B6",
+  "ordinal": 12,
+  "topics": ["analysis", "sequences-series", "inequalities"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B6" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For a real number " }, { "type": "inlineMath", "tex": "a" },
+      { "type": "text", "text": ", define" }
+    ] },
+    { "type": "displayMath", "tex": "F_a(x)=\\sum_{n=1}^{\\infty}n^a e^{2n}x^{n^2}\\qquad(0\\le x<1)." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Find the number " }, { "type": "inlineMath", "tex": "c" },
+      { "type": "text", "text": " such that" }
+    ] },
+    { "type": "displayMath", "tex": "\\lim_{x\\to1^-}F_a(x)e^{-1/(1-x)}=0\\quad\\text{for all }a<c" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "and" }] },
+    { "type": "displayMath", "tex": "\\lim_{x\\to1^-}F_a(x)e^{-1/(1-x)}=\\infty\\quad\\text{for all }a>c." }
+  ] },
+  "hints": [
+    { "order": 1, "stage": "nudge", "title": "Use a logarithmic normalizer", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "0<x<1" },
+      { "type": "text", "text": ", compare " }, { "type": "inlineMath", "tex": "e^{-1/(1-x)}" },
+      { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "e^{1/\\log x}" },
+      { "type": "text", "text": ". They differ by only a bounded positive factor near " }, { "type": "inlineMath", "tex": "x=1" }, { "type": "text", "text": "." }
+    ] }] } },
+    { "order": 2, "stage": "strategy", "title": "Complete the square", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Set " }, { "type": "inlineMath", "tex": "z=-1/\\log x" },
+      { "type": "text", "text": ", so " }, { "type": "inlineMath", "tex": "z\\to\\infty" },
+      { "type": "text", "text": ". Rewrite the normalized summand as a Gaussian centered at " },
+      { "type": "inlineMath", "tex": "n=z" }, { "type": "text", "text": "." }
+    ] }] } },
+    { "order": 3, "stage": "knowledge", "title": "Read the central window", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "There are on the order of " }, { "type": "inlineMath", "tex": "\\sqrt z" },
+      { "type": "text", "text": " integers with " }, { "type": "inlineMath", "tex": "|n-z|\\le\\sqrt z" },
+      { "type": "text", "text": ". On this window the Gaussian is bounded below and " },
+      { "type": "inlineMath", "tex": "n^a" }, { "type": "text", "text": " is comparable to " },
+      { "type": "inlineMath", "tex": "z^a" }, { "type": "text", "text": "." }
+    ] }] } },
+    { "order": 4, "stage": "outline", "title": "Control both tails", "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+      [{ "type": "text", "text": "Use the central window to prove divergence when " }, { "type": "inlineMath", "tex": "a>-1/2" }, { "type": "text", "text": "." }],
+      [{ "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "a<-1/2" }, { "type": "text", "text": ", split the sum at " }, { "type": "inlineMath", "tex": "n=z/2" }, { "type": "text", "text": "." }],
+      [{ "type": "text", "text": "The lower part is exponentially small." }],
+      [{ "type": "text", "text": "Group the upper part into shells according to " }, { "type": "inlineMath", "tex": "k\\le(n-z)^2/z<k+1" }, { "type": "text", "text": " and sum the resulting geometric bound." }]
+    ] }] } }
+  ],
+  "prerequisites": [
+    { "order": 1, "title": "Logarithmic bounds near one", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Standard bounds for " }, { "type": "inlineMath", "tex": "\\log x" },
+      { "type": "text", "text": " imply that, for " }, { "type": "inlineMath", "tex": "0<x<1" }, { "type": "text", "text": "," }
+    ] }, { "type": "displayMath", "tex": "e^{1/\\log x}\\ge e^{-1/(1-x)}\\ge e^{-1}e^{1/\\log x}." }] } },
+    { "order": 2, "title": "Completing the square", "document": { "blocks": [{ "type": "displayMath", "tex": "-\\frac{n^2}{z}+2n-z=-\\frac{(n-z)^2}{z}." }] } },
+    { "order": 3, "title": "Gaussian localization", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "A Gaussian of the form " }, { "type": "inlineMath", "tex": "e^{-(n-z)^2/z}" },
+      { "type": "text", "text": " has effective width " }, { "type": "inlineMath", "tex": "\\sqrt z" },
+      { "type": "text", "text": "; grouping by squared-distance shells makes this precise without integration." }
+    ] }] } }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "We will show that the threshold is " }, { "type": "inlineMath", "tex": "c=-1/2" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "0<x<1" },
+      { "type": "text", "text": ", elementary logarithmic inequalities give" }
+    ] },
+    { "type": "displayMath", "tex": "e^{1/\\log x}\\ge e^{-1/(1-x)}\\ge e^{-1}e^{1/\\log x}." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Thus multiplying by either exponential produces the same zero-versus-infinity behavior. Put " },
+      { "type": "inlineMath", "tex": "z=-1/\\log x" }, { "type": "text", "text": ", so that " },
+      { "type": "inlineMath", "tex": "x=e^{-1/z}" }, { "type": "text", "text": " and " },
+      { "type": "inlineMath", "tex": "z\\to\\infty" }, { "type": "text", "text": " as " },
+      { "type": "inlineMath", "tex": "x\\to1^-" }, { "type": "text", "text": ". Completing the square gives" }
+    ] },
+    { "type": "displayMath", "tex": "F_a(x)e^{1/\\log x}=\\sum_{n=1}^{\\infty}n^a\\exp\\!\\left(-\\frac{(n-z)^2}{z}\\right)." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Suppose first that " }, { "type": "inlineMath", "tex": "a>-1/2" },
+      { "type": "text", "text": ". Restrict the sum to integers satisfying " },
+      { "type": "inlineMath", "tex": "|n-z|\\le\\sqrt z" }, { "type": "text", "text": ". For large " },
+      { "type": "inlineMath", "tex": "z" }, { "type": "text", "text": ", this interval contains at least " },
+      { "type": "inlineMath", "tex": "\\sqrt z" }, { "type": "text", "text": " positive integers, its exponential factor is at least " },
+      { "type": "inlineMath", "tex": "e^{-1}" }, { "type": "text", "text": ", and " },
+      { "type": "inlineMath", "tex": "n^a" }, { "type": "text", "text": " is bounded below by a positive constant times " },
+      { "type": "inlineMath", "tex": "z^a" }, { "type": "text", "text": ". Hence the sum is at least a positive constant times " },
+      { "type": "inlineMath", "tex": "z^{a+1/2}" }, { "type": "text", "text": ", which tends to infinity." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Now suppose that " }, { "type": "inlineMath", "tex": "a<-1/2" },
+      { "type": "text", "text": ". In particular " }, { "type": "inlineMath", "tex": "a<0" },
+      { "type": "text", "text": ". For " }, { "type": "inlineMath", "tex": "n\\le z/2" },
+      { "type": "text", "text": ", we have " }, { "type": "inlineMath", "tex": "n^a\\le1" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "(n-z)^2/z\\ge z/4" },
+      { "type": "text", "text": ". Therefore this portion is at most " },
+      { "type": "inlineMath", "tex": "(z/2)e^{-z/4}" }, { "type": "text", "text": ", up to adding at most one boundary term, and tends to zero." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "n>z/2" },
+      { "type": "text", "text": ", the negative exponent " }, { "type": "inlineMath", "tex": "a" },
+      { "type": "text", "text": " gives " }, { "type": "inlineMath", "tex": "n^a\\le(z/2)^a" },
+      { "type": "text", "text": ". For each integer " }, { "type": "inlineMath", "tex": "j\\ge0" },
+      { "type": "text", "text": ", the shell" }
+    ] },
+    { "type": "displayMath", "tex": "j\\le\\frac{(n-z)^2}{z}<j+1" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "contains at most " }, { "type": "inlineMath", "tex": "2\\sqrt{(j+1)z}+1" },
+      { "type": "text", "text": " integers, and every exponential factor in it is at most " },
+      { "type": "inlineMath", "tex": "e^{-j}" }, { "type": "text", "text": ". Consequently the upper portion is bounded by" }
+    ] },
+    { "type": "displayMath", "tex": "\\left(\\frac z2\\right)^a\\sum_{j=0}^{\\infty}\\bigl(2\\sqrt{(j+1)z}+1\\bigr)e^{-j}" },
+    { "type": "displayMath", "tex": "=O\\!\\left(z^{a+1/2}\\right)+O\\!\\left(z^a\\right)," },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "which tends to zero because " }, { "type": "inlineMath", "tex": "a<-1/2" },
+      { "type": "text", "text": ". The two regimes are therefore separated by " },
+      { "type": "inlineMath", "tex": "c=-1/2" }, { "type": "text", "text": ", as required." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2024 problems", "url": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2024 problems and solutions", "url": "https://maa.org/wp-content/uploads/2026/02/2024-Putnam-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2024 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2024s.tex" }
+  ]
+}
