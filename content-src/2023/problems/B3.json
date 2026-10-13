@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2023",
+  "problemId": "B3",
+  "label": "B3",
+  "ordinal": 9,
+  "topics": ["combinatorics", "probability"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B3" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "A sequence " }, { "type": "inlineMath", "tex": "y_1,y_2,\\ldots,y_k" },
+      { "type": "text", "text": " of real numbers is called zigzag if " }, { "type": "inlineMath", "tex": "k=1" },
+      { "type": "text", "text": ", or if the differences" }
+    ] },
+    { "type": "displayMath", "tex": "y_2-y_1,\\quad y_3-y_2,\\quad\\ldots,\\quad y_k-y_{k-1}" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "are nonzero and alternate in sign. Let " },
+      { "type": "inlineMath", "tex": "X_1,X_2,\\ldots,X_n" },
+      { "type": "text", "text": " be chosen independently from the uniform distribution on " },
+      { "type": "inlineMath", "tex": "[0,1]" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "a(X_1,X_2,\\ldots,X_n)" },
+      { "type": "text", "text": " be the largest " }, { "type": "inlineMath", "tex": "k" },
+      { "type": "text", "text": " for which there are increasing indices " },
+      { "type": "inlineMath", "tex": "i_1,i_2,\\ldots,i_k" },
+      { "type": "text", "text": " such that " }, { "type": "inlineMath", "tex": "X_{i_1},X_{i_2},\\ldots,X_{i_k}" },
+      { "type": "text", "text": " is zigzag. Find the expected value of " },
+      { "type": "inlineMath", "tex": "a(X_1,X_2,\\ldots,X_n)" },
+      { "type": "text", "text": " for " }, { "type": "inlineMath", "tex": "n\\ge2" }, { "type": "text", "text": "." }
+    ] }
+  ] },
+  "hints": [
+    {
+      "order": 1, "stage": "nudge", "title": "Look at adjacent directions",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "With probability one, all sampled values are distinct. Record whether each adjacent step " },
+        { "type": "inlineMath", "tex": "X_{i+1}-X_i" }, { "type": "text", "text": " is positive or negative, and group equal consecutive signs into runs." }
+      ] }] }
+    },
+    {
+      "order": 2, "stage": "strategy", "title": "Relate runs to the optimum subsequence",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Take the first sample and the endpoint of every maximal increasing or decreasing run. These points form a zigzag subsequence. Show that no subsequence can use more sign alternations than the original sequence contains." }
+      ] }] }
+    },
+    {
+      "order": 3, "stage": "knowledge", "title": "Count local extrema",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "A sign change at an interior index " }, { "type": "inlineMath", "tex": "i" },
+        { "type": "text", "text": " occurs exactly when " }, { "type": "inlineMath", "tex": "X_i" },
+        { "type": "text", "text": " is the largest or smallest of " },
+        { "type": "inlineMath", "tex": "X_{i-1},X_i,X_{i+1}" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 4, "stage": "outline", "title": "Use indicators",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Write the optimum length as two plus the number of interior sign changes." }],
+        [{ "type": "text", "text": "Introduce one indicator for each " }, { "type": "inlineMath", "tex": "i=2,\\ldots,n-1" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Among the six relative orders of three samples, count those with the middle sample extreme." }],
+        [{ "type": "text", "text": "Apply linearity of expectation and simplify." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1, "title": "Runs in a sign sequence",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "A run is a maximal consecutive block of equal signs. A nonempty sign sequence has one run plus one additional run for every place where adjacent signs differ." }
+      ] }] }
+    },
+    {
+      "order": 2, "title": "Relative order of continuous samples",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Independent samples from a continuous distribution are distinct with probability one. For three identically distributed samples, their six relative orderings are equally likely." }
+      ] }] }
+    },
+    {
+      "order": 3, "title": "Linearity of expectation",
+      "document": { "blocks": [{ "type": "displayMath", "tex": "\\mathbb{E}\\left[\\sum_i I_i\\right]=\\sum_i\\mathbb{E}[I_i]=\\sum_i\\Pr(I_i=1)." }, { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The indicators need not be independent." }
+      ] }] }
+    }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The expected value is " }, { "type": "inlineMath", "tex": "\\frac{2n+2}{3}" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "With probability one, the " }, { "type": "inlineMath", "tex": "X_i" },
+      { "type": "text", "text": " are all distinct. For such an outcome, let " },
+      { "type": "inlineMath", "tex": "R" }, { "type": "text", "text": " be the number of runs in the sign sequence" }
+    ] },
+    { "type": "displayMath", "tex": "\\operatorname{sgn}(X_2-X_1),\\ldots,\\operatorname{sgn}(X_n-X_{n-1})." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "We claim that the longest zigzag subsequence has length " },
+      { "type": "inlineMath", "tex": "R+1" }, { "type": "text", "text": ". For the lower bound, take " },
+      { "type": "inlineMath", "tex": "X_1" }, { "type": "text", "text": " and the final sample in each maximal increasing or decreasing run. The successive selected differences have the signs of the runs, so they alternate." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For the upper bound, consider any zigzag subsequence of length " },
+      { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": ". Each difference between consecutive selected samples is a sum of adjacent original differences, so its sign occurs among those original differences. Choose one original difference of that sign from each of the " },
+      { "type": "inlineMath", "tex": "k-1" }, { "type": "text", "text": " disjoint index intervals. The chosen original differences occur in order and alternate in sign. Hence the original sign sequence has at least " },
+      { "type": "inlineMath", "tex": "k-1" }, { "type": "text", "text": " runs. Thus " },
+      { "type": "inlineMath", "tex": "k\\le R+1" }, { "type": "text", "text": ", proving the claim." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "i=2,\\ldots,n-1" },
+      { "type": "text", "text": ", let " }, { "type": "inlineMath", "tex": "I_i" },
+      { "type": "text", "text": " indicate that the signs on the two sides of " },
+      { "type": "inlineMath", "tex": "X_i" }, { "type": "text", "text": " differ. Since the adjacent sign sequence starts with one run," }
+    ] },
+    { "type": "displayMath", "tex": "a(X_1,\\ldots,X_n)=R+1=2+\\sum_{i=2}^{n-1}I_i." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The event " }, { "type": "inlineMath", "tex": "I_i=1" },
+      { "type": "text", "text": " says that " }, { "type": "inlineMath", "tex": "X_i" },
+      { "type": "text", "text": " is a strict local maximum or minimum. Of the six equally likely relative orderings of " },
+      { "type": "inlineMath", "tex": "X_{i-1},X_i,X_{i+1}" }, { "type": "text", "text": ", the middle-position sample is largest in two and smallest in two. Therefore" }
+    ] },
+    { "type": "displayMath", "tex": "\\Pr(I_i=1)=\\frac{4}{6}=\\frac23." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Linearity of expectation now gives" }
+    ] },
+    { "type": "displayMath", "tex": "\\mathbb{E}[a]=2+(n-2)\\frac23=\\frac{2n+2}{3}." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "This formula also covers " }, { "type": "inlineMath", "tex": "n=2" },
+      { "type": "text", "text": ", when the sum of indicators is empty and the two distinct samples themselves form a zigzag sequence." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2023 problems", "url": "https://maa.org/wp-content/uploads/2025/02/2023-Putnam-Problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2023 problems and solutions", "url": "https://maa.org/wp-content/uploads/2025/02/2023-Putnam-Problems-and-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2023 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2023s.tex" }
+  ]
+}

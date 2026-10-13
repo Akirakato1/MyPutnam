@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2023",
+  "problemId": "B2",
+  "label": "B2",
+  "ordinal": 8,
+  "topics": ["number-theory"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B2" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For each positive integer " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": ", let " }, { "type": "inlineMath", "tex": "k(n)" },
+      { "type": "text", "text": " be the number of ones in the binary representation of " },
+      { "type": "inlineMath", "tex": "2023n" }, { "type": "text", "text": ". What is the minimum value of " },
+      { "type": "inlineMath", "tex": "k(n)" }, { "type": "text", "text": "?" }
+    ] }
+  ] },
+  "hints": [
+    {
+      "order": 1, "stage": "nudge", "title": "Factor 2023",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "inlineMath", "tex": "2023=7\\cdot17^2" },
+        { "type": "text", "text": ". Use the factor " }, { "type": "inlineMath", "tex": "7" },
+        { "type": "text", "text": " first to rule out binary representations with only one or two ones." }
+      ] }] }
+    },
+    {
+      "order": 2, "stage": "strategy", "title": "Translate binary weight into powers of two",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "k(n)=2" },
+        { "type": "text", "text": ", then " }, { "type": "inlineMath", "tex": "2023n=2^a+2^b" },
+        { "type": "text", "text": " for distinct exponents. Reduce the odd factor after removing the smaller power of two modulo " },
+        { "type": "inlineMath", "tex": "7" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3, "stage": "knowledge", "title": "Construct three one-bits",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Seek exponents " }, { "type": "inlineMath", "tex": "a>b>0" },
+        { "type": "text", "text": " such that " }, { "type": "inlineMath", "tex": "2^a+2^b+1" },
+        { "type": "text", "text": " is divisible by both " }, { "type": "inlineMath", "tex": "7" },
+        { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "17^2" },
+        { "type": "text", "text": ". The pair " }, { "type": "inlineMath", "tex": "(a,b)=(77,16)" }, { "type": "text", "text": " works." }
+      ] }] }
+    },
+    {
+      "order": 4, "stage": "outline", "title": "Verify the explicit witness",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Show powers of " }, { "type": "inlineMath", "tex": "2" }, { "type": "text", "text": " modulo " }, { "type": "inlineMath", "tex": "7" }, { "type": "text", "text": " never equal " }, { "type": "inlineMath", "tex": "-1" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Use " }, { "type": "inlineMath", "tex": "2^4\\equiv-1\\pmod{17}" }, { "type": "text", "text": " to prove " }, { "type": "inlineMath", "tex": "2^{68}\\equiv-1\\pmod{17^2}" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Combine this with " }, { "type": "inlineMath", "tex": "(2^8-1)^2\\equiv0\\pmod{17^2}" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Set " }, { "type": "inlineMath", "tex": "n=(2^{77}+2^{16}+1)/2023" }, { "type": "text", "text": " and compare upper and lower bounds." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1, "title": "Binary Hamming weight",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "A positive integer has exactly " }, { "type": "inlineMath", "tex": "r" },
+        { "type": "text", "text": " ones in binary precisely when it is a sum of " }, { "type": "inlineMath", "tex": "r" },
+        { "type": "text", "text": " distinct nonnegative powers of " }, { "type": "inlineMath", "tex": "2" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2, "title": "Powers modulo 7",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The nonzero powers of " }, { "type": "inlineMath", "tex": "2" },
+        { "type": "text", "text": " modulo " }, { "type": "inlineMath", "tex": "7" },
+        { "type": "text", "text": " cycle through " }, { "type": "inlineMath", "tex": "1,2,4" },
+        { "type": "text", "text": ". In particular, no power is congruent to " },
+        { "type": "inlineMath", "tex": "-1" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3, "title": "Lifting a congruence by binomial expansion",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "x\\equiv-1\\pmod p" },
+        { "type": "text", "text": ", writing " }, { "type": "inlineMath", "tex": "x=-1+pc" },
+        { "type": "text", "text": " and expanding " }, { "type": "inlineMath", "tex": "x^p" },
+        { "type": "text", "text": " often determines it modulo " }, { "type": "inlineMath", "tex": "p^2" },
+        { "type": "text", "text": ". Every nonconstant binomial term then has the needed factors of " }, { "type": "inlineMath", "tex": "p" }, { "type": "text", "text": "." }
+      ] }] }
+    }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The minimum value is " }, { "type": "inlineMath", "tex": "3" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Since " }, { "type": "inlineMath", "tex": "2023=7\\cdot17^2" },
+      { "type": "text", "text": ", the number " }, { "type": "inlineMath", "tex": "2023n" },
+      { "type": "text", "text": " cannot be a single power of two. If it had exactly two one-bits, then for some " },
+      { "type": "inlineMath", "tex": "a>b\\ge0" }, { "type": "text", "text": "," }
+    ] },
+    { "type": "displayMath", "tex": "2023n=2^a+2^b=2^b(2^{a-b}+1)." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Because " }, { "type": "inlineMath", "tex": "7" },
+      { "type": "text", "text": " is odd, this would force " },
+      { "type": "inlineMath", "tex": "2^{a-b}\\equiv-1\\pmod7" },
+      { "type": "text", "text": ". But powers of " }, { "type": "inlineMath", "tex": "2" },
+      { "type": "text", "text": " modulo " }, { "type": "inlineMath", "tex": "7" },
+      { "type": "text", "text": " are " }, { "type": "inlineMath", "tex": "1,2,4" },
+      { "type": "text", "text": " cyclically, never " }, { "type": "inlineMath", "tex": "-1" },
+      { "type": "text", "text": ". Thus " }, { "type": "inlineMath", "tex": "k(n)\\ge3" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "We now show that three one-bits are attainable. Modulo " },
+      { "type": "inlineMath", "tex": "7" }, { "type": "text", "text": ", the period is " },
+      { "type": "inlineMath", "tex": "3" }, { "type": "text", "text": ", and hence" }
+    ] },
+    { "type": "displayMath", "tex": "2^{77}+2^{16}+1\\equiv2^2+2^1+1=7\\equiv0\\pmod7." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For the factor " }, { "type": "inlineMath", "tex": "17^2" },
+      { "type": "text", "text": ", note first that " }, { "type": "inlineMath", "tex": "2^4=17-1" },
+      { "type": "text", "text": ". The binomial theorem gives" }
+    ] },
+    { "type": "displayMath", "tex": "2^{68}=(17-1)^{17}\\equiv-1\\pmod{17^2}." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Also " }, { "type": "inlineMath", "tex": "17\\mid2^8-1" },
+      { "type": "text", "text": ", so" }
+    ] },
+    { "type": "displayMath", "tex": "2^{16}-2\\cdot2^8+1=(2^8-1)^2\\equiv0\\pmod{17^2}." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Multiplying " }, { "type": "inlineMath", "tex": "2^{68}\\equiv-1" },
+      { "type": "text", "text": " by " }, { "type": "inlineMath", "tex": "2^9" },
+      { "type": "text", "text": " shows " }, { "type": "inlineMath", "tex": "2^{77}\\equiv-2\\cdot2^8\\pmod{17^2}" },
+      { "type": "text", "text": ". Therefore" }
+    ] },
+    { "type": "displayMath", "tex": "2^{77}+2^{16}+1\\equiv0\\pmod{17^2}." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The factors " }, { "type": "inlineMath", "tex": "7" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "17^2" },
+      { "type": "text", "text": " are coprime, so " }, { "type": "inlineMath", "tex": "2023" },
+      { "type": "text", "text": " divides " }, { "type": "inlineMath", "tex": "2^{77}+2^{16}+1" },
+      { "type": "text", "text": ". Thus the positive integer" }
+    ] },
+    { "type": "displayMath", "tex": "n=\\frac{2^{77}+2^{16}+1}{2023}" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "satisfies " }, { "type": "inlineMath", "tex": "2023n=2^{77}+2^{16}+1" },
+      { "type": "text", "text": ", whose binary representation has exactly three ones. Combined with the lower bound, this proves the minimum is " },
+      { "type": "inlineMath", "tex": "3" }, { "type": "text", "text": "." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2023 problems", "url": "https://maa.org/wp-content/uploads/2025/02/2023-Putnam-Problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2023 problems and solutions", "url": "https://maa.org/wp-content/uploads/2025/02/2023-Putnam-Problems-and-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2023 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2023s.tex" }
+  ]
+}

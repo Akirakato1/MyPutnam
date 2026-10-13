@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2023",
+  "problemId": "B1",
+  "label": "B1",
+  "ordinal": 7,
+  "topics": ["combinatorics"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B1" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Consider an " }, { "type": "inlineMath", "tex": "m\\text{-by-}n" },
+      { "type": "text", "text": " grid of unit squares, indexed by " }, { "type": "inlineMath", "tex": "(i,j)" },
+      { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "1\\le i\\le m" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "1\\le j\\le n" },
+      { "type": "text", "text": ". There are " }, { "type": "inlineMath", "tex": "(m-1)(n-1)" },
+      { "type": "text", "text": " coins, initially placed in the squares " }, { "type": "inlineMath", "tex": "(i,j)" },
+      { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "1\\le i\\le m-1" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "1\\le j\\le n-1" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "If a coin occupies " }, { "type": "inlineMath", "tex": "(i,j)" },
+      { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "i\\le m-1" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "j\\le n-1" },
+      { "type": "text", "text": ", while " }, { "type": "inlineMath", "tex": "(i+1,j)" },
+      { "type": "text", "text": ", " }, { "type": "inlineMath", "tex": "(i,j+1)" },
+      { "type": "text", "text": ", and " }, { "type": "inlineMath", "tex": "(i+1,j+1)" },
+      { "type": "text", "text": " are unoccupied, a legal move slides the coin from " },
+      { "type": "inlineMath", "tex": "(i,j)" }, { "type": "text", "text": " to " },
+      { "type": "inlineMath", "tex": "(i+1,j+1)" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "How many distinct configurations of coins can be reached from the initial configuration by a possibly empty sequence of legal moves?" }
+    ] }
+  ] },
+  "hints": [
+    {
+      "order": 1, "stage": "nudge", "title": "Track the empty squares",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The number of empty squares is always " },
+        { "type": "inlineMath", "tex": "m+n-1" }, { "type": "text", "text": ". In the initial position they are exactly the last row together with the last column." }
+      ] }] }
+    },
+    {
+      "order": 2, "stage": "strategy", "title": "Recognize a monotone path",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "View the empty squares as a path from " },
+        { "type": "inlineMath", "tex": "(1,n)" }, { "type": "text", "text": " to " },
+        { "type": "inlineMath", "tex": "(m,1)" }, { "type": "text", "text": " using down and left steps. Check how one legal coin move changes a single corner of this path." }
+      ] }] }
+    },
+    {
+      "order": 3, "stage": "knowledge", "title": "Count the possible paths",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Every such path uses " }, { "type": "inlineMath", "tex": "m-1" },
+        { "type": "text", "text": " down steps and " }, { "type": "inlineMath", "tex": "n-1" },
+        { "type": "text", "text": " left steps. If every path is reachable, the count is a binomial coefficient." }
+      ] }] }
+    },
+    {
+      "order": 4, "stage": "outline", "title": "Prove reachability backward",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Show legal moves preserve the empty-square path invariant." }],
+        [{ "type": "text", "text": "This makes the map from configurations to monotone paths injective." }],
+        [{ "type": "text", "text": "For any noninitial path, find a corner that can be flipped backward." }],
+        [{ "type": "text", "text": "Induct on the number of such backward flips, then count the paths." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1, "title": "Counting monotone lattice paths",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "A path with " }, { "type": "inlineMath", "tex": "a" },
+        { "type": "text", "text": " steps of one type and " }, { "type": "inlineMath", "tex": "b" },
+        { "type": "text", "text": " of another is determined by the positions of either type, so there are " },
+        { "type": "inlineMath", "tex": "\\binom{a+b}{a}" }, { "type": "text", "text": " such paths." }
+      ] }] }
+    },
+    {
+      "order": 2, "title": "Local corner flips",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Inside a unit square of the path diagram, replacing a down-then-left corner by a left-then-down corner preserves both endpoints and the total numbers of each step." }
+      ] }] }
+    },
+    {
+      "order": 3, "title": "Reverse induction",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "To prove every state in a finite family is reachable, it is often easier to show that every noninitial state has a reverse move that decreases a nonnegative statistic." }
+      ] }] }
+    }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The number of reachable configurations is " },
+      { "type": "inlineMath", "tex": "\\binom{m+n-2}{m-1}" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Initially the unoccupied squares are the last column and the last row. Listed from " },
+      { "type": "inlineMath", "tex": "(1,n)" }, { "type": "text", "text": " to " },
+      { "type": "inlineMath", "tex": "(m,1)" }, { "type": "text", "text": ", they form a monotone path of squares with " },
+      { "type": "inlineMath", "tex": "m-1" }, { "type": "text", "text": " down steps and " },
+      { "type": "inlineMath", "tex": "n-1" }, { "type": "text", "text": " left steps." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "A legal move occurs in a " }, { "type": "inlineMath", "tex": "2\\text{-by-}2" },
+      { "type": "text", "text": " block whose northwest square is occupied and whose other three squares are empty. Sliding the coin to the southeast square replaces one local corner of the empty-square path by the other corner. Thus after every legal move the empty squares still form exactly one such monotone path." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Because the occupied squares are the complement of the path, the path determines the entire coin configuration. Hence distinct reachable configurations inject into the set of these paths." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Conversely, every monotone path is reachable. Work backward from a target path. Unless it is the initial path, it contains a left-then-down corner lying strictly away from the initial boundary. The southeast square at that corner is occupied, while the other three squares of the corresponding " },
+      { "type": "inlineMath", "tex": "2\\text{-by-}2" }, { "type": "text", "text": " block are empty. Moving that coin northwest reverses one legal move and decreases the area between the target path and the initial path by one." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Repeating reaches the initial path, so reversing the sequence reaches the target configuration. Therefore the path correspondence is bijective. Finally, choosing the positions of the " },
+      { "type": "inlineMath", "tex": "m-1" }, { "type": "text", "text": " down steps among all " },
+      { "type": "inlineMath", "tex": "m+n-2" }, { "type": "text", "text": " steps gives the stated binomial coefficient." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2023 problems", "url": "https://maa.org/wp-content/uploads/2025/02/2023-Putnam-Problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2023 problems and solutions", "url": "https://maa.org/wp-content/uploads/2025/02/2023-Putnam-Problems-and-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2023 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2023s.tex" }
+  ]
+}
