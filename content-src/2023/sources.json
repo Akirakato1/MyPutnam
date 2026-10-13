@@ -1,0 +1,57 @@
+{
+  "year": 2023,
+  "publisher": "Mathematical Association of America",
+  "usage": "Personal, noncommercial offline study only.",
+  "sources": [
+    {
+      "id": "problems",
+      "title": "2023 William Lowell Putnam Mathematical Competition — Problems for Sessions A and B",
+      "publisher": "Mathematical Association of America",
+      "requestUrl": "https://maa.org/wp-content/uploads/2025/02/2023-Putnam-Problems.pdf",
+      "url": "https://maa.org/wp-content/uploads/2025/02/2023-Putnam-Problems.pdf",
+      "mediaType": "application/pdf",
+      "retrievedOn": "2026-10-13",
+      "file": "original/2023-problems.pdf",
+      "byteLength": 726692,
+      "pageCount": 2,
+      "sha256": "2380069c25713383ac7cd5dac4c2ae68e37c66906163b85d5663d4250c5afa68"
+    },
+    {
+      "id": "solutions",
+      "title": "2023 William Lowell Putnam Mathematical Competition — Official Problems and Solutions",
+      "publisher": "Mathematical Association of America",
+      "requestUrl": "https://maa.org/wp-content/uploads/2025/02/2023-Putnam-Problems-and-Solutions.pdf",
+      "url": "https://maa.org/wp-content/uploads/2025/02/2023-Putnam-Problems-and-Solutions.pdf",
+      "mediaType": "application/pdf",
+      "retrievedOn": "2026-10-13",
+      "file": "original/2023-problems-and-solutions.pdf",
+      "byteLength": 339013,
+      "pageCount": 33,
+      "sha256": "7e377389c74f4c04eed2936011fbe1eca0ff871b2a5e56486f3f8a3d19cf9781"
+    },
+    {
+      "id": "kedlaya-statements",
+      "title": "Putnam 2023 problem statements — TeX cross-check",
+      "publisher": "Kiran S. Kedlaya",
+      "requestUrl": "https://kskedlaya.org/putnam-archive/2023.tex",
+      "url": "https://kskedlaya.org/putnam-archive/2023.tex",
+      "mediaType": "application/x-tex",
+      "retrievedOn": "2026-10-13",
+      "file": "original/2023.tex",
+      "byteLength": 5087,
+      "sha256": "b2ca09a0c01cf44995d4a023ff4e2abe62367c7cc3e0c047c255362a63a3bc82"
+    },
+    {
+      "id": "kedlaya-solutions",
+      "title": "Putnam 2023 solutions — TeX cross-check",
+      "publisher": "Kiran S. Kedlaya",
+      "requestUrl": "https://kskedlaya.org/putnam-archive/2023s.tex",
+      "url": "https://kskedlaya.org/putnam-archive/2023s.tex",
+      "mediaType": "application/x-tex",
+      "retrievedOn": "2026-10-13",
+      "file": "original/2023s.tex",
+      "byteLength": 26206,
+      "sha256": "6b2fabe6db0a31b94114a2406add6355fa5052a4b3b2dbd64c0ab157a75a2bab"
+    }
+  ]
+}
