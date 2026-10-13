@@ -70,6 +70,13 @@ export async function renderReview(contentDir, screenshotDir, options = {}) {
           overflowingElements: [...document.querySelectorAll('body *')]
             .filter((element) => {
               if (element.closest('.katex-mathml')) return false;
+              // SVG glyphs (notably KaTeX radical tails) may intentionally use a
+              // very wide internal coordinate box that is sliced by a fitted
+              // HTML wrapper. Their DOMRect is not a layout-overflow signal;
+              // the containing HTML box remains covered by this check.
+              const radicalTail = element.closest('.hide-tail');
+              if (element.namespaceURI === 'http://www.w3.org/2000/svg'
+                  && radicalTail?.closest('.katex-html')) return false;
               const style = getComputedStyle(element);
               if (style.display === 'none' || style.visibility === 'hidden') return false;
               const rect = element.getBoundingClientRect();

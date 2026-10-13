@@ -61,3 +61,53 @@ test('render review rejects content clipped inside an overflow-hidden container'
     /element exceeds viewport/i,
   );
 });
+
+test('render review ignores KaTeX radical-tail SVG coordinates inside its fitted slice', async (t) => {
+  const root = await mkdtemp(join(tmpdir(), 'putnam-render-svg-coordinates-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const content = join(root, 'content-root');
+  await mkdir(content, { recursive: true });
+  await writeFile(
+    join(content, 'svg.html'),
+    '<!doctype html><style>.hide-tail{display:inline-block;overflow:hidden;width:24px;height:24px}.hide-tail svg{width:400em;height:24px}</style><p>Square root <span class="katex-html"><span class="hide-tail"><svg viewBox="0 0 400000 1080" preserveAspectRatio="xMinYMin slice"><path d="M0 0 H400000 V1080 H0 Z"/></svg></span></span></p>',
+    'utf8',
+  );
+
+  const result = await renderReview(content, join(root, 'screenshots'), { widths: [480] });
+
+  assert.deepEqual(result.files, ['svg.html']);
+});
+
+test('render review still rejects clipped SVG outside KaTeX output', async (t) => {
+  const root = await mkdtemp(join(tmpdir(), 'putnam-render-clipped-svg-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const content = join(root, 'content-root');
+  await mkdir(content, { recursive: true });
+  await writeFile(
+    join(content, 'clipped-svg.html'),
+    '<!doctype html><style>.clip{overflow:hidden;width:100%}.clip svg{width:2000px;height:24px}</style><p>Diagram</p><div class="clip"><svg><path d="M0 0 H2000"/></svg></div>',
+    'utf8',
+  );
+
+  await assert.rejects(
+    renderReview(content, join(root, 'screenshots'), { widths: [480] }),
+    /element exceeds viewport/i,
+  );
+});
+
+test('render review rejects unrelated clipped SVG inside KaTeX output', async (t) => {
+  const root = await mkdtemp(join(tmpdir(), 'putnam-render-katex-clipped-svg-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const content = join(root, 'content-root');
+  await mkdir(content, { recursive: true });
+  await writeFile(
+    join(content, 'katex-clipped-svg.html'),
+    '<!doctype html><style>.katex-html,.clip{display:block;width:100%}.clip{overflow:hidden}.clip svg{width:2000px;height:24px}</style><p>Formula</p><span class="katex-html"><span class="clip"><svg><path d="M0 0 H2000"/></svg></span></span>',
+    'utf8',
+  );
+
+  await assert.rejects(
+    renderReview(content, join(root, 'screenshots'), { widths: [480] }),
+    /element exceeds viewport/i,
+  );
+});
