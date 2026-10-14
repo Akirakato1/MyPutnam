@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2022",
+  "problemId": "B5",
+  "label": "B5",
+  "ordinal": 11,
+  "topics": ["probability", "algebra", "inequalities"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B5" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "0\\le p\\le1/2" },
+      { "type": "text", "text": ", let " }, { "type": "inlineMath", "tex": "X_1,X_2,\\ldots" },
+      { "type": "text", "text": " be independent random variables such that, for every " }, { "type": "inlineMath", "tex": "i\\ge1" }, { "type": "text", "text": "," }
+    ] },
+    { "type": "displayMath", "tex": "X_i=\\begin{cases}1&\\text{with probability }p,\\\\-1&\\text{with probability }p,\\\\0&\\text{with probability }1-2p.\\end{cases}" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Given a positive integer " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " and integers " }, { "type": "inlineMath", "tex": "b,a_1,\\ldots,a_n" },
+      { "type": "text", "text": ", let " }, { "type": "inlineMath", "tex": "P(b,a_1,\\ldots,a_n)" },
+      { "type": "text", "text": " be the probability that " },
+      { "type": "inlineMath", "tex": "a_1X_1+\\cdots+a_nX_n=b" }, { "type": "text", "text": ". For which values of " },
+      { "type": "inlineMath", "tex": "p" }, { "type": "text", "text": " is" }
+    ] },
+    { "type": "displayMath", "tex": "P(0,a_1,\\ldots,a_n)\\ge P(b,a_1,\\ldots,a_n)" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "for every positive integer " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " and all integers " }, { "type": "inlineMath", "tex": "b,a_1,\\ldots,a_n" }, { "type": "text", "text": "?" }
+    ] }
+  ] },
+  "hints": [
+    { "order": 1, "stage": "nudge", "title": "Find quick obstructions above one third", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Compare the probabilities of " }, { "type": "inlineMath", "tex": "0" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "1" },
+      { "type": "text", "text": " for a single variable. At the equality case, try the two weights " },
+      { "type": "inlineMath", "tex": "1,2" }, { "type": "text", "text": "." }
+    ] }] } },
+    { "order": 2, "stage": "strategy", "title": "Use binary weights for the remaining obstruction", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "For weights " }, { "type": "inlineMath", "tex": "1,2,4,\\ldots,2^{n-1}" },
+      { "type": "text", "text": ", enumerate the sign vectors giving sums " }, { "type": "inlineMath", "tex": "0" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "1" },
+      { "type": "text", "text": ". Compare their probabilities as " }, { "type": "inlineMath", "tex": "n\\to\\infty" }, { "type": "text", "text": "." }
+    ] }] } },
+    { "order": 3, "stage": "knowledge", "title": "Encode every probability as a coefficient", "document": { "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Define the Laurent polynomial" }] },
+      { "type": "displayMath", "tex": "F(x)=px+p x^{-1}+1-2p." },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Then the desired probability is the appropriate coefficient of " }, { "type": "inlineMath", "tex": "\\prod_i F(x^{a_i})" }, { "type": "text", "text": "." }] }
+    ] } },
+    { "order": 4, "stage": "outline", "title": "Factor into an autocorrelation", "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+      [{ "type": "text", "text": "When the discriminant permits it, factor " }, { "type": "inlineMath", "tex": "F(x)" }, { "type": "text", "text": " as a positive constant times " }, { "type": "inlineMath", "tex": "(x+\\alpha)(x^{-1}+\\alpha)" }, { "type": "text", "text": "." }],
+      [{ "type": "text", "text": "Write the full product as " }, { "type": "inlineMath", "tex": "g(x)g(x^{-1})" }, { "type": "text", "text": " for a finite Laurent polynomial " }, { "type": "inlineMath", "tex": "g" }, { "type": "text", "text": "." }],
+      [{ "type": "text", "text": "Its constant coefficient is " }, { "type": "inlineMath", "tex": "\\sum c_j^2" }, { "type": "text", "text": ", while the coefficient at displacement " }, { "type": "inlineMath", "tex": "b" }, { "type": "text", "text": " is " }, { "type": "inlineMath", "tex": "\\sum c_jc_{j+b}" }, { "type": "text", "text": "." }],
+      [{ "type": "text", "text": "Apply Cauchy-Schwarz and combine this sufficient range with the earlier counterexamples." }]
+    ] }] } }
+  ],
+  "prerequisites": [
+    { "order": 1, "title": "Probability-generating Laurent polynomials", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "If an integer-valued random variable " }, { "type": "inlineMath", "tex": "Y" },
+      { "type": "text", "text": " has generating Laurent polynomial " },
+      { "type": "inlineMath", "tex": "\\sum_m\\Pr(Y=m)x^m" }, { "type": "text", "text": ", then independent sums correspond to products, and the coefficient of " },
+      { "type": "inlineMath", "tex": "x^b" }, { "type": "text", "text": " is the probability of total " }, { "type": "inlineMath", "tex": "b" }, { "type": "text", "text": "." }
+    ] }] } },
+    { "order": 2, "title": "Dominance of the largest binary weight", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "In a signed sum of distinct powers of " }, { "type": "inlineMath", "tex": "2" },
+      { "type": "text", "text": ", the largest nonzero term has magnitude greater than the sum of all smaller powers. This permits a direct classification of representations of " },
+      { "type": "inlineMath", "tex": "0" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": "." }
+    ] }] } },
+    { "order": 3, "title": "Autocorrelation and Cauchy-Schwarz", "document": { "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "For a finitely supported real sequence " }, { "type": "inlineMath", "tex": "(c_j)" }, { "type": "text", "text": ", zero-extended outside its support," }] },
+      { "type": "displayMath", "tex": "\\left|\\sum_j c_jc_{j+b}\\right|\\le\\left(\\sum_j c_j^2\\right)^{1/2}\\left(\\sum_j c_{j+b}^2\\right)^{1/2}=\\sum_jc_j^2." }
+    ] } }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The required range is " }, { "type": "inlineMath", "tex": "0\\le p\\le1/4" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "heading", "level": 2, "runs": [{ "type": "text", "text": "Why larger values fail" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "p>1/3" },
+      { "type": "text", "text": ", one variable with coefficient " }, { "type": "inlineMath", "tex": "1" },
+      { "type": "text", "text": " gives " }, { "type": "inlineMath", "tex": "P(0,1)=1-2p<p=P(1,1)" },
+      { "type": "text", "text": ". If " }, { "type": "inlineMath", "tex": "p=1/3" },
+      { "type": "text", "text": ", the weights " }, { "type": "inlineMath", "tex": "1,2" },
+      { "type": "text", "text": " give " }, { "type": "inlineMath", "tex": "P(0,1,2)=1/9<2/9=P(1,1,2)" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Now suppose " }, { "type": "inlineMath", "tex": "1/4<p<1/3" },
+      { "type": "text", "text": " and use weights " }, { "type": "inlineMath", "tex": "1,2,\\ldots,2^{n-1}" },
+      { "type": "text", "text": ". The only signed-digit representation of " }, { "type": "inlineMath", "tex": "0" },
+      { "type": "text", "text": " is the all-zero one, so" }
+    ] },
+    { "type": "displayMath", "tex": "P(0,1,2,\\ldots,2^{n-1})=(1-2p)^n." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The representations of " }, { "type": "inlineMath", "tex": "1" },
+      { "type": "text", "text": " are obtained by choosing a highest nonzero position, placing " },
+      { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": " there, and placing " },
+      { "type": "inlineMath", "tex": "-1" }, { "type": "text", "text": " in every lower position. Hence, with " },
+      { "type": "inlineMath", "tex": "q=1-2p" }, { "type": "text", "text": "," }
+    ] },
+    { "type": "displayMath", "tex": "P(1,1,2,\\ldots,2^{n-1})=pq^{n-1}+p^2q^{n-2}+\\cdots+p^n." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Summing this geometric series, with " }, { "type": "inlineMath", "tex": "q-p=1-3p>0" },
+      { "type": "text", "text": ", shows that the inequality at zero is equivalent to" }
+    ] },
+    { "type": "displayMath", "tex": "p^{n+1}\\ge(4p-1)q^n," },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "which fails for all sufficiently large " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " since " }, { "type": "inlineMath", "tex": "p/q<1" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "4p-1>0" }, { "type": "text", "text": ". Thus no " },
+      { "type": "inlineMath", "tex": "p>1/4" }, { "type": "text", "text": " works." }
+    ] },
+    { "type": "heading", "level": 2, "runs": [{ "type": "text", "text": "Why the stated range works" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "p=0" },
+      { "type": "text", "text": ", every " }, { "type": "inlineMath", "tex": "X_i" },
+      { "type": "text", "text": " is zero, so the claim is immediate. Assume " },
+      { "type": "inlineMath", "tex": "0<p\\le1/4" }, { "type": "text", "text": " and define" }
+    ] },
+    { "type": "displayMath", "tex": "F(x)=px+px^{-1}+1-2p." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Then " }, { "type": "inlineMath", "tex": "P(b,a_1,\\ldots,a_n)" },
+      { "type": "text", "text": " is the coefficient of " }, { "type": "inlineMath", "tex": "x^b" },
+      { "type": "text", "text": " in " }, { "type": "inlineMath", "tex": "\\prod_{i=1}^nF(x^{a_i})" }, { "type": "text", "text": ". Put" }
+    ] },
+    { "type": "displayMath", "tex": "\\alpha=\\frac{1-2p+\\sqrt{1-4p}}{2p}>0." },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "A direct expansion gives" }] },
+    { "type": "displayMath", "tex": "F(x)=\\frac{p}{\\alpha}(x+\\alpha)(x^{-1}+\\alpha)." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Therefore the full product has the form " },
+      { "type": "inlineMath", "tex": "g(x)g(x^{-1})" }, { "type": "text", "text": ", where the finite Laurent polynomial" }
+    ] },
+    { "type": "displayMath", "tex": "g(x)=\\left(\\frac p\\alpha\\right)^{n/2}\\prod_{i=1}^n(x^{a_i}+\\alpha)" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "has real coefficients. Write " }, { "type": "inlineMath", "tex": "g(x)=\\sum_jc_jx^j" },
+      { "type": "text", "text": ", extending " }, { "type": "inlineMath", "tex": "c_j" },
+      { "type": "text", "text": " by zero outside its finite support. The coefficients of " },
+      { "type": "inlineMath", "tex": "x^0" }, { "type": "text", "text": " and " },
+      { "type": "inlineMath", "tex": "x^b" }, { "type": "text", "text": " in " },
+      { "type": "inlineMath", "tex": "g(x)g(x^{-1})" }, { "type": "text", "text": " are respectively" }
+    ] },
+    { "type": "displayMath", "tex": "\\sum_jc_j^2,\\qquad \\sum_jc_jc_{j+b}." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Cauchy-Schwarz gives" }
+    ] },
+    { "type": "displayMath", "tex": "\\left|\\sum_jc_jc_{j+b}\\right|\\le\\sum_jc_j^2." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "These coefficients are probabilities, so the coefficient at " },
+      { "type": "inlineMath", "tex": "b" }, { "type": "text", "text": " is at most the constant coefficient. This proves the desired inequality for every choice of the integers and completes the proof." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2022 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2022_Putnam_Competitions.pdf" },
+    { "kind": "solution", "label": "MAA official 2022 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2022-Putnam-solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2022 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2022s.tex" }
+  ]
+}

@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2022",
+  "problemId": "B6",
+  "label": "B6",
+  "ordinal": 12,
+  "topics": ["analysis", "functional-equations"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B6" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Find all continuous functions " },
+      { "type": "inlineMath", "tex": "f:\\mathbb R^+\\to\\mathbb R^+" },
+      { "type": "text", "text": " such that" }
+    ] },
+    { "type": "displayMath", "tex": "f(xf(y))+f(yf(x))=1+f(x+y)" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "for all " }, { "type": "inlineMath", "tex": "x,y>0" },
+      { "type": "text", "text": ". Here " }, { "type": "inlineMath", "tex": "\\mathbb R^+" },
+      { "type": "text", "text": " denotes the positive real numbers." }
+    ] }
+  ] },
+  "hints": [
+    { "order": 1, "stage": "nudge", "title": "Start at the missing endpoint", "document": { "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "L_-" },
+        { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "L_+" },
+        { "type": "text", "text": " be the lower and upper limits of " }, { "type": "inlineMath", "tex": "f(x)" },
+        { "type": "text", "text": " as " }, { "type": "inlineMath", "tex": "x\\to0^+" },
+        { "type": "text", "text": ". First show that " }, { "type": "inlineMath", "tex": "f" },
+        { "type": "text", "text": " is bounded near zero, then set " }, { "type": "inlineMath", "tex": "x=y" },
+        { "type": "text", "text": "." }
+      ] }
+    ] } },
+    { "order": 2, "stage": "strategy", "title": "Separate the constant solution", "document": { "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Show first that if " }, { "type": "inlineMath", "tex": "f\\ge1" },
+        { "type": "text", "text": " everywhere, then bounded suprema and the map " }, { "type": "inlineMath", "tex": "x\\mapsto xf(x)" },
+        { "type": "text", "text": " force " }, { "type": "inlineMath", "tex": "f\\equiv1" },
+        { "type": "text", "text": ". Otherwise use " }, { "type": "inlineMath", "tex": "I=\\inf f<1" },
+        { "type": "text", "text": " to prove " }, { "type": "inlineMath", "tex": "f(x)\\to0" },
+        { "type": "text", "text": " as " }, { "type": "inlineMath", "tex": "x\\to\\infty" },
+        { "type": "text", "text": "." }
+      ] }
+    ] } },
+    { "order": 3, "stage": "knowledge", "title": "Normalize the first half-level", "document": { "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Scaling the input preserves the equation. Normalize so that " },
+        { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": " is the least point where " },
+        { "type": "inlineMath", "tex": "f=1/2" }, { "type": "text", "text": ". For " },
+        { "type": "inlineMath", "tex": "h(x)=xf(x)" }, { "type": "text", "text": ", use the equation with " },
+        { "type": "inlineMath", "tex": "x=y" }, { "type": "text", "text": " to show " },
+        { "type": "inlineMath", "tex": "h(x)<1" }, { "type": "text", "text": " and then " },
+        { "type": "inlineMath", "tex": "h(x)\\to1" }, { "type": "text", "text": "." }
+      ] }
+    ] } },
+    { "order": 4, "stage": "outline", "title": "Extract reciprocity and finish", "document": { "blocks": [
+      { "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Replace " }, { "type": "inlineMath", "tex": "y" }, { "type": "text", "text": " by " }, { "type": "inlineMath", "tex": "xy" }, { "type": "text", "text": " and let " }, { "type": "inlineMath", "tex": "x\\to\\infty" }, { "type": "text", "text": " to obtain a relation between " }, { "type": "inlineMath", "tex": "f(y)" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "f(1/y)" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Use that relation to rewrite the second term in the original equation." }],
+        [{ "type": "text", "text": "Multiply the resulting identity by " }, { "type": "inlineMath", "tex": "xf(y)" }, { "type": "text", "text": " and take one final limit." }]
+      ] }
+    ] } }
+  ],
+  "prerequisites": [
+    { "order": 1, "title": "One-sided limsup and liminf", "document": { "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "If a positive continuous function is bounded near zero, its one-sided upper and lower limits can be compared through a functional equation. For a continuous map " },
+        { "type": "inlineMath", "tex": "h" }, { "type": "text", "text": " with " },
+        { "type": "inlineMath", "tex": "h(0)=0" }, { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "h(x)>0" }, { "type": "text", "text": " for " },
+        { "type": "inlineMath", "tex": "x>0" }, { "type": "text", "text": ", the intermediate value theorem shows that the values of " },
+        { "type": "inlineMath", "tex": "h(x)" }, { "type": "text", "text": " near zero cover arbitrarily small intervals starting at zero." }
+      ] }
+    ] } },
+    { "order": 2, "title": "Scaling invariance", "document": { "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "When an equation contains its variables only through sums and products with function values, check whether " },
+        { "type": "inlineMath", "tex": "g(x)=f(ax)" }, { "type": "text", "text": " satisfies the same equation. A suitable level set can then fix the otherwise free horizontal scale." }
+      ] }
+    ] } },
+    { "order": 3, "title": "First level crossings and compactness", "document": { "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "If a continuous function has limits on opposite sides of a level, it reaches that level. If the limiting behavior also keeps all such points away from both ends of the domain, the level set is compact and therefore has a least element." }
+      ] }
+    ] } }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The solutions are" }
+    ] },
+    { "type": "displayMath", "tex": "f(x)=\\frac{1}{1+cx}\\qquad(c\\ge0)." },
+    { "type": "heading", "level": 2, "runs": [{ "type": "text", "text": "Behavior near zero" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Write " }, { "type": "inlineMath", "tex": "L_-" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "L_+" },
+      { "type": "text", "text": " for the lower and upper limits of " }, { "type": "inlineMath", "tex": "f(x)" },
+      { "type": "text", "text": " as " }, { "type": "inlineMath", "tex": "x\\to0^+" },
+      { "type": "text", "text": ". For fixed " }, { "type": "inlineMath", "tex": "y" },
+      { "type": "text", "text": ", positivity and the equation give" }
+    ] },
+    { "type": "displayMath", "tex": "f(xf(y))\\le1+f(x+y)," },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "so " }, { "type": "inlineMath", "tex": "L_+\\le1+f(y)<\\infty" },
+      { "type": "text", "text": ". Hence " }, { "type": "inlineMath", "tex": "f" },
+      { "type": "text", "text": " is bounded near zero and " }, { "type": "inlineMath", "tex": "xf(x)\\to0" },
+      { "type": "text", "text": ". The continuous map " }, { "type": "inlineMath", "tex": "h(x)=xf(x)" },
+      { "type": "text", "text": " therefore extends by " }, { "type": "inlineMath", "tex": "h(0)=0" },
+      { "type": "text", "text": "; on every sufficiently small interval its image contains an interval beginning at zero. Thus composing with " },
+      { "type": "inlineMath", "tex": "h" }, { "type": "text", "text": " preserves both one-sided limit extrema. Setting " },
+      { "type": "inlineMath", "tex": "y=x" }, { "type": "text", "text": " now yields" }
+    ] },
+    { "type": "displayMath", "tex": "2L_+=1+L_+,\\qquad2L_-=1+L_-," },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "and consequently" }
+    ] },
+    { "type": "displayMath", "tex": "\\lim_{x\\to0^+}f(x)=1." },
+    { "type": "heading", "level": 2, "runs": [{ "type": "text", "text": "The constant case and behavior at infinity" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Suppose first that " }, { "type": "inlineMath", "tex": "f(x)\\ge1" },
+      { "type": "text", "text": " for every " }, { "type": "inlineMath", "tex": "x" },
+      { "type": "text", "text": ". Put " }, { "type": "inlineMath", "tex": "S_c=\\sup_{0<t\\le c}f(t)" },
+      { "type": "text", "text": ". If some " }, { "type": "inlineMath", "tex": "f(y)>1" },
+      { "type": "text", "text": ", then" }
+    ] },
+    { "type": "displayMath", "tex": "f(x+y)-f(xf(y))=f(yf(x))-1\\ge0." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Monotonicity of the suprema therefore gives" }
+    ] },
+    { "type": "displayMath", "tex": "S_c=S_{(c-y)f(y)}\\qquad\\left(c\\ge\\frac{yf(y)}{f(y)-1}\\right)." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Iterating the increasing affine argument shows that " }, { "type": "inlineMath", "tex": "S_\\infty<\\infty" },
+      { "type": "text", "text": ". If no such " }, { "type": "inlineMath", "tex": "y" },
+      { "type": "text", "text": " exists, boundedness is immediate. Also " }, { "type": "inlineMath", "tex": "xf(x)" },
+      { "type": "text", "text": " runs from zero to infinity, so it takes every positive value. Taking suprema in" }
+    ] },
+    { "type": "displayMath", "tex": "2f(xf(x))=1+f(2x)" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "gives " }, { "type": "inlineMath", "tex": "2S_\\infty\\le1+S_\\infty" },
+      { "type": "text", "text": ". Thus " }, { "type": "inlineMath", "tex": "f\\equiv1" },
+      { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "We may now assume that " }, { "type": "inlineMath", "tex": "I=\\inf_{t>0}f(t)<1" },
+      { "type": "text", "text": ". Choose " }, { "type": "inlineMath", "tex": "0<\\varepsilon<(1-I)/2" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "y>0" },
+      { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "f(y)<I+\\varepsilon" },
+      { "type": "text", "text": ". There can be no " }, { "type": "inlineMath", "tex": "x" },
+      { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "xf(x)=y" },
+      { "type": "text", "text": ", because then" }
+    ] },
+    { "type": "displayMath", "tex": "f(y)=\\frac{1+f(2x)}2\\ge\\frac{1+I}{2}>I+\\varepsilon." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Since " }, { "type": "inlineMath", "tex": "xf(x)\\to0" },
+      { "type": "text", "text": " at zero, continuity now forces " }, { "type": "inlineMath", "tex": "xf(x)<y" },
+      { "type": "text", "text": " for all " }, { "type": "inlineMath", "tex": "x" },
+      { "type": "text", "text": ". Hence " }, { "type": "inlineMath", "tex": "f(x)<y/x" },
+      { "type": "text", "text": ", and" }
+    ] },
+    { "type": "displayMath", "tex": "\\lim_{x\\to\\infty}f(x)=0." },
+    { "type": "heading", "level": 2, "runs": [{ "type": "text", "text": "Normalize the scale" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The limits just proved show that " }, { "type": "inlineMath", "tex": "f^{-1}(1/2)" },
+      { "type": "text", "text": " is nonempty and compact. Replacing " }, { "type": "inlineMath", "tex": "f(x)" },
+      { "type": "text", "text": " by " }, { "type": "inlineMath", "tex": "f(ax)" },
+      { "type": "text", "text": " preserves the equation, so normalize the least point of this level set to " },
+      { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": ". Then " },
+      { "type": "inlineMath", "tex": "f(t)>1/2" }, { "type": "text", "text": " for " },
+      { "type": "inlineMath", "tex": "0<t<1" }, { "type": "text", "text": ". From" }
+    ] },
+    { "type": "displayMath", "tex": "f(xf(x))=\\frac{1+f(2x)}2>\\frac12=f(1)," },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "we get " }, { "type": "inlineMath", "tex": "xf(x)\\ne1" },
+      { "type": "text", "text": ". Continuity and the limit at zero give " }, { "type": "inlineMath", "tex": "xf(x)<1" },
+      { "type": "text", "text": " for every " }, { "type": "inlineMath", "tex": "x" },
+      { "type": "text", "text": ". As " }, { "type": "inlineMath", "tex": "x\\to\\infty" },
+      { "type": "text", "text": ", the displayed identity gives " }, { "type": "inlineMath", "tex": "f(xf(x))\\to1/2" },
+      { "type": "text", "text": ". On every closed subinterval of " }, { "type": "inlineMath", "tex": "[0,1)" },
+      { "type": "text", "text": ", the extended function stays uniformly above " }, { "type": "inlineMath", "tex": "1/2" },
+      { "type": "text", "text": "; therefore" }
+    ] },
+    { "type": "displayMath", "tex": "\\lim_{x\\to\\infty}xf(x)=1." },
+    { "type": "heading", "level": 2, "runs": [{ "type": "text", "text": "Reciprocity determines the function" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Replace " }, { "type": "inlineMath", "tex": "y" },
+      { "type": "text", "text": " by " }, { "type": "inlineMath", "tex": "xy" },
+      { "type": "text", "text": " in the original equation:" }
+    ] },
+    { "type": "displayMath", "tex": "f(xf(xy))+f(xyf(x))=1+f(x+xy)." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Letting " }, { "type": "inlineMath", "tex": "x\\to\\infty" },
+      { "type": "text", "text": " and using " }, { "type": "inlineMath", "tex": "tf(t)\\to1" },
+      { "type": "text", "text": " gives" }
+    ] },
+    { "type": "displayMath", "tex": "f(1/y)+f(y)=1." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Use this with " }, { "type": "inlineMath", "tex": "t=yf(x)" },
+      { "type": "text", "text": " in the original equation to obtain" }
+    ] },
+    { "type": "displayMath", "tex": "f(xf(y))=f(x+y)+f\\left(\\frac1{yf(x)}\\right)." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Multiply by " }, { "type": "inlineMath", "tex": "xf(y)" },
+      { "type": "text", "text": " and let " }, { "type": "inlineMath", "tex": "x\\to\\infty" },
+      { "type": "text", "text": ". Applying " }, { "type": "inlineMath", "tex": "tf(t)\\to1" },
+      { "type": "text", "text": " to each large argument yields" }
+    ] },
+    { "type": "displayMath", "tex": "1=f(y)+yf(y)," },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "so the normalized solution is " }, { "type": "inlineMath", "tex": "f(y)=1/(1+y)" },
+      { "type": "text", "text": ". Undoing the input scaling gives " },
+      { "type": "inlineMath", "tex": "f(y)=1/(1+cy)" }, { "type": "text", "text": " with " },
+      { "type": "inlineMath", "tex": "c>0" }, { "type": "text", "text": "; the earlier constant solution is the case " },
+      { "type": "inlineMath", "tex": "c=0" }, { "type": "text", "text": ". Finally, direct substitution gives" }
+    ] },
+    { "type": "displayMath", "tex": "f(xf(y))+f(yf(x))" },
+    { "type": "displayMath", "tex": "=\\frac{2+c(x+y)}{1+c(x+y)}=1+f(x+y)," },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "which verifies every listed function." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2022 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2022_Putnam_Competitions.pdf" },
+    { "kind": "solution", "label": "MAA official 2022 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2022-Putnam-solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2022 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2022s.tex" }
+  ]
+}

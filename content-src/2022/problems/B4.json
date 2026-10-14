@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2022",
+  "problemId": "B4",
+  "label": "B4",
+  "ordinal": 10,
+  "topics": ["combinatorics", "number-theory"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B4" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Find all integers " }, { "type": "inlineMath", "tex": "n\\ge4" },
+      { "type": "text", "text": " for which there is a sequence of distinct real numbers " },
+      { "type": "inlineMath", "tex": "x_1,\\ldots,x_n" }, { "type": "text", "text": " such that each of the sets" }
+    ] },
+    { "type": "displayMath", "tex": "\\{x_1,x_2,x_3\\},\\{x_2,x_3,x_4\\},\\ldots,\\{x_{n-2},x_{n-1},x_n\\}," },
+    { "type": "displayMath", "tex": "\\{x_{n-1},x_n,x_1\\},\\qquad \\{x_n,x_1,x_2\\}" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "forms a three-term arithmetic progression when arranged in increasing order." }
+    ] }
+  ] },
+  "hints": [
+    { "order": 1, "stage": "nudge", "title": "Compare neighboring common differences", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "d_i" },
+      { "type": "text", "text": " be the positive common difference of the progression formed by " },
+      { "type": "inlineMath", "tex": "x_i,x_{i+1},x_{i+2}" }, { "type": "text", "text": ". The two shared entries force" }
+    ] }, { "type": "displayMath", "tex": "d_{i+1}\\in\\{d_i/2,d_i,2d_i\\}." }] } },
+    { "order": 2, "stage": "strategy", "title": "Normalize and reduce modulo three", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Scale so the smallest common difference is " }, { "type": "inlineMath", "tex": "1" },
+      { "type": "text", "text": " and translate one term to an integer. Show that all common differences and all terms are integers, while no common difference is divisible by " },
+      { "type": "inlineMath", "tex": "3" }, { "type": "text", "text": "." }
+    ] }] } },
+    { "order": 3, "stage": "knowledge", "title": "Read the cyclic residue pattern", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Every three consecutive terms then have the three different residues modulo " },
+      { "type": "inlineMath", "tex": "3" }, { "type": "text", "text": ". Hence " },
+      { "type": "inlineMath", "tex": "x_{i+3}\\equiv x_i\\pmod3" },
+      { "type": "text", "text": ". Use the wraparound triples to constrain the cycle length." }
+    ] }] } },
+    { "order": 4, "stage": "outline", "title": "Construct the long cycles and isolate the short one", "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+      [{ "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "m\\ge2" }, { "type": "text", "text": ", concatenate increasing odd numbers, the term " }, { "type": "inlineMath", "tex": "4m-2" }, { "type": "text", "text": ", decreasing multiples of " }, { "type": "inlineMath", "tex": "4" }, { "type": "text", "text": ", and the final term " }, { "type": "inlineMath", "tex": "2" }, { "type": "text", "text": "." }],
+      [{ "type": "text", "text": "Check separately the six triples that cross the joins or wrap around." }],
+      [{ "type": "text", "text": "The residue argument leaves one possible cycle length below this family." }],
+      [{ "type": "text", "text": "Up to reversing the cycle and reflecting all values, normalize a smallest-difference triple to one of two ordered forms, then enumerate the possible final pair." }]
+    ] }] } }
+  ],
+  "prerequisites": [
+    { "order": 1, "title": "Completing a three-term progression", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Given two distinct numbers " }, { "type": "inlineMath", "tex": "a,b" },
+      { "type": "text", "text": ", a third number completing an unordered three-term arithmetic progression must be one of" }
+    ] }, { "type": "displayMath", "tex": "2a-b,\\qquad \\frac{a+b}{2},\\qquad 2b-a." }] } },
+    { "order": 2, "title": "Overlapping progression differences", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Two three-term arithmetic progressions sharing two entries have positive common differences whose ratio is " },
+      { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": ", " },
+      { "type": "inlineMath", "tex": "2" }, { "type": "text", "text": ", or " },
+      { "type": "inlineMath", "tex": "1/2" }, { "type": "text", "text": "." }
+    ] }] } },
+    { "order": 3, "title": "A cyclic period-three pattern", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "If every three consecutive entries of a cyclic sequence use three different symbols, the next symbol is forced to equal the one three positions earlier. A nonconstant pattern of exact period " },
+      { "type": "inlineMath", "tex": "3" }, { "type": "text", "text": " closes around a cycle only when the cycle length is divisible by " },
+      { "type": "inlineMath", "tex": "3" }, { "type": "text", "text": "." }
+    ] }] } }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The valid integers are precisely the multiples of " },
+      { "type": "inlineMath", "tex": "3" }, { "type": "text", "text": " that are at least " },
+      { "type": "inlineMath", "tex": "9" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "heading", "level": 2, "runs": [{ "type": "text", "text": "The divisibility condition" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "d_i" },
+      { "type": "text", "text": " be the positive common difference of the progression formed by the cyclic triple " },
+      { "type": "inlineMath", "tex": "x_i,x_{i+1},x_{i+2}" }, { "type": "text", "text": ". Since neighboring triples share two terms," }
+    ] },
+    { "type": "displayMath", "tex": "d_{i+1}\\in\\{d_i/2,d_i,2d_i\\}." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Scale the sequence so that the smallest of the finitely many " },
+      { "type": "inlineMath", "tex": "d_i" }, { "type": "text", "text": " is " },
+      { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": ". Moving around the cycle shows that every " },
+      { "type": "inlineMath", "tex": "d_i" }, { "type": "text", "text": " is a nonnegative power of " },
+      { "type": "inlineMath", "tex": "2" }, { "type": "text", "text": ", hence an integer not divisible by " },
+      { "type": "inlineMath", "tex": "3" }, { "type": "text", "text": ". After translating one term to " },
+      { "type": "inlineMath", "tex": "0" }, { "type": "text", "text": ", the overlapping progressions also show successively that every " },
+      { "type": "inlineMath", "tex": "x_i" }, { "type": "text", "text": " is an integer." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "A three-term progression with integer common difference not divisible by " },
+      { "type": "inlineMath", "tex": "3" }, { "type": "text", "text": " contains the three distinct residues modulo " },
+      { "type": "inlineMath", "tex": "3" }, { "type": "text", "text": ". Thus every three consecutive " },
+      { "type": "inlineMath", "tex": "x_i" }, { "type": "text", "text": " have different residues. The residue sequence is forced to repeat every three positions, and the cyclic wraparound is possible only if " },
+      { "type": "inlineMath", "tex": "3\\mid n" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "heading", "level": 2, "runs": [{ "type": "text", "text": "Constructions for every multiple from nine onward" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "m\\ge2" },
+      { "type": "text", "text": ". The following concatenated list has length " },
+      { "type": "inlineMath", "tex": "3m+3" }, { "type": "text", "text": ":" }
+    ] },
+    { "type": "displayMath", "tex": "1,3,\\ldots,4m-3,4m-1,4m-2," },
+    { "type": "displayMath", "tex": "4m,4m-4,\\ldots,4,0,2." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The odd run and the decreasing multiples-of-four run each have the required property internally. At the joins and around the end, the remaining triples, when sorted, are" }
+    ] },
+    { "type": "displayMath", "tex": "(4m-3,4m-2,4m-1)," },
+    { "type": "displayMath", "tex": "(4m-2,4m-1,4m)," },
+    { "type": "displayMath", "tex": "(4m-4,4m-2,4m),\\quad(0,2,4)," },
+    { "type": "displayMath", "tex": "(0,1,2),\\quad(1,2,3)," },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "all arithmetic progressions. The entries are distinct: the first run is odd, the second consists of multiples of " },
+      { "type": "inlineMath", "tex": "4" }, { "type": "text", "text": ", and the two remaining entries " },
+      { "type": "inlineMath", "tex": "2" }, { "type": "text", "text": " and " },
+      { "type": "inlineMath", "tex": "4m-2" }, { "type": "text", "text": " are distinct numbers congruent to " },
+      { "type": "inlineMath", "tex": "2\\pmod4" }, { "type": "text", "text": ". Hence every multiple of " },
+      { "type": "inlineMath", "tex": "3" }, { "type": "text", "text": " at least " },
+      { "type": "inlineMath", "tex": "9" }, { "type": "text", "text": " occurs." }
+    ] },
+    { "type": "heading", "level": 2, "runs": [{ "type": "text", "text": "Excluding six" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "It remains to rule out " }, { "type": "inlineMath", "tex": "n=6" },
+      { "type": "text", "text": ". Choose a cyclic triple with the smallest common difference. The six possible orders of its three values reduce to two under reversal of the cycle and a nonzero affine change of all values. For example, the apparent third form " },
+      { "type": "inlineMath", "tex": "(0,1,-1)" }, { "type": "text", "text": " reverses to " },
+      { "type": "inlineMath", "tex": "(-1,1,0)" }, { "type": "text", "text": ", which normalizes to " },
+      { "type": "inlineMath", "tex": "(0,2,1)" }, { "type": "text", "text": ". After rotating and normalizing, we may therefore assume" }
+    ] },
+    { "type": "displayMath", "tex": "x_1=0,\\qquad (x_2,x_3)\\in\\{(1,2),(2,1)\\}." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For two distinct values " }, { "type": "inlineMath", "tex": "a,b" },
+      { "type": "text", "text": ", the next entry must be one of " },
+      { "type": "inlineMath", "tex": "2a-b,(a+b)/2,2b-a" },
+      { "type": "text", "text": ". Applying this to " }, { "type": "inlineMath", "tex": "x_2,x_3" },
+      { "type": "text", "text": ", the two alternatives other than " }, { "type": "inlineMath", "tex": "3" },
+      { "type": "text", "text": " either repeat an entry or create common difference " },
+      { "type": "inlineMath", "tex": "1/2" }, { "type": "text", "text": ", so " },
+      { "type": "inlineMath", "tex": "x_4=3" }, { "type": "text", "text": ". Repeating the same three-completion check gives the complete branch table" }
+    ] },
+    { "type": "displayMath", "tex": "(x_2,x_3)=(1,2):\\quad(x_5,x_6)=(4,5)," },
+    { "type": "displayMath", "tex": "(x_2,x_3)=(2,1):" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "the possible values of " }, { "type": "inlineMath", "tex": "(x_5,x_6)" }, { "type": "text", "text": " are" }
+    ] },
+    { "type": "displayMath", "tex": "(-1,-5),\\quad(-1,7)," },
+    { "type": "displayMath", "tex": "(5,4),\\quad(5,7)." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For none of these five pairs does " },
+      { "type": "inlineMath", "tex": "\\{x_5,x_6,x_1\\}" }, { "type": "text", "text": " form an arithmetic progression. Thus " },
+      { "type": "inlineMath", "tex": "n=6" }, { "type": "text", "text": " is impossible, completing the proof." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2022 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2022_Putnam_Competitions.pdf" },
+    { "kind": "solution", "label": "MAA official 2022 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2022-Putnam-solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2022 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2022s.tex" }
+  ]
+}
