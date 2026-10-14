@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2020",
+  "problemId": "A2",
+  "label": "A2",
+  "ordinal": 2,
+  "topics": ["combinatorics", "probability"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A2" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "k" },
+        { "type": "text", "text": " be a nonnegative integer. Evaluate" }
+      ] },
+      { "type": "displayMath", "tex": "\\sum_{j=0}^k 2^{k-j}\\binom{k+j}{j}." }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Look for binary choices",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The factor " },
+        { "type": "inlineMath", "tex": "2^{k-j}" },
+        { "type": "text", "text": " suggests a freely chosen binary suffix. Try counting strings of a fixed total length." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Classify by a first decisive event",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Consider head-tail strings of length " },
+        { "type": "inlineMath", "tex": "2k+1" },
+        { "type": "text", "text": " having at least " },
+        { "type": "inlineMath", "tex": "k+1" },
+        { "type": "text", "text": " heads. Classify each string by the position of its " },
+        { "type": "inlineMath", "tex": "(k+1)" },
+        { "type": "text", "text": "st head." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Count the prefix and suffix separately",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "If the " },
+          { "type": "inlineMath", "tex": "(k+1)" },
+          { "type": "text", "text": "st head occurs at position " },
+          { "type": "inlineMath", "tex": "k+j+1" },
+          { "type": "text", "text": ", the preceding positions contain exactly " },
+          { "type": "inlineMath", "tex": "j" },
+          { "type": "text", "text": " tails, and the remaining " },
+          { "type": "inlineMath", "tex": "k-j" },
+          { "type": "text", "text": " positions are arbitrary." }
+        ] },
+        { "type": "displayMath", "tex": "\\#\\text{ strings in this class}=\\binom{k+j}{j}2^{k-j}." }
+      ] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Use complement symmetry",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Interpret the summand for each " }, { "type": "inlineMath", "tex": "j=0,\\ldots,k" }, { "type": "text", "text": " as one first-hitting class." }],
+        [{ "type": "text", "text": "Conclude that the sum counts all length-" }, { "type": "inlineMath", "tex": "2k+1" }, { "type": "text", "text": " strings with a strict majority of heads." }],
+        [{ "type": "text", "text": "Pair every string with the string obtained by swapping heads and tails." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Binomial counting",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Among " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " labeled positions, the number of ways to choose exactly " },
+        { "type": "inlineMath", "tex": "r" },
+        { "type": "text", "text": " positions for one symbol is " },
+        { "type": "inlineMath", "tex": "\\binom nr" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "title": "First-hitting decompositions",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "A family of sequences can often be partitioned by the first time a specified count is reached. Once that first time is fixed, the constrained prefix and free suffix can be counted independently and their counts multiplied." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "title": "Majority symmetry in odd length",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "A binary string of odd length cannot have equally many of its two symbols. Swapping the symbols is a bijection between strings with a majority of the first symbol and strings with a majority of the second, so each class contains half of all strings." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Consider all head-tail strings of length " },
+        { "type": "inlineMath", "tex": "2k+1" },
+        { "type": "text", "text": " that contain at least " },
+        { "type": "inlineMath", "tex": "k+1" },
+        { "type": "text", "text": " heads. Every such string has a unique " },
+        { "type": "inlineMath", "tex": "(k+1)" },
+        { "type": "text", "text": "st head." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Suppose this head occurs at position " },
+        { "type": "inlineMath", "tex": "k+j+1" },
+        { "type": "text", "text": ", where " },
+        { "type": "inlineMath", "tex": "0\\le j\\le k" },
+        { "type": "text", "text": ". Among the first " },
+        { "type": "inlineMath", "tex": "k+j" },
+        { "type": "text", "text": " positions there must be exactly " },
+        { "type": "inlineMath", "tex": "k" },
+        { "type": "text", "text": " heads and " },
+        { "type": "inlineMath", "tex": "j" },
+        { "type": "text", "text": " tails, which can be arranged in " },
+        { "type": "inlineMath", "tex": "\\binom{k+j}{j}" },
+        { "type": "text", "text": " ways. The next symbol is forced to be a head." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "After that decisive head, there are" }
+      ] },
+      { "type": "displayMath", "tex": "(2k+1)-(k+j+1)=k-j" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "remaining positions, each arbitrary. Thus the number of strings whose " },
+        { "type": "inlineMath", "tex": "(k+1)" },
+        { "type": "text", "text": "st head occurs there is " },
+        { "type": "inlineMath", "tex": "2^{k-j}\\binom{k+j}{j}" },
+        { "type": "text", "text": ". Summing over " },
+        { "type": "inlineMath", "tex": "j" },
+        { "type": "text", "text": " shows that the expression in the problem counts exactly the length-" },
+        { "type": "inlineMath", "tex": "2k+1" },
+        { "type": "text", "text": " strings with at least " },
+        { "type": "inlineMath", "tex": "k+1" },
+        { "type": "text", "text": " heads." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Because the length is odd, every binary string has either a strict head majority or a strict tail majority. Swapping heads and tails pairs these two classes, so exactly half of the " },
+        { "type": "inlineMath", "tex": "2^{2k+1}" },
+        { "type": "text", "text": " strings have a head majority. Therefore" }
+      ] },
+      { "type": "displayMath", "tex": "\\sum_{j=0}^k2^{k-j}\\binom{k+j}{j}=\\frac{2^{2k+1}}2=2^{2k}=\\boxed{4^k}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The argument also includes " },
+        { "type": "inlineMath", "tex": "k=0" },
+        { "type": "text", "text": ", when both sides equal " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2020 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2020Putnam_final.pdf" },
+    { "kind": "solution", "label": "MAA official 2020 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2020-Putnam-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2020 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2020s.tex" }
+  ]
+}

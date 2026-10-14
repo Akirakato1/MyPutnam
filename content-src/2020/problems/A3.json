@@ -1,0 +1,188 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2020",
+  "problemId": "A3",
+  "label": "A3",
+  "ordinal": 3,
+  "topics": ["analysis", "sequences-series", "inequalities"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A3" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "a_0=\\pi/2" },
+        { "type": "text", "text": ", and let " },
+        { "type": "inlineMath", "tex": "a_n=\\sin(a_{n-1})" },
+        { "type": "text", "text": " for " },
+        { "type": "inlineMath", "tex": "n\\ge1" },
+        { "type": "text", "text": ". Determine whether" }
+      ] },
+      { "type": "displayMath", "tex": "\\sum_{n=1}^{\\infty}a_n^2" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "converges." }] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Estimate how slowly the terms shrink",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "After noting that " },
+        { "type": "inlineMath", "tex": "a_1=1" },
+        { "type": "text", "text": " and the sequence decreases, seek a simple lower bound of order " },
+        { "type": "inlineMath", "tex": "n^{-1/2}" },
+        { "type": "text", "text": " rather than trying to solve the recurrence exactly." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Set up an induction",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Try to prove " },
+        { "type": "inlineMath", "tex": "a_n\\ge1/\\sqrt n" },
+        { "type": "text", "text": " for every " },
+        { "type": "inlineMath", "tex": "n\\ge1" },
+        { "type": "text", "text": ". The induction step reduces to comparing " },
+        { "type": "inlineMath", "tex": "\\sin(1/\\sqrt n)" },
+        { "type": "text", "text": " with " },
+        { "type": "inlineMath", "tex": "1/\\sqrt{n+1}" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Use a one-sided Taylor estimate",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "For " },
+          { "type": "inlineMath", "tex": "0\\le x\\le1" },
+          { "type": "text", "text": "," }
+        ] },
+        { "type": "displayMath", "tex": "\\sin x\\ge x-\\frac{x^3}{6}." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "At " },
+          { "type": "inlineMath", "tex": "x=1/\\sqrt n" },
+          { "type": "text", "text": ", both sides of the desired comparison are positive, so it is safe to square them." }
+        ] }
+      ] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Compare with the harmonic series",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Use positivity, " }, { "type": "inlineMath", "tex": "\\sin x<x" }, { "type": "text", "text": ", and " }, { "type": "inlineMath", "tex": "a_1=1" }, { "type": "text", "text": " to keep the recurrence inside " }, { "type": "inlineMath", "tex": "(0,1]" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Prove the lower bound by induction using " }, { "type": "inlineMath", "tex": "\\sin x\\ge x-x^3/6" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "After squaring and clearing denominators, verify the remaining polynomial inequality by factoring " }, { "type": "inlineMath", "tex": "24n^2-11n+1" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Square the lower bound on " }, { "type": "inlineMath", "tex": "a_n" }, { "type": "text", "text": " and apply the comparison test." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Elementary sine bounds",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For " },
+        { "type": "inlineMath", "tex": "x>0" },
+        { "type": "text", "text": ", one has " },
+        { "type": "inlineMath", "tex": "\\sin x<x" },
+        { "type": "text", "text": ". On " },
+        { "type": "inlineMath", "tex": "[0,1]" },
+        { "type": "text", "text": ", Taylor's theorem or the alternating-series estimate also gives " },
+        { "type": "inlineMath", "tex": "\\sin x\\ge x-x^3/6" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "title": "Monotonicity of sine near zero",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The sine function is increasing on " },
+        { "type": "inlineMath", "tex": "[0,\\pi/2]" },
+        { "type": "text", "text": ". Thus lower bounds for an input in this interval can be passed through " },
+        { "type": "inlineMath", "tex": "\\sin" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "title": "Comparison with the harmonic series",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If nonnegative terms satisfy " },
+        { "type": "inlineMath", "tex": "u_n\\ge1/n" },
+        { "type": "text", "text": " for all sufficiently large " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": ", then " },
+        { "type": "inlineMath", "tex": "\\sum u_n" },
+        { "type": "text", "text": " diverges because " },
+        { "type": "inlineMath", "tex": "\\sum 1/n" },
+        { "type": "text", "text": " diverges." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "We have " },
+        { "type": "inlineMath", "tex": "a_1=\\sin(\\pi/2)=1" },
+        { "type": "text", "text": ". Since " },
+        { "type": "inlineMath", "tex": "0<\\sin x<x" },
+        { "type": "text", "text": " for " },
+        { "type": "inlineMath", "tex": "0<x\\le\\pi/2" },
+        { "type": "text", "text": ", the sequence is positive and strictly decreasing. In particular, " },
+        { "type": "inlineMath", "tex": "0<a_n\\le1" },
+        { "type": "text", "text": " for " },
+        { "type": "inlineMath", "tex": "n\\ge1" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "We claim that" }
+      ] },
+      { "type": "displayMath", "tex": "a_n\\ge\\frac1{\\sqrt n}\\qquad(n\\ge1)." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The case " },
+        { "type": "inlineMath", "tex": "n=1" },
+        { "type": "text", "text": " is equality. Assume the claim holds at " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": ". Because sine is increasing on " },
+        { "type": "inlineMath", "tex": "[0,1]" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "a_n\\le1" },
+        { "type": "text", "text": "," }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned}a_{n+1}&=\\sin(a_n)\\\\&\\ge\\sin\\!\\left(\\frac1{\\sqrt n}\\right)\\\\&\\ge\\frac1{\\sqrt n}-\\frac1{6n^{3/2}}\\\\&=\\frac{6n-1}{6n^{3/2}}.\\end{aligned}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "It remains to compare the last expression with " },
+        { "type": "inlineMath", "tex": "1/\\sqrt{n+1}" },
+        { "type": "text", "text": ". Both are positive. Squaring and clearing denominators gives the equivalent inequality" }
+      ] },
+      { "type": "displayMath", "tex": "(n+1)(6n-1)^2\\ge36n^3." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The difference between the two sides is" }
+      ] },
+      { "type": "displayMath", "tex": "24n^2-11n+1=(3n-1)(8n-1)>0" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "for every " },
+        { "type": "inlineMath", "tex": "n\\ge1" },
+        { "type": "text", "text": ". This completes the induction." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Consequently " },
+        { "type": "inlineMath", "tex": "a_n^2\\ge1/n" },
+        { "type": "text", "text": " for every " },
+        { "type": "inlineMath", "tex": "n\\ge1" },
+        { "type": "text", "text": ". Since the harmonic series diverges, the comparison test shows that" }
+      ] },
+      { "type": "displayMath", "tex": "\\boxed{\\displaystyle\\sum_{n=1}^{\\infty}a_n^2\\text{ diverges}.}" }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2020 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2020Putnam_final.pdf" },
+    { "kind": "solution", "label": "MAA official 2020 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2020-Putnam-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2020 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2020s.tex" }
+  ]
+}

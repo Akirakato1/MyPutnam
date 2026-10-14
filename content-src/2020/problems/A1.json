@@ -1,0 +1,227 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2020",
+  "problemId": "A1",
+  "label": "A1",
+  "ordinal": 1,
+  "topics": ["number-theory", "combinatorics"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A1" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "How many positive integers " },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": " satisfy all of the following three conditions?" }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "(i) " },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": " is divisible by " },
+        { "type": "inlineMath", "tex": "2020" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "(ii) " },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": " has at most " },
+        { "type": "inlineMath", "tex": "2020" },
+        { "type": "text", "text": " decimal digits." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "(iii) The decimal digits of " },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": " are a string of consecutive ones followed by a string of consecutive zeros." }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Name the two digit blocks",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let the number contain " },
+        { "type": "inlineMath", "tex": "j" },
+        { "type": "text", "text": " ones followed by " },
+        { "type": "inlineMath", "tex": "k" },
+        { "type": "text", "text": " zeros. Write " },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": " algebraically before applying divisibility tests." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Split the prime factors of 2020",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "2020=2^2\\cdot5\\cdot101." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "The trailing zeros control divisibility by " },
+          { "type": "inlineMath", "tex": "2^2\\cdot5" },
+          { "type": "text", "text": ", while the block of ones controls divisibility by " },
+          { "type": "inlineMath", "tex": "101" },
+          { "type": "text", "text": "." }
+        ] }
+      ] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Find the period modulo 101",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "10^2\\equiv-1\\pmod{101}," },
+        { "type": "displayMath", "tex": "10^4\\equiv1\\pmod{101}." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "Therefore " },
+          { "type": "inlineMath", "tex": "101\\mid(10^j-1)" },
+          { "type": "text", "text": " exactly when " },
+          { "type": "inlineMath", "tex": "4\\mid j" },
+          { "type": "text", "text": ". Since " },
+          { "type": "inlineMath", "tex": "9" },
+          { "type": "text", "text": " is invertible modulo " },
+          { "type": "inlineMath", "tex": "101" },
+          { "type": "text", "text": ", the same criterion applies to the repunit " },
+          { "type": "inlineMath", "tex": "(10^j-1)/9" },
+          { "type": "text", "text": "." }
+        ] }
+      ] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Count the admissible pairs",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Show that admissibility is equivalent to " }, { "type": "inlineMath", "tex": "4\\mid j" }, { "type": "text", "text": ", " }, { "type": "inlineMath", "tex": "k\\ge2" }, { "type": "text", "text": ", and " }, { "type": "inlineMath", "tex": "j+k\\le2020" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Write " }, { "type": "inlineMath", "tex": "j=4m" }, { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "1\\le m\\le504" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "For each " }, { "type": "inlineMath", "tex": "m" }, { "type": "text", "text": ", count the integers " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": " in " }, { "type": "inlineMath", "tex": "2\\le k\\le2020-4m" }, { "type": "text", "text": ", then sum." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "A block of ones followed by zeros",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "The decimal integer with " },
+          { "type": "inlineMath", "tex": "j" },
+          { "type": "text", "text": " ones followed by " },
+          { "type": "inlineMath", "tex": "k" },
+          { "type": "text", "text": " zeros is" }
+        ] },
+        { "type": "displayMath", "tex": "R_j=1+10+\\cdots+10^{j-1}=\\frac{10^j-1}{9}," },
+        { "type": "displayMath", "tex": "N=R_j10^k." }
+      ] }
+    },
+    {
+      "order": 2,
+      "title": "Multiplicative order",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " },
+        { "type": "inlineMath", "tex": "\\gcd(a,m)=1" },
+        { "type": "text", "text": ", the powers of " },
+        { "type": "inlineMath", "tex": "a" },
+        { "type": "text", "text": " modulo " },
+        { "type": "inlineMath", "tex": "m" },
+        { "type": "text", "text": " are periodic. The least positive " },
+        { "type": "inlineMath", "tex": "r" },
+        { "type": "text", "text": " with " },
+        { "type": "inlineMath", "tex": "a^r\\equiv1\\pmod m" },
+        { "type": "text", "text": " is the multiplicative order, and it divides every exponent producing residue " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "title": "Counting an integer interval",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For integers " },
+        { "type": "inlineMath", "tex": "L\\le U" },
+        { "type": "text", "text": ", there are " },
+        { "type": "inlineMath", "tex": "U-L+1" },
+        { "type": "text", "text": " integers in the inclusive interval. Also " },
+        { "type": "inlineMath", "tex": "1+2+\\cdots+n=n(n+1)/2" },
+        { "type": "text", "text": "." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Suppose that " },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": " has " },
+        { "type": "inlineMath", "tex": "j\\ge1" },
+        { "type": "text", "text": " ones followed by " },
+        { "type": "inlineMath", "tex": "k\\ge0" },
+        { "type": "text", "text": " zeros. Then" }
+      ] },
+      { "type": "displayMath", "tex": "N=\\frac{10^j-1}{9}\\,10^k,\\qquad j+k\\le2020." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Factor " },
+        { "type": "inlineMath", "tex": "2020=2^2\\cdot5\\cdot101" },
+        { "type": "text", "text": ". The repunit " },
+        { "type": "inlineMath", "tex": "(10^j-1)/9" },
+        { "type": "text", "text": " is odd and is not divisible by " },
+        { "type": "inlineMath", "tex": "5" },
+        { "type": "text", "text": ", so the factors " },
+        { "type": "inlineMath", "tex": "2^2\\cdot5" },
+        { "type": "text", "text": " divide " },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": " exactly when " },
+        { "type": "inlineMath", "tex": "k\\ge2" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Because " },
+        { "type": "inlineMath", "tex": "9" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "10" },
+        { "type": "text", "text": " are both invertible modulo " },
+        { "type": "inlineMath", "tex": "101" },
+        { "type": "text", "text": ", divisibility by " },
+        { "type": "inlineMath", "tex": "101" },
+        { "type": "text", "text": " is equivalent to " },
+        { "type": "inlineMath", "tex": "10^j\\equiv1\\pmod{101}" },
+        { "type": "text", "text": ". Now" }
+      ] },
+      { "type": "displayMath", "tex": "10^2\\equiv-1\\pmod{101}," },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "so " },
+        { "type": "inlineMath", "tex": "10" },
+        { "type": "text", "text": " has order " },
+        { "type": "inlineMath", "tex": "4" },
+        { "type": "text", "text": " modulo " },
+        { "type": "inlineMath", "tex": "101" },
+        { "type": "text", "text": ". Hence " },
+        { "type": "inlineMath", "tex": "101\\mid N" },
+        { "type": "text", "text": " exactly when " },
+        { "type": "inlineMath", "tex": "4\\mid j" },
+        { "type": "text", "text": ". Thus all three conditions are equivalent to" }
+      ] },
+      { "type": "displayMath", "tex": "j=4m,\\qquad 1\\le m\\le504,\\qquad 2\\le k\\le2020-4m." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For fixed " },
+        { "type": "inlineMath", "tex": "m" },
+        { "type": "text", "text": ", the number of possible values of " },
+        { "type": "inlineMath", "tex": "k" },
+        { "type": "text", "text": " is " },
+        { "type": "inlineMath", "tex": "2019-4m" },
+        { "type": "text", "text": ". Therefore the requested count is" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned}\\sum_{m=1}^{504}(2019-4m)&=504\\cdot2019-2\\cdot504\\cdot505\\\\&=504(2019-1010)\\\\&=504\\cdot1009\\\\&=508536.\\end{aligned}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Hence the number of positive integers satisfying the three conditions is " },
+        { "type": "inlineMath", "tex": "\\boxed{508536}" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2020 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2020Putnam_final.pdf" },
+    { "kind": "solution", "label": "MAA official 2020 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2020-Putnam-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2020 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2020s.tex" }
+  ]
+}
