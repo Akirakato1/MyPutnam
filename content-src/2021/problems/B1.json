@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2021",
+  "problemId": "B1",
+  "label": "B1",
+  "ordinal": 7,
+  "topics": ["probability", "geometry"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B1" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Suppose that the plane is tiled with an infinite checkerboard of unit squares. If another unit square is dropped on the plane at random, with position and orientation independent of the checkerboard tiling, what is the probability that it does not cover any of the corners of the squares of the checkerboard?" }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Reduce position modulo the lattice",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Record the dropped square by its center modulo " },
+        { "type": "inlineMath", "tex": "\\mathbb Z^2" },
+        { "type": "text", "text": " and its orientation modulo a quarter-turn. Thus the center is uniform in one unit cell and the angle " },
+        { "type": "inlineMath", "tex": "\\theta" },
+        { "type": "text", "text": " is uniform on " },
+        { "type": "inlineMath", "tex": "[0,\\pi/2]" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Fix the orientation first",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For a fixed angle " },
+        { "type": "inlineMath", "tex": "\\theta" },
+        { "type": "text", "text": ", determine the area of the set of safe centers in a unit fundamental square. This area is the conditional probability for that orientation." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Use the inset-square geometry",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "A square of orientation " },
+          { "type": "inlineMath", "tex": "\\theta" },
+          { "type": "text", "text": " circumscribed about an axis-aligned unit cell has side length " },
+          { "type": "inlineMath", "tex": "\\sin\\theta+\\cos\\theta" },
+          { "type": "text", "text": ". The safe centers form the square left after moving every side inward by " },
+          { "type": "inlineMath", "tex": "1/2" },
+          { "type": "text", "text": "." }
+        ] },
+        { "type": "displayMath", "tex": "A(\\theta)=(\\sin\\theta+\\cos\\theta-1)^2." }
+      ] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Average over all orientations",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Use the safe-center area as the probability conditional on " }, { "type": "inlineMath", "tex": "\\theta" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Average it with density " }, { "type": "inlineMath", "tex": "2/\\pi" }, { "type": "text", "text": " on " }, { "type": "inlineMath", "tex": "[0,\\pi/2]" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Expand the square and integrate the elementary sine and cosine terms." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Fundamental domains",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "A translation-invariant random position relative to the checkerboard is represented by a uniform point in one unit square. Translating the center by a vector in " },
+        { "type": "inlineMath", "tex": "\\mathbb Z^2" },
+        { "type": "text", "text": " does not change whether a lattice corner is covered." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "title": "Width of a rotated square",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The horizontal or vertical span of a unit square rotated through " },
+        { "type": "inlineMath", "tex": "\\theta\\in[0,\\pi/2]" },
+        { "type": "text", "text": " is " },
+        { "type": "inlineMath", "tex": "\\sin\\theta+\\cos\\theta" },
+        { "type": "text", "text": ", obtained by projecting its two perpendicular unit sides." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "title": "Conditional probability by area",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "When a center is uniform in a region of area " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": ", the probability of lying in a measurable safe subset equals that subset's area. The unconditional probability is the average of these conditional areas over the orientation." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The probability is" }
+      ] },
+      { "type": "displayMath", "tex": "\\boxed{2-\\frac{6}{\\pi}}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Choose one checkerboard cell " },
+        { "type": "inlineMath", "tex": "Q=[0,1]^2" },
+        { "type": "text", "text": ". Translation invariance lets us take the center of the dropped square uniformly in " },
+        { "type": "inlineMath", "tex": "Q" },
+        { "type": "text", "text": ". Because a square is unchanged by a quarter-turn, its orientation " },
+        { "type": "inlineMath", "tex": "\\theta" },
+        { "type": "text", "text": " may be taken uniformly in " },
+        { "type": "inlineMath", "tex": "[0,\\pi/2]" },
+        { "type": "text", "text": ", independently of the center." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Fix " },
+        { "type": "inlineMath", "tex": "\\theta" },
+        { "type": "text", "text": ". Draw the square " },
+        { "type": "inlineMath", "tex": "Q_\\theta" },
+        { "type": "text", "text": " of orientation " },
+        { "type": "inlineMath", "tex": "\\theta" },
+        { "type": "text", "text": " circumscribed about " },
+        { "type": "inlineMath", "tex": "Q" },
+        { "type": "text", "text": ". Projection onto either side direction gives its side length:" }
+      ] },
+      { "type": "displayMath", "tex": "\\operatorname{side}(Q_\\theta)=\\sin\\theta+\\cos\\theta." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "A center is safe exactly when it is more than " },
+        { "type": "inlineMath", "tex": "1/2" },
+        { "type": "text", "text": " from every side of " },
+        { "type": "inlineMath", "tex": "Q_\\theta" },
+        { "type": "text", "text": ". Indeed, crossing one of these four offset lines is precisely when the corresponding corner of " },
+        { "type": "inlineMath", "tex": "Q" },
+        { "type": "text", "text": " enters the dropped unit square. Hence the safe centers form the concentric square obtained by moving each side of " },
+        { "type": "inlineMath", "tex": "Q_\\theta" },
+        { "type": "text", "text": " inward by " },
+        { "type": "inlineMath", "tex": "1/2" },
+        { "type": "text", "text": ". Its side length and area are" }
+      ] },
+      { "type": "displayMath", "tex": "\\ell(\\theta)=\\sin\\theta+\\cos\\theta-1,\\qquad A(\\theta)=\\ell(\\theta)^2." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Boundary cases have area zero and do not affect the probability. Thus the required probability is the orientation average" }
+      ] },
+      { "type": "displayMath", "tex": "\\frac{2}{\\pi}\\int_0^{\\pi/2}(\\sin\\theta+\\cos\\theta-1)^2\\,d\\theta." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Expanding the integrand gives" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned}(\\sin\\theta+\\cos\\theta-1)^2&=2+\\sin(2\\theta)\\\\&\\quad-2\\sin\\theta-2\\cos\\theta.\\end{aligned}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Therefore" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned}\\frac{2}{\\pi}\\int_0^{\\pi/2}A(\\theta)\\,d\\theta&=\\frac{2}{\\pi}\\left(\\pi+1-2-2\\right)\\\\&=2-\\frac{6}{\\pi}.\\end{aligned}" }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2021 problems", "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2021 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems-and-solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2021 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2021s.tex" }
+  ]
+}

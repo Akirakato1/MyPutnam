@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2021",
+  "problemId": "B2",
+  "label": "B2",
+  "ordinal": 8,
+  "topics": ["inequalities", "sequences-series"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B2" }] },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Determine the maximum value of the sum" }] },
+      { "type": "displayMath", "tex": "S=\\sum_{n=1}^{\\infty}\\frac{n}{2^n}(a_1a_2\\cdots a_n)^{1/n}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "over all sequences " },
+        { "type": "inlineMath", "tex": "a_1,a_2,a_3,\\ldots" },
+        { "type": "text", "text": " of nonnegative real numbers satisfying" }
+      ] },
+      { "type": "displayMath", "tex": "\\sum_{k=1}^{\\infty}a_k=1." }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Build a weighted AM–GM estimate",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Try applying AM–GM to the " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " numbers " },
+        { "type": "inlineMath", "tex": "4a_1,4^2a_2,\\ldots,4^na_n" },
+        { "type": "text", "text": ". Their geometric mean has exactly the powers of " },
+        { "type": "inlineMath", "tex": "2" },
+        { "type": "text", "text": " needed by the series." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Cancel the factor n",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [{ "type": "text", "text": "The AM–GM inequality gives" }] },
+        { "type": "displayMath", "tex": "2^{n+1}(a_1\\cdots a_n)^{1/n}\\le\\frac1n\\sum_{k=1}^n4^ka_k." },
+        { "type": "paragraph", "runs": [{ "type": "text", "text": "Multiply by the coefficient from the definition of the series and simplify before summing over " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": "." }] }
+      ] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Reverse a nonnegative double sum",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "After the estimate, interchange the sums over " },
+        { "type": "inlineMath", "tex": "1\\le k\\le n" },
+        { "type": "text", "text": ". Nonnegativity justifies the interchange, and for fixed " },
+        { "type": "inlineMath", "tex": "k" },
+        { "type": "text", "text": " the remaining geometric series begins at " },
+        { "type": "inlineMath", "tex": "n=k" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Track the equality case",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Obtain a universal upper bound using AM–GM and the constraint " }, { "type": "inlineMath", "tex": "\\sum a_k=1" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "AM–GM is equal for every prefix when " }, { "type": "inlineMath", "tex": "4^ka_k" }, { "type": "text", "text": " is independent of " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Normalize that geometric sequence and verify that it attains the bound." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Arithmetic–geometric mean inequality",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For nonnegative " },
+        { "type": "inlineMath", "tex": "x_1,\\ldots,x_n" },
+        { "type": "text", "text": "," }
+      ] }, { "type": "displayMath", "tex": "(x_1\\cdots x_n)^{1/n}\\le\\frac{x_1+\\cdots+x_n}{n}," }, { "type": "paragraph", "runs": [
+        { "type": "text", "text": "with equality exactly when all positive entries are equal." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "title": "Tonelli for series",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "A double series of nonnegative terms may be summed in either order, even before convergence has been established. This is the series form of Tonelli's theorem." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "title": "Geometric series",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For fixed " },
+        { "type": "inlineMath", "tex": "k" },
+        { "type": "text", "text": "," }
+      ] }, { "type": "displayMath", "tex": "\\sum_{n=k}^{\\infty}4^{k-n}=\\sum_{m=0}^{\\infty}4^{-m}=\\frac43." }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "The maximum value is" }] },
+      { "type": "displayMath", "tex": "\\boxed{\\frac23}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Fix " },
+        { "type": "inlineMath", "tex": "n\\ge1" },
+        { "type": "text", "text": " and apply AM–GM to " },
+        { "type": "inlineMath", "tex": "4a_1,4^2a_2,\\ldots,4^na_n" },
+        { "type": "text", "text": ". Their product is " },
+        { "type": "inlineMath", "tex": "4^{1+2+\\cdots+n}a_1\\cdots a_n" },
+        { "type": "text", "text": ", so their geometric mean is " },
+        { "type": "inlineMath", "tex": "2^{n+1}(a_1\\cdots a_n)^{1/n}" },
+        { "type": "text", "text": ". Therefore" }
+      ] },
+      { "type": "displayMath", "tex": "2^{n+1}(a_1\\cdots a_n)^{1/n}\\le\\frac1n\\sum_{k=1}^n4^ka_k." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Equivalently," }
+      ] },
+      { "type": "displayMath", "tex": "\\frac{n}{2^n}(a_1\\cdots a_n)^{1/n}\\le\\frac12\\sum_{k=1}^n4^{k-n}a_k." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "All terms are nonnegative, so we may sum this inequality and reverse the order of summation:" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned}S&\\le\\frac12\\sum_{n=1}^{\\infty}\\sum_{k=1}^n4^{k-n}a_k\\\\&=\\frac12\\sum_{k=1}^{\\infty}a_k\\sum_{n=k}^{\\infty}4^{k-n}\\\\&=\\frac12\\sum_{k=1}^{\\infty}a_k\\cdot\\frac43=\\frac23.\\end{aligned}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "It remains to show that the bound is attained. Equality in every prefix AM–GM inequality asks that " },
+        { "type": "inlineMath", "tex": "4^ka_k" },
+        { "type": "text", "text": " be constant. Choose" }
+      ] },
+      { "type": "displayMath", "tex": "a_k=\\frac{3}{4^k}\\qquad(k\\ge1)." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "This is admissible because" }
+      ] },
+      { "type": "displayMath", "tex": "\\sum_{k=1}^{\\infty}a_k=3\\sum_{k=1}^{\\infty}4^{-k}=1." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For this sequence, " },
+        { "type": "inlineMath", "tex": "4^ka_k=3" },
+        { "type": "text", "text": " for every " },
+        { "type": "inlineMath", "tex": "k" },
+        { "type": "text", "text": ", so equality holds in every AM–GM step and hence in the summed bound. Thus " },
+        { "type": "inlineMath", "tex": "2/3" },
+        { "type": "text", "text": " is the maximum, not merely a supremum." }
+      ] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2021 problems", "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2021 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems-and-solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2021 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2021s.tex" }
+  ]
+}
