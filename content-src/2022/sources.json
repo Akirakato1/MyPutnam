@@ -1,0 +1,57 @@
+{
+  "year": 2022,
+  "publisher": "Mathematical Association of America",
+  "usage": "Personal, noncommercial offline study only.",
+  "sources": [
+    {
+      "id": "problems",
+      "title": "2022 William Lowell Putnam Mathematical Competition — Problems for Sessions A and B",
+      "publisher": "Mathematical Association of America",
+      "requestUrl": "https://maa.org/wp-content/uploads/2024/10/2022_Putnam_Competitions.pdf",
+      "url": "https://maa.org/wp-content/uploads/2024/10/2022_Putnam_Competitions.pdf",
+      "mediaType": "application/pdf",
+      "retrievedOn": "2026-10-13",
+      "file": "original/2022-problems.pdf",
+      "byteLength": 635574,
+      "pageCount": 2,
+      "sha256": "849d3023d6b19dba9a748aa2dee64b003e9c9bfc60e0a9d5612c16c974200974"
+    },
+    {
+      "id": "solutions",
+      "title": "2022 William Lowell Putnam Mathematical Competition — Official Problems and Solutions",
+      "publisher": "Mathematical Association of America",
+      "requestUrl": "https://maa.org/wp-content/uploads/2024/10/2022-Putnam-solutions.pdf",
+      "url": "https://maa.org/wp-content/uploads/2024/10/2022-Putnam-solutions.pdf",
+      "mediaType": "application/pdf",
+      "retrievedOn": "2026-10-13",
+      "file": "original/2022-solutions.pdf",
+      "byteLength": 267952,
+      "pageCount": 23,
+      "sha256": "b1299053a4086fca02fa211204d5cabee028604af575f5871f96025f359e8be0"
+    },
+    {
+      "id": "kedlaya-statements",
+      "title": "Putnam 2022 problem statements — TeX cross-check",
+      "publisher": "Kiran S. Kedlaya",
+      "requestUrl": "https://kskedlaya.org/putnam-archive/2022.tex",
+      "url": "https://kskedlaya.org/putnam-archive/2022.tex",
+      "mediaType": "application/x-tex",
+      "retrievedOn": "2026-10-13",
+      "file": "original/2022.tex",
+      "byteLength": 4186,
+      "sha256": "03e3b0d683c6cee67d8cd47748bdf2eacd713df13a4e3458300db79887ea228d"
+    },
+    {
+      "id": "kedlaya-solutions",
+      "title": "Putnam 2022 solutions — TeX cross-check",
+      "publisher": "Kiran S. Kedlaya",
+      "requestUrl": "https://kskedlaya.org/putnam-archive/2022s.tex",
+      "url": "https://kskedlaya.org/putnam-archive/2022s.tex",
+      "mediaType": "application/x-tex",
+      "retrievedOn": "2026-10-13",
+      "file": "original/2022s.tex",
+      "byteLength": 33980,
+      "sha256": "10a7a4a8e59f5fb5bc9d75a36581c161bc95dcb2d9ed2d3d2d55100c1bbd41d4"
+    }
+  ]
+}
