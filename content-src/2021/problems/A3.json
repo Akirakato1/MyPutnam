@@ -1,0 +1,209 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2021",
+  "problemId": "A3",
+  "label": "A3",
+  "ordinal": 3,
+  "topics": ["geometry", "linear-algebra", "number-theory"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A3" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Determine all positive integers " },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": " for which the sphere" }
+      ] },
+      { "type": "displayMath", "tex": "x^2+y^2+z^2=N" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "has an inscribed regular tetrahedron whose vertices have integer coordinates." }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Translate geometry into dot products",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Represent the four vertices by vectors " },
+        { "type": "inlineMath", "tex": "v_1,\\ldots,v_4\\in\\mathbb Z^3" },
+        { "type": "text", "text": ". Their squared norms are all " },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": ", and equal edge lengths make every off-diagonal dot product the same." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Build a Gram matrix",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "First show that " },
+        { "type": "inlineMath", "tex": "v_1+v_2+v_3+v_4=0" },
+        { "type": "text", "text": ". Dot this identity with one vertex to determine the common dot product, then form the Gram matrix of any three vertices." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Use the Gram determinant identity",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "If the rows of an integer matrix " },
+          { "type": "inlineMath", "tex": "V" },
+          { "type": "text", "text": " are three vertex vectors, then" }
+        ] },
+        { "type": "displayMath", "tex": "\\det(VV^{\\mathsf T})=(\\det V)^2." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "The right side is a perfect square. Compute the determinant of the resulting three-by-three Gram matrix and compare prime exponents." }
+        ] }
+      ] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Prove necessity and sufficiency",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Use the common dot product and zero centroid to prove that " }, { "type": "inlineMath", "tex": "3\\mid N" }, { "type": "text", "text": "; write " }, { "type": "inlineMath", "tex": "N=3k" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Compute the Gram determinant as a constant times " }, { "type": "inlineMath", "tex": "k^3" }, { "type": "text", "text": " and use that it is an integer square to constrain every prime exponent of " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "For the converse, choose four sign patterns of " }, { "type": "inlineMath", "tex": "(m,m,m)" }, { "type": "text", "text": " and check both their norms and pairwise distances." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Distances and dot products",
+      "document": { "blocks": [{ "type": "displayMath", "tex": "\\|u-v\\|^2=\\|u\\|^2+\\|v\\|^2-2u\\cdot v." }] }
+    },
+    {
+      "order": 2,
+      "title": "Gram matrices and determinants",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For a matrix " },
+        { "type": "inlineMath", "tex": "V" },
+        { "type": "text", "text": " whose rows are vectors, " },
+        { "type": "inlineMath", "tex": "VV^{\\mathsf T}" },
+        { "type": "text", "text": " is their Gram matrix. For a square matrix," }
+      ] }, { "type": "displayMath", "tex": "\\det(VV^{\\mathsf T})=\\det(V)\\det(V^{\\mathsf T})=(\\det V)^2." }] }
+    },
+    {
+      "order": 3,
+      "title": "Recognizing perfect squares by prime exponents",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "A positive integer is a square exactly when every exponent in its prime factorization is even. Thus, if " },
+        { "type": "inlineMath", "tex": "16k^3" },
+        { "type": "text", "text": " is a square, then " },
+        { "type": "inlineMath", "tex": "3v_p(k)+v_p(16)" },
+        { "type": "text", "text": " is even for every prime " },
+        { "type": "inlineMath", "tex": "p" },
+        { "type": "text", "text": ". Since " },
+        { "type": "inlineMath", "tex": "v_p(16)" },
+        { "type": "text", "text": " is even, every " },
+        { "type": "inlineMath", "tex": "v_p(k)" },
+        { "type": "text", "text": " is even." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The required integers are exactly" }
+      ] },
+      { "type": "displayMath", "tex": "N=3m^2\\qquad(m\\in\\mathbb Z_{>0})." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "First suppose such a tetrahedron exists, and write its vertex vectors as " },
+        { "type": "inlineMath", "tex": "v_1,v_2,v_3,v_4\\in\\mathbb Z^3" },
+        { "type": "text", "text": ". Because all vertices lie on the sphere, " },
+        { "type": "inlineMath", "tex": "\\|v_i\\|^2=N" },
+        { "type": "text", "text": ". Because all six edges have the same length, the identity" }
+      ] },
+      { "type": "displayMath", "tex": "\\|v_i-v_j\\|^2=2N-2v_i\\cdot v_j" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "shows that " },
+        { "type": "inlineMath", "tex": "v_i\\cdot v_j=c" },
+        { "type": "text", "text": " is the same constant whenever " },
+        { "type": "inlineMath", "tex": "i\\ne j" },
+        { "type": "text", "text": ". Let " },
+        { "type": "inlineMath", "tex": "S=v_1+v_2+v_3+v_4" },
+        { "type": "text", "text": ". For any " },
+        { "type": "inlineMath", "tex": "i,j" },
+        { "type": "text", "text": "," }
+      ] },
+      { "type": "displayMath", "tex": "S\\cdot(v_i-v_j)=(N+3c)-(N+3c)=0." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The three independent edge directions of a nondegenerate tetrahedron span " },
+        { "type": "inlineMath", "tex": "\\mathbb R^3" },
+        { "type": "text", "text": ", so " },
+        { "type": "inlineMath", "tex": "S=0" },
+        { "type": "text", "text": ". Taking the dot product with any " },
+        { "type": "inlineMath", "tex": "v_i" },
+        { "type": "text", "text": " gives " },
+        { "type": "inlineMath", "tex": "N+3c=0" },
+        { "type": "text", "text": ". Hence" }
+      ] },
+      { "type": "displayMath", "tex": "c=-\\frac N3." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The dot product " },
+        { "type": "inlineMath", "tex": "c" },
+        { "type": "text", "text": " is an integer, so " },
+        { "type": "inlineMath", "tex": "3\\mid N" },
+        { "type": "text", "text": ". Write " },
+        { "type": "inlineMath", "tex": "N=3k" },
+        { "type": "text", "text": ". Let " },
+        { "type": "inlineMath", "tex": "V" },
+        { "type": "text", "text": " be the integer matrix whose rows are " },
+        { "type": "inlineMath", "tex": "v_1,v_2,v_3" },
+        { "type": "text", "text": ". Its Gram matrix is" }
+      ] },
+      { "type": "displayMath", "tex": "VV^{\\mathsf T}=k\\begin{pmatrix}3&-1&-1\\\\-1&3&-1\\\\-1&-1&3\\end{pmatrix}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The displayed constant matrix has eigenvalues " },
+        { "type": "inlineMath", "tex": "1,4,4" },
+        { "type": "text", "text": ", so its determinant is " },
+        { "type": "inlineMath", "tex": "16" },
+        { "type": "text", "text": ". Therefore" }
+      ] },
+      { "type": "displayMath", "tex": "(\\det V)^2=\\det(VV^{\\mathsf T})=16k^3." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For every prime " },
+        { "type": "inlineMath", "tex": "p" },
+        { "type": "text", "text": ", the exponent of " },
+        { "type": "inlineMath", "tex": "p" },
+        { "type": "text", "text": " on the left is even. Since " },
+        { "type": "inlineMath", "tex": "v_p(16)" },
+        { "type": "text", "text": " is even, the equality forces " },
+        { "type": "inlineMath", "tex": "3v_p(k)" },
+        { "type": "text", "text": ", and therefore " },
+        { "type": "inlineMath", "tex": "v_p(k)" },
+        { "type": "text", "text": ", to be even. Thus " },
+        { "type": "inlineMath", "tex": "k=m^2" },
+        { "type": "text", "text": " for some positive integer " },
+        { "type": "inlineMath", "tex": "m" },
+        { "type": "text", "text": ", proving the necessity of " },
+        { "type": "inlineMath", "tex": "N=3m^2" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Conversely, if " },
+        { "type": "inlineMath", "tex": "N=3m^2" },
+        { "type": "text", "text": ", take the four integer points" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned}&(-m,-m,-m),\\quad (m,m,-m),\\\\&(m,-m,m),\\quad (-m,m,m).\\end{aligned}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Each has squared norm " },
+        { "type": "inlineMath", "tex": "3m^2=N" },
+        { "type": "text", "text": ". Any two differ in exactly two coordinates, each by " },
+        { "type": "inlineMath", "tex": "2m" },
+        { "type": "text", "text": ", so every edge has length " },
+        { "type": "inlineMath", "tex": "2m\\sqrt2" },
+        { "type": "text", "text": ". They form the desired regular tetrahedron." }
+      ] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2021 problems", "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2021 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems-and-solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2021 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2021s.tex" }
+  ]
+}

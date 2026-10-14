@@ -1,0 +1,174 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2021",
+  "problemId": "A2",
+  "label": "A2",
+  "ordinal": 2,
+  "topics": ["calculus", "analysis"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A2" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For every positive real number " },
+        { "type": "inlineMath", "tex": "x" },
+        { "type": "text", "text": ", let" }
+      ] },
+      { "type": "displayMath", "tex": "g(x)=\\lim_{r\\to0}\\left((x+1)^{r+1}-x^{r+1}\\right)^{1/r}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Find " },
+        { "type": "inlineMath", "tex": "\\displaystyle\\lim_{x\\to\\infty}\\frac{g(x)}{x}" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Expose the indeterminate form",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For fixed " },
+        { "type": "inlineMath", "tex": "x" },
+        { "type": "text", "text": ", the expression inside the outer power tends to " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": ". Taking a logarithm turns the " },
+        { "type": "inlineMath", "tex": "1^{\\infty}" },
+        { "type": "text", "text": " form into a quotient." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Compute the inner limit exactly",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Set " },
+        { "type": "inlineMath", "tex": "A(r)=(x+1)^{r+1}-x^{r+1}" },
+        { "type": "text", "text": ". Evaluate " },
+        { "type": "inlineMath", "tex": "\\lim_{r\\to0}\\log A(r)/r" },
+        { "type": "text", "text": ", then exponentiate to obtain a closed form for " },
+        { "type": "inlineMath", "tex": "g(x)" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Differentiate powers with respect to the exponent",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "For a fixed positive number " },
+          { "type": "inlineMath", "tex": "a" },
+          { "type": "text", "text": "," }
+        ] },
+        { "type": "displayMath", "tex": "\\frac{d}{dr}a^{r+1}=a^{r+1}\\log a." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "Because " },
+          { "type": "inlineMath", "tex": "A(0)=1" },
+          { "type": "text", "text": ", l'Hôpital's rule makes the logarithmic limit equal to " },
+          { "type": "inlineMath", "tex": "A'(0)" },
+          { "type": "text", "text": "." }
+        ] }
+      ] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Reduce to the standard limit for e",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Take logarithms and apply l'Hôpital's rule at " }, { "type": "inlineMath", "tex": "r=0" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Exponentiate and simplify " }, { "type": "inlineMath", "tex": "g(x)" }, { "type": "text", "text": " into a product involving " }, { "type": "inlineMath", "tex": "(1+1/x)^x" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Divide by " }, { "type": "inlineMath", "tex": "x" }, { "type": "text", "text": " and use the standard exponential limit." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Logarithms of variable powers",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For positive " },
+        { "type": "inlineMath", "tex": "B(r)" },
+        { "type": "text", "text": ", the limit of " },
+        { "type": "inlineMath", "tex": "B(r)^{1/r}" },
+        { "type": "text", "text": " can be found by first studying " },
+        { "type": "inlineMath", "tex": "\\log B(r)/r" },
+        { "type": "text", "text": " and then applying the continuity of the exponential function." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "title": "L'Hôpital's rule at zero",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If differentiable functions " },
+        { "type": "inlineMath", "tex": "F" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "H" },
+        { "type": "text", "text": " both tend to zero and the usual hypotheses hold, then " },
+        { "type": "inlineMath", "tex": "\\lim F/H=\\lim F'/H'" },
+        { "type": "text", "text": ". Here the denominator is simply " },
+        { "type": "inlineMath", "tex": "r" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "title": "The defining exponential limit",
+      "document": { "blocks": [{ "type": "displayMath", "tex": "\\lim_{x\\to\\infty}\\left(1+\\frac1x\\right)^x=e." }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Fix " },
+        { "type": "inlineMath", "tex": "x>0" },
+        { "type": "text", "text": " and put " },
+        { "type": "inlineMath", "tex": "A(r)=(x+1)^{r+1}-x^{r+1}" },
+        { "type": "text", "text": ". For " },
+        { "type": "inlineMath", "tex": "r" },
+        { "type": "text", "text": " sufficiently close to zero, " },
+        { "type": "inlineMath", "tex": "r+1>0" },
+        { "type": "text", "text": " and hence " },
+        { "type": "inlineMath", "tex": "A(r)>0" },
+        { "type": "text", "text": ". Also " },
+        { "type": "inlineMath", "tex": "A(0)=1" },
+        { "type": "text", "text": ". Therefore" }
+      ] },
+      { "type": "displayMath", "tex": "\\log g(x)=\\lim_{r\\to0}\\frac{\\log A(r)}{r}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The quotient has the form " },
+        { "type": "inlineMath", "tex": "0/0" },
+        { "type": "text", "text": ". By l'Hôpital's rule," }
+      ] },
+      { "type": "displayMath", "tex": "A'(r)=(x+1)^{r+1}\\log(x+1)-x^{r+1}\\log x," },
+      { "type": "displayMath", "tex": "\\log g(x)=\\lim_{r\\to0}\\frac{A'(r)}{A(r)}=\\frac{A'(0)}{A(0)}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Substituting " },
+        { "type": "inlineMath", "tex": "r=0" },
+        { "type": "text", "text": " gives" }
+      ] },
+      { "type": "displayMath", "tex": "\\log g(x)=(x+1)\\log(x+1)-x\\log x." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Exponentiating yields the exact formula" }
+      ] },
+      { "type": "displayMath", "tex": "g(x)=\\frac{(x+1)^{x+1}}{x^x}=(x+1)\\left(1+\\frac1x\\right)^x." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Consequently," }
+      ] },
+      { "type": "displayMath", "tex": "\\frac{g(x)}x=\\left(1+\\frac1x\\right)\\left(1+\\frac1x\\right)^x." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The first factor tends to " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": " and the second tends to " },
+        { "type": "inlineMath", "tex": "e" },
+        { "type": "text", "text": ". Thus" }
+      ] },
+      { "type": "displayMath", "tex": "\\boxed{\\displaystyle\\lim_{x\\to\\infty}\\frac{g(x)}x=e}." }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2021 problems", "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2021 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems-and-solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2021 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2021s.tex" }
+  ]
+}

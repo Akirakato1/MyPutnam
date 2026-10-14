@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2021",
+  "problemId": "A1",
+  "label": "A1",
+  "ordinal": 1,
+  "topics": ["geometry"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A1" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "A grasshopper starts at the origin in the coordinate plane and makes a sequence of hops. Each hop has length " },
+        { "type": "inlineMath", "tex": "5" },
+        { "type": "text", "text": ", and after each hop the grasshopper is at a point whose coordinates are both integers; thus, there are " },
+        { "type": "inlineMath", "tex": "12" },
+        { "type": "text", "text": " possible locations for the grasshopper after the first hop. What is the smallest number of hops needed for the grasshopper to reach the point " },
+        { "type": "inlineMath", "tex": "(2021,2021)" },
+        { "type": "text", "text": "?" }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Track one quantity",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Instead of tracking both coordinates separately, ask how much one hop can increase " },
+        { "type": "inlineMath", "tex": "x+y" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "List the useful displacement types",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "An integer displacement " },
+        { "type": "inlineMath", "tex": "(u,v)" },
+        { "type": "text", "text": " of length " },
+        { "type": "inlineMath", "tex": "5" },
+        { "type": "text", "text": " satisfies " },
+        { "type": "inlineMath", "tex": "u^2+v^2=25" },
+        { "type": "text", "text": ". Identify the displacements that maximize " },
+        { "type": "inlineMath", "tex": "u+v" },
+        { "type": "text", "text": ", then try to use almost entirely those hops." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Use a linear-functional lower bound",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "If every allowed move increases a quantity by at most " },
+          { "type": "inlineMath", "tex": "M" },
+          { "type": "text", "text": ", then reaching a point where that quantity equals " },
+          { "type": "inlineMath", "tex": "T" },
+          { "type": "text", "text": " needs at least " },
+          { "type": "inlineMath", "tex": "\\lceil T/M\\rceil" },
+          { "type": "text", "text": " moves." }
+        ] },
+        { "type": "displayMath", "tex": "4042=7\\cdot 577+3." }
+      ] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Match the lower bound",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Show that every allowed hop changes " }, { "type": "inlineMath", "tex": "x+y" }, { "type": "text", "text": " by at most " }, { "type": "inlineMath", "tex": "7" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Convert the target value " }, { "type": "inlineMath", "tex": "x+y=4042" }, { "type": "text", "text": " into a lower bound on the number of hops." }],
+        [{ "type": "text", "text": "Combine equal numbers of " }, { "type": "inlineMath", "tex": "(3,4)" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "(4,3)" }, { "type": "text", "text": " hops, then correct the small remaining displacement with axis hops." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Integer points on a radius-five circle",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "The integer solutions of " },
+          { "type": "inlineMath", "tex": "u^2+v^2=25" },
+          { "type": "text", "text": " are the sign changes and coordinate swaps of " },
+          { "type": "inlineMath", "tex": "(0,5)" },
+          { "type": "text", "text": " and " },
+          { "type": "inlineMath", "tex": "(3,4)" },
+          { "type": "text", "text": "." }
+        ] },
+        { "type": "displayMath", "tex": "(\\pm5,0),(0,\\pm5),(\\pm3,\\pm4),(\\pm4,\\pm3)." }
+      ] }
+    },
+    {
+      "order": 2,
+      "title": "Bounding moves with a linear functional",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For a displacement " },
+        { "type": "inlineMath", "tex": "(u,v)" },
+        { "type": "text", "text": ", the linear functional " },
+        { "type": "inlineMath", "tex": "L(u,v)=u+v" },
+        { "type": "text", "text": " turns a two-dimensional path into a one-dimensional progress measure. Summing the per-hop bound gives a lower bound for the whole path." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The smallest number is " },
+        { "type": "inlineMath", "tex": "578" },
+        { "type": "text", "text": ". Every hop has an integer displacement " },
+        { "type": "inlineMath", "tex": "(u,v)" },
+        { "type": "text", "text": " satisfying " },
+        { "type": "inlineMath", "tex": "u^2+v^2=25" },
+        { "type": "text", "text": ", so the possible displacements are" }
+      ] },
+      { "type": "displayMath", "tex": "(\\pm5,0),(0,\\pm5),(\\pm3,\\pm4),(\\pm4,\\pm3)." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For each of these vectors, " },
+        { "type": "inlineMath", "tex": "u+v\\le 7" },
+        { "type": "text", "text": ". Therefore after " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " hops the coordinate sum can be at most " },
+        { "type": "inlineMath", "tex": "7n" },
+        { "type": "text", "text": ". At the target the sum is" }
+      ] },
+      { "type": "displayMath", "tex": "2021+2021=4042=7\\cdot 577+3." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Hence " },
+        { "type": "inlineMath", "tex": "577" },
+        { "type": "text", "text": " hops cannot suffice, so at least " },
+        { "type": "inlineMath", "tex": "578" },
+        { "type": "text", "text": " are required." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "This lower bound is attainable because" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned}(2021,2021)&=288(3,4)+288(4,3)\\\\&\\quad +(0,5)+(5,0).\\end{aligned}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "All four displacement types are allowed, and the displayed sum uses " },
+        { "type": "inlineMath", "tex": "288+288+1+1=578" },
+        { "type": "text", "text": " hops. Thus the minimum is " },
+        { "type": "inlineMath", "tex": "578" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2021 problems", "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2021 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems-and-solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2021 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2021s.tex" }
+  ]
+}
