@@ -1,0 +1,278 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2021",
+  "problemId": "A6",
+  "label": "A6",
+  "ordinal": 6,
+  "topics": ["polynomials", "number-theory"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A6" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "P(x)" },
+        { "type": "text", "text": " be a polynomial whose coefficients are all either " },
+        { "type": "inlineMath", "tex": "0" },
+        { "type": "text", "text": " or " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": ". Suppose that " },
+        { "type": "inlineMath", "tex": "P(x)" },
+        { "type": "text", "text": " can be written as a product of two nonconstant polynomials with integer coefficients. Does it follow that " },
+        { "type": "inlineMath", "tex": "P(2)" },
+        { "type": "text", "text": " is a composite integer?" }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Assume the value is prime",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Write " },
+        { "type": "inlineMath", "tex": "P=FG" },
+        { "type": "text", "text": " over the integers and evaluate at " },
+        { "type": "inlineMath", "tex": "2" },
+        { "type": "text", "text": ". If " },
+        { "type": "inlineMath", "tex": "P(2)" },
+        { "type": "text", "text": " were prime, one factor could be normalized to satisfy " },
+        { "type": "inlineMath", "tex": "G(2)=1" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Compare G at one and two",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The polynomial " },
+        { "type": "inlineMath", "tex": "P" },
+        { "type": "text", "text": " has no positive real root, so the normalized factor " },
+        { "type": "inlineMath", "tex": "G" },
+        { "type": "text", "text": " is positive on " },
+        { "type": "inlineMath", "tex": "(0,\\infty)" },
+        { "type": "text", "text": ". Hence " },
+        { "type": "inlineMath", "tex": "G(1)\\ge G(2)=1" },
+        { "type": "text", "text": ". Express both values as products of distances from the roots of " },
+        { "type": "inlineMath", "tex": "G" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Locate one root in a half-plane",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "If " },
+          { "type": "inlineMath", "tex": "\\prod|1-r_i|\\ge\\prod|2-r_i|" },
+          { "type": "text", "text": ", some root " },
+          { "type": "inlineMath", "tex": "\\rho" },
+          { "type": "text", "text": " satisfies " },
+          { "type": "inlineMath", "tex": "|1-\\rho|\\ge|2-\\rho|" },
+          { "type": "text", "text": ". Squaring shows " },
+          { "type": "inlineMath", "tex": "\\operatorname{Re}\\rho\\ge3/2" },
+          { "type": "text", "text": ", and hence " },
+          { "type": "inlineMath", "tex": "|\\rho|\\ge3/2" },
+          { "type": "text", "text": "." }
+        ] }
+      ] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Use the 0-1 coefficients for the contradiction",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Normalize an integer factor so that " }, { "type": "inlineMath", "tex": "G(2)=1" }, { "type": "text", "text": ", then obtain a root " }, { "type": "inlineMath", "tex": "\\rho" }, { "type": "text", "text": " with real part at least " }, { "type": "inlineMath", "tex": "3/2" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Divide " }, { "type": "inlineMath", "tex": "P(\\rho)=0" }, { "type": "text", "text": " by the next-to-leading power of " }, { "type": "inlineMath", "tex": "\\rho" }, { "type": "text", "text": " so the first three terms have nonnegative real parts." }],
+        [{ "type": "text", "text": "Bound the remaining terms by a geometric series using " }, { "type": "inlineMath", "tex": "|\\rho|\\ge3/2" }, { "type": "text", "text": " and derive incompatible lower and upper bounds." }],
+        [{ "type": "text", "text": "Conclude that the value cannot be prime; its degree already makes it greater than one." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Evaluating an integer factorization",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " },
+        { "type": "inlineMath", "tex": "P=FG" },
+        { "type": "text", "text": " in " },
+        { "type": "inlineMath", "tex": "\\mathbb Z[x]" },
+        { "type": "text", "text": ", then " },
+        { "type": "inlineMath", "tex": "P(2)=F(2)G(2)" },
+        { "type": "text", "text": " in the integers. A prime product forces one of the two factors to be a unit " },
+        { "type": "inlineMath", "tex": "\\pm1" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "title": "Root products as distance products",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For a monic polynomial with roots " },
+        { "type": "inlineMath", "tex": "r_1,\\ldots,r_k" },
+        { "type": "text", "text": "," }
+      ] }, { "type": "displayMath", "tex": "|G(a)|=\\prod_{i=1}^k|a-r_i|." }, { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The points at least as far from " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": " as from " },
+        { "type": "inlineMath", "tex": "2" },
+        { "type": "text", "text": " form the half-plane " },
+        { "type": "inlineMath", "tex": "\\operatorname{Re}z\\ge3/2" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "title": "Real parts and a geometric tail",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "When " },
+          { "type": "inlineMath", "tex": "\\operatorname{Re}\\rho>0" },
+          { "type": "text", "text": ", also " },
+          { "type": "inlineMath", "tex": "\\operatorname{Re}(1/\\rho)>0" },
+          { "type": "text", "text": ", because " },
+          { "type": "inlineMath", "tex": "1/\\rho=\\overline\\rho/|\\rho|^2" },
+          { "type": "text", "text": ". For " },
+          { "type": "inlineMath", "tex": "|\\rho|>1" },
+          { "type": "text", "text": "," }
+        ] },
+        { "type": "displayMath", "tex": "\\sum_{m=2}^{\\infty}|\\rho|^{-m}=\\frac1{|\\rho|(|\\rho|-1)}." }
+      ] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Yes. Suppose for contradiction that " },
+        { "type": "inlineMath", "tex": "P(x)=F(x)G(x)" },
+        { "type": "text", "text": " with both factors nonconstant in " },
+        { "type": "inlineMath", "tex": "\\mathbb Z[x]" },
+        { "type": "text", "text": ", but " },
+        { "type": "inlineMath", "tex": "P(2)=p" },
+        { "type": "text", "text": " is prime. Then one of " },
+        { "type": "inlineMath", "tex": "F(2),G(2)" },
+        { "type": "text", "text": " is " },
+        { "type": "inlineMath", "tex": "\\pm1" },
+        { "type": "text", "text": ". Renaming the factors and changing both signs if necessary, assume " },
+        { "type": "inlineMath", "tex": "G(2)=1" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Write" }
+      ] },
+      { "type": "displayMath", "tex": "P(x)=\\sum_{n=0}^{N}\\sigma_nx^n,\\qquad \\sigma_n\\in\\{0,1\\},\\quad\\sigma_N=1." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Both factors are nonconstant, so " },
+        { "type": "inlineMath", "tex": "N\\ge2" },
+        { "type": "text", "text": ". Also " },
+        { "type": "inlineMath", "tex": "P(x)>0" },
+        { "type": "text", "text": " for every " },
+        { "type": "inlineMath", "tex": "x>0" },
+        { "type": "text", "text": ", so " },
+        { "type": "inlineMath", "tex": "G" },
+        { "type": "text", "text": " has no positive real zero. Since " },
+        { "type": "inlineMath", "tex": "G(2)=1" },
+        { "type": "text", "text": ", continuity gives " },
+        { "type": "inlineMath", "tex": "G(x)>0" },
+        { "type": "text", "text": " on " },
+        { "type": "inlineMath", "tex": "(0,\\infty)" },
+        { "type": "text", "text": ". The leading coefficients of " },
+        { "type": "inlineMath", "tex": "F" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "G" },
+        { "type": "text", "text": " multiply to " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": ", and positivity for large " },
+        { "type": "inlineMath", "tex": "x" },
+        { "type": "text", "text": " makes " },
+        { "type": "inlineMath", "tex": "G" },
+        { "type": "text", "text": " monic." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "r_1,\\ldots,r_k" },
+        { "type": "text", "text": " be the complex roots of " },
+        { "type": "inlineMath", "tex": "G" },
+        { "type": "text", "text": ", counted with multiplicity. The positive integer " },
+        { "type": "inlineMath", "tex": "G(1)" },
+        { "type": "text", "text": " is at least " },
+        { "type": "inlineMath", "tex": "1=G(2)" },
+        { "type": "text", "text": ", so" }
+      ] },
+      { "type": "displayMath", "tex": "\\prod_{i=1}^k|1-r_i|\\ge\\prod_{i=1}^k|2-r_i|." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Therefore some root " },
+        { "type": "inlineMath", "tex": "\\rho" },
+        { "type": "text", "text": " satisfies " },
+        { "type": "inlineMath", "tex": "|1-\\rho|\\ge|2-\\rho|" },
+        { "type": "text", "text": ". Squaring and cancelling " },
+        { "type": "inlineMath", "tex": "|\\rho|^2" },
+        { "type": "text", "text": " yields" }
+      ] },
+      { "type": "displayMath", "tex": "\\operatorname{Re}\\rho\\ge\\frac32,\\qquad |\\rho|\\ge\\frac32." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "This " },
+        { "type": "inlineMath", "tex": "\\rho" },
+        { "type": "text", "text": " is also a root of " },
+        { "type": "inlineMath", "tex": "P" },
+        { "type": "text", "text": ". If " },
+        { "type": "inlineMath", "tex": "N=2" },
+        { "type": "text", "text": ", dividing " },
+        { "type": "inlineMath", "tex": "P(\\rho)=0" },
+        { "type": "text", "text": " by " },
+        { "type": "inlineMath", "tex": "\\rho" },
+        { "type": "text", "text": " gives" }
+      ] },
+      { "type": "displayMath", "tex": "\\rho+\\sigma_1+\\frac{\\sigma_0}{\\rho}=0." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Every term on the left has nonnegative real part, and the first has strictly positive real part, a contradiction." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Now suppose " },
+        { "type": "inlineMath", "tex": "N\\ge3" },
+        { "type": "text", "text": ". Dividing by " },
+        { "type": "inlineMath", "tex": "\\rho^{N-1}" },
+        { "type": "text", "text": " gives" }
+      ] },
+      { "type": "displayMath", "tex": "\\rho+\\sigma_{N-1}+\\frac{\\sigma_{N-2}}\\rho=-\\sum_{n=0}^{N-3}\\frac{\\sigma_n}{\\rho^{N-1-n}}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Since " },
+        { "type": "inlineMath", "tex": "\\operatorname{Re}\\rho>0" },
+        { "type": "text", "text": ", also " },
+        { "type": "inlineMath", "tex": "\\operatorname{Re}(1/\\rho)>0" },
+        { "type": "text", "text": ". Thus the real part of the left side is at least " },
+        { "type": "inlineMath", "tex": "\\operatorname{Re}\\rho" },
+        { "type": "text", "text": ". Taking absolute values on the right and extending the finite sum to a geometric series gives" }
+      ] },
+      { "type": "displayMath", "tex": "\\operatorname{Re}\\rho\\le\\sum_{m=2}^{\\infty}|\\rho|^{-m}=\\frac1{|\\rho|(|\\rho|-1)}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "But " },
+        { "type": "inlineMath", "tex": "|\\rho|\\ge3/2" },
+        { "type": "text", "text": ", so the right side is at most " },
+        { "type": "inlineMath", "tex": "4/3" },
+        { "type": "text", "text": ", while the left side is at least " },
+        { "type": "inlineMath", "tex": "3/2" },
+        { "type": "text", "text": ". This contradiction shows that " },
+        { "type": "inlineMath", "tex": "P(2)" },
+        { "type": "text", "text": " is not prime." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Finally, " },
+        { "type": "inlineMath", "tex": "N\\ge2" },
+        { "type": "text", "text": " and the leading coefficient is " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": ", so " },
+        { "type": "inlineMath", "tex": "P(2)\\ge2^N\\ge4" },
+        { "type": "text", "text": ". Being a positive integer greater than one that is not prime, it is composite." }
+      ] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2021 problems", "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2021 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems-and-solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2021 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2021s.tex" }
+  ]
+}

@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2021",
+  "problemId": "A4",
+  "label": "A4",
+  "ordinal": 4,
+  "topics": ["integrals", "analysis"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A4" }] },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Let" }] },
+      { "type": "displayMath", "tex": "\\begin{aligned}I(R)=\\iint_{x^2+y^2\\le R^2}\\bigg(&\\frac{1+2x^2}{1+x^4+6x^2y^2+y^4}\\\\&-\\frac{1+y^2}{2+x^4+y^4}\\bigg)\\,dx\\,dy.\\end{aligned}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Find " },
+        { "type": "inlineMath", "tex": "\\displaystyle\\lim_{R\\to\\infty}I(R)" },
+        { "type": "text", "text": ", or show that this limit does not exist." }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Exploit the circular domain",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The disk is unchanged when " },
+        { "type": "inlineMath", "tex": "x" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "y" },
+        { "type": "text", "text": " are interchanged. Average the original integral with the one obtained by that swap." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Turn two disks into one annulus",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "After symmetrizing, write the integrand as " },
+          { "type": "inlineMath", "tex": "f(x,y)-g(x,y)" },
+          { "type": "text", "text": ". The key identity is" }
+        ] },
+        { "type": "displayMath", "tex": "f(x,y)=2g(x+y,x-y)." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "Use the change of variables " },
+          { "type": "inlineMath", "tex": "(u,v)=(x+y,x-y)" },
+          { "type": "text", "text": " to compare the two disk integrals." }
+        ] }
+      ] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Rescale before taking the limit",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "In polar coordinates the annulus has " },
+        { "type": "inlineMath", "tex": "R\\le r\\le\\sqrt2R" },
+        { "type": "text", "text": ". Put " },
+        { "type": "inlineMath", "tex": "r=Rs" },
+        { "type": "text", "text": " so the domain becomes fixed. Since " },
+        { "type": "inlineMath", "tex": "1-\\tfrac12\\sin^2(2\\theta)\\ge\\tfrac12" },
+        { "type": "text", "text": ", a uniform bound justifies moving the limit through the integral." }
+      ] }] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Finish with one trigonometric integral",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Average under " }, { "type": "inlineMath", "tex": "x\\leftrightarrow y" }, { "type": "text", "text": " and define the two symmetric rational functions." }],
+        [{ "type": "text", "text": "Use the forty-five-degree linear change of variables to express " }, { "type": "inlineMath", "tex": "I(R)" }, { "type": "text", "text": " as the integral of " }, { "type": "inlineMath", "tex": "g" }, { "type": "text", "text": " over an annulus." }],
+        [{ "type": "text", "text": "Switch to polar coordinates, rescale, and separate the limiting radial and angular factors." }],
+        [{ "type": "text", "text": "Evaluate the angular factor with periodicity and " }, { "type": "inlineMath", "tex": "t=\\tan(\\theta/2)" }, { "type": "text", "text": "." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Linear changes of variables",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "For " },
+          { "type": "inlineMath", "tex": "u=x+y" },
+          { "type": "text", "text": " and " },
+          { "type": "inlineMath", "tex": "v=x-y" },
+          { "type": "text", "text": "," }
+        ] },
+        { "type": "displayMath", "tex": "u^2+v^2=2(x^2+y^2),\\qquad du\\,dv=2\\,dx\\,dy." }
+      ] }
+    },
+    {
+      "order": 2,
+      "title": "Polar coordinates and dominated convergence",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Polar coordinates use " },
+        { "type": "inlineMath", "tex": "dx\\,dy=r\\,dr\\,d\\theta" },
+        { "type": "text", "text": ". After rescaling to a fixed compact rectangle, pointwise convergence plus an integrable bound independent of " },
+        { "type": "inlineMath", "tex": "R" },
+        { "type": "text", "text": " permits passage of the limit through the integral." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "title": "A standard cosine integral",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [{ "type": "text", "text": "The tangent half-angle substitution evaluates" }] },
+        { "type": "displayMath", "tex": "\\int_0^{2\\pi}\\frac{2\\,du}{3+\\cos u}=\\int_{-\\infty}^{\\infty}\\frac{2\\,dt}{t^2+2}=\\sqrt2\\pi." }
+      ] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Interchanging " },
+        { "type": "inlineMath", "tex": "x" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "y" },
+        { "type": "text", "text": " does not change the disk. Averaging the original integrand with its swapped version gives" }
+      ] },
+      { "type": "displayMath", "tex": "I(R)=\\iint_{x^2+y^2\\le R^2}\\bigl(f(x,y)-g(x,y)\\bigr)\\,dx\\,dy," },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "where" }] },
+      { "type": "displayMath", "tex": "f(x,y)=\\frac{1+x^2+y^2}{1+x^4+6x^2y^2+y^4}," },
+      { "type": "displayMath", "tex": "g(x,y)=\\frac{1+(x^2+y^2)/2}{2+x^4+y^4}." },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "A direct expansion shows that" }] },
+      { "type": "displayMath", "tex": "f(x,y)=2g(x+y,x-y)." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Now set " },
+        { "type": "inlineMath", "tex": "u=x+y" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "v=x-y" },
+        { "type": "text", "text": ". Then " },
+        { "type": "inlineMath", "tex": "u^2+v^2=2(x^2+y^2)" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "du\\,dv=2\\,dx\\,dy" },
+        { "type": "text", "text": ". Hence the integral of " },
+        { "type": "inlineMath", "tex": "f" },
+        { "type": "text", "text": " over the radius-" },
+        { "type": "inlineMath", "tex": "R" },
+        { "type": "text", "text": " disk equals the integral of " },
+        { "type": "inlineMath", "tex": "g" },
+        { "type": "text", "text": " over the radius-" },
+        { "type": "inlineMath", "tex": "\\sqrt2R" },
+        { "type": "text", "text": " disk. Subtracting the original " },
+        { "type": "inlineMath", "tex": "g" },
+        { "type": "text", "text": " integral leaves the annulus:" }
+      ] },
+      { "type": "displayMath", "tex": "I(R)=\\iint_{R^2\\le x^2+y^2\\le2R^2}g(x,y)\\,dx\\,dy." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "In polar coordinates, using " },
+        { "type": "inlineMath", "tex": "\\cos^4\\theta+\\sin^4\\theta=1-\\tfrac12\\sin^2(2\\theta)" },
+        { "type": "text", "text": ", this becomes" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned}I(R)=\\int_R^{\\sqrt2R}\\int_0^{2\\pi}\\frac{1+r^2/2}{2+r^4h(\\theta)}\\,r\\,d\\theta\\,dr,\\\\h(\\theta)=1-\\frac12\\sin^2(2\\theta).\\end{aligned}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Put " },
+        { "type": "inlineMath", "tex": "r=Rs" },
+        { "type": "text", "text": ". On " },
+        { "type": "inlineMath", "tex": "1\\le s\\le\\sqrt2" },
+        { "type": "text", "text": " we have " },
+        { "type": "inlineMath", "tex": "h(\\theta)\\ge1/2" },
+        { "type": "text", "text": ", so the rescaled integrands are uniformly bounded by an integrable constant. Dominated convergence gives" }
+      ] },
+      { "type": "displayMath", "tex": "\\lim_{R\\to\\infty}I(R)=\\int_1^{\\sqrt2}\\frac{ds}{s}\\int_0^{2\\pi}\\frac{d\\theta}{2-\\sin^2(2\\theta)}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The radial factor is " },
+        { "type": "inlineMath", "tex": "\\log\\sqrt2=\\tfrac12\\log2" },
+        { "type": "text", "text": ". For the angular factor," }
+      ] },
+      { "type": "displayMath", "tex": "\\frac1{2-\\sin^2(2\\theta)}=\\frac2{3+\\cos(4\\theta)}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Periodicity and the substitution " },
+        { "type": "inlineMath", "tex": "u=4\\theta" },
+        { "type": "text", "text": " reduce the angular integral to one full cosine period:" }
+      ] },
+      { "type": "displayMath", "tex": "\\int_0^{2\\pi}\\frac{2\\,d\\theta}{3+\\cos(4\\theta)}=\\int_0^{2\\pi}\\frac{2\\,du}{3+\\cos u}=\\sqrt2\\pi." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The last value follows from " },
+        { "type": "inlineMath", "tex": "t=\\tan(u/2)" },
+        { "type": "text", "text": ", which produces " },
+        { "type": "inlineMath", "tex": "\\int_{-\\infty}^{\\infty}2\\,dt/(t^2+2)" },
+        { "type": "text", "text": ". Multiplying the radial and angular factors yields" }
+      ] },
+      { "type": "displayMath", "tex": "\\boxed{\\displaystyle\\lim_{R\\to\\infty}I(R)=\\frac{\\sqrt2}{2}\\pi\\log2}." }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2021 problems", "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2021 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems-and-solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2021 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2021s.tex" }
+  ]
+}

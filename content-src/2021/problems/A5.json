@@ -1,0 +1,225 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2021",
+  "problemId": "A5",
+  "label": "A5",
+  "ordinal": 5,
+  "topics": ["number-theory"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A5" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "A" },
+        { "type": "text", "text": " be the set of all integers " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " such that " },
+        { "type": "inlineMath", "tex": "1\\le n\\le2021" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "\\gcd(n,2021)=1" },
+        { "type": "text", "text": ". For every nonnegative integer " },
+        { "type": "inlineMath", "tex": "j" },
+        { "type": "text", "text": ", let" }
+      ] },
+      { "type": "displayMath", "tex": "S(j)=\\sum_{n\\in A}n^j." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Determine all values of " },
+        { "type": "inlineMath", "tex": "j" },
+        { "type": "text", "text": " such that " },
+        { "type": "inlineMath", "tex": "S(j)" },
+        { "type": "text", "text": " is a multiple of " },
+        { "type": "inlineMath", "tex": "2021" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Factor the modulus",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Begin with " },
+        { "type": "inlineMath", "tex": "2021=43\\cdot47" },
+        { "type": "text", "text": ". It is enough to understand the sum modulo each prime separately." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Count the same residues repeatedly",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Modulo " },
+        { "type": "inlineMath", "tex": "43" },
+        { "type": "text", "text": ", every nonzero residue appears among " },
+        { "type": "inlineMath", "tex": "A" },
+        { "type": "text", "text": " exactly " },
+        { "type": "inlineMath", "tex": "46" },
+        { "type": "text", "text": " times. Find the analogous multiplicity modulo " },
+        { "type": "inlineMath", "tex": "47" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Recall finite-field power sums",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "For a prime " },
+          { "type": "inlineMath", "tex": "p" },
+          { "type": "text", "text": " and nonnegative " },
+          { "type": "inlineMath", "tex": "j" },
+          { "type": "text", "text": "," }
+        ] },
+        { "type": "displayMath", "tex": "\\sum_{a=1}^{p-1}a^j\\equiv\\begin{cases}-1& p-1\\mid j,\\\\0& p-1\\nmid j\\end{cases}\\pmod p." }
+      ] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Combine the two prime conditions",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Reduce " }, { "type": "inlineMath", "tex": "S(j)" }, { "type": "text", "text": " modulo each prime factor using residue multiplicities." }],
+        [{ "type": "text", "text": "Apply the power-sum criterion with group orders " }, { "type": "inlineMath", "tex": "42" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "46" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Require both prime divisibilities, remembering that the multipliers " }, { "type": "inlineMath", "tex": "46" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "42" }, { "type": "text", "text": " are nonzero modulo the corresponding primes." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Chinese remainder counting",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Because " },
+        { "type": "inlineMath", "tex": "43" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "47" },
+        { "type": "text", "text": " are coprime, choosing a unit modulo " },
+        { "type": "inlineMath", "tex": "2021" },
+        { "type": "text", "text": " is equivalent to choosing independently a nonzero residue modulo each prime." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "title": "Primitive roots modulo a prime",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The nonzero residues modulo a prime " },
+        { "type": "inlineMath", "tex": "p" },
+        { "type": "text", "text": " form a cyclic group of order " },
+        { "type": "inlineMath", "tex": "p-1" },
+        { "type": "text", "text": ". Thus a generator " },
+        { "type": "inlineMath", "tex": "g" },
+        { "type": "text", "text": " satisfies " },
+        { "type": "inlineMath", "tex": "g^j=1" },
+        { "type": "text", "text": " exactly when " },
+        { "type": "inlineMath", "tex": "p-1\\mid j" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "title": "Divisibility by a squarefree product",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Since " },
+        { "type": "inlineMath", "tex": "2021=43\\cdot47" },
+        { "type": "text", "text": ", an integer is divisible by " },
+        { "type": "inlineMath", "tex": "2021" },
+        { "type": "text", "text": " exactly when it is divisible by both " },
+        { "type": "inlineMath", "tex": "43" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "47" },
+        { "type": "text", "text": "." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The answer is all nonnegative integers " },
+        { "type": "inlineMath", "tex": "j" },
+        { "type": "text", "text": " such that" }
+      ] },
+      { "type": "displayMath", "tex": "42\\nmid j\\qquad\\text{and}\\qquad46\\nmid j." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "We first prove the needed power-sum fact. Let " },
+        { "type": "inlineMath", "tex": "p" },
+        { "type": "text", "text": " be prime and put " },
+        { "type": "inlineMath", "tex": "T_j=\\sum_{a=1}^{p-1}a^j" },
+        { "type": "text", "text": ". If " },
+        { "type": "inlineMath", "tex": "p-1\\mid j" },
+        { "type": "text", "text": ", Fermat's theorem gives " },
+        { "type": "inlineMath", "tex": "a^j\\equiv1\\pmod p" },
+        { "type": "text", "text": " for every nonzero residue, so " },
+        { "type": "inlineMath", "tex": "T_j\\equiv-1\\pmod p" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " },
+        { "type": "inlineMath", "tex": "p-1\\nmid j" },
+        { "type": "text", "text": ", choose a primitive root " },
+        { "type": "inlineMath", "tex": "g" },
+        { "type": "text", "text": " modulo " },
+        { "type": "inlineMath", "tex": "p" },
+        { "type": "text", "text": ". Multiplication by " },
+        { "type": "inlineMath", "tex": "g" },
+        { "type": "text", "text": " permutes the nonzero residues, and therefore" }
+      ] },
+      { "type": "displayMath", "tex": "T_j\\equiv\\sum_{a=1}^{p-1}(ga)^j\\equiv g^jT_j\\pmod p." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Here " },
+        { "type": "inlineMath", "tex": "g^j\\not\\equiv1\\pmod p" },
+        { "type": "text", "text": ", so " },
+        { "type": "inlineMath", "tex": "T_j\\equiv0\\pmod p" },
+        { "type": "text", "text": ". Thus" }
+      ] },
+      { "type": "displayMath", "tex": "T_j\\equiv0\\pmod p\\quad\\Longleftrightarrow\\quad p-1\\nmid j." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Now factor " },
+        { "type": "inlineMath", "tex": "2021=43\\cdot47" },
+        { "type": "text", "text": ". By the Chinese remainder theorem, fixing a nonzero residue modulo " },
+        { "type": "inlineMath", "tex": "43" },
+        { "type": "text", "text": " leaves " },
+        { "type": "inlineMath", "tex": "46" },
+        { "type": "text", "text": " choices for the nonzero residue modulo " },
+        { "type": "inlineMath", "tex": "47" },
+        { "type": "text", "text": ". Hence" }
+      ] },
+      { "type": "displayMath", "tex": "S(j)\\equiv46\\sum_{a=1}^{42}a^j\\pmod{43}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Since " },
+        { "type": "inlineMath", "tex": "46\\not\\equiv0\\pmod{43}" },
+        { "type": "text", "text": ", the power-sum fact gives" }
+      ] },
+      { "type": "displayMath", "tex": "S(j)\\equiv0\\pmod{43}\\quad\\Longleftrightarrow\\quad42\\nmid j." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Likewise, fixing a nonzero residue modulo " },
+        { "type": "inlineMath", "tex": "47" },
+        { "type": "text", "text": " leaves " },
+        { "type": "inlineMath", "tex": "42" },
+        { "type": "text", "text": " choices modulo " },
+        { "type": "inlineMath", "tex": "43" },
+        { "type": "text", "text": ", so" }
+      ] },
+      { "type": "displayMath", "tex": "S(j)\\equiv42\\sum_{a=1}^{46}a^j\\pmod{47}," },
+      { "type": "displayMath", "tex": "S(j)\\equiv0\\pmod{47}\\quad\\Longleftrightarrow\\quad46\\nmid j." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Finally, divisibility by " },
+        { "type": "inlineMath", "tex": "2021" },
+        { "type": "text", "text": " is equivalent to divisibility by both prime factors. Combining the two conditions proves the stated classification, including " },
+        { "type": "inlineMath", "tex": "j=0" },
+        { "type": "text", "text": ", which is excluded because it is divisible by both " },
+        { "type": "inlineMath", "tex": "42" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "46" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2021 problems", "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2021 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems-and-solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2021 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2021s.tex" }
+  ]
+}
