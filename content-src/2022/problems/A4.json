@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2022",
+  "problemId": "A4",
+  "label": "A4",
+  "ordinal": 4,
+  "topics": ["probability", "sequences-series"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A4" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Suppose that " }, { "type": "inlineMath", "tex": "X_1,X_2,\\ldots" },
+      { "type": "text", "text": " are real numbers between " }, { "type": "inlineMath", "tex": "0" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "1" },
+      { "type": "text", "text": " that are chosen independently and uniformly at random. Let" }
+    ] },
+    { "type": "displayMath", "tex": "S=\\sum_{i=1}^{k}\\frac{X_i}{2^i}," },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "where " }, { "type": "inlineMath", "tex": "k" },
+      { "type": "text", "text": " is the least positive integer such that " }, { "type": "inlineMath", "tex": "X_k<X_{k+1}" },
+      { "type": "text", "text": ", or " }, { "type": "inlineMath", "tex": "k=\\infty" },
+      { "type": "text", "text": " if there is no such integer. Find the expected value of " },
+      { "type": "inlineMath", "tex": "S" }, { "type": "text", "text": "." }
+    ] }
+  ] },
+  "hints": [
+    { "order": 1, "stage": "nudge", "title": "Ask when a term appears", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "The summand containing " }, { "type": "inlineMath", "tex": "X_j" },
+      { "type": "text", "text": " is present exactly when the first " }, { "type": "inlineMath", "tex": "j" },
+      { "type": "text", "text": " observations are nonincreasing." }
+    ] }] } },
+    { "order": 2, "stage": "strategy", "title": "Replace the stopping time by indicators", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "c_j=2^{-j}" },
+      { "type": "text", "text": " on the event " }, { "type": "inlineMath", "tex": "X_1\\ge\\cdots\\ge X_j" },
+      { "type": "text", "text": " and let " }, { "type": "inlineMath", "tex": "c_j=0" },
+      { "type": "text", "text": " otherwise. Then write " }, { "type": "inlineMath", "tex": "S" },
+      { "type": "text", "text": " as an infinite nonnegative sum." }
+    ] }] } },
+    { "order": 3, "stage": "knowledge", "title": "Use order symmetry", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Among " }, { "type": "inlineMath", "tex": "j" },
+      { "type": "text", "text": " independent continuous observations, every ordering is equally likely. Conditional on the decreasing ordering, " },
+      { "type": "inlineMath", "tex": "X_j" }, { "type": "text", "text": " is their minimum." }
+    ] }] } },
+    { "order": 4, "stage": "outline", "title": "Turn the expectation into an exponential series", "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+      [{ "type": "text", "text": "Compute the probability of " }, { "type": "inlineMath", "tex": "X_1\\ge\\cdots\\ge X_j" }, { "type": "text", "text": "." }],
+      [{ "type": "text", "text": "Compute the expected minimum of " }, { "type": "inlineMath", "tex": "j" }, { "type": "text", "text": " independent uniform random variables." }],
+      [{ "type": "text", "text": "Use nonnegativity to sum the expectations of the individual terms." }],
+      [{ "type": "text", "text": "Reindex the resulting factorial series and compare it with the power series for " }, { "type": "inlineMath", "tex": "e^x" }, { "type": "text", "text": "." }]
+    ] }] } }
+  ],
+  "prerequisites": [
+    { "order": 1, "title": "Truncated sums as indicator sums", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "A random sum stopped after a random index can often be written as " },
+      { "type": "inlineMath", "tex": "\\sum_{j\\ge1}Y_j\\mathbf 1_{\\{j\\text{ is reached}\\}}" },
+      { "type": "text", "text": ". This removes the stopping index from the summation limits." }
+    ] }] } },
+    { "order": 2, "title": "Minimum of uniform samples", "document": { "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "M" }, { "type": "text", "text": " is the minimum of " }, { "type": "inlineMath", "tex": "j" }, { "type": "text", "text": " independent uniform variables on " }, { "type": "inlineMath", "tex": "[0,1]" }, { "type": "text", "text": ", then" }] },
+      { "type": "displayMath", "tex": "\\Pr(M>t)=(1-t)^j,\\qquad \\mathbb E[M]=\\frac{1}{j+1}." }
+    ] } },
+    { "order": 3, "title": "Tonelli and the exponential series", "document": { "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "For nonnegative random variables, expectation may be interchanged with an infinite sum. The resulting factorial series can be evaluated from" }] },
+      { "type": "displayMath", "tex": "e^x=\\sum_{r=0}^{\\infty}\\frac{x^r}{r!}." }
+    ] } }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The expected value is " }, { "type": "inlineMath", "tex": "2\\sqrt e-3" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "j\\ge1" },
+      { "type": "text", "text": ", define " }, { "type": "inlineMath", "tex": "c_j=2^{-j}" },
+      { "type": "text", "text": " if " }, { "type": "inlineMath", "tex": "X_1\\ge X_2\\ge\\cdots\\ge X_j" },
+      { "type": "text", "text": ", and define " }, { "type": "inlineMath", "tex": "c_j=0" },
+      { "type": "text", "text": " otherwise. The stopping rule then gives" }
+    ] },
+    { "type": "displayMath", "tex": "S=\\sum_{j=1}^{\\infty}c_jX_j." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "All " }, { "type": "inlineMath", "tex": "j!" },
+      { "type": "text", "text": " relative orderings of " }, { "type": "inlineMath", "tex": "X_1,\\ldots,X_j" },
+      { "type": "text", "text": " are equally likely, so " },
+      { "type": "inlineMath", "tex": "\\Pr(c_j>0)=1/j!" }, { "type": "text", "text": ". Conditional on this event, " },
+      { "type": "inlineMath", "tex": "X_j" }, { "type": "text", "text": " is the minimum of those " },
+      { "type": "inlineMath", "tex": "j" }, { "type": "text", "text": " observations. Its conditional mean is " },
+      { "type": "inlineMath", "tex": "1/(j+1)" }, { "type": "text", "text": ". Therefore" }
+    ] },
+    { "type": "displayMath", "tex": "\\mathbb E[c_jX_j]=\\frac{1}{2^j(j+1)!}." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Because every summand is nonnegative, Tonelli's theorem permits termwise expectation. Hence" }
+    ] },
+    { "type": "displayMath", "tex": "\\begin{aligned}\\mathbb E[S]&=\\sum_{j=1}^{\\infty}\\frac{1}{2^j(j+1)!}\\\\&=2\\sum_{r=2}^{\\infty}\\frac{(1/2)^r}{r!}\\\\&=2\\left(e^{1/2}-1-\\frac12\\right)=2\\sqrt e-3.\\end{aligned}" }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2022 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2022_Putnam_Competitions.pdf" },
+    { "kind": "solution", "label": "MAA official 2022 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2022-Putnam-solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2022 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2022s.tex" }
+  ]
+}

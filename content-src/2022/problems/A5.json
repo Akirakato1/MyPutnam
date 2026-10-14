@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2022",
+  "problemId": "A5",
+  "label": "A5",
+  "ordinal": 5,
+  "topics": ["combinatorics"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A5" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Alice and Bob play a game on a board consisting of one row of " },
+      { "type": "inlineMath", "tex": "2022" }, { "type": "text", "text": " consecutive squares. They take turns placing tiles that cover two adjacent squares, with Alice going first. A tile must not cover a square that is already covered by another tile. The game ends when no tile can be placed. Alice wants to maximize the number of uncovered squares at the end, while Bob wants to minimize it. What is the greatest number of uncovered squares that Alice can ensure, no matter how Bob plays?" }
+    ] }
+  ] },
+  "hints": [
+    { "order": 1, "stage": "nudge", "title": "Track the uncovered blocks", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "After " }, { "type": "inlineMath", "tex": "t" },
+      { "type": "text", "text": " tiles have been placed, there are at most " }, { "type": "inlineMath", "tex": "t+1" },
+      { "type": "text", "text": " uncovered blocks, containing " }, { "type": "inlineMath", "tex": "2022-2t" },
+      { "type": "text", "text": " squares in total." }
+    ] }] } },
+    { "order": 2, "stage": "strategy", "title": "Alice should manufacture singletons", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Whenever an uncovered block has length at least " }, { "type": "inlineMath", "tex": "3" },
+      { "type": "text", "text": ", Alice can cover its second and third squares. This permanently isolates one uncovered square." }
+    ] }] } },
+    { "order": 3, "stage": "knowledge", "title": "Give Bob a balancing potential", "document": { "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Have Bob create a block of length " }, { "type": "inlineMath", "tex": "2" }, { "type": "text", "text": " whenever a block of length at least " }, { "type": "inlineMath", "tex": "4" }, { "type": "text", "text": " is available. If " }, { "type": "inlineMath", "tex": "N_2" }, { "type": "text", "text": " counts length-2 blocks and " }, { "type": "inlineMath", "tex": "N_{\\ne2}" }, { "type": "text", "text": " counts all other blocks, track" }] },
+      { "type": "displayMath", "tex": "D=N_{\\ne2}-N_2." }
+    ] } },
+    { "order": 4, "stage": "outline", "title": "Stop each strategy and count", "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+      [{ "type": "text", "text": "When Alice can no longer use her strategy, all blocks have length at most " }, { "type": "inlineMath", "tex": "2" }, { "type": "text", "text": ". Bound their total size using the number of singleton blocks she created." }],
+      [{ "type": "text", "text": "Use the parity of the final number of uncovered squares to sharpen Alice's integer lower bound." }],
+      [{ "type": "text", "text": "When Bob can no longer use his strategy, let " }, { "type": "inlineMath", "tex": "n_1,n_2,n_3" }, { "type": "text", "text": " count the remaining blocks of lengths " }, { "type": "inlineMath", "tex": "1,2,3" }, { "type": "text", "text": "." }],
+      [{ "type": "text", "text": "Combine the block count, square count, and the bound on " }, { "type": "inlineMath", "tex": "D" }, { "type": "text", "text": " to bound the eventual score " }, { "type": "inlineMath", "tex": "n_1+n_3" }, { "type": "text", "text": "." }]
+    ] }] } }
+  ],
+  "prerequisites": [
+    { "order": 1, "title": "Block decomposition", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Each placed domino splits one uncovered block into at most two smaller blocks. Thus after " },
+      { "type": "inlineMath", "tex": "t" }, { "type": "text", "text": " moves there are at most " },
+      { "type": "inlineMath", "tex": "t+1" }, { "type": "text", "text": " uncovered blocks." }
+    ] }] } },
+    { "order": 2, "title": "Parity at the end", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Every move covers exactly two squares. Starting from an even board length, the number of uncovered squares therefore remains even throughout the game." }
+    ] }] } },
+    { "order": 3, "title": "Matching strategy bounds", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "To determine the value of a two-player zero-sum game, it is enough to give one strategy guaranteeing Alice at least " },
+      { "type": "inlineMath", "tex": "L" }, { "type": "text", "text": " and one strategy guaranteeing Bob at most " },
+      { "type": "inlineMath", "tex": "L" }, { "type": "text", "text": "." }
+    ] }] } }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The greatest number Alice can ensure is " }, { "type": "inlineMath", "tex": "290" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "After " }, { "type": "inlineMath", "tex": "t" },
+      { "type": "text", "text": " tiles have been placed, the uncovered squares form at most " },
+      { "type": "inlineMath", "tex": "t+1" }, { "type": "text", "text": " blocks and have total length " },
+      { "type": "inlineMath", "tex": "2022-2t" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "heading", "level": 2, "runs": [{ "type": "text", "text": "Alice's lower bound" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Whenever a block has length " }, { "type": "inlineMath", "tex": "L\\ge3" },
+      { "type": "text", "text": ", Alice covers its second and third squares. This leaves a singleton and, if " },
+      { "type": "inlineMath", "tex": "L>3" }, { "type": "text", "text": ", a block of length " },
+      { "type": "inlineMath", "tex": "L-3" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Suppose Alice makes " }, { "type": "inlineMath", "tex": "m" },
+      { "type": "text", "text": " such moves but cannot make another. At that moment either " },
+      { "type": "inlineMath", "tex": "2m-1" }, { "type": "text", "text": " or " },
+      { "type": "inlineMath", "tex": "2m" }, { "type": "text", "text": " tiles have been placed, every remaining block has length at most " },
+      { "type": "inlineMath", "tex": "2" }, { "type": "text", "text": ", and at least " },
+      { "type": "inlineMath", "tex": "m" }, { "type": "text", "text": " blocks are singletons. There are at most " },
+      { "type": "inlineMath", "tex": "2m+1" }, { "type": "text", "text": " blocks, so the number of uncovered squares is at most" }
+    ] },
+    { "type": "displayMath", "tex": "2(2m+1)-m=3m+2." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "At most " }, { "type": "inlineMath", "tex": "4m" },
+      { "type": "text", "text": " squares have been covered. Therefore " },
+      { "type": "inlineMath", "tex": "2022\\le4m+(3m+2)" }, { "type": "text", "text": ", so " },
+      { "type": "inlineMath", "tex": "m\\ge289" }, { "type": "text", "text": ". These singletons survive to the end. Since the final number of uncovered squares is even, Alice guarantees at least " },
+      { "type": "inlineMath", "tex": "290" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "heading", "level": 2, "runs": [{ "type": "text", "text": "Bob's upper bound" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Whenever a block has length " }, { "type": "inlineMath", "tex": "L\\ge4" },
+      { "type": "text", "text": ", Bob covers its third and fourth squares. This creates a block of length " },
+      { "type": "inlineMath", "tex": "2" }, { "type": "text", "text": " and possibly a remaining block of length " },
+      { "type": "inlineMath", "tex": "L-4" }, { "type": "text", "text": ". Let " },
+      { "type": "inlineMath", "tex": "N_2" }, { "type": "text", "text": " be the number of length-2 blocks and " },
+      { "type": "inlineMath", "tex": "N_{\\ne2}" }, { "type": "text", "text": " the number of all other blocks. Define" }
+    ] },
+    { "type": "displayMath", "tex": "D=N_{\\ne2}-N_2." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Initially " }, { "type": "inlineMath", "tex": "D=1" },
+      { "type": "text", "text": ". Any move can increase " }, { "type": "inlineMath", "tex": "D" },
+      { "type": "text", "text": " by at most " }, { "type": "inlineMath", "tex": "1" },
+      { "type": "text", "text": ", while each of Bob's strategy moves decreases it by at least " },
+      { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": ". Hence " },
+      { "type": "inlineMath", "tex": "D\\le2" }, { "type": "text", "text": " while Bob can follow this strategy." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Suppose Bob makes " }, { "type": "inlineMath", "tex": "m" },
+      { "type": "text", "text": " strategy moves but cannot make another. Let " },
+      { "type": "inlineMath", "tex": "n_1,n_2,n_3" }, { "type": "text", "text": " count the remaining blocks of lengths " },
+      { "type": "inlineMath", "tex": "1,2,3" }, { "type": "text", "text": ". At this moment either " },
+      { "type": "inlineMath", "tex": "2m" }, { "type": "text", "text": " or " },
+      { "type": "inlineMath", "tex": "2m+1" }, { "type": "text", "text": " tiles have been placed, so" }
+    ] },
+    { "type": "displayMath", "tex": "n_1+n_2+n_3\\le2m+2," },
+    { "type": "displayMath", "tex": "n_1+2n_2+3n_3+4m\\le2022." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Twice the first inequality plus the second gives" }
+    ] },
+    { "type": "displayMath", "tex": "3n_1+4n_2+5n_3\\le2026." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The potential bound is " }, { "type": "inlineMath", "tex": "n_1+n_3-n_2\\le2" },
+      { "type": "text", "text": ". Adding four times this inequality yields" }
+    ] },
+    { "type": "displayMath", "tex": "7n_1+9n_3\\le2034." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "A block of length " }, { "type": "inlineMath", "tex": "2" },
+      { "type": "text", "text": " ultimately leaves no uncovered square, while blocks of lengths " },
+      { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": " and " },
+      { "type": "inlineMath", "tex": "3" }, { "type": "text", "text": " each leave one. Thus the final score is" }
+    ] },
+    { "type": "displayMath", "tex": "n_1+n_3\\le\\frac{7n_1+9n_3}{7}\\le\\frac{2034}{7}<291." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "It is an integer, so Bob holds the score to at most " },
+      { "type": "inlineMath", "tex": "290" }, { "type": "text", "text": ". The two strategies prove the result." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2022 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2022_Putnam_Competitions.pdf" },
+    { "kind": "solution", "label": "MAA official 2022 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2022-Putnam-solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2022 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2022s.tex" }
+  ]
+}

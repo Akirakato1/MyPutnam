@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2022",
+  "problemId": "A6",
+  "label": "A6",
+  "ordinal": 6,
+  "topics": ["algebra"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A6" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " be a positive integer. Determine, in terms of " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": ", the largest integer " }, { "type": "inlineMath", "tex": "m" },
+      { "type": "text", "text": " with the following property: there exist real numbers" }
+    ] },
+    { "type": "displayMath", "tex": "-1<x_1<x_2<\\cdots<x_{2n}<1" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "such that the sum of the lengths of the " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " intervals" }
+    ] },
+    { "type": "displayMath", "tex": "[x_1^{2k-1},x_2^{2k-1}],\\ldots,[x_{2n-1}^{2k-1},x_{2n}^{2k-1}]" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "is equal to " }, { "type": "inlineMath", "tex": "1" },
+      { "type": "text", "text": " for every integer " }, { "type": "inlineMath", "tex": "k" },
+      { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "1\\le k\\le m" }, { "type": "text", "text": "." }
+    ] }
+  ] },
+  "hints": [
+    { "order": 1, "stage": "nudge", "title": "Write the interval sum as one alternating sum", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Because odd powers preserve order, the condition for an odd exponent " },
+      { "type": "inlineMath", "tex": "r" }, { "type": "text", "text": " is" }
+    ] }, { "type": "displayMath", "tex": "\\sum_{j=1}^{2n}(-1)^j x_j^r=1." }] } },
+    { "order": 2, "stage": "strategy", "title": "Try equally spaced cosine values", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "For the construction, set " }, { "type": "inlineMath", "tex": "q=2n+1" },
+      { "type": "text", "text": " and test " }, { "type": "inlineMath", "tex": "x_j=-\\cos(j\\pi/q)" },
+      { "type": "text", "text": ". A roots-of-unity sum evaluates the odd cosine powers." }
+    ] }] } },
+    { "order": 3, "stage": "knowledge", "title": "Package a hypothetical extra moment", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "For an upper bound, use the polynomial whose roots are " },
+      { "type": "inlineMath", "tex": "-1" }, { "type": "text", "text": " and " },
+      { "type": "inlineMath", "tex": "(-1)^j x_j" }, { "type": "text", "text": ". The given equations make its relevant odd power sums vanish." }
+    ] }] } },
+    { "order": 4, "stage": "outline", "title": "Use Newton identities to force symmetry", "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+      [{ "type": "text", "text": "Show that the cosine construction works for the first " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " odd powers." }],
+      [{ "type": "text", "text": "Assume one more required odd power and form the degree-" }, { "type": "inlineMath", "tex": "2n+1" }, { "type": "text", "text": " root polynomial." }],
+      [{ "type": "text", "text": "Newton identities force every odd-indexed elementary symmetric function to vanish." }],
+      [{ "type": "text", "text": "Conclude that the polynomial is odd, then compare its roots at " }, { "type": "inlineMath", "tex": "-1" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": "." }]
+    ] }] } }
+  ],
+  "prerequisites": [
+    { "order": 1, "title": "Roots-of-unity filter", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "\\omega=e^{2\\pi i/q}" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "q\\nmid a" }, { "type": "text", "text": ", then" }
+    ] }, { "type": "displayMath", "tex": "\\sum_{j=0}^{q-1}\\omega^{aj}=0." }] } },
+    { "order": 2, "title": "Power sums and Newton identities", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "For roots " }, { "type": "inlineMath", "tex": "r_1,\\ldots,r_d" },
+      { "type": "text", "text": ", let " }, { "type": "inlineMath", "tex": "s_k=\\sum r_j^k" },
+      { "type": "text", "text": " and let " }, { "type": "inlineMath", "tex": "e_k" },
+      { "type": "text", "text": " be the elementary symmetric functions. Newton identities express each " },
+      { "type": "inlineMath", "tex": "e_k" }, { "type": "text", "text": " recursively in terms of earlier " },
+      { "type": "inlineMath", "tex": "e_i" }, { "type": "text", "text": " and the power sums." }
+    ] }] } },
+    { "order": 3, "title": "Odd polynomials and paired roots", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "A polynomial containing only odd powers satisfies " },
+      { "type": "inlineMath", "tex": "p(-t)=-p(t)" }, { "type": "text", "text": ". Thus every nonzero root occurs together with its negative." }
+    ] }] } }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The largest possible value is " }, { "type": "inlineMath", "tex": "m=n" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For an odd integer " }, { "type": "inlineMath", "tex": "r" },
+      { "type": "text", "text": ", the sum of the interval lengths is" }
+    ] },
+    { "type": "displayMath", "tex": "\\sum_{j=1}^{2n}(-1)^j x_j^r." },
+    { "type": "heading", "level": 2, "runs": [{ "type": "text", "text": "Construction" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Put " }, { "type": "inlineMath", "tex": "q=2n+1" },
+      { "type": "text", "text": " and choose" }
+    ] },
+    { "type": "displayMath", "tex": "x_j=-\\cos\\left(\\frac{j\\pi}{q}\\right),\\qquad 1\\le j\\le2n." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "These numbers are strictly increasing and lie in " },
+      { "type": "inlineMath", "tex": "(-1,1)" }, { "type": "text", "text": ". Let " },
+      { "type": "inlineMath", "tex": "r=2k-1" }, { "type": "text", "text": " with " },
+      { "type": "inlineMath", "tex": "1\\le k\\le n" }, { "type": "text", "text": ". If " },
+      { "type": "inlineMath", "tex": "\\omega=e^{2\\pi i/q}" }, { "type": "text", "text": ", expanding each cosine power shows" }
+    ] },
+    { "type": "displayMath", "tex": "\\sum_{j=0}^{q-1}\\cos^r\\left(\\frac{2\\pi j}{q}\\right)=0." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Indeed, the expansion involves powers " },
+      { "type": "inlineMath", "tex": "\\omega^{j(r-2a)}" }, { "type": "text", "text": ", where " },
+      { "type": "inlineMath", "tex": "r-2a" }, { "type": "text", "text": " is nonzero and has absolute value below " },
+      { "type": "inlineMath", "tex": "q" }, { "type": "text", "text": ". Every such root-of-unity sum vanishes. Pairing equal cosine values gives" }
+    ] },
+    { "type": "displayMath", "tex": "1+2\\sum_{j=1}^{n}\\cos^r\\left(\\frac{2\\pi j}{q}\\right)=0." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Also " },
+      { "type": "inlineMath", "tex": "\\cos((2j-1)\\pi/q)=-\\cos(2(n-j+1)\\pi/q)" },
+      { "type": "text", "text": ". Since " }, { "type": "inlineMath", "tex": "r" },
+      { "type": "text", "text": " is odd, it follows that" }
+    ] },
+    { "type": "displayMath", "tex": "\\sum_{j=1}^{2n}(-1)^{j-1}\\cos^r\\left(\\frac{j\\pi}{q}\\right)=1." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Because " }, { "type": "inlineMath", "tex": "x_j^r=-\\cos^r(j\\pi/q)" },
+      { "type": "text", "text": ", this is exactly " },
+      { "type": "inlineMath", "tex": "\\sum_{j=1}^{2n}(-1)^j x_j^r=1" },
+      { "type": "text", "text": ". Thus the construction works for " },
+      { "type": "inlineMath", "tex": "k=1,\\ldots,n" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "heading", "level": 2, "runs": [{ "type": "text", "text": "Upper bound" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Suppose instead that the condition holds through " },
+      { "type": "inlineMath", "tex": "k=n+1" }, { "type": "text", "text": ". Form" }
+    ] },
+    { "type": "displayMath", "tex": "p(t)=(t+1)\\prod_{j=1}^{2n}\\bigl(t-(-1)^j x_j\\bigr)." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "s_r" },
+      { "type": "text", "text": " be the " }, { "type": "inlineMath", "tex": "r" },
+      { "type": "text", "text": "th power sum of the roots of " }, { "type": "inlineMath", "tex": "p" },
+      { "type": "text", "text": ". For each required odd exponent " }, { "type": "inlineMath", "tex": "r" }, { "type": "text", "text": "," }
+    ] },
+    { "type": "displayMath", "tex": "s_r=-1+\\sum_{j=1}^{2n}(-1)^j x_j^r=0." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Hence " }, { "type": "inlineMath", "tex": "s_1,s_3,\\ldots,s_{2n+1}" },
+      { "type": "text", "text": " all vanish. Newton identities now imply inductively that the odd-indexed elementary symmetric functions " },
+      { "type": "inlineMath", "tex": "e_1,e_3,\\ldots,e_{2n+1}" }, { "type": "text", "text": " vanish as well: in the identity for an odd " },
+      { "type": "inlineMath", "tex": "e_r" }, { "type": "text", "text": ", a term with odd power-sum index vanishes by hypothesis, while a term with even index contains an earlier odd-indexed elementary symmetric function." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Therefore the monic polynomial " }, { "type": "inlineMath", "tex": "p" },
+      { "type": "text", "text": " of odd degree contains only odd powers, so it is an odd polynomial. Since " },
+      { "type": "inlineMath", "tex": "-1" }, { "type": "text", "text": " is a root, " },
+      { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": " must also be a root. But every other listed root has absolute value below " },
+      { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": ", a contradiction. Thus " },
+      { "type": "inlineMath", "tex": "m\\le n" }, { "type": "text", "text": ", completing the proof." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2022 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2022_Putnam_Competitions.pdf" },
+    { "kind": "solution", "label": "MAA official 2022 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2022-Putnam-solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2022 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2022s.tex" }
+  ]
+}
