@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2022",
+  "problemId": "A1",
+  "label": "A1",
+  "ordinal": 1,
+  "topics": ["calculus"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A1" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Determine all ordered pairs of real numbers " },
+      { "type": "inlineMath", "tex": "(a,b)" },
+      { "type": "text", "text": " such that the line " },
+      { "type": "inlineMath", "tex": "y=ax+b" },
+      { "type": "text", "text": " intersects the curve " },
+      { "type": "inlineMath", "tex": "y=\\ln(1+x^2)" },
+      { "type": "text", "text": " in exactly one point." }
+    ] }
+  ] },
+  "hints": [
+    { "order": 1, "stage": "nudge", "title": "Use the symmetry first", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "The curve is unchanged by " }, { "type": "inlineMath", "tex": "x\\mapsto -x" },
+      { "type": "text", "text": ". How does this transformation change the slope of the line?" }
+    ] }] } },
+    { "order": 2, "stage": "strategy", "title": "Turn intersections into level sets", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "After reducing to " }, { "type": "inlineMath", "tex": "a\\ge0" },
+      { "type": "text", "text": ", study the number of solutions of " },
+      { "type": "inlineMath", "tex": "g(x)=b" }, { "type": "text", "text": ", where " },
+      { "type": "inlineMath", "tex": "g(x)=\\ln(1+x^2)-ax" }, { "type": "text", "text": "." }
+    ] }] } },
+    { "order": 3, "stage": "knowledge", "title": "Find the critical slopes", "document": { "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The derivative " }, { "type": "inlineMath", "tex": "2x/(1+x^2)" },
+        { "type": "text", "text": " has maximum " }, { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": ". For " }, { "type": "inlineMath", "tex": "0<a<1" },
+        { "type": "text", "text": ", solve " }, { "type": "inlineMath", "tex": "2x/(1+x^2)=a" }, { "type": "text", "text": "." }
+      ] },
+      { "type": "displayMath", "tex": "x_{\\pm}=\\frac{1\\pm\\sqrt{1-a^2}}{a}." }
+    ] } },
+    { "order": 4, "stage": "outline", "title": "Count roots in the three slope ranges", "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+      [{ "type": "text", "text": "Handle " }, { "type": "inlineMath", "tex": "a=0" }, { "type": "text", "text": " from the minimum and symmetry of the curve." }],
+      [{ "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "a\\ge1" }, { "type": "text", "text": ", combine monotonicity with the limits at infinity." }],
+      [{ "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "0<a<1" }, { "type": "text", "text": ", compare " }, { "type": "inlineMath", "tex": "b" }, { "type": "text", "text": " with the local minimum and maximum values " }, { "type": "inlineMath", "tex": "g(x_-)" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "g(x_+)" }, { "type": "text", "text": "." }],
+      [{ "type": "text", "text": "Restore negative slopes by replacing " }, { "type": "inlineMath", "tex": "a" }, { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "|a|" }, { "type": "text", "text": "." }]
+    ] }] } }
+  ],
+  "prerequisites": [
+    { "order": 1, "title": "Reflection symmetry", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Reflecting across the " }, { "type": "inlineMath", "tex": "y" },
+      { "type": "text", "text": "-axis leaves an even curve fixed and sends " },
+      { "type": "inlineMath", "tex": "y=ax+b" }, { "type": "text", "text": " to " },
+      { "type": "inlineMath", "tex": "y=-ax+b" }, { "type": "text", "text": "." }
+    ] }] } },
+    { "order": 2, "title": "Derivative and its range", "document": { "blocks": [
+      { "type": "displayMath", "tex": "\\frac{d}{dx}\\ln(1+x^2)=\\frac{2x}{1+x^2}," },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "and " }, { "type": "inlineMath", "tex": "2x/(1+x^2)\\le1" },
+        { "type": "text", "text": ", with equality only at " }, { "type": "inlineMath", "tex": "x=1" }, { "type": "text", "text": "." }
+      ] }
+    ] } },
+    { "order": 3, "title": "Root counts from monotonicity", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Suppose a continuous function tends to positive infinity at the left end, negative infinity at the right end, and has successive decreasing, increasing, and decreasing branches. It has one, two, or three intersections with a horizontal line according to that line's position relative to the local minimum and maximum. Equality at an extremum gives tangency and hence two distinct intersections." }
+    ] }] } }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Put " }, { "type": "inlineMath", "tex": "\\alpha=|a|" },
+      { "type": "text", "text": ". The required pairs are exactly the following:" }
+    ] },
+    { "type": "list", "ordered": false, "items": [
+      [{ "type": "inlineMath", "tex": "a=b=0" }, { "type": "text", "text": ";" }],
+      [{ "type": "inlineMath", "tex": "|a|\\ge1" }, { "type": "text", "text": ", with arbitrary " }, { "type": "inlineMath", "tex": "b" }, { "type": "text", "text": ";" }],
+      [{ "type": "inlineMath", "tex": "0<|a|<1" }, { "type": "text", "text": ", with " }, { "type": "inlineMath", "tex": "b<L_-" }, { "type": "text", "text": " or " }, { "type": "inlineMath", "tex": "b>L_+" }, { "type": "text", "text": ", where the two thresholds are defined below." }]
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For the last case set " }, { "type": "inlineMath", "tex": "s=\\sqrt{1-\\alpha^2}" }, { "type": "text", "text": ". Then" }
+    ] },
+    { "type": "displayMath", "tex": "L_-=\\ln\\!\\left(\\frac{2(1-s)}{\\alpha^2}\\right)+s-1," },
+    { "type": "displayMath", "tex": "L_+=\\ln\\!\\left(\\frac{2(1+s)}{\\alpha^2}\\right)-s-1." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "To prove the classification, reflection in the " }, { "type": "inlineMath", "tex": "y" },
+      { "type": "text", "text": "-axis shows that changing " }, { "type": "inlineMath", "tex": "a" },
+      { "type": "text", "text": " to " }, { "type": "inlineMath", "tex": "-a" },
+      { "type": "text", "text": " does not change the number of intersections. It is therefore enough to assume " },
+      { "type": "inlineMath", "tex": "a=\\alpha\\ge0" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "a=0" },
+      { "type": "text", "text": ", the even function " }, { "type": "inlineMath", "tex": "\\ln(1+x^2)" },
+      { "type": "text", "text": " has its unique minimum value " }, { "type": "inlineMath", "tex": "0" },
+      { "type": "text", "text": " at " }, { "type": "inlineMath", "tex": "x=0" },
+      { "type": "text", "text": ". Thus a horizontal line meets it exactly once only when " },
+      { "type": "inlineMath", "tex": "b=0" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Now let " }, { "type": "inlineMath", "tex": "a>0" },
+      { "type": "text", "text": " and define " }, { "type": "inlineMath", "tex": "g(x)=\\ln(1+x^2)-ax" },
+      { "type": "text", "text": ". Intersections correspond to solutions of " }, { "type": "inlineMath", "tex": "g(x)=b" },
+      { "type": "text", "text": ", and" }
+    ] },
+    { "type": "displayMath", "tex": "g'(x)=\\frac{2x}{1+x^2}-a." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "a\\ge1" },
+      { "type": "text", "text": ", then " }, { "type": "inlineMath", "tex": "g'(x)\\le0" },
+      { "type": "text", "text": ", with equality at most at the isolated point " }, { "type": "inlineMath", "tex": "a=x=1" },
+      { "type": "text", "text": ". Hence " }, { "type": "inlineMath", "tex": "g" },
+      { "type": "text", "text": " is strictly decreasing. Moreover " }, { "type": "inlineMath", "tex": "g(x)\\to\\infty" },
+      { "type": "text", "text": " as " }, { "type": "inlineMath", "tex": "x\\to-\\infty" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "g(x)\\to-\\infty" },
+      { "type": "text", "text": " as " }, { "type": "inlineMath", "tex": "x\\to\\infty" },
+      { "type": "text", "text": ", so every value of " }, { "type": "inlineMath", "tex": "b" }, { "type": "text", "text": " gives exactly one intersection." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Finally suppose " }, { "type": "inlineMath", "tex": "0<a<1" },
+      { "type": "text", "text": ". The two critical points are" }
+    ] },
+    { "type": "displayMath", "tex": "x_-=\\frac{1-s}{a},\\qquad x_+=\\frac{1+s}{a}," },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "where " }, { "type": "inlineMath", "tex": "s=\\sqrt{1-a^2}" },
+      { "type": "text", "text": ". The function decreases to a local minimum at " },
+      { "type": "inlineMath", "tex": "x_-" }, { "type": "text", "text": ", increases to a local maximum at " },
+      { "type": "inlineMath", "tex": "x_+" }, { "type": "text", "text": ", and then decreases again. Its limits are the same as above. Therefore " },
+      { "type": "inlineMath", "tex": "g(x)=b" }, { "type": "text", "text": " has exactly one solution precisely when " },
+      { "type": "inlineMath", "tex": "b<g(x_-)" }, { "type": "text", "text": " or " },
+      { "type": "inlineMath", "tex": "b>g(x_+)" }, { "type": "text", "text": ". At equality the tangent root and another root give two intersections." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Substitution gives " }, { "type": "inlineMath", "tex": "g(x_-)=L_-" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "g(x_+)=L_+" },
+      { "type": "text", "text": ", completing the classification." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2022 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2022_Putnam_Competitions.pdf" },
+    { "kind": "solution", "label": "MAA official 2022 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2022-Putnam-solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2022 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2022s.tex" }
+  ]
+}

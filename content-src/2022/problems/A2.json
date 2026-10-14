@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2022",
+  "problemId": "A2",
+  "label": "A2",
+  "ordinal": 2,
+  "topics": ["algebra"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A2" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " be an integer with " }, { "type": "inlineMath", "tex": "n\\ge2" },
+      { "type": "text", "text": ". Over all real polynomials " }, { "type": "inlineMath", "tex": "p(x)" },
+      { "type": "text", "text": " of degree " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": ", what is the largest possible number of negative coefficients of " },
+      { "type": "inlineMath", "tex": "p(x)^2" }, { "type": "text", "text": "?" }
+    ] }
+  ] },
+  "hints": [
+    { "order": 1, "stage": "nudge", "title": "Inspect the unavoidable endpoint coefficients", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "p(x)=a_0+a_1x+\\cdots+a_nx^n" },
+      { "type": "text", "text": ", what are the constant and leading coefficients of " }, { "type": "inlineMath", "tex": "p(x)^2" }, { "type": "text", "text": "?" }
+    ] }] } },
+    { "order": 2, "stage": "strategy", "title": "Rule out all negative middle coefficients", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Assume for contradiction that every coefficient of degrees " },
+      { "type": "inlineMath", "tex": "1,2,\\ldots,2n-1" }, { "type": "text", "text": " is negative. Normalize the sign so that " },
+      { "type": "inlineMath", "tex": "a_0>0" }, { "type": "text", "text": ", then determine the signs of " },
+      { "type": "inlineMath", "tex": "a_1,a_2,\\ldots" }, { "type": "text", "text": " inductively." }
+    ] }] } },
+    { "order": 3, "stage": "knowledge", "title": "Use coefficient convolution", "document": { "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "b_k=[x^k]p(x)^2" },
+        { "type": "text", "text": ". For " }, { "type": "inlineMath", "tex": "1\\le k\\le n" },
+        { "type": "text", "text": ", the coefficient identity can be arranged as" }
+      ] },
+      { "type": "displayMath", "tex": "2a_0a_k=b_k-\\sum_{i=1}^{k-1}a_i a_{k-i}." },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Once the lower coefficients of " }, { "type": "inlineMath", "tex": "p" }, { "type": "text", "text": " are negative, the sum has a definite sign." }] }
+    ] } },
+    { "order": 4, "stage": "outline", "title": "Build an extremal polynomial", "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+      [{ "type": "text", "text": "Use the contradiction above to obtain an upper bound." }],
+      [{ "type": "text", "text": "For the construction, try " }, { "type": "inlineMath", "tex": "p(x)=R(x^n+1)-(x+x^2+\\cdots+x^{n-1})" }, { "type": "text", "text": "." }],
+      [{ "type": "text", "text": "Choose " }, { "type": "inlineMath", "tex": "R" }, { "type": "text", "text": " large enough that each relevant cross-term dominates the bounded square of the middle sum." }],
+      [{ "type": "text", "text": "Check separately the coefficients of degrees " }, { "type": "inlineMath", "tex": "0,n,2n" }, { "type": "text", "text": "." }]
+    ] }] } }
+  ],
+  "prerequisites": [
+    { "order": 1, "title": "Coefficient convolution", "document": { "blocks": [{ "type": "displayMath", "tex": "[x^k]p(x)^2=\\sum_{i=0}^{k}a_i a_{k-i}," }, { "type": "paragraph", "runs": [{ "type": "text", "text": "where coefficients outside " }, { "type": "inlineMath", "tex": "0\\le i\\le n" }, { "type": "text", "text": " are treated as zero." }] }] } },
+    { "order": 2, "title": "Global sign normalization", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Replacing " }, { "type": "inlineMath", "tex": "p" }, { "type": "text", "text": " by " },
+      { "type": "inlineMath", "tex": "-p" }, { "type": "text", "text": " does not change " }, { "type": "inlineMath", "tex": "p^2" },
+      { "type": "text", "text": ", so a nonzero coefficient such as " }, { "type": "inlineMath", "tex": "a_0" }, { "type": "text", "text": " may be assumed positive." }
+    ] }] } },
+    { "order": 3, "title": "Dominating finitely many coefficients", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "If finitely many expressions have the form " }, { "type": "inlineMath", "tex": "-2R+c_i" },
+      { "type": "text", "text": " with fixed real numbers " }, { "type": "inlineMath", "tex": "c_i" },
+      { "type": "text", "text": ", then all are negative once " }, { "type": "inlineMath", "tex": "R" }, { "type": "text", "text": " is sufficiently large." }
+    ] }] } }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The largest possible number is " }, { "type": "inlineMath", "tex": "2n-2" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Write" }
+    ] },
+    { "type": "displayMath", "tex": "p(x)=a_0+a_1x+\\cdots+a_nx^n" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "and let " }, { "type": "inlineMath", "tex": "b_k" },
+      { "type": "text", "text": " be the coefficient of " }, { "type": "inlineMath", "tex": "x^k" },
+      { "type": "text", "text": " in " }, { "type": "inlineMath", "tex": "p(x)^2" },
+      { "type": "text", "text": ". The endpoint coefficients " }, { "type": "inlineMath", "tex": "b_0=a_0^2" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "b_{2n}=a_n^2" },
+      { "type": "text", "text": " are nonnegative. We show that the other " }, { "type": "inlineMath", "tex": "2n-1" },
+      { "type": "text", "text": " coefficients cannot all be negative." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Suppose instead that " }, { "type": "inlineMath", "tex": "b_k<0" },
+      { "type": "text", "text": " for every " }, { "type": "inlineMath", "tex": "1\\le k\\le2n-1" },
+      { "type": "text", "text": ". Then " }, { "type": "inlineMath", "tex": "b_1=2a_0a_1<0" },
+      { "type": "text", "text": ", so " }, { "type": "inlineMath", "tex": "a_0\\ne0" },
+      { "type": "text", "text": ". Replacing " }, { "type": "inlineMath", "tex": "p" },
+      { "type": "text", "text": " by " }, { "type": "inlineMath", "tex": "-p" },
+      { "type": "text", "text": " if needed, assume " }, { "type": "inlineMath", "tex": "a_0>0" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "We prove inductively that " }, { "type": "inlineMath", "tex": "a_k<0" },
+      { "type": "text", "text": " for " }, { "type": "inlineMath", "tex": "1\\le k\\le n" },
+      { "type": "text", "text": ". The case " }, { "type": "inlineMath", "tex": "k=1" },
+      { "type": "text", "text": " follows from " }, { "type": "inlineMath", "tex": "b_1<0" },
+      { "type": "text", "text": ". If the assertion holds below " }, { "type": "inlineMath", "tex": "k" },
+      { "type": "text", "text": ", coefficient convolution gives" }
+    ] },
+    { "type": "displayMath", "tex": "2a_0a_k=b_k-\\sum_{i=1}^{k-1}a_i a_{k-i}<0," },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "because every product in the sum is positive. Thus " },
+      { "type": "inlineMath", "tex": "a_k<0" }, { "type": "text", "text": ". But then" }
+    ] },
+    { "type": "displayMath", "tex": "b_{2n-1}=2a_{n-1}a_n>0," },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "a contradiction. Hence at most " }, { "type": "inlineMath", "tex": "2n-2" },
+      { "type": "text", "text": " coefficients can be negative." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "It remains to attain the bound. Let " }, { "type": "inlineMath", "tex": "q(x)=x+x^2+\\cdots+x^{n-1}" },
+      { "type": "text", "text": " and choose a positive real number " }, { "type": "inlineMath", "tex": "R" },
+      { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "2R>n-2" }, { "type": "text", "text": ". Set" }
+    ] },
+    { "type": "displayMath", "tex": "p(x)=R(x^n+1)-q(x)." },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "Then" }] },
+    { "type": "displayMath", "tex": "\\begin{aligned}p(x)^2={}&R^2(x^{2n}+2x^n+1)\\\\&-2R(x^n+1)q(x)+q(x)^2.\\end{aligned}" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For each degree " }, { "type": "inlineMath", "tex": "k" },
+      { "type": "text", "text": " in " }, { "type": "inlineMath", "tex": "1,\\ldots,n-1" },
+      { "type": "text", "text": " or " }, { "type": "inlineMath", "tex": "n+1,\\ldots,2n-1" },
+      { "type": "text", "text": ", the cross-term contributes " }, { "type": "inlineMath", "tex": "-2R" },
+      { "type": "text", "text": ", while the coefficient contributed by " }, { "type": "inlineMath", "tex": "q(x)^2" },
+      { "type": "text", "text": " is at most " }, { "type": "inlineMath", "tex": "n-2" },
+      { "type": "text", "text": ". Therefore all these " }, { "type": "inlineMath", "tex": "2n-2" },
+      { "type": "text", "text": " coefficients are negative." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The coefficients of degrees " }, { "type": "inlineMath", "tex": "0" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "2n" },
+      { "type": "text", "text": " equal " }, { "type": "inlineMath", "tex": "R^2" },
+      { "type": "text", "text": ", and the coefficient of degree " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " equals " }, { "type": "inlineMath", "tex": "2R^2+n-1" },
+      { "type": "text", "text": ", so these three are positive. The construction has exactly " },
+      { "type": "inlineMath", "tex": "2n-2" }, { "type": "text", "text": " negative coefficients." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2022 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2022_Putnam_Competitions.pdf" },
+    { "kind": "solution", "label": "MAA official 2022 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2022-Putnam-solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2022 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2022s.tex" }
+  ]
+}

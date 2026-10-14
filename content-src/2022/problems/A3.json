@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2022",
+  "problemId": "A3",
+  "label": "A3",
+  "ordinal": 3,
+  "topics": ["number-theory", "combinatorics"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A3" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "p" },
+      { "type": "text", "text": " be a prime number greater than " }, { "type": "inlineMath", "tex": "5" },
+      { "type": "text", "text": ". Let " }, { "type": "inlineMath", "tex": "f(p)" },
+      { "type": "text", "text": " denote the number of infinite sequences " },
+      { "type": "inlineMath", "tex": "a_1,a_2,a_3,\\ldots" }, { "type": "text", "text": " such that" }
+    ] },
+    { "type": "displayMath", "tex": "a_n\\in\\{1,2,\\ldots,p-1\\}" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "and" }
+    ] },
+    { "type": "displayMath", "tex": "a_na_{n+2}\\equiv1+a_{n+1}\\pmod p" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "for all " }, { "type": "inlineMath", "tex": "n\\ge1" },
+      { "type": "text", "text": ". Prove that " }, { "type": "inlineMath", "tex": "f(p)" },
+      { "type": "text", "text": " is congruent to " }, { "type": "inlineMath", "tex": "0" },
+      { "type": "text", "text": " or " }, { "type": "inlineMath", "tex": "2\\pmod5" }, { "type": "text", "text": "." }
+    ] }
+  ] },
+  "hints": [
+    { "order": 1, "stage": "nudge", "title": "Start from the first two terms", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Because every term is nonzero modulo " }, { "type": "inlineMath", "tex": "p" },
+      { "type": "text", "text": ", the recurrence determines " }, { "type": "inlineMath", "tex": "a_{n+2}" },
+      { "type": "text", "text": " uniquely from " }, { "type": "inlineMath", "tex": "a_n,a_{n+1}" }, { "type": "text", "text": "." }
+    ] }] } },
+    { "order": 2, "stage": "strategy", "title": "Compute one full cycle", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Write " }, { "type": "inlineMath", "tex": "a_1=u" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "a_2=v" },
+      { "type": "text", "text": ". Compute through " }, { "type": "inlineMath", "tex": "a_7" },
+      { "type": "text", "text": " in " }, { "type": "inlineMath", "tex": "\\mathbb F_p" },
+      { "type": "text", "text": "; a short period appears." }
+    ] }] } },
+    { "order": 3, "stage": "knowledge", "title": "Identify the admissible initial pairs", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "The formulas fail to stay in " }, { "type": "inlineMath", "tex": "\\mathbb F_p^\\times" },
+      { "type": "text", "text": " exactly when " }, { "type": "inlineMath", "tex": "u=-1" },
+      { "type": "text", "text": ", " }, { "type": "inlineMath", "tex": "v=-1" },
+      { "type": "text", "text": ", or " }, { "type": "inlineMath", "tex": "u+v=-1" },
+      { "type": "text", "text": ". Count the remaining ordered pairs." }
+    ] }] } },
+    { "order": 4, "stage": "outline", "title": "Reduce the count modulo five", "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+      [{ "type": "text", "text": "Show every admissible sequence is " }, { "type": "inlineMath", "tex": "5" }, { "type": "text", "text": "-periodic and is uniquely determined by its initial pair." }],
+      [{ "type": "text", "text": "Count pairs " }, { "type": "inlineMath", "tex": "u,v\\in\\mathbb F_p\\setminus\\{0,-1\\}" }, { "type": "text", "text": " and subtract those with " }, { "type": "inlineMath", "tex": "u+v=-1" }, { "type": "text", "text": "." }],
+      [{ "type": "text", "text": "Evaluate the resulting quadratic for the four possible nonzero residue classes of " }, { "type": "inlineMath", "tex": "p\\pmod5" }, { "type": "text", "text": "." }]
+    ] }] } }
+  ],
+  "prerequisites": [
+    { "order": 1, "title": "Division in a finite field", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Modulo a prime " }, { "type": "inlineMath", "tex": "p" },
+      { "type": "text", "text": ", every nonzero residue has a multiplicative inverse. Thus " },
+      { "type": "inlineMath", "tex": "a_na_{n+2}=1+a_{n+1}" }, { "type": "text", "text": " uniquely determines " },
+      { "type": "inlineMath", "tex": "a_{n+2}" }, { "type": "text", "text": " when " }, { "type": "inlineMath", "tex": "a_n\\ne0" }, { "type": "text", "text": "." }
+    ] }] } },
+    { "order": 2, "title": "Periodicity from a repeated state", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "For a deterministic second-order recurrence, once the ordered pair " },
+      { "type": "inlineMath", "tex": "(a_{m},a_{m+1})" }, { "type": "text", "text": " repeats an earlier pair, all subsequent terms repeat as well." }
+    ] }] } },
+    { "order": 3, "title": "Counting an affine diagonal", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "To count ordered pairs from a finite product set while excluding a condition " },
+      { "type": "inlineMath", "tex": "u+v=c" }, { "type": "text", "text": ", parameterize the forbidden diagonal by " },
+      { "type": "inlineMath", "tex": "v=c-u" }, { "type": "text", "text": ". Then check which parameter values violate the separate restrictions on " },
+      { "type": "inlineMath", "tex": "u" }, { "type": "text", "text": " or " }, { "type": "inlineMath", "tex": "v" },
+      { "type": "text", "text": " before subtracting its size." }
+    ] }] } }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Work in the finite field " }, { "type": "inlineMath", "tex": "\\mathbb F_p" },
+      { "type": "text", "text": ". An admissible sequence has only nonzero terms, so it is determined by " },
+      { "type": "inlineMath", "tex": "u=a_1" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "v=a_2" },
+      { "type": "text", "text": " through" }
+    ] },
+    { "type": "displayMath", "tex": "a_{n+2}=\\frac{1+a_{n+1}}{a_n}." },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "Direct calculation gives" }] },
+    { "type": "displayMath", "tex": "a_3=\\frac{1+v}{u},\\qquad a_4=\\frac{1+u+v}{uv}," },
+    { "type": "displayMath", "tex": "a_5=\\frac{1+u}{v},\\qquad a_6=u,\\qquad a_7=v." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Consequently, whenever these displayed terms are nonzero, the pair " },
+      { "type": "inlineMath", "tex": "(a_6,a_7)" }, { "type": "text", "text": " repeats " },
+      { "type": "inlineMath", "tex": "(a_1,a_2)" }, { "type": "text", "text": ", and the sequence is " },
+      { "type": "inlineMath", "tex": "5" }, { "type": "text", "text": "-periodic." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The initial pair produces an admissible sequence exactly when" }
+    ] },
+    { "type": "displayMath", "tex": "u,v\\in\\mathbb F_p\\setminus\\{0,-1\\},\\qquad u+v\\ne-1." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Indeed, these conditions make " }, { "type": "inlineMath", "tex": "a_3,a_4,a_5" },
+      { "type": "text", "text": " nonzero, after which periodicity handles every later term. Conversely, if " },
+      { "type": "inlineMath", "tex": "v=-1" }, { "type": "text", "text": ", " },
+      { "type": "inlineMath", "tex": "u+v=-1" }, { "type": "text", "text": ", or " },
+      { "type": "inlineMath", "tex": "u=-1" }, { "type": "text", "text": ", then respectively " },
+      { "type": "inlineMath", "tex": "a_3,a_4" }, { "type": "text", "text": ", or " },
+      { "type": "inlineMath", "tex": "a_5" }, { "type": "text", "text": " is zero, which is forbidden." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "There are " }, { "type": "inlineMath", "tex": "(p-2)^2" },
+      { "type": "text", "text": " ordered pairs with " }, { "type": "inlineMath", "tex": "u,v\\notin\\{0,-1\\}" },
+      { "type": "text", "text": ". For each of the " }, { "type": "inlineMath", "tex": "p-2" },
+      { "type": "text", "text": " allowed choices of " }, { "type": "inlineMath", "tex": "u" },
+      { "type": "text", "text": ", the value " }, { "type": "inlineMath", "tex": "v=-1-u" },
+      { "type": "text", "text": " is also neither " }, { "type": "inlineMath", "tex": "0" },
+      { "type": "text", "text": " nor " }, { "type": "inlineMath", "tex": "-1" },
+      { "type": "text", "text": ", so exactly " }, { "type": "inlineMath", "tex": "p-2" },
+      { "type": "text", "text": " pairs must be excluded. Thus" }
+    ] },
+    { "type": "displayMath", "tex": "f(p)=(p-2)^2-(p-2)=(p-2)(p-3)." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Since " }, { "type": "inlineMath", "tex": "p>5" },
+      { "type": "text", "text": " is prime, its residue modulo " }, { "type": "inlineMath", "tex": "5" },
+      { "type": "text", "text": " is one of " }, { "type": "inlineMath", "tex": "1,2,3,4" },
+      { "type": "text", "text": ". The corresponding values of " }, { "type": "inlineMath", "tex": "(p-2)(p-3)" },
+      { "type": "text", "text": " modulo " }, { "type": "inlineMath", "tex": "5" },
+      { "type": "text", "text": " are respectively " }, { "type": "inlineMath", "tex": "2,0,0,2" },
+      { "type": "text", "text": ". Therefore " }, { "type": "inlineMath", "tex": "f(p)\\equiv0" },
+      { "type": "text", "text": " or " }, { "type": "inlineMath", "tex": "2\\pmod5" }, { "type": "text", "text": "." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2022 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2022_Putnam_Competitions.pdf" },
+    { "kind": "solution", "label": "MAA official 2022 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2022-Putnam-solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2022 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2022s.tex" }
+  ]
+}
