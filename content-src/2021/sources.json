@@ -1,0 +1,57 @@
+{
+  "year": 2021,
+  "publisher": "Mathematical Association of America",
+  "usage": "Personal, noncommercial offline study only.",
+  "sources": [
+    {
+      "id": "problems",
+      "title": "2021 William Lowell Putnam Mathematical Competition — Problems for Sessions A and B",
+      "publisher": "Mathematical Association of America",
+      "requestUrl": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems.pdf",
+      "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems.pdf",
+      "mediaType": "application/pdf",
+      "retrievedOn": "2026-10-14",
+      "file": "original/2021-problems.pdf",
+      "byteLength": 628990,
+      "pageCount": 2,
+      "sha256": "a1f345693297c2d82ec1008b99c2a53bf98f5c1b7d7873a8bac8b99b447b1b83"
+    },
+    {
+      "id": "solutions",
+      "title": "2021 William Lowell Putnam Mathematical Competition — Official Problems and Solutions",
+      "publisher": "Mathematical Association of America",
+      "requestUrl": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems-and-solutions.pdf",
+      "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems-and-solutions.pdf",
+      "mediaType": "application/pdf",
+      "retrievedOn": "2026-10-14",
+      "file": "original/2021-problems-and-solutions.pdf",
+      "byteLength": 346078,
+      "pageCount": 17,
+      "sha256": "29e7d71f4f24c469a06a1720a3086f3d5c51224b79aae4c3fee5da05fead755e"
+    },
+    {
+      "id": "kedlaya-statements",
+      "title": "Putnam 2021 problem statements — TeX cross-check",
+      "publisher": "Kiran S. Kedlaya",
+      "requestUrl": "https://kskedlaya.org/putnam-archive/2021.tex",
+      "url": "https://kskedlaya.org/putnam-archive/2021.tex",
+      "mediaType": "application/x-tex",
+      "retrievedOn": "2026-10-14",
+      "file": "original/2021.tex",
+      "byteLength": 4010,
+      "sha256": "c04e3d1c80fb2f08859a767e8164e14bda82b54e236ba660f0704923bd40cc87"
+    },
+    {
+      "id": "kedlaya-solutions",
+      "title": "Putnam 2021 solutions — TeX cross-check",
+      "publisher": "Kiran S. Kedlaya",
+      "requestUrl": "https://kskedlaya.org/putnam-archive/2021s.tex",
+      "url": "https://kskedlaya.org/putnam-archive/2021s.tex",
+      "mediaType": "application/x-tex",
+      "retrievedOn": "2026-10-14",
+      "file": "original/2021s.tex",
+      "byteLength": 25325,
+      "sha256": "0b65e94d6145c81a66930206a6dfdbe7666acf680f50757cf8eeb9218a0fed87"
+    }
+  ]
+}
