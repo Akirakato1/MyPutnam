@@ -78,7 +78,7 @@
         { "type": "inlineMath", "tex": "x_1,\\ldots,x_n" },
         { "type": "text", "text": "," }
       ] }, { "type": "displayMath", "tex": "(x_1\\cdots x_n)^{1/n}\\le\\frac{x_1+\\cdots+x_n}{n}," }, { "type": "paragraph", "runs": [
-        { "type": "text", "text": "with equality exactly when all positive entries are equal." }
+        { "type": "text", "text": "with equality exactly when all entries are equal." }
       ] }] }
     },
     {
