@@ -8,7 +8,7 @@ import {
   problemKey,
   setKey,
 } from '../src/content-types.mjs';
-import { validateLibraryCatalog } from '../src/library-catalog.mjs';
+import { findCatalogSet, validateLibraryCatalog } from '../src/library-catalog.mjs';
 
 const catalog = () => ({
   schemaVersion: 1,
@@ -65,4 +65,31 @@ test('catalog validation rejects duplicate ids and display orders without case f
     mutate(invalid);
     assert.ok(validateLibraryCatalog(invalid).length > 0);
   }
+});
+
+test('administration year records delayed sittings without changing canonical competition identity', () => {
+  const delayed = catalog();
+  delayed.collections[0].sets.push({
+    id: '2020',
+    title: '2020',
+    displayOrder: 3,
+    metadata: { competitionYear: 2020, administrationYear: 2021 },
+  });
+
+  assert.deepEqual(validateLibraryCatalog(delayed), []);
+  const { problemSet } = findCatalogSet(delayed, 'putnam', '2020');
+  assert.equal(problemSet.metadata.competitionYear, 2020);
+  assert.equal(problemSet.metadata.administrationYear, 2021);
+  assert.equal(problemKey('putnam', problemSet.id, 'A1'), 'putnam/2020/A1');
+
+  const backwards = structuredClone(delayed);
+  backwards.collections[0].sets[2].metadata.administrationYear = 2019;
+  assert.match(
+    validateLibraryCatalog(backwards).join('\n'),
+    /administrationYear.*earlier than competitionYear/,
+  );
+
+  const fractional = structuredClone(delayed);
+  fractional.collections[0].sets[2].metadata.administrationYear = 2021.5;
+  assert.ok(validateLibraryCatalog(fractional).length > 0);
 });

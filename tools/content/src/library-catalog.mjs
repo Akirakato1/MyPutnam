@@ -28,6 +28,12 @@ export function validateLibraryCatalog(value) {
       validateId(set?.id, `${setPath}.id`, errors);
       addUnique(setIds, set?.id, `${setPath}.id`, 'set id', errors);
       addUnique(setOrders, set?.displayOrder, `${setPath}.displayOrder`, 'set display order', errors);
+      const competitionYear = set?.metadata?.competitionYear;
+      const administrationYear = set?.metadata?.administrationYear;
+      if (Number.isInteger(competitionYear) && Number.isInteger(administrationYear)
+          && administrationYear < competitionYear) {
+        errors.push(`${setPath}.metadata.administrationYear: cannot be earlier than competitionYear`);
+      }
     }
   }
 

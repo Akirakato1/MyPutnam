@@ -25,7 +25,10 @@
         "metadata": {
           "type": "object",
           "additionalProperties": false,
-          "properties": { "competitionYear": { "type": "integer", "minimum": 1 } }
+          "properties": {
+            "competitionYear": { "type": "integer", "minimum": 1 },
+            "administrationYear": { "type": "integer", "minimum": 1 }
+          }
         }
       }
     },

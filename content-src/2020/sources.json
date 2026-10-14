@@ -1,0 +1,57 @@
+{
+  "year": 2020,
+  "publisher": "Mathematical Association of America",
+  "usage": "Personal, noncommercial offline study only.",
+  "sources": [
+    {
+      "id": "problems",
+      "title": "2020 William Lowell Putnam Mathematical Competition — Problems for Sessions A and B",
+      "publisher": "Mathematical Association of America",
+      "requestUrl": "https://maa.org/wp-content/uploads/2024/10/2020Putnam_final.pdf",
+      "url": "https://maa.org/wp-content/uploads/2024/10/2020Putnam_final.pdf",
+      "mediaType": "application/pdf",
+      "retrievedOn": "2026-10-14",
+      "file": "original/2020-problems.pdf",
+      "byteLength": 622150,
+      "pageCount": 2,
+      "sha256": "f996310ef3c988d61e2d6a0be919edec569e6427647c8f90dee32f0cf2b7a872"
+    },
+    {
+      "id": "solutions",
+      "title": "2020 William Lowell Putnam Mathematical Competition — Official Problems and Solutions",
+      "publisher": "Mathematical Association of America",
+      "requestUrl": "https://maa.org/wp-content/uploads/2024/10/2020-Putnam-Solutions.pdf",
+      "url": "https://maa.org/wp-content/uploads/2024/10/2020-Putnam-Solutions.pdf",
+      "mediaType": "application/pdf",
+      "retrievedOn": "2026-10-14",
+      "file": "original/2020-solutions.pdf",
+      "byteLength": 313790,
+      "pageCount": 20,
+      "sha256": "c0b6a52a9e192bada3b82fbba094819ff63a3ddb054b425ce1f2d04ada35007c"
+    },
+    {
+      "id": "kedlaya-statements",
+      "title": "Putnam 2020 problem statements — TeX cross-check",
+      "publisher": "Kiran S. Kedlaya",
+      "requestUrl": "https://kskedlaya.org/putnam-archive/2020.tex",
+      "url": "https://kskedlaya.org/putnam-archive/2020.tex",
+      "mediaType": "application/x-tex",
+      "retrievedOn": "2026-10-14",
+      "file": "original/2020.tex",
+      "byteLength": 3773,
+      "sha256": "63eb0b15d2b514ac357d1b8f7d62e2ceb54273b85187ded1d3730cd654089583"
+    },
+    {
+      "id": "kedlaya-solutions",
+      "title": "Putnam 2020 solutions — TeX cross-check",
+      "publisher": "Kiran S. Kedlaya",
+      "requestUrl": "https://kskedlaya.org/putnam-archive/2020s.tex",
+      "url": "https://kskedlaya.org/putnam-archive/2020s.tex",
+      "mediaType": "application/x-tex",
+      "retrievedOn": "2026-10-14",
+      "file": "original/2020s.tex",
+      "byteLength": 45613,
+      "sha256": "20be564af5a548e773afd762ee9eadfafdcfdd6662137f248a58b608254758e9"
+    }
+  ]
+}

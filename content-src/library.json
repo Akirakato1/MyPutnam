@@ -13,7 +13,7 @@
         { "id": "2023", "title": "2023", "displayOrder": 3, "metadata": { "competitionYear": 2023 } },
         { "id": "2022", "title": "2022", "displayOrder": 4, "metadata": { "competitionYear": 2022 } },
         { "id": "2021", "title": "2021", "displayOrder": 5, "metadata": { "competitionYear": 2021 } },
-        { "id": "2020", "title": "2020", "displayOrder": 6, "metadata": { "competitionYear": 2020 } }
+        { "id": "2020", "title": "2020", "displayOrder": 6, "metadata": { "competitionYear": 2020, "administrationYear": 2021 } }
       ]
     }
   ],
