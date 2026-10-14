@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2022",
+  "problemId": "B1",
+  "label": "B1",
+  "ordinal": 7,
+  "topics": ["algebra", "sequences-series"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B1" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Suppose that " },
+      { "type": "inlineMath", "tex": "P(x)=a_1x+a_2x^2+\\cdots+a_nx^n" },
+      { "type": "text", "text": " is a polynomial with integer coefficients, with " },
+      { "type": "inlineMath", "tex": "a_1" }, { "type": "text", "text": " odd. Suppose that" }
+    ] },
+    { "type": "displayMath", "tex": "e^{P(x)}=b_0+b_1x+b_2x^2+\\cdots" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "for all " }, { "type": "inlineMath", "tex": "x" },
+      { "type": "text", "text": ". Prove that " }, { "type": "inlineMath", "tex": "b_k" },
+      { "type": "text", "text": " is nonzero for every " }, { "type": "inlineMath", "tex": "k\\ge0" }, { "type": "text", "text": "." }
+    ] }
+  ] },
+  "hints": [
+    { "order": 1, "stage": "nudge", "title": "Clear the factorial denominator", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Instead of studying " }, { "type": "inlineMath", "tex": "b_k" },
+      { "type": "text", "text": " directly, look at the integer " }, { "type": "inlineMath", "tex": "k!b_k" },
+      { "type": "text", "text": " and try to determine its parity." }
+    ] }] } },
+    { "order": 2, "stage": "strategy", "title": "Only finitely many exponential terms matter", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Since " }, { "type": "inlineMath", "tex": "P" },
+      { "type": "text", "text": " has no constant term, the coefficient of " }, { "type": "inlineMath", "tex": "x^k" },
+      { "type": "text", "text": " in " }, { "type": "inlineMath", "tex": "e^{P(x)}" },
+      { "type": "text", "text": " receives contributions only from " }, { "type": "inlineMath", "tex": "P(x)^r/r!" },
+      { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "0\\le r\\le k" }, { "type": "text", "text": "." }
+    ] }] } },
+    { "order": 3, "stage": "knowledge", "title": "Isolate the top power", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "The contribution from " }, { "type": "inlineMath", "tex": "P(x)^k" },
+      { "type": "text", "text": " to " }, { "type": "inlineMath", "tex": "[x^k]" },
+      { "type": "text", "text": " is " }, { "type": "inlineMath", "tex": "a_1^k" },
+      { "type": "text", "text": ". Show that every lower-power contribution to " },
+      { "type": "inlineMath", "tex": "k!b_k" }, { "type": "text", "text": " is even." }
+    ] }] } },
+    { "order": 4, "stage": "outline", "title": "Handle the only exceptional factorial ratio", "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+      [{ "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "r\\le k-2" }, { "type": "text", "text": ", prove that " }, { "type": "inlineMath", "tex": "k!/r!" }, { "type": "text", "text": " is even." }],
+      [{ "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "r=k-1" }, { "type": "text", "text": ", the ratio is " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": ", so only odd " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": " needs attention." }],
+      [{ "type": "text", "text": "Compute " }, { "type": "inlineMath", "tex": "[x^k]P(x)^{k-1}" }, { "type": "text", "text": " by choosing one quadratic term and " }, { "type": "inlineMath", "tex": "k-2" }, { "type": "text", "text": " linear terms." }],
+      [{ "type": "text", "text": "Conclude that " }, { "type": "inlineMath", "tex": "k!b_k" }, { "type": "text", "text": " has the parity of " }, { "type": "inlineMath", "tex": "a_1^k" }, { "type": "text", "text": "." }]
+    ] }] } }
+  ],
+  "prerequisites": [
+    { "order": 1, "title": "Formal coefficient extraction", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "The notation " }, { "type": "inlineMath", "tex": "[x^k]F(x)" },
+      { "type": "text", "text": " means the coefficient of " }, { "type": "inlineMath", "tex": "x^k" },
+      { "type": "text", "text": " in a power series. If a polynomial has least degree " },
+      { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": ", then its " },
+      { "type": "inlineMath", "tex": "r" }, { "type": "text", "text": "th power has least degree " },
+      { "type": "inlineMath", "tex": "r" }, { "type": "text", "text": "." }
+    ] }] } },
+    { "order": 2, "title": "Clearing exponential denominators", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "In the expansion " }, { "type": "inlineMath", "tex": "e^{P}=\\sum_{r\\ge0}P^r/r!" },
+      { "type": "text", "text": ", multiplying the coefficient of degree " }, { "type": "inlineMath", "tex": "k" },
+      { "type": "text", "text": " by " }, { "type": "inlineMath", "tex": "k!" },
+      { "type": "text", "text": " makes every relevant factor " }, { "type": "inlineMath", "tex": "k!/r!" },
+      { "type": "text", "text": " an integer." }
+    ] }] } },
+    { "order": 3, "title": "Lowest-degree multinomial terms", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "To obtain degree " }, { "type": "inlineMath", "tex": "k" },
+      { "type": "text", "text": " from a product of " }, { "type": "inlineMath", "tex": "k-1" },
+      { "type": "text", "text": " factors of a polynomial beginning " },
+      { "type": "inlineMath", "tex": "a_1x+a_2x^2+\\cdots" },
+      { "type": "text", "text": ", exactly one factor supplies " }, { "type": "inlineMath", "tex": "a_2x^2" },
+      { "type": "text", "text": " and all others supply " }, { "type": "inlineMath", "tex": "a_1x" }, { "type": "text", "text": "." }
+    ] }] } }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "We prove the stronger statement that " },
+      { "type": "inlineMath", "tex": "k!b_k" }, { "type": "text", "text": " is an odd integer for every " },
+      { "type": "inlineMath", "tex": "k\\ge0" }, { "type": "text", "text": ". This immediately implies " },
+      { "type": "inlineMath", "tex": "b_k\\ne0" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Because " }, { "type": "inlineMath", "tex": "P" },
+      { "type": "text", "text": " has no constant term, powers above " }, { "type": "inlineMath", "tex": "k" },
+      { "type": "text", "text": " cannot contribute to degree " }, { "type": "inlineMath", "tex": "k" },
+      { "type": "text", "text": ". Thus" }
+    ] },
+    { "type": "displayMath", "tex": "k!b_k=[x^k]\\sum_{r=0}^{k}\\frac{k!}{r!}P(x)^r." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "k=0" },
+      { "type": "text", "text": ", this is " }, { "type": "inlineMath", "tex": "b_0=1" },
+      { "type": "text", "text": "; for " }, { "type": "inlineMath", "tex": "k=1" },
+      { "type": "text", "text": ", it is " }, { "type": "inlineMath", "tex": "b_1=a_1" },
+      { "type": "text", "text": ", which is odd. Now assume " }, { "type": "inlineMath", "tex": "k\\ge2" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The term with " }, { "type": "inlineMath", "tex": "r=k" },
+      { "type": "text", "text": " contributes" }
+    ] },
+    { "type": "displayMath", "tex": "[x^k]P(x)^k=a_1^k," },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "an odd integer. If " }, { "type": "inlineMath", "tex": "r\\le k-2" },
+      { "type": "text", "text": ", then " }, { "type": "inlineMath", "tex": "k!/r!" },
+      { "type": "text", "text": " is even, so the entire contribution from that value of " },
+      { "type": "inlineMath", "tex": "r" }, { "type": "text", "text": " is even." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "It remains to inspect " }, { "type": "inlineMath", "tex": "r=k-1" },
+      { "type": "text", "text": ". If " }, { "type": "inlineMath", "tex": "k" },
+      { "type": "text", "text": " is even, the multiplier " }, { "type": "inlineMath", "tex": "k!/(k-1)!=k" },
+      { "type": "text", "text": " is already even. If " }, { "type": "inlineMath", "tex": "k" },
+      { "type": "text", "text": " is odd, then" }
+    ] },
+    { "type": "displayMath", "tex": "[x^k]P(x)^{k-1}=(k-1)a_1^{k-2}a_2," },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "because one of the " }, { "type": "inlineMath", "tex": "k-1" },
+      { "type": "text", "text": " factors must provide the quadratic term and all others the linear term. Multiplication by " },
+      { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": " gives " },
+      { "type": "inlineMath", "tex": "k(k-1)a_1^{k-2}a_2" }, { "type": "text", "text": ", which is even." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Therefore every contribution except " }, { "type": "inlineMath", "tex": "a_1^k" },
+      { "type": "text", "text": " is even. Hence " }, { "type": "inlineMath", "tex": "k!b_k" },
+      { "type": "text", "text": " is odd and in particular nonzero, completing the proof." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2022 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2022_Putnam_Competitions.pdf" },
+    { "kind": "solution", "label": "MAA official 2022 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2022-Putnam-solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2022 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2022s.tex" }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2022",
+  "problemId": "B3",
+  "label": "B3",
+  "ordinal": 9,
+  "topics": ["combinatorics"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B3" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Assign to each positive real number a color, either red or blue. Let " },
+      { "type": "inlineMath", "tex": "D" }, { "type": "text", "text": " be the set of all distances " },
+      { "type": "inlineMath", "tex": "d>0" }, { "type": "text", "text": " for which there are two points of the same color at distance " },
+      { "type": "inlineMath", "tex": "d" }, { "type": "text", "text": " apart. Recolor the positive reals so that the numbers in " },
+      { "type": "inlineMath", "tex": "D" }, { "type": "text", "text": " are red and the numbers not in " },
+      { "type": "inlineMath", "tex": "D" }, { "type": "text", "text": " are blue. If this recoloring process is iterated, will all the numbers always become red after finitely many steps?" }
+    ] }
+  ] },
+  "hints": [
+    { "order": 1, "stage": "nudge", "title": "Translate a blue distance", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "d" },
+      { "type": "text", "text": " is blue after a recoloring, then in the preceding coloring every pair of points at distance " },
+      { "type": "inlineMath", "tex": "d" }, { "type": "text", "text": " has opposite colors." }
+    ] }] } },
+    { "order": 2, "stage": "strategy", "title": "Force an alternating four-term chain", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Apply the previous observation to the points " },
+      { "type": "inlineMath", "tex": "d,2d,3d,4d" }, { "type": "text", "text": ". Their colors in the preceding coloring must alternate." }
+    ] }] } },
+    { "order": 3, "stage": "knowledge", "title": "Use the midpoint between the two pairs", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Compare the color of " }, { "type": "inlineMath", "tex": "5d/2" },
+      { "type": "text", "text": " with the colors of both pairs " }, { "type": "inlineMath", "tex": "\\{d,4d\\}" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "\\{2d,3d\\}" },
+      { "type": "text", "text": ". This proves that blue " }, { "type": "inlineMath", "tex": "d" },
+      { "type": "text", "text": " forces " }, { "type": "inlineMath", "tex": "d/2" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "3d/2" }, { "type": "text", "text": " to be red after the same recoloring." }
+    ] }] } },
+    { "order": 4, "stage": "outline", "title": "Rule out blue after two steps", "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+      [{ "type": "text", "text": "Use the lemma to show that a distance cannot be blue in two consecutive colorings." }],
+      [{ "type": "text", "text": "Assume " }, { "type": "inlineMath", "tex": "d" }, { "type": "text", "text": " is blue after the second recoloring; it was therefore red after the first." }],
+      [{ "type": "text", "text": "The points " }, { "type": "inlineMath", "tex": "d,2d,3d,4d" }, { "type": "text", "text": " alternate after the first recoloring, fixing the colors of " }, { "type": "inlineMath", "tex": "2d" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "4d" }, { "type": "text", "text": "." }],
+      [{ "type": "text", "text": "Apply the lemma to the blue distance " }, { "type": "inlineMath", "tex": "4d" }, { "type": "text", "text": " to obtain a contradiction at " }, { "type": "inlineMath", "tex": "2d" }, { "type": "text", "text": "." }]
+    ] }] } }
+  ],
+  "prerequisites": [
+    { "order": 1, "title": "What the new blue set means", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "A distance is blue after a recoloring precisely when no two points at that distance had the same color beforehand. With only two colors, every such pair must then have opposite colors." }
+    ] }] } },
+    { "order": 2, "title": "Alternation along an arithmetic progression", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "If every pair of points separated by " }, { "type": "inlineMath", "tex": "d" },
+      { "type": "text", "text": " has opposite colors, then the colors along " },
+      { "type": "inlineMath", "tex": "x,x+d,x+2d,\\ldots" }, { "type": "text", "text": " alternate." }
+    ] }] } },
+    { "order": 3, "title": "Tracking iterated colorings", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Keep the original coloring, the coloring after one step, and the coloring after two steps distinct. A red distance at one step is witnessed by two same-colored points in the immediately preceding coloring." }
+    ] }] } }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Yes. In fact, every positive real number is red after at most two recolorings." }
+    ] },
+    { "type": "heading", "level": 2, "runs": [{ "type": "text", "text": "A one-step lemma" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Suppose that " }, { "type": "inlineMath", "tex": "d" },
+      { "type": "text", "text": " is blue after a recoloring. In the preceding coloring, every pair of points at distance " },
+      { "type": "inlineMath", "tex": "d" }, { "type": "text", "text": " had opposite colors. Hence the four points" }
+    ] },
+    { "type": "displayMath", "tex": "d,\\quad 2d,\\quad 3d,\\quad 4d" },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "alternated in color. In particular, " }, { "type": "inlineMath", "tex": "d" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "4d" },
+      { "type": "text", "text": " had opposite colors, so " }, { "type": "inlineMath", "tex": "5d/2" },
+      { "type": "text", "text": " shared a color with one of them. Its distance from each is " },
+      { "type": "inlineMath", "tex": "3d/2" }, { "type": "text", "text": ", so " },
+      { "type": "inlineMath", "tex": "3d/2" }, { "type": "text", "text": " became red." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Likewise, " }, { "type": "inlineMath", "tex": "2d" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "3d" },
+      { "type": "text", "text": " had opposite colors, so " }, { "type": "inlineMath", "tex": "5d/2" },
+      { "type": "text", "text": " shared a color with one of them. Its distance from each is " },
+      { "type": "inlineMath", "tex": "d/2" }, { "type": "text", "text": ", so " },
+      { "type": "inlineMath", "tex": "d/2" }, { "type": "text", "text": " also became red. We have proved:" }
+    ] },
+    { "type": "displayMath", "tex": "d\\text{ blue }\\Longrightarrow d/2\\text{ and }3d/2\\text{ red}." },
+    { "type": "heading", "level": 2, "runs": [{ "type": "text", "text": "The second recoloring" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The lemma first shows that no distance can be blue in two consecutive colorings. Indeed, if " },
+      { "type": "inlineMath", "tex": "d" }, { "type": "text", "text": " is blue, then " },
+      { "type": "inlineMath", "tex": "d/2" }, { "type": "text", "text": " and " },
+      { "type": "inlineMath", "tex": "3d/2" }, { "type": "text", "text": " are red; these two points are distance " },
+      { "type": "inlineMath", "tex": "d" }, { "type": "text", "text": " apart, so " },
+      { "type": "inlineMath", "tex": "d" }, { "type": "text", "text": " is red after the next recoloring." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Assume for contradiction that some " }, { "type": "inlineMath", "tex": "d" },
+      { "type": "text", "text": " is blue after two recolorings. It must have been red after the first. Since it becomes blue at the second step, the colors of " },
+      { "type": "inlineMath", "tex": "d,2d,3d,4d" }, { "type": "text", "text": " after the first step alternate. Therefore " },
+      { "type": "inlineMath", "tex": "2d" }, { "type": "text", "text": " and " },
+      { "type": "inlineMath", "tex": "4d" }, { "type": "text", "text": " are blue after the first recoloring." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Apply the lemma in that coloring to the blue number " },
+      { "type": "inlineMath", "tex": "4d" }, { "type": "text", "text": ". It says that " },
+      { "type": "inlineMath", "tex": "2d" }, { "type": "text", "text": " is red, contradicting the conclusion above. Thus no number is blue after the second recoloring, as required." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2022 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2022_Putnam_Competitions.pdf" },
+    { "kind": "solution", "label": "MAA official 2022 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2022-Putnam-solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2022 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2022s.tex" }
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2022",
+  "problemId": "B2",
+  "label": "B2",
+  "ordinal": 8,
+  "topics": ["linear-algebra", "geometry"],
+  "statement": { "blocks": [
+    { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B2" }] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "\\times" },
+      { "type": "text", "text": " denote the cross product in " }, { "type": "inlineMath", "tex": "\\mathbb R^3" },
+      { "type": "text", "text": ". For which positive integers " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " does there exist a set " }, { "type": "inlineMath", "tex": "S\\subset\\mathbb R^3" },
+      { "type": "text", "text": " with exactly " }, { "type": "inlineMath", "tex": "n" },
+      { "type": "text", "text": " elements such that" }
+    ] },
+    { "type": "displayMath", "tex": "S=\\{v\\times w:v,w\\in S\\}?" }
+  ] },
+  "hints": [
+    { "order": 1, "stage": "nudge", "title": "Start with the forced zero vector", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "For any " }, { "type": "inlineMath", "tex": "v\\in S" },
+      { "type": "text", "text": ", the vector " }, { "type": "inlineMath", "tex": "v\\times v" },
+      { "type": "text", "text": " belongs to " }, { "type": "inlineMath", "tex": "S" },
+      { "type": "text", "text": ". This immediately gives one small example." }
+    ] }] } },
+    { "order": 2, "stage": "strategy", "title": "Use finiteness to control norms", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "Represent a nonzero " }, { "type": "inlineMath", "tex": "v_1\\in S" },
+      { "type": "text", "text": " as " }, { "type": "inlineMath", "tex": "v_1=v_2\\times v_3" },
+      { "type": "text", "text": ", then repeatedly form " }, { "type": "inlineMath", "tex": "v_{j+1}=v_1\\times v_j" },
+      { "type": "text", "text": ". What happens to the norms if " }, { "type": "inlineMath", "tex": "\\lVert v_1\\rVert\\ne1" }, { "type": "text", "text": "?" }
+    ] }] } },
+    { "order": 3, "stage": "knowledge", "title": "Turn unit cross products into orthogonality", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "For unit vectors " }, { "type": "inlineMath", "tex": "v,w" },
+      { "type": "text", "text": ", the identity " }, { "type": "inlineMath", "tex": "\\lVert v\\times w\\rVert=\\sin\\theta" },
+      { "type": "text", "text": " shows that a nonzero unit cross product forces " },
+      { "type": "inlineMath", "tex": "v\\perp w" }, { "type": "text", "text": "." }
+    ] }] } },
+    { "order": 4, "stage": "outline", "title": "Classify the whole set", "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+      [{ "type": "text", "text": "Prove that every nonzero vector in a finite admissible set has norm " }, { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": "." }],
+      [{ "type": "text", "text": "Show that any two members are either collinear or orthogonal." }],
+      [{ "type": "text", "text": "A nonzero cross product produces an orthonormal basis whose signed vectors and zero all lie in " }, { "type": "inlineMath", "tex": "S" }, { "type": "text", "text": "." }],
+      [{ "type": "text", "text": "Use that basis to rule out any additional vector, then verify the resulting set is closed under cross products." }]
+    ] }] } }
+  ],
+  "prerequisites": [
+    { "order": 1, "title": "Cross-product magnitude", "document": { "blocks": [{ "type": "displayMath", "tex": "\\lVert v\\times w\\rVert=\\lVert v\\rVert\\,\\lVert w\\rVert\\sin\\theta," }, { "type": "paragraph", "runs": [
+      { "type": "text", "text": "where " }, { "type": "inlineMath", "tex": "\\theta" },
+      { "type": "text", "text": " is the angle between the vectors. The cross product is zero exactly when the vectors are collinear." }
+    ] }] } },
+    { "order": 2, "title": "Iterating a perpendicular cross product", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "u\\perp v" },
+      { "type": "text", "text": ", then " }, { "type": "inlineMath", "tex": "u\\times v" },
+      { "type": "text", "text": " is again perpendicular to " }, { "type": "inlineMath", "tex": "u" },
+      { "type": "text", "text": " and has norm " }, { "type": "inlineMath", "tex": "\\lVert u\\rVert\\,\\lVert v\\rVert" }, { "type": "text", "text": "." }
+    ] }] } },
+    { "order": 3, "title": "Coordinates in an orthonormal basis", "document": { "blocks": [{ "type": "paragraph", "runs": [
+      { "type": "text", "text": "A vector orthogonal to all three vectors of an orthonormal basis of " },
+      { "type": "inlineMath", "tex": "\\mathbb R^3" }, { "type": "text", "text": " must be zero. A unit vector collinear with a basis vector is one of its two signed versions." }
+    ] }] } }
+  ],
+  "solution": { "blocks": [
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The possible values are " }, { "type": "inlineMath", "tex": "n=1" },
+      { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "n=7" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Since " }, { "type": "inlineMath", "tex": "v\\times v=0" },
+      { "type": "text", "text": ", every nonempty admissible set contains " }, { "type": "inlineMath", "tex": "0" },
+      { "type": "text", "text": ". The set " }, { "type": "inlineMath", "tex": "\\{0\\}" },
+      { "type": "text", "text": " is therefore an example with " }, { "type": "inlineMath", "tex": "n=1" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Now suppose " }, { "type": "inlineMath", "tex": "S\\ne\\{0\\}" },
+      { "type": "text", "text": " is finite. Choose a nonzero " }, { "type": "inlineMath", "tex": "v_1\\in S" },
+      { "type": "text", "text": ". Because every member of " }, { "type": "inlineMath", "tex": "S" },
+      { "type": "text", "text": " is a cross product of two members, write " },
+      { "type": "inlineMath", "tex": "v_1=v_2\\times v_3" }, { "type": "text", "text": ". Define " },
+      { "type": "inlineMath", "tex": "v_{j+1}=v_1\\times v_j" }, { "type": "text", "text": " for " },
+      { "type": "inlineMath", "tex": "j\\ge3" }, { "type": "text", "text": ". Closure keeps every " },
+      { "type": "inlineMath", "tex": "v_j" }, { "type": "text", "text": " in " }, { "type": "inlineMath", "tex": "S" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "The vectors " }, { "type": "inlineMath", "tex": "v_j" },
+      { "type": "text", "text": " for " }, { "type": "inlineMath", "tex": "j\\ge3" },
+      { "type": "text", "text": " are nonzero and perpendicular to " }, { "type": "inlineMath", "tex": "v_1" },
+      { "type": "text", "text": ", so induction gives" }
+    ] },
+    { "type": "displayMath", "tex": "\\lVert v_j\\rVert=\\lVert v_1\\rVert^{j-3}\\lVert v_3\\rVert,\\qquad j\\ge3." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "\\lVert v_1\\rVert\\ne1" },
+      { "type": "text", "text": ", these norms are all distinct, contradicting the finiteness of " },
+      { "type": "inlineMath", "tex": "S" }, { "type": "text", "text": ". Thus every nonzero member of " },
+      { "type": "inlineMath", "tex": "S" }, { "type": "text", "text": " has norm " }, { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Consequently, two vectors in " }, { "type": "inlineMath", "tex": "S" },
+      { "type": "text", "text": " are either collinear or orthogonal. Indeed, if two unit vectors are not collinear, their cross product is a nonzero member of " },
+      { "type": "inlineMath", "tex": "S" }, { "type": "text", "text": " and hence also has norm " },
+      { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": "; the magnitude formula then forces their angle to be " },
+      { "type": "inlineMath", "tex": "\\pi/2" }, { "type": "text", "text": "." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "In the representation " }, { "type": "inlineMath", "tex": "v_1=v_2\\times v_3" },
+      { "type": "text", "text": ", the three vectors form an orthonormal basis. Closure under both orders of the cross product gives" }
+    ] },
+    { "type": "displayMath", "tex": "\\{0,\\pm v_1,\\pm v_2,\\pm v_3\\}\\subseteq S." },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "w\\in S" },
+      { "type": "text", "text": " is nonzero, then for each basis vector " }, { "type": "inlineMath", "tex": "v_i" },
+      { "type": "text", "text": " it is either parallel or perpendicular to " }, { "type": "inlineMath", "tex": "v_i" },
+      { "type": "text", "text": ". It cannot be perpendicular to all three, so it is parallel to some " },
+      { "type": "inlineMath", "tex": "v_i" }, { "type": "text", "text": ". Since it has unit norm, " },
+      { "type": "inlineMath", "tex": "w=\\pm v_i" }, { "type": "text", "text": ". Hence no further vectors occur." }
+    ] },
+    { "type": "paragraph", "runs": [
+      { "type": "text", "text": "Finally, " }, { "type": "inlineMath", "tex": "\\{0,\\pm v_1,\\pm v_2,\\pm v_3\\}" },
+      { "type": "text", "text": " is closed under cross products whenever " },
+      { "type": "inlineMath", "tex": "v_1,v_2,v_3" }, { "type": "text", "text": " is an orthonormal basis. This gives the example with " },
+      { "type": "inlineMath", "tex": "n=7" }, { "type": "text", "text": " and completes the classification." }
+    ] }
+  ] },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2022 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2022_Putnam_Competitions.pdf" },
+    { "kind": "solution", "label": "MAA official 2022 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2022-Putnam-solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2022 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2022s.tex" }
+  ]
+}
