@@ -1,0 +1,240 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2021",
+  "problemId": "B4",
+  "label": "B4",
+  "ordinal": 10,
+  "topics": ["number-theory", "sequences-series"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B4" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "F_0,F_1,\\ldots" },
+        { "type": "text", "text": " be the sequence of Fibonacci numbers, with " },
+        { "type": "inlineMath", "tex": "F_0=0" },
+        { "type": "text", "text": ", " },
+        { "type": "inlineMath", "tex": "F_1=1" },
+        { "type": "text", "text": ", and " },
+        { "type": "inlineMath", "tex": "F_n=F_{n-1}+F_{n-2}" },
+        { "type": "text", "text": " for " },
+        { "type": "inlineMath", "tex": "n\\ge2" },
+        { "type": "text", "text": ". For " },
+        { "type": "inlineMath", "tex": "m>2" },
+        { "type": "text", "text": ", let " },
+        { "type": "inlineMath", "tex": "R_m" },
+        { "type": "text", "text": " be the remainder when the product" }
+      ] },
+      { "type": "displayMath", "tex": "\\prod_{k=1}^{F_m-1}k^k" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "is divided by " },
+        { "type": "inlineMath", "tex": "F_m" },
+        { "type": "text", "text": ". Prove that " },
+        { "type": "inlineMath", "tex": "R_m" },
+        { "type": "text", "text": " is also a Fibonacci number." }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Split according to the modulus",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Treat separately the cases where " },
+        { "type": "inlineMath", "tex": "F_m" },
+        { "type": "text", "text": " is composite and prime. In the composite case, factors already present in the product force a very simple remainder." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Square the hyperfactorial",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "In the prime case put " },
+        { "type": "inlineMath", "tex": "p=F_m" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "A=\\prod_{k=1}^{p-1}k^k" },
+        { "type": "text", "text": ". Pair the product with the same product indexed by " },
+        { "type": "inlineMath", "tex": "p-k" },
+        { "type": "text", "text": " to compute " },
+        { "type": "inlineMath", "tex": "A^2\\pmod p" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Bring in Fibonacci congruences",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "For prime " },
+          { "type": "inlineMath", "tex": "F_m>3" },
+          { "type": "text", "text": ", show that " },
+          { "type": "inlineMath", "tex": "m" },
+          { "type": "text", "text": " is odd and " },
+          { "type": "inlineMath", "tex": "p\\equiv1\\pmod4" },
+          { "type": "text", "text": ". Wilson's theorem and Cassini's identity then give" }
+        ] },
+        { "type": "displayMath", "tex": "A^2\\equiv-1\\equiv F_{m-1}^2\\pmod p." }
+      ] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Identify the possible remainders",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Check " }, { "type": "inlineMath", "tex": "m=3,4" }, { "type": "text", "text": " directly." }],
+        [{ "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "F_m" }, { "type": "text", "text": " is composite, prove the remainder is " }, { "type": "inlineMath", "tex": "F_0" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "If it is prime, factor " }, { "type": "inlineMath", "tex": "A^2-F_{m-1}^2" }, { "type": "text", "text": " modulo " }, { "type": "inlineMath", "tex": "F_m" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Use " }, { "type": "inlineMath", "tex": "F_m-F_{m-1}=F_{m-2}" }, { "type": "text", "text": " to interpret the negative possibility." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Fermat and Wilson",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For prime " },
+        { "type": "inlineMath", "tex": "p" },
+        { "type": "text", "text": ", Fermat's theorem gives " },
+        { "type": "inlineMath", "tex": "k^p\\equiv k\\pmod p" },
+        { "type": "text", "text": ", while Wilson's theorem gives " },
+        { "type": "inlineMath", "tex": "(p-1)!\\equiv-1\\pmod p" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "title": "Fibonacci parity identities",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [{ "type": "text", "text": "The identities" }] },
+        { "type": "displayMath", "tex": "F_{2j}=F_j(F_{j-1}+F_{j+1}),\\qquad F_{2j+1}=F_j^2+F_{j+1}^2" },
+        { "type": "paragraph", "runs": [{ "type": "text", "text": "show that a prime Fibonacci number beyond " }, { "type": "inlineMath", "tex": "3" }, { "type": "text", "text": " has odd index and is congruent to " }, { "type": "inlineMath", "tex": "1\\pmod4" }, { "type": "text", "text": "." }] }
+      ] }
+    },
+    {
+      "order": 3,
+      "title": "Cassini's identity",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Cassini's identity in the form " },
+        { "type": "inlineMath", "tex": "F_j^2=F_{j-1}F_{j+1}+(-1)^{j-1}" },
+        { "type": "text", "text": " turns a neighboring Fibonacci number into a square root of " },
+        { "type": "inlineMath", "tex": "-1" },
+        { "type": "text", "text": " modulo " },
+        { "type": "inlineMath", "tex": "F_{j+1}" },
+        { "type": "text", "text": " when " },
+        { "type": "inlineMath", "tex": "j" },
+        { "type": "text", "text": " is even." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Write " },
+        { "type": "inlineMath", "tex": "H(n)=\\prod_{k=1}^n k^k" },
+        { "type": "text", "text": ". Directly, " },
+        { "type": "inlineMath", "tex": "R_3=R_4=1" },
+        { "type": "text", "text": ", so suppose " },
+        { "type": "inlineMath", "tex": "m>4" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " },
+        { "type": "inlineMath", "tex": "F_m=qr" },
+        { "type": "text", "text": " is composite with " },
+        { "type": "inlineMath", "tex": "1<q\\le r<F_m" },
+        { "type": "text", "text": ", then the factors " },
+        { "type": "inlineMath", "tex": "q^q" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "r^r" },
+        { "type": "text", "text": " occur in " },
+        { "type": "inlineMath", "tex": "H(F_m-1)" },
+        { "type": "text", "text": " when " },
+        { "type": "inlineMath", "tex": "q<r" },
+        { "type": "text", "text": "; if " },
+        { "type": "inlineMath", "tex": "q=r" },
+        { "type": "text", "text": ", the single factor " },
+        { "type": "inlineMath", "tex": "q^q" },
+        { "type": "text", "text": " is already divisible by " },
+        { "type": "inlineMath", "tex": "q^2" },
+        { "type": "text", "text": ". Thus " },
+        { "type": "inlineMath", "tex": "R_m=0=F_0" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "It remains to take " },
+        { "type": "inlineMath", "tex": "p=F_m" },
+        { "type": "text", "text": " prime and " },
+        { "type": "inlineMath", "tex": "A=H(p-1)" },
+        { "type": "text", "text": ". The identity " },
+        { "type": "inlineMath", "tex": "F_{2j}=F_j(F_{j-1}+F_{j+1})" },
+        { "type": "text", "text": " shows that " },
+        { "type": "inlineMath", "tex": "m" },
+        { "type": "text", "text": " is odd. Also " },
+        { "type": "inlineMath", "tex": "F_m=F_{(m-1)/2}^2+F_{(m+1)/2}^2" },
+        { "type": "text", "text": ". Since an odd prime that is a sum of two squares is " },
+        { "type": "inlineMath", "tex": "1\\pmod4" },
+        { "type": "text", "text": ", we have " },
+        { "type": "inlineMath", "tex": "p\\equiv1\\pmod4" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Reindexing one copy of " },
+        { "type": "inlineMath", "tex": "A" },
+        { "type": "text", "text": " by " },
+        { "type": "inlineMath", "tex": "k\\mapsto p-k" },
+        { "type": "text", "text": " and using Fermat's theorem gives" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned}A^2&\\equiv\\prod_{k=1}^{p-1}k^k(p-k)^{p-k}\\\\&\\equiv\\prod_{k=1}^{p-1}(-1)^{k+1}k\\pmod p.\\end{aligned}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "After Wilson's theorem accounts for " },
+        { "type": "inlineMath", "tex": "\\prod k=(p-1)!\\equiv-1" },
+        { "type": "text", "text": ", the sign is" }
+      ] },
+      { "type": "displayMath", "tex": "A^2\\equiv(-1)^{p(p+1)/2}=-1\\pmod p," },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "where the last equality uses " },
+        { "type": "inlineMath", "tex": "p\\equiv1\\pmod4" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Cassini's identity with " },
+        { "type": "inlineMath", "tex": "j=m-1" },
+        { "type": "text", "text": " gives, since " },
+        { "type": "inlineMath", "tex": "m" },
+        { "type": "text", "text": " is odd," }
+      ] },
+      { "type": "displayMath", "tex": "F_{m-1}^2=F_{m-2}F_m+(-1)^{m-2}\\equiv-1\\pmod p." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Hence " },
+        { "type": "inlineMath", "tex": "A^2\\equiv F_{m-1}^2\\pmod p" },
+        { "type": "text", "text": ". Because " },
+        { "type": "inlineMath", "tex": "p" },
+        { "type": "text", "text": " is prime," }
+      ] },
+      { "type": "displayMath", "tex": "A\\equiv F_{m-1}\\quad\\text{or}\\quad A\\equiv-F_{m-1}\\pmod p." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Both neighboring Fibonacci numbers lie between " },
+        { "type": "inlineMath", "tex": "0" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "p" },
+        { "type": "text", "text": ". Therefore the least nonnegative remainder is " },
+        { "type": "inlineMath", "tex": "F_{m-1}" },
+        { "type": "text", "text": " in the first case and " },
+        { "type": "inlineMath", "tex": "p-F_{m-1}=F_{m-2}" },
+        { "type": "text", "text": " in the second. In every case " },
+        { "type": "inlineMath", "tex": "R_m" },
+        { "type": "text", "text": " is a Fibonacci number." }
+      ] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2021 problems", "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2021 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems-and-solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2021 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2021s.tex" }
+  ]
+}

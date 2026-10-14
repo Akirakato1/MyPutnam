@@ -1,0 +1,208 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2021",
+  "problemId": "B5",
+  "label": "B5",
+  "ordinal": 11,
+  "topics": ["linear-algebra", "combinatorics"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B5" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Say that an " },
+        { "type": "inlineMath", "tex": "n\\text{-by-}n" },
+        { "type": "text", "text": " matrix " },
+        { "type": "inlineMath", "tex": "A=(a_{ij})_{1\\le i,j\\le n}" },
+        { "type": "text", "text": " with integer entries is very odd if, for every nonempty subset " },
+        { "type": "inlineMath", "tex": "S" },
+        { "type": "text", "text": " of " },
+        { "type": "inlineMath", "tex": "\\{1,2,\\ldots,n\\}" },
+        { "type": "text", "text": ", the " },
+        { "type": "inlineMath", "tex": "|S|\\text{-by-}|S|" },
+        { "type": "text", "text": " submatrix " },
+        { "type": "inlineMath", "tex": "(a_{ij})_{i,j\\in S}" },
+        { "type": "text", "text": " has odd determinant. Prove that if " },
+        { "type": "inlineMath", "tex": "A" },
+        { "type": "text", "text": " is very odd, then " },
+        { "type": "inlineMath", "tex": "A^k" },
+        { "type": "text", "text": " is very odd for every " },
+        { "type": "inlineMath", "tex": "k\\ge1" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Work modulo two",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Oddness of every principal minor depends only on " },
+        { "type": "inlineMath", "tex": "A\\pmod2" },
+        { "type": "text", "text": ". Over " },
+        { "type": "inlineMath", "tex": "\\mathbb F_2" },
+        { "type": "text", "text": ", all principal minors must equal " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Turn the off-diagonal entries into a graph",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "First use the one-element subsets to get " },
+        { "type": "inlineMath", "tex": "a_{ii}=1" },
+        { "type": "text", "text": ". Then draw a directed edge " },
+        { "type": "inlineMath", "tex": "i\\to j" },
+        { "type": "text", "text": " for each off-diagonal entry " },
+        { "type": "inlineMath", "tex": "a_{ij}=1" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Exclude a shortest directed cycle",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If a shortest directed cycle existed, its induced principal submatrix would have exactly two " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": "s in each row: the diagonal entry and the next edge of the cycle. Its row sum over " },
+        { "type": "inlineMath", "tex": "\\mathbb F_2" },
+        { "type": "text", "text": " would be zero." }
+      ] }] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Topologically order and take powers",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "The graph is acyclic, so simultaneously permute rows and columns into a topological order." }],
+        [{ "type": "text", "text": "The resulting matrix is upper triangular with diagonal entries " }, { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Its every positive power has the same form." }],
+        [{ "type": "text", "text": "Every principal submatrix of an upper unitriangular matrix has determinant " }, { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": "." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Parity and reduction modulo two",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "An integer determinant is odd exactly when its reduction modulo " },
+        { "type": "inlineMath", "tex": "2" },
+        { "type": "text", "text": " is nonzero. Determinants commute with reducing every matrix entry modulo " },
+        { "type": "inlineMath", "tex": "2" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "title": "Directed acyclic graphs",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "A finite directed graph with no directed cycle has a topological ordering: its vertices can be listed so that every directed edge points forward. One proof repeatedly removes a vertex with no incoming edge." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "title": "Upper triangular matrices",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Products and positive powers of upper triangular matrices remain upper triangular, and their diagonal entries multiply. Every principal submatrix of an upper triangular matrix is upper triangular in the inherited order." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Reduce all entries modulo " },
+        { "type": "inlineMath", "tex": "2" },
+        { "type": "text", "text": ". It is enough to prove that every principal minor of " },
+        { "type": "inlineMath", "tex": "A^k" },
+        { "type": "text", "text": " is " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": " in " },
+        { "type": "inlineMath", "tex": "\\mathbb F_2" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The one-element principal minors show that " },
+        { "type": "inlineMath", "tex": "a_{ii}=1" },
+        { "type": "text", "text": " for all " },
+        { "type": "inlineMath", "tex": "i" },
+        { "type": "text", "text": ". Form a loopless directed graph on " },
+        { "type": "inlineMath", "tex": "\\{1,\\ldots,n\\}" },
+        { "type": "text", "text": " by drawing " },
+        { "type": "inlineMath", "tex": "i\\to j" },
+        { "type": "text", "text": " when " },
+        { "type": "inlineMath", "tex": "i\\ne j" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "a_{ij}=1" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "We claim that this graph has no directed cycle. Suppose otherwise, and choose a cycle " },
+        { "type": "inlineMath", "tex": "i_1\\to i_2\\to\\cdots\\to i_m\\to i_1" },
+        { "type": "text", "text": " of minimum length. Minimality implies that among these vertices the only off-diagonal edges are the displayed cycle edges: any additional edge would combine with part of the cycle to make a shorter directed cycle." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "In the principal submatrix on " },
+        { "type": "inlineMath", "tex": "\\{i_1,\\ldots,i_m\\}" },
+        { "type": "text", "text": ", each row therefore contains exactly two " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": "s: one on the diagonal and one for the outgoing cycle edge. Every row sum is " },
+        { "type": "inlineMath", "tex": "0" },
+        { "type": "text", "text": " in " },
+        { "type": "inlineMath", "tex": "\\mathbb F_2" },
+        { "type": "text", "text": ", so the all-ones column vector lies in its kernel. This principal submatrix is singular, contradicting that " },
+        { "type": "inlineMath", "tex": "A" },
+        { "type": "text", "text": " is very odd." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "A finite acyclic directed graph has a topological ordering. Let " },
+        { "type": "inlineMath", "tex": "P" },
+        { "type": "text", "text": " be the permutation matrix that simultaneously reorders the rows and columns of " },
+        { "type": "inlineMath", "tex": "A" },
+        { "type": "text", "text": " according to such an ordering. Then" }
+      ] },
+      { "type": "displayMath", "tex": "U=PAP^{-1}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "is upper triangular and has every diagonal entry equal to " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": ". Consequently " },
+        { "type": "inlineMath", "tex": "U^k" },
+        { "type": "text", "text": " is upper triangular with diagonal entries " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": " for every " },
+        { "type": "inlineMath", "tex": "k\\ge1" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Every principal submatrix of " },
+        { "type": "inlineMath", "tex": "U^k" },
+        { "type": "text", "text": " is again upper triangular with diagonal entries " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": ", so every such determinant is " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": " in " },
+        { "type": "inlineMath", "tex": "\\mathbb F_2" },
+        { "type": "text", "text": ". Simultaneous row-and-column permutation merely relabels principal submatrices, and" }
+      ] },
+      { "type": "displayMath", "tex": "PA^kP^{-1}=(PAP^{-1})^k=U^k." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Thus every principal minor of " },
+        { "type": "inlineMath", "tex": "A^k" },
+        { "type": "text", "text": " is nonzero modulo " },
+        { "type": "inlineMath", "tex": "2" },
+        { "type": "text", "text": ", hence odd as an integer. Therefore " },
+        { "type": "inlineMath", "tex": "A^k" },
+        { "type": "text", "text": " is very odd." }
+      ] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2021 problems", "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2021 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems-and-solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2021 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2021s.tex" }
+  ]
+}

@@ -1,0 +1,241 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2021",
+  "problemId": "B6",
+  "label": "B6",
+  "ordinal": 12,
+  "topics": ["probability", "analysis", "inequalities"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B6" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Given an ordered list of " },
+        { "type": "inlineMath", "tex": "3N" },
+        { "type": "text", "text": " real numbers, we can trim it to form a list of " },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": " numbers as follows: We divide the list into " },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": " groups of " },
+        { "type": "inlineMath", "tex": "3" },
+        { "type": "text", "text": " consecutive numbers, and within each group, discard the highest and lowest numbers, keeping only the median." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Consider generating a random number " },
+        { "type": "inlineMath", "tex": "X" },
+        { "type": "text", "text": " by the following procedure: Start with a list of " },
+        { "type": "inlineMath", "tex": "3^{2021}" },
+        { "type": "text", "text": " numbers, drawn independently and uniformly at random between " },
+        { "type": "inlineMath", "tex": "0" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": ". Then trim this list repeatedly until just one number remains; let " },
+        { "type": "inlineMath", "tex": "X" },
+        { "type": "text", "text": " be this number. Let " },
+        { "type": "inlineMath", "tex": "\\mu" },
+        { "type": "text", "text": " be the expected value of " },
+        { "type": "inlineMath", "tex": "|X-1/2|" },
+        { "type": "text", "text": ". Show that" }
+      ] },
+      { "type": "displayMath", "tex": "\\mu\\ge\\frac14\\left(\\frac23\\right)^{2021}." }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Center the distribution",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Subtract " },
+        { "type": "inlineMath", "tex": "1/2" },
+        { "type": "text", "text": " from every initial number. After each trim the common density " },
+        { "type": "inlineMath", "tex": "\\rho_n" },
+        { "type": "text", "text": " of a surviving entry is even on " },
+        { "type": "inlineMath", "tex": "[-1/2,1/2]" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Find the median density",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If three independent variables have density " },
+        { "type": "inlineMath", "tex": "\\rho" },
+        { "type": "text", "text": " and distribution function " },
+        { "type": "inlineMath", "tex": "F" },
+        { "type": "text", "text": ", their median has density " },
+        { "type": "inlineMath", "tex": "6\\rho(z)F(z)(1-F(z))" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Control the peak",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "Let " },
+          { "type": "inlineMath", "tex": "S_{n-1}(z)=\\int_0^z\\rho_{n-1}(t)\\,dt" },
+          { "type": "text", "text": ". Symmetry turns the recursion into" }
+        ] },
+        { "type": "displayMath", "tex": "\\rho_n(z)=\\frac32\\rho_{n-1}(z)\\left(1-4S_{n-1}(z)^2\\right)." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "Use it to prove " },
+          { "type": "inlineMath", "tex": "\\rho_n(0)=(3/2)^n" },
+          { "type": "text", "text": " and that " },
+          { "type": "inlineMath", "tex": "\\rho_n" },
+          { "type": "text", "text": " decreases on " },
+          { "type": "inlineMath", "tex": "[0,1/2]" },
+          { "type": "text", "text": "." }
+        ] }
+      ] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Convert the density cap into a moment bound",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Put " }, { "type": "inlineMath", "tex": "M=(3/2)^{2021}" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "S(z)=\\int_0^z\\rho_{2021}(t)\\,dt" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Use " }, { "type": "inlineMath", "tex": "S(z)\\le\\min(Mz,1/2)" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Integrate " }, { "type": "inlineMath", "tex": "\\mu=2\\int_0^{1/2}z\\rho_{2021}(z)\\,dz" }, { "type": "text", "text": " by parts." }],
+        [{ "type": "text", "text": "Split the upper bound for " }, { "type": "inlineMath", "tex": "S" }, { "type": "text", "text": " at " }, { "type": "inlineMath", "tex": "z=1/(2M)" }, { "type": "text", "text": "." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Density of an order statistic",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For one of three independent samples to be the median near " },
+        { "type": "inlineMath", "tex": "z" },
+        { "type": "text", "text": ", choose which sample it is, which remaining sample lies below it, and which lies above it. The " },
+        { "type": "inlineMath", "tex": "3!" },
+        { "type": "text", "text": " orderings yield the density " },
+        { "type": "inlineMath", "tex": "6\\rho(z)F(z)(1-F(z))" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "title": "Symmetric densities",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For an even probability density on " },
+        { "type": "inlineMath", "tex": "[-1/2,1/2]" },
+        { "type": "text", "text": ", exactly half the mass lies on each side of zero. Thus for " },
+        { "type": "inlineMath", "tex": "z\\ge0" },
+        { "type": "text", "text": ", " },
+        { "type": "inlineMath", "tex": "F(z)=1/2+\\int_0^z\\rho(t)\\,dt" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "title": "Integration by parts for a density",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " },
+        { "type": "inlineMath", "tex": "S(z)=\\int_0^z\\rho(t)\\,dt" },
+        { "type": "text", "text": ", then " },
+        { "type": "inlineMath", "tex": "dS=\\rho(z)\\,dz" },
+        { "type": "text", "text": " and" }
+      ] }, { "type": "displayMath", "tex": "\\int_0^{1/2}z\\rho(z)\\,dz=\\left[zS(z)\\right]_0^{1/2}-\\int_0^{1/2}S(z)\\,dz." }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Center every initial sample by replacing " },
+        { "type": "inlineMath", "tex": "x" },
+        { "type": "text", "text": " with " },
+        { "type": "inlineMath", "tex": "z=x-1/2" },
+        { "type": "text", "text": ". Let " },
+        { "type": "inlineMath", "tex": "\\rho_n" },
+        { "type": "text", "text": " be the common density of the entries remaining after " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " trims. We have " },
+        { "type": "inlineMath", "tex": "\\rho_0(z)=1" },
+        { "type": "text", "text": " on " },
+        { "type": "inlineMath", "tex": "[-1/2,1/2]" },
+        { "type": "text", "text": ", and symmetry of the median operation makes every " },
+        { "type": "inlineMath", "tex": "\\rho_n" },
+        { "type": "text", "text": " even." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For " },
+        { "type": "inlineMath", "tex": "z\\ge0" },
+        { "type": "text", "text": ", put " },
+        { "type": "inlineMath", "tex": "S_{n-1}(z)=\\int_0^z\\rho_{n-1}(t)\\,dt" },
+        { "type": "text", "text": ". One of three independent entries is the median near " },
+        { "type": "inlineMath", "tex": "z" },
+        { "type": "text", "text": ", one lies below, and one lies above. Accounting for all six orderings gives" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned}\\rho_n(z)&=6\\rho_{n-1}(z)\\\\&\\quad\\cdot\\left(\\frac12+S_{n-1}(z)\\right)\\left(\\frac12-S_{n-1}(z)\\right),\\end{aligned}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "or equivalently" }] },
+      { "type": "displayMath", "tex": "\\rho_n(z)=\\frac32\\rho_{n-1}(z)\\left(1-4S_{n-1}(z)^2\\right)." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "At " },
+        { "type": "inlineMath", "tex": "z=0" },
+        { "type": "text", "text": " this yields " },
+        { "type": "inlineMath", "tex": "\\rho_n(0)=\\frac32\\rho_{n-1}(0)" },
+        { "type": "text", "text": ", hence" }
+      ] },
+      { "type": "displayMath", "tex": "\\rho_n(0)=\\left(\\frac32\\right)^n." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Also, " },
+        { "type": "inlineMath", "tex": "\\rho_n" },
+        { "type": "text", "text": " is nonincreasing on " },
+        { "type": "inlineMath", "tex": "[0,1/2]" },
+        { "type": "text", "text": " for every " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": ". This holds for the constant density " },
+        { "type": "inlineMath", "tex": "\\rho_0" },
+        { "type": "text", "text": "; if it holds at stage " },
+        { "type": "inlineMath", "tex": "n-1" },
+        { "type": "text", "text": ", then both nonnegative factors " },
+        { "type": "inlineMath", "tex": "\\rho_{n-1}(z)" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "1-4S_{n-1}(z)^2" },
+        { "type": "text", "text": " are nonincreasing. Thus their product is nonincreasing." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Now set " },
+        { "type": "inlineMath", "tex": "n=2021" },
+        { "type": "text", "text": ", write " },
+        { "type": "inlineMath", "tex": "\\rho=\\rho_n" },
+        { "type": "text", "text": ", and put" }
+      ] },
+      { "type": "displayMath", "tex": "M=\\rho(0)=\\left(\\frac32\\right)^n,\\qquad S(z)=\\int_0^z\\rho(t)\\,dt." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Since " },
+        { "type": "inlineMath", "tex": "\\rho(z)\\le M" },
+        { "type": "text", "text": " and the positive half-axis contains total mass " },
+        { "type": "inlineMath", "tex": "1/2" },
+        { "type": "text", "text": "," }
+      ] },
+      { "type": "displayMath", "tex": "S(z)\\le\\min\\left(Mz,\\frac12\\right)\\qquad(0\\le z\\le1/2)." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "By symmetry and integration by parts," }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned}\\mu&=2\\int_0^{1/2}z\\rho(z)\\,dz\\\\&=\\frac12-2\\int_0^{1/2}S(z)\\,dz.\\end{aligned}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Use the linear bound until it reaches " },
+        { "type": "inlineMath", "tex": "1/2" },
+        { "type": "text", "text": ", at " },
+        { "type": "inlineMath", "tex": "z=1/(2M)" },
+        { "type": "text", "text": ", and the constant bound afterward. Then" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned}\\int_0^{1/2}S(z)\\,dz&\\le\\int_0^{1/(2M)}Mz\\,dz+\\int_{1/(2M)}^{1/2}\\frac12\\,dz\\\\&=\\frac14-\\frac{1}{8M}.\\end{aligned}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Substitution gives" }
+      ] },
+      { "type": "displayMath", "tex": "\\mu\\ge\\frac{1}{4M}=\\frac14\\left(\\frac23\\right)^{2021}," },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "as required." }] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2021 problems", "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems.pdf" },
+    { "kind": "solution", "label": "MAA official 2021 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems-and-solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2021 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2021s.tex" }
+  ]
+}
