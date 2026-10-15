@@ -6,6 +6,7 @@ import {
   loadArchiveCatalog,
   validateArchiveCatalog,
 } from '../src/archive-catalog.mjs';
+import { assertReleaseComplete } from '../src/release-manifest.mjs';
 
 const catalogUrl = new URL('../../../content-src/archive.json', import.meta.url);
 const targetYears = Array.from({ length: 2025 - 1962 + 1 }, (_, index) => 1962 + index);
@@ -59,6 +60,28 @@ test('final archive validation rejects incomplete catalogs without an escape hat
   const complete = validCatalog();
   complete.completedYears = [...complete.targetYears];
   assert.doesNotThrow(() => assertFinalArchiveComplete(complete));
+});
+
+test('release completion is independent from final archive completion', () => {
+  const archive = validCatalog();
+  const release = {
+    schemaVersion: 1,
+    releaseId: 'putnam-2020-2025-v0.4.0',
+    contentSchemaVersion: 3,
+    contentVersion: 'putnam-2020-2025.1',
+    appVersionName: '0.4.0',
+    appVersionCode: 4,
+    includedSets: completedBatchYears.map((year) => `putnam/${year}`),
+  };
+
+  assert.throws(() => assertFinalArchiveComplete(archive), /incomplete/i);
+  assert.doesNotThrow(() => assertReleaseComplete(release, archive));
+
+  archive.completedYears = archive.completedYears.filter((year) => year !== 2022);
+  assert.throws(
+    () => assertReleaseComplete(release, archive),
+    /putnam\/2022.*not complete/i,
+  );
 });
 
 function validCatalog() {

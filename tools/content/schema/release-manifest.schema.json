@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://putnamworkbook.local/schema/release-manifest.schema.json",
+  "title": "Putnam workbook progressive release manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "releaseId",
+    "contentSchemaVersion",
+    "contentVersion",
+    "appVersionName",
+    "appVersionCode",
+    "includedSets"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "releaseId": { "const": "putnam-2020-2025-v0.4.0" },
+    "contentSchemaVersion": { "const": 3 },
+    "contentVersion": { "const": "putnam-2020-2025.1" },
+    "appVersionName": { "const": "0.4.0" },
+    "appVersionCode": { "const": 4 },
+    "includedSets": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9._-]+/[A-Za-z0-9._-]+$"
+      }
+    }
+  }
+}

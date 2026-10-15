@@ -62,6 +62,26 @@ export function assertFinalArchiveComplete(catalog) {
   }
 }
 
+export function assertReleaseComplete(release, catalog) {
+  const errors = validateArchiveCatalog(catalog);
+  if (errors.length > 0) {
+    throw new Error(`Invalid archive catalog:\n${errors.join('\n')}`);
+  }
+  if (!release || !Array.isArray(release.includedSets)) {
+    throw new Error('Invalid release manifest: includedSets must be an array');
+  }
+
+  const completed = new Set(catalog.completedYears);
+  for (const key of release.includedSets) {
+    if (typeof key !== 'string') continue;
+    const [collectionId, setId, ...extra] = key.split('/');
+    if (extra.length > 0 || collectionId !== 'putnam' || !/^\d{4}$/.test(setId ?? '')) continue;
+    if (!completed.has(Number(setId))) {
+      throw new Error(`Release set ${key} is not complete in the archive catalog`);
+    }
+  }
+}
+
 function validateStrictlyAscending(years, path, errors) {
   if (!Array.isArray(years)) {
     return;
