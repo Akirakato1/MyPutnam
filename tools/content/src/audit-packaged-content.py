@@ -148,10 +148,14 @@ def _extract_asset_bytes(apk, destination):
             archive_path = PurePosixPath(normalized)
             lowered_parts = {part.lower() for part in archive_path.parts}
             if (
-                archive_path.suffix.lower() in {".pdf", ".tex", ".jks", ".keystore"}
+                archive_path.suffix.lower() in {
+                    ".pdf", ".tex", ".jks", ".keystore", ".p12", ".pfx", ".pem", ".key", ".pk8",
+                }
                 or "original" in lowered_parts
                 or "review" in lowered_parts
-                or archive_path.name.lower() == "keystore.properties"
+                or archive_path.name.lower() in {
+                    "keystore.properties", "key.properties", "signing.properties",
+                }
             ):
                 raise ValueError(f"Forbidden development or signing file in APK: {name}")
             if member.is_dir() or not normalized.startswith("assets/"):

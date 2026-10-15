@@ -240,6 +240,8 @@ class PackagedContentAuditTest(unittest.TestCase):
             "assets/dexopt/disguised-source.pdf",
             "res/raw/original.pdf",
             "review/notes.txt",
+            "res/raw/release-signing.p12",
+            "META-INF/private-key.pem",
         ):
             with self.subTest(path=path):
                 self.rebuild(extra_members={path: b"forbidden"})
