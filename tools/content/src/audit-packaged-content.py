@@ -106,10 +106,19 @@ def _extract_asset_bytes(apk, destination):
             relative = normalized[len("assets/"):]
             if not relative:
                 continue
+            relative_path = PurePosixPath(relative)
+            if (
+                relative_path.suffix.lower() in {".pdf", ".tex"}
+                or "original" in relative_path.parts
+                or "review" in relative_path.parts
+            ):
+                raise ValueError(f"Forbidden development source file in APK: {name}")
+            if not (relative.startswith("content/") or relative == "databases/content.db"):
+                continue
             total_asset_bytes += member.file_size
             if total_asset_bytes > MAX_ASSET_BYTES:
                 raise ValueError("APK asset payload exceeds the extraction size limit")
-            target = destination.joinpath(*PurePosixPath(relative).parts)
+            target = destination.joinpath(*relative_path.parts)
             target.parent.mkdir(parents=True, exist_ok=True)
             with archive.open(member) as source, target.open("wb") as output:
                 shutil.copyfileobj(source, output)

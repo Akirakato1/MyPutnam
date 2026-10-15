@@ -22,7 +22,7 @@ function Find-AndroidSdk {
             Where-Object { $_ -match '^sdk\.dir=' } |
             Select-Object -First 1
         if ($sdkLine) {
-            $candidate = $sdkLine.Substring("sdk.dir=".Length).Replace('\\:', ':').Replace('\\\\', '\')
+            $candidate = $sdkLine.Substring("sdk.dir=".Length).Replace('\:', ':').Replace('\\', '\')
             if (Test-Path -LiteralPath $candidate -PathType Container) {
                 return (Resolve-Path -LiteralPath $candidate).Path
             }
@@ -85,8 +85,15 @@ if ($expectedHash -ne $actualHash) {
 
 $python = Get-Command python -ErrorAction Stop
 $auditor = Join-Path $repoRoot "tools\content\src\audit-packaged-content.py"
-$auditOutput = & $python.Source $auditor --apk $apk.FullName --expected-release $expectedReleasePath 2>&1 | Out-String
-$auditExitCode = $LASTEXITCODE
+$savedErrorActionPreference = $ErrorActionPreference
+try {
+    $ErrorActionPreference = "Continue"
+    $auditOutput = & $python.Source $auditor --apk $apk.FullName --expected-release $expectedReleasePath 2>&1 | Out-String
+    $auditExitCode = $LASTEXITCODE
+}
+finally {
+    $ErrorActionPreference = $savedErrorActionPreference
+}
 if ($auditExitCode -ne 0) {
     throw "Packaged content audit failed:`n$auditOutput"
 }

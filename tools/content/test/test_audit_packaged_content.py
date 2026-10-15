@@ -60,6 +60,13 @@ class PackagedContentAuditTest(unittest.TestCase):
         self.assertEqual(4, report["counts"]["hintCount"])
         self.assertEqual(1, report["counts"]["prerequisiteCount"])
 
+    def test_android_generated_assets_outside_the_content_bundle_are_ignored(self):
+        self.rebuild(extra_members={"assets/dexopt/baseline.prof": b"android profile"})
+
+        report = self.audit()
+
+        self.assertEqual("fixture-release", report["releaseId"])
+
     def test_checked_in_travel_bundle_satisfies_the_exact_release_contract(self):
         production_apk = self.root / "travel-release-fixture.apk"
         production_assets = REPOSITORY_ROOT / "app/src/main/assets"
@@ -78,7 +85,9 @@ class PackagedContentAuditTest(unittest.TestCase):
         self.assertIn("audit-packaged-content.py", verifier)
         self.assertIn("--expected-release", verifier)
         self.assertIn("$LASTEXITCODE", verifier)
+        self.assertIn('$ErrorActionPreference = "Continue"', verifier)
         self.assertNotIn("assets/content/2025/manifest.json", verifier)
+        self.assertIn(".Replace('\\:', ':').Replace('\\\\', '\\')", verifier)
 
     def test_missing_database_and_stale_database_metadata_are_rejected(self):
         (self.assets / "databases/content.db").unlink()
@@ -199,6 +208,7 @@ class PackagedContentAuditTest(unittest.TestCase):
             "assets/content/source.tex",
             "assets/content/original/raw.txt",
             "assets/content/review/note.txt",
+            "assets/dexopt/disguised-source.pdf",
         ):
             with self.subTest(path=path):
                 self.rebuild(extra_members={path: b"forbidden"})
