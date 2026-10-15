@@ -1,0 +1,262 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2020",
+  "problemId": "A6",
+  "label": "A6",
+  "ordinal": 6,
+  "topics": ["analysis", "sequences-series"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A6" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For a positive integer " },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": ", let " },
+        { "type": "inlineMath", "tex": "f_N" },
+        { "type": "text", "text": " be the function defined by" }
+      ] },
+      { "type": "displayMath", "tex": "f_N(x)=\\sum_{n=0}^N\\frac{N+\\tfrac12-n}{(N+1)(2n+1)}\\sin((2n+1)x)." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Determine the smallest constant " },
+        { "type": "inlineMath", "tex": "M" },
+        { "type": "text", "text": " such that " },
+        { "type": "inlineMath", "tex": "f_N(x)\\le M" },
+        { "type": "text", "text": " for all " },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": " and all real " },
+        { "type": "inlineMath", "tex": "x" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Separate the coefficient",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "\\frac{N+\\tfrac12-n}{(N+1)(2n+1)}=\\frac1{2n+1}-\\frac1{2(N+1)}." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "This separates an odd-harmonic sine sum from an unweighted finite sine sum." }
+        ] }
+      ] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Control the unweighted sine sum",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "For " },
+          { "type": "inlineMath", "tex": "0<x<\\pi" },
+          { "type": "text", "text": ", a geometric-series calculation gives" }
+        ] },
+        { "type": "displayMath", "tex": "\\sum_{n=0}^N\\sin((2n+1)x)=\\frac{1-\\cos(2(N+1)x)}{2\\sin x}\\ge0." }
+      ] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Compare consecutive N",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Write " },
+        { "type": "inlineMath", "tex": "f_{N+1}(x)-f_N(x)" },
+        { "type": "text", "text": " using the nonnegative partial sine sums. Split according to the sign of the one new term " },
+        { "type": "inlineMath", "tex": "\\sin((2N+3)x)" },
+        { "type": "text", "text": " to prove monotonicity in " },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": " on " },
+        { "type": "inlineMath", "tex": "(0,\\pi)" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Identify the limiting ceiling",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Rewrite " }, { "type": "inlineMath", "tex": "f_N" }, { "type": "text", "text": " as an odd-harmonic sine partial sum plus a correction tending to zero." }],
+        [{ "type": "text", "text": "Use the square-wave Fourier series on " }, { "type": "inlineMath", "tex": "(0,\\pi)" }, { "type": "text", "text": " to find the pointwise limit." }],
+        [{ "type": "text", "text": "Combine monotonicity with that limit to obtain a bound for positive " }, { "type": "inlineMath", "tex": "x" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Use oddness and " }, { "type": "inlineMath", "tex": "2\\pi" }, { "type": "text", "text": "-periodicity for all real " }, { "type": "inlineMath", "tex": "x" }, { "type": "text", "text": ", then use approach to the limit to prove sharpness." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Finite sums of odd sine multiples",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "Taking imaginary parts of a geometric series yields" }
+        ] },
+        { "type": "displayMath", "tex": "\\sum_{n=0}^N\\sin((2n+1)x)=\\frac{\\sin^2((N+1)x)}{\\sin x}," },
+        { "type": "displayMath", "tex": "\\frac{\\sin^2((N+1)x)}{\\sin x}=\\frac{1-\\cos(2(N+1)x)}{2\\sin x}." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "In particular, this sum is nonnegative when " },
+          { "type": "inlineMath", "tex": "0<x<\\pi" },
+          { "type": "text", "text": "." }
+        ] }
+      ] }
+    },
+    {
+      "order": 2,
+      "title": "The square-wave Fourier series",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "The odd " },
+          { "type": "inlineMath", "tex": "2\\pi" },
+          { "type": "text", "text": "-periodic function equal to " },
+          { "type": "inlineMath", "tex": "1" },
+          { "type": "text", "text": " on " },
+          { "type": "inlineMath", "tex": "(0,\\pi)" },
+          { "type": "text", "text": " and " },
+          { "type": "inlineMath", "tex": "-1" },
+          { "type": "text", "text": " on " },
+          { "type": "inlineMath", "tex": "(-\\pi,0)" },
+          { "type": "text", "text": " has Fourier series" }
+        ] },
+        { "type": "displayMath", "tex": "\\frac4\\pi\\sum_{n=0}^{\\infty}\\frac{\\sin((2n+1)x)}{2n+1}." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "Dirichlet's convergence theorem says the series equals the function at each continuity point." }
+        ] }
+      ] }
+    },
+    {
+      "order": 3,
+      "title": "A monotone sequence lies below its limit",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If a real sequence is nondecreasing and converges to " },
+        { "type": "inlineMath", "tex": "L" },
+        { "type": "text", "text": ", then every term is at most " },
+        { "type": "inlineMath", "tex": "L" },
+        { "type": "text", "text": ". If terms approach " },
+        { "type": "inlineMath", "tex": "L" },
+        { "type": "text", "text": ", no smaller number can bound all of them." }
+      ] }] }
+    },
+    {
+      "order": 4,
+      "title": "Oddness and periodicity of sine sums",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Any linear combination of " },
+        { "type": "inlineMath", "tex": "\\sin(mx)" },
+        { "type": "text", "text": " with integer " },
+        { "type": "inlineMath", "tex": "m" },
+        { "type": "text", "text": " is odd and " },
+        { "type": "inlineMath", "tex": "2\\pi" },
+        { "type": "text", "text": "-periodic. Bounds on " },
+        { "type": "inlineMath", "tex": "(-\\pi,\\pi]" },
+        { "type": "text", "text": " therefore extend to the real line." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For the proof, the same formula also defines the auxiliary case " },
+        { "type": "inlineMath", "tex": "N=0" },
+        { "type": "text", "text": ". First rewrite the coefficient as" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned}\\frac{N+\\tfrac12-n}{(N+1)(2n+1)}&=\\frac1{2n+1}\\\\&\\quad-\\frac1{2(N+1)}.\\end{aligned}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For fixed " },
+        { "type": "inlineMath", "tex": "x\\in(0,\\pi)" },
+        { "type": "text", "text": ", put" }
+      ] },
+      { "type": "displayMath", "tex": "s_n=\\sin((2n+1)x),\\qquad T_N=\\sum_{n=0}^Ns_n." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The finite sine-sum identity gives" }
+      ] },
+      { "type": "displayMath", "tex": "T_N=\\frac{1-\\cos(2(N+1)x)}{2\\sin x}\\ge0." },
+      { "type": "heading", "level": 2, "runs": [{ "type": "text", "text": "Monotonicity in N" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "A direct subtraction gives" }
+      ] },
+      { "type": "displayMath", "tex": "f_{N+1}(x)-f_N(x)=d_NT_N+e_Ns_{N+1}," },
+      { "type": "displayMath", "tex": "d_N=\\frac1{2(N+1)(N+2)}," },
+      { "type": "displayMath", "tex": "e_N=\\frac1{(2N+3)(2N+4)}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " },
+        { "type": "inlineMath", "tex": "s_{N+1}\\ge0" },
+        { "type": "text", "text": ", both terms are nonnegative. If " },
+        { "type": "inlineMath", "tex": "s_{N+1}\\le0" },
+        { "type": "text", "text": ", use " },
+        { "type": "inlineMath", "tex": "T_{N+1}=T_N+s_{N+1}" },
+        { "type": "text", "text": " to write" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned}f_{N+1}(x)-f_N(x)&=d_NT_{N+1}\\\\&\\quad +(e_N-d_N)s_{N+1}\\ge0,\\end{aligned}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "because " },
+        { "type": "inlineMath", "tex": "T_{N+1}\\ge0" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "0<e_N<d_N" },
+        { "type": "text", "text": ". Hence " },
+        { "type": "inlineMath", "tex": "f_N(x)" },
+        { "type": "text", "text": " is nondecreasing in " },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": " on " },
+        { "type": "inlineMath", "tex": "(0,\\pi)" },
+        { "type": "text", "text": ". Also " },
+        { "type": "inlineMath", "tex": "f_0(x)=\\tfrac12\\sin x>0" },
+        { "type": "text", "text": " there." }
+      ] },
+      { "type": "heading", "level": 2, "runs": [{ "type": "text", "text": "The pointwise limit" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The coefficient decomposition and the formula for " },
+        { "type": "inlineMath", "tex": "T_N" },
+        { "type": "text", "text": " give" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned}f_N(x)&=\\sum_{n=0}^N\\frac{\\sin((2n+1)x)}{2n+1}\\\\&\\quad-\\frac{1-\\cos(2(N+1)x)}{4(N+1)\\sin x}.\\end{aligned}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For fixed " },
+        { "type": "inlineMath", "tex": "x\\in(0,\\pi)" },
+        { "type": "text", "text": ", the second term tends to zero. The first term tends to the square-wave Fourier value, so" }
+      ] },
+      { "type": "displayMath", "tex": "\\lim_{N\\to\\infty}f_N(x)=\\sum_{n=0}^{\\infty}\\frac{\\sin((2n+1)x)}{2n+1}=\\frac\\pi4." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Monotonicity now implies" }
+      ] },
+      { "type": "displayMath", "tex": "0<f_N(x)\\le\\frac\\pi4\\qquad(0<x<\\pi)." },
+      { "type": "heading", "level": 2, "runs": [{ "type": "text", "text": "Global bound and sharpness" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Each " },
+        { "type": "inlineMath", "tex": "f_N" },
+        { "type": "text", "text": " is odd and " },
+        { "type": "inlineMath", "tex": "2\\pi" },
+        { "type": "text", "text": "-periodic. It vanishes at multiples of " },
+        { "type": "inlineMath", "tex": "\\pi" },
+        { "type": "text", "text": ", and for " },
+        { "type": "inlineMath", "tex": "-\\pi<x<0" },
+        { "type": "text", "text": " oddness makes " },
+        { "type": "inlineMath", "tex": "f_N(x)<0" },
+        { "type": "text", "text": ". Thus " },
+        { "type": "inlineMath", "tex": "f_N(x)\\le\\pi/4" },
+        { "type": "text", "text": " for every real " },
+        { "type": "inlineMath", "tex": "x" },
+        { "type": "text", "text": " and every positive integer " },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Finally, fix any " },
+        { "type": "inlineMath", "tex": "x\\in(0,\\pi)" },
+        { "type": "text", "text": ". Since " },
+        { "type": "inlineMath", "tex": "f_N(x)\\to\\pi/4" },
+        { "type": "text", "text": ", every proposed bound smaller than " },
+        { "type": "inlineMath", "tex": "\\pi/4" },
+        { "type": "text", "text": " is exceeded for sufficiently large " },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": ". Therefore the smallest constant is " },
+        { "type": "inlineMath", "tex": "\\boxed{M=\\pi/4}" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2020 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2020Putnam_final.pdf" },
+    { "kind": "solution", "label": "MAA official 2020 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2020-Putnam-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2020 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2020s.tex" }
+  ]
+}

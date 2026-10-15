@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2020",
+  "problemId": "A4",
+  "label": "A4",
+  "ordinal": 4,
+  "topics": ["probability", "sequences-series"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A4" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Consider a horizontal strip of " },
+        { "type": "inlineMath", "tex": "N+2" },
+        { "type": "text", "text": " squares in which the first and the last square are black and the remaining " },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": " squares are all white. Choose a white square uniformly at random, choose one of its two neighbors with equal probability, and color this neighboring square black if it is not already black. Repeat this process until all the remaining white squares have only black neighbors. Let " },
+        { "type": "inlineMath", "tex": "w(N)" },
+        { "type": "text", "text": " be the expected number of white squares remaining. Find" }
+      ] },
+      { "type": "displayMath", "tex": "\\lim_{N\\to\\infty}\\frac{w(N)}N." }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Ignore unsuccessful repetitions",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "At the initial state, some choices merely point toward an already-black endpoint. Condition instead on the first choice that actually turns a white square black." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Split at the first new black square",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If square " },
+        { "type": "inlineMath", "tex": "i" },
+        { "type": "text", "text": " is the first newly black square, the strip separates into subproblems with " },
+        { "type": "inlineMath", "tex": "i-2" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "N+1-i" },
+        { "type": "text", "text": " initially white squares. Apply linearity of expectation." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Turn the first-step equation into a recurrence",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "After conditioning on the first successful directed choice, the two edge-adjacent white squares each have half the weight of an interior square. Simplification gives" }
+        ] },
+        { "type": "displayMath", "tex": "(N-1)w(N)=2\\sum_{j=1}^{N-2}w(j)+w(N-1)." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "Subtract the same identity with " },
+          { "type": "inlineMath", "tex": "N-1" },
+          { "type": "text", "text": " in place of " },
+          { "type": "inlineMath", "tex": "N" },
+          { "type": "text", "text": "." }
+        ] }
+      ] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Recognize a truncated exponential",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Use " }, { "type": "inlineMath", "tex": "w(0)=0" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "w(1)=1" }, { "type": "text", "text": " with the two-term recurrence." }],
+        [{ "type": "text", "text": "Verify by induction that " }, { "type": "inlineMath", "tex": "w(N)=(N+1)\\sum_{k=0}^{N+1}(-1)^k/k!" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Divide by " }, { "type": "inlineMath", "tex": "N" }, { "type": "text", "text": " and use the power series for " }, { "type": "inlineMath", "tex": "e^{-1}" }, { "type": "text", "text": "." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Conditioning on the first effective event",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If repeated trials can leave the state unchanged, conditioning on the first trial that changes the state removes those self-loops. When all directed choices are equally likely, the first effective choice is uniform among the effective directed choices." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "title": "First-step recurrences for expectations",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Partition outcomes by the first state-changing event. If that event produces disjoint subproblems, the conditional expected total is the sum of their expectations; independence is not needed for this use of linearity." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "title": "The exponential series",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "e^x=\\sum_{k=0}^{\\infty}\\frac{x^k}{k!}," },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "so the partial sums " },
+          { "type": "inlineMath", "tex": "\\sum_{k=0}^m(-1)^k/k!" },
+          { "type": "text", "text": " converge to " },
+          { "type": "inlineMath", "tex": "e^{-1}" },
+          { "type": "text", "text": "." }
+        ] }
+      ] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Number the squares " },
+        { "type": "inlineMath", "tex": "1,2,\\ldots,N+2" },
+        { "type": "text", "text": ". Initially there are " },
+        { "type": "inlineMath", "tex": "2N" },
+        { "type": "text", "text": " equally likely directed choices of a white square and one of its neighbors. Two point toward the already-black endpoints, so after ignoring repetitions that leave the state unchanged, the first effective choice is uniform among " },
+        { "type": "inlineMath", "tex": "2(N-1)" },
+        { "type": "text", "text": " directed choices." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Thus square " },
+        { "type": "inlineMath", "tex": "2" },
+        { "type": "text", "text": " or " },
+        { "type": "inlineMath", "tex": "N+1" },
+        { "type": "text", "text": " is the first newly black square with probability " },
+        { "type": "inlineMath", "tex": "1/[2(N-1)]" },
+        { "type": "text", "text": " each, while each square " },
+        { "type": "inlineMath", "tex": "i=3,\\ldots,N" },
+        { "type": "text", "text": " has probability " },
+        { "type": "inlineMath", "tex": "1/(N-1)" },
+        { "type": "text", "text": ". Once " },
+        { "type": "inlineMath", "tex": "i" },
+        { "type": "text", "text": " turns black, the two sides are copies of the original process with " },
+        { "type": "inlineMath", "tex": "i-2" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "N+1-i" },
+        { "type": "text", "text": " white squares. Their expected remaining counts add." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "With " },
+        { "type": "inlineMath", "tex": "w(0)=0" },
+        { "type": "text", "text": ", first-step conditioning and symmetry give, for " },
+        { "type": "inlineMath", "tex": "N\\ge2" },
+        { "type": "text", "text": "," }
+      ] },
+      { "type": "displayMath", "tex": "(N-1)w(N)=2\\sum_{j=1}^{N-2}w(j)+w(N-1)." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Replacing " },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": " by " },
+        { "type": "inlineMath", "tex": "N-1" },
+        { "type": "text", "text": " and subtracting yields" }
+      ] },
+      { "type": "displayMath", "tex": "w(N)=w(N-1)+\\frac{w(N-2)}{N-1}\\qquad(N\\ge2)." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "We also have " },
+        { "type": "inlineMath", "tex": "w(1)=1" },
+        { "type": "text", "text": ", because the single white square already has two black neighbors. We claim that" }
+      ] },
+      { "type": "displayMath", "tex": "w(N)=(N+1)\\sum_{k=0}^{N+1}\\frac{(-1)^k}{k!}\\qquad(N\\ge0)." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The formula gives " },
+        { "type": "inlineMath", "tex": "w(0)=0" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "w(1)=1" },
+        { "type": "text", "text": ". Assuming it for the preceding two indices, the recurrence gives" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned}w(N)&=N\\sum_{k=0}^{N}\\frac{(-1)^k}{k!}+\\sum_{k=0}^{N-1}\\frac{(-1)^k}{k!}\\\\&=(N+1)\\sum_{k=0}^{N+1}\\frac{(-1)^k}{k!}.\\end{aligned}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "This proves the claim by induction. Therefore" }
+      ] },
+      { "type": "displayMath", "tex": "\\frac{w(N)}N=\\frac{N+1}{N}\\sum_{k=0}^{N+1}\\frac{(-1)^k}{k!}\\longrightarrow 1\\cdot e^{-1}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Hence the requested limit is " },
+        { "type": "inlineMath", "tex": "\\boxed{1/e}" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2020 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2020Putnam_final.pdf" },
+    { "kind": "solution", "label": "MAA official 2020 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2020-Putnam-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2020 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2020s.tex" }
+  ]
+}

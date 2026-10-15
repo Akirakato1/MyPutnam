@@ -1,0 +1,267 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2020",
+  "problemId": "A5",
+  "label": "A5",
+  "ordinal": 5,
+  "topics": ["combinatorics", "sequences-series"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A5" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "a_n" },
+        { "type": "text", "text": " be the number of sets " },
+        { "type": "inlineMath", "tex": "S" },
+        { "type": "text", "text": " of positive integers for which" }
+      ] },
+      { "type": "displayMath", "tex": "\\sum_{k\\in S}F_k=n," },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "where the Fibonacci sequence " },
+        { "type": "inlineMath", "tex": "(F_k)_{k\\ge1}" },
+        { "type": "text", "text": " satisfies " },
+        { "type": "inlineMath", "tex": "F_{k+2}=F_{k+1}+F_k" },
+        { "type": "text", "text": " and begins " },
+        { "type": "inlineMath", "tex": "F_1=1,F_2=1,F_3=2,F_4=3" },
+        { "type": "text", "text": ". Find the largest integer " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " such that " },
+        { "type": "inlineMath", "tex": "a_n=2020" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Use the sum of initial Fibonacci numbers",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "F_1+F_2+\\cdots+F_{m-1}=F_{m+1}-1." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "For " },
+          { "type": "inlineMath", "tex": "F_m\\le n<F_{m+1}" },
+          { "type": "text", "text": ", partition the representing sets according to whether they contain the index " },
+          { "type": "inlineMath", "tex": "m" },
+          { "type": "text", "text": "." }
+        ] }
+      ] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Complement the representations that omit m",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Removing " },
+        { "type": "inlineMath", "tex": "m" },
+        { "type": "text", "text": " from a set that contains it leaves sum " },
+        { "type": "inlineMath", "tex": "n-F_m" },
+        { "type": "text", "text": ". If the set omits " },
+        { "type": "inlineMath", "tex": "m" },
+        { "type": "text", "text": ", take its complement inside " },
+        { "type": "inlineMath", "tex": "\\{1,\\ldots,m-1\\}" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Obtain the central recurrence",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "a_n=a_{n-F_m}+a_{F_{m+1}-n-1}\\qquad(F_m\\le n<F_{m+1})," },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "where it is convenient to define " },
+          { "type": "inlineMath", "tex": "a_0=1" },
+          { "type": "text", "text": " for the empty set. First use the recurrence at the two ends of each Fibonacci interval." }
+        ] }
+      ] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Control both the target and all later integers",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Prove " }, { "type": "inlineMath", "tex": "a_{F_m}=a_{F_{m+1}-1}=\\lfloor(m+2)/2\\rfloor" }, { "type": "text", "text": " by induction." }],
+        [{ "type": "text", "text": "Show that throughout " }, { "type": "inlineMath", "tex": "[F_m,F_{m+1})" }, { "type": "text", "text": ", the value " }, { "type": "inlineMath", "tex": "a_n" }, { "type": "text", "text": " is at least the endpoint value " }, { "type": "inlineMath", "tex": "a_{F_m}" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Apply the endpoint formula once just before " }, { "type": "inlineMath", "tex": "F_{4040}" }, { "type": "text", "text": ", then use the interval lower bound from " }, { "type": "inlineMath", "tex": "F_{4040}" }, { "type": "text", "text": " onward." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Sum of an initial Fibonacci segment",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "\\sum_{k=1}^{r}F_k=F_{r+2}-1." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "This follows by induction from " },
+          { "type": "inlineMath", "tex": "F_{r+2}=F_{r+1}+F_r" },
+          { "type": "text", "text": " and is what makes complementation of index sets preserve a controlled target sum." }
+        ] }
+      ] }
+    },
+    {
+      "order": 2,
+      "title": "Sets mean distinct indexed Fibonacci terms",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "A set " },
+        { "type": "inlineMath", "tex": "S" },
+        { "type": "text", "text": " selects each index at most once. The equal values " },
+        { "type": "inlineMath", "tex": "F_1=F_2=1" },
+        { "type": "text", "text": " still correspond to two distinct choices because the indices " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "2" },
+        { "type": "text", "text": " are different." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "title": "Greedy existence of a representation",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Every nonnegative integer is a sum of distinct indexed Fibonacci numbers: subtract the largest Fibonacci number not exceeding the remainder and repeat. The new remainder is smaller than the preceding Fibonacci number, so no index is reused." }
+      ] }] }
+    },
+    {
+      "order": 4,
+      "title": "Strong induction over Fibonacci intervals",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "When a recurrence sends a value in " },
+        { "type": "inlineMath", "tex": "[F_m,F_{m+1})" },
+        { "type": "text", "text": " to arguments below " },
+        { "type": "inlineMath", "tex": "F_{m-1}" },
+        { "type": "text", "text": ", strong induction lets bounds already proved on all earlier Fibonacci intervals be reused." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Extend the definition by setting " },
+        { "type": "inlineMath", "tex": "a_0=1" },
+        { "type": "text", "text": ", corresponding to the empty set. We will use" }
+      ] },
+      { "type": "displayMath", "tex": "F_1+F_2+\\cdots+F_{m-1}=F_{m+1}-1." },
+      { "type": "heading", "level": 2, "runs": [{ "type": "text", "text": "A recurrence for one Fibonacci interval" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Fix " },
+        { "type": "inlineMath", "tex": "F_m\\le n<F_{m+1}" },
+        { "type": "text", "text": ". A representing set cannot contain an index larger than " },
+        { "type": "inlineMath", "tex": "m" },
+        { "type": "text", "text": ". If it contains " },
+        { "type": "inlineMath", "tex": "m" },
+        { "type": "text", "text": ", removing that index is a bijection with representations of " },
+        { "type": "inlineMath", "tex": "n-F_m" },
+        { "type": "text", "text": "; this quantity is below " },
+        { "type": "inlineMath", "tex": "F_{m-1}" },
+        { "type": "text", "text": ", so the reverse operation cannot already contain " },
+        { "type": "inlineMath", "tex": "m" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "If the representing set omits " },
+        { "type": "inlineMath", "tex": "m" },
+        { "type": "text", "text": ", take its complement in " },
+        { "type": "inlineMath", "tex": "\\{1,\\ldots,m-1\\}" },
+        { "type": "text", "text": ". The complement has sum " },
+        { "type": "inlineMath", "tex": "F_{m+1}-n-1" },
+        { "type": "text", "text": ", and complementation is reversible. Therefore" }
+      ] },
+      { "type": "displayMath", "tex": "a_n=a_{n-F_m}+a_{F_{m+1}-n-1}." },
+      { "type": "heading", "level": 2, "runs": [{ "type": "text", "text": "The endpoint values" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Directly, " },
+        { "type": "inlineMath", "tex": "a_1=a_2=2" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "a_3=a_4=3" },
+        { "type": "text", "text": ". We claim that for " },
+        { "type": "inlineMath", "tex": "m\\ge2" },
+        { "type": "text", "text": "," }
+      ] },
+      { "type": "displayMath", "tex": "a_{F_m}=a_{F_{m+1}-1}=\\left\\lfloor\\frac{m+2}{2}\\right\\rfloor." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The displayed small values establish the initial cases. For later " },
+        { "type": "inlineMath", "tex": "m" },
+        { "type": "text", "text": ", the recurrence and the induction hypothesis give" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned}a_{F_m}&=a_0+a_{F_{m-1}-1}\\\\&=1+\\left\\lfloor\\frac m2\\right\\rfloor=\\left\\lfloor\\frac{m+2}{2}\\right\\rfloor,\\\\a_{F_{m+1}-1}&=a_{F_{m-1}-1}+a_0=a_{F_m}.\\end{aligned}" },
+      { "type": "heading", "level": 2, "runs": [{ "type": "text", "text": "A lower bound throughout each interval" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "We next prove by strong induction on " },
+        { "type": "inlineMath", "tex": "m" },
+        { "type": "text", "text": " that" }
+      ] },
+      { "type": "displayMath", "tex": "a_n\\ge a_{F_m}\\qquad(F_m\\le n<F_{m+1})." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The cases through " },
+        { "type": "inlineMath", "tex": "m=4" },
+        { "type": "text", "text": " follow from the direct values. Assume " },
+        { "type": "inlineMath", "tex": "m\\ge5" },
+        { "type": "text", "text": " and the earlier intervals are known. The two endpoints already have the claimed value, so take an interior " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " and set" }
+      ] },
+      { "type": "displayMath", "tex": "x=n-F_m,\\qquad y=F_{m+1}-n-1." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Then " },
+        { "type": "inlineMath", "tex": "x,y\\ge1" },
+        { "type": "text", "text": ", " },
+        { "type": "inlineMath", "tex": "x+y=F_{m-1}-1" },
+        { "type": "text", "text": ", and " },
+        { "type": "inlineMath", "tex": "a_n=a_x+a_y" },
+        { "type": "text", "text": ". Every positive integer has at least one Fibonacci representation, so this recurrence also shows " },
+        { "type": "inlineMath", "tex": "a_r\\ge2" },
+        { "type": "text", "text": " for every " },
+        { "type": "inlineMath", "tex": "r>0" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " },
+        { "type": "inlineMath", "tex": "\\max(x,y)\\ge F_{m-2}" },
+        { "type": "text", "text": ", the induction hypothesis applied to that larger argument gives" }
+      ] },
+      { "type": "displayMath", "tex": "a_n\\ge a_{F_{m-2}}+2=\\left\\lfloor\\frac m2\\right\\rfloor+2\\ge\\left\\lfloor\\frac{m+2}{2}\\right\\rfloor." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Otherwise both arguments are below " },
+        { "type": "inlineMath", "tex": "F_{m-2}" },
+        { "type": "text", "text": ". Their fixed sum then forces both to be at least " },
+        { "type": "inlineMath", "tex": "F_{m-3}" },
+        { "type": "text", "text": ", so" }
+      ] },
+      { "type": "displayMath", "tex": "a_n\\ge2a_{F_{m-3}}=2\\left\\lfloor\\frac{m-1}{2}\\right\\rfloor\\ge\\left\\lfloor\\frac{m+2}{2}\\right\\rfloor." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "This proves the interval lower bound." }
+      ] },
+      { "type": "heading", "level": 2, "runs": [{ "type": "text", "text": "Locate the last value 2020" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Taking " },
+        { "type": "inlineMath", "tex": "m=4039" },
+        { "type": "text", "text": " in the endpoint formula gives" }
+      ] },
+      { "type": "displayMath", "tex": "a_{F_{4040}-1}=\\left\\lfloor\\frac{4041}{2}\\right\\rfloor=2020." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For every " },
+        { "type": "inlineMath", "tex": "n>F_{4040}-1" },
+        { "type": "text", "text": ", choose " },
+        { "type": "inlineMath", "tex": "p\\ge4040" },
+        { "type": "text", "text": " with " },
+        { "type": "inlineMath", "tex": "F_p\\le n<F_{p+1}" },
+        { "type": "text", "text": ". The interval bound gives" }
+      ] },
+      { "type": "displayMath", "tex": "a_n\\ge a_{F_p}=\\left\\lfloor\\frac{p+2}{2}\\right\\rfloor\\ge2021." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Hence no larger integer has value " },
+        { "type": "inlineMath", "tex": "2020" },
+        { "type": "text", "text": ", and the answer is " },
+        { "type": "inlineMath", "tex": "\\boxed{F_{4040}-1}" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2020 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2020Putnam_final.pdf" },
+    { "kind": "solution", "label": "MAA official 2020 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2020-Putnam-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2020 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2020s.tex" }
+  ]
+}
