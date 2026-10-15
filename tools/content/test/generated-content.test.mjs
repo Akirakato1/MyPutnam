@@ -9,37 +9,53 @@ import { buildYear } from '../src/build-year.mjs';
 import { problemDocuments } from '../src/content-types.mjs';
 import { auditRenderedDocument } from '../src/render-document.mjs';
 
-const sourceRoot = fileURLToPath(new URL('../../../content-src/2025/', import.meta.url));
+const sourceRoot = fileURLToPath(new URL('../../../content-src/', import.meta.url));
+const years = [2020, 2021, 2022, 2023, 2024, 2025];
+const prerequisiteCounts = new Map([
+  [2020, 40],
+  [2021, 35],
+  [2022, 36],
+  [2023, 36],
+  [2024, 36],
+  [2025, 36],
+]);
 
-test('generated 2025 content preserves stages and renders every source math run', async () => {
+test('generated 2020-2025 content preserves stages and renders every source math run', async () => {
   const temporaryRoot = await mkdtemp(join(tmpdir(), 'putnam-generated-audit-'));
-  const outputRoot = join(temporaryRoot, 'content');
 
   try {
-    const manifest = await buildYear(sourceRoot, outputRoot, {
-      year: 2025,
-      contentVersion: '2025.2',
-    });
+    for (const year of years) {
+      const yearSourceRoot = join(sourceRoot, String(year));
+      const outputRoot = join(temporaryRoot, 'content', String(year));
+      const manifest = await buildYear(yearSourceRoot, outputRoot, {
+        year,
+        contentVersion: `${year}.2`,
+      });
 
-    assert.equal(manifest.problems.length, 12);
-    assert.equal(manifest.problems.flatMap(({ hints }) => hints).length, 48);
-    assert.equal(manifest.problems.flatMap(({ prerequisites }) => prerequisites).length, 36);
-    assert.ok(manifest.problems.every(({ topics }) => topics.length > 0));
-    assert.equal(manifest.assets.some(({ path }) => path.endsWith('.pdf')), false);
-
-    for (const generatedProblem of manifest.problems) {
-      const source = JSON.parse(
-        await readFile(join(sourceRoot, 'problems', `${generatedProblem.problemId}.json`), 'utf8'),
+      assert.equal(manifest.problems.length, 12, `${year}: problem count`);
+      assert.equal(manifest.problems.flatMap(({ hints }) => hints).length, 48, `${year}: hint count`);
+      assert.equal(
+        manifest.problems.flatMap(({ prerequisites }) => prerequisites).length,
+        prerequisiteCounts.get(year),
+        `${year}: prerequisite count`,
       );
-      assert.deepEqual(
-        generatedProblem.hints.map(({ stage }) => stage),
-        source.hints.map(({ stage }) => stage),
-      );
+      assert.ok(manifest.problems.every(({ topics }) => topics.length > 0));
+      assert.equal(manifest.assets.some(({ path }) => path.endsWith('.pdf')), false);
 
-      for (const { path, document } of problemDocuments(source)) {
-        const reference = generatedReference(generatedProblem, path);
-        const html = await readFile(join(outputRoot, ...reference.assetPath.split('/')), 'utf8');
-        auditRenderedDocument(document, html, `${generatedProblem.problemId}${path}`);
+      for (const generatedProblem of manifest.problems) {
+        const source = JSON.parse(
+          await readFile(join(yearSourceRoot, 'problems', `${generatedProblem.problemId}.json`), 'utf8'),
+        );
+        assert.deepEqual(
+          generatedProblem.hints.map(({ stage }) => stage),
+          source.hints.map(({ stage }) => stage),
+        );
+
+        for (const { path, document } of problemDocuments(source)) {
+          const reference = generatedReference(generatedProblem, path);
+          const html = await readFile(join(outputRoot, ...reference.assetPath.split('/')), 'utf8');
+          auditRenderedDocument(document, html, `${year}/${generatedProblem.problemId}${path}`);
+        }
       }
     }
   } finally {
