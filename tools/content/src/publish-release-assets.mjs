@@ -64,14 +64,18 @@ export async function publishReleaseAssets({
       await rename(newDatabase, destinationDatabase);
       databaseInstalled = true;
       onPhase('database-replaced');
-      await rm(contentBackup, { recursive: true, force: true });
-      await rm(databaseBackup, { force: true });
     } catch (error) {
       try {
         if (contentInstalled) await rm(destinationContent, { recursive: true, force: true });
         if (databaseInstalled) await rm(destinationDatabase, { force: true });
-        if (hadContent && await exists(contentBackup)) await rename(contentBackup, destinationContent);
-        if (hadDatabase && await exists(databaseBackup)) await rename(databaseBackup, destinationDatabase);
+        if (hadContent) {
+          if (!await exists(contentBackup)) throw new Error('Content backup missing during rollback');
+          await rename(contentBackup, destinationContent);
+        }
+        if (hadDatabase) {
+          if (!await exists(databaseBackup)) throw new Error('Database backup missing during rollback');
+          await rename(databaseBackup, destinationDatabase);
+        }
       } catch (rollbackError) {
         preserveRecovery = true;
         throw new AggregateError(
@@ -80,6 +84,18 @@ export async function publishReleaseAssets({
         );
       }
       throw error;
+    }
+    try {
+      await rm(contentBackup, { recursive: true, force: true });
+      onPhase('content-backup-removed');
+      await rm(databaseBackup, { force: true });
+      onPhase('backups-removed');
+    } catch (cleanupError) {
+      preserveRecovery = true;
+      throw new Error(
+        `Release published but backup cleanup failed; recovery files retained at ${workRoot}`,
+        { cause: cleanupError },
+      );
     }
   } finally {
     if (workRoot && !preserveRecovery) await rm(workRoot, { recursive: true, force: true });

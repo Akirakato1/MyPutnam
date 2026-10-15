@@ -19,7 +19,7 @@ The checked-in release is version `0.4.0` (code `4`) with immutable content rele
 Build and independently audit a staging bundle before publishing it into the Android assets:
 
 ```text
-node tools/content/src/build-release.mjs --release content-src/releases/putnam-2020-2025-v0.4.0.json --catalog content-src/library.json --source content-src --output build/release/putnam-2020-2025-v0.4.0/app-assets --receipt build/release/putnam-2020-2025-v0.4.0/receipt.json
+node tools/content/src/build-release.mjs --source content-src --archive-catalog content-src/archive.json --library-catalog content-src/library.json --release content-src/releases/putnam-2020-2025-v0.4.0.json --staging build/release/putnam-2020-2025-v0.4.0/app-assets --review-output build/release/putnam-2020-2025-v0.4.0/review --receipt build/release/putnam-2020-2025-v0.4.0/receipt.json
 python tools/content/src/content_bundle_audit.py --asset-root build/release/putnam-2020-2025-v0.4.0/app-assets --expected-release content-src/releases/putnam-2020-2025-v0.4.0.json
 node tools/content/src/publish-release-assets.mjs --staging build/release/putnam-2020-2025-v0.4.0/app-assets --receipt build/release/putnam-2020-2025-v0.4.0/receipt.json --destination app/src/main/assets
 ```

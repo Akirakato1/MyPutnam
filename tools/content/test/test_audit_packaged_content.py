@@ -202,6 +202,35 @@ class PackagedContentAuditTest(unittest.TestCase):
                 {**baseline, "problemCount": 72, "hintCount": 288, "prerequisiteCount": 71},
             )
 
+    def test_travel_release_requires_exact_a1_through_b6_identities_and_ordinals(self):
+        release = {
+            "releaseId": "putnam-2020-2025-v0.4.0",
+            "includedSets": [f"putnam/{year}" for year in range(2020, 2026)],
+        }
+        problem_ids = [f"A{number}" for number in range(1, 7)] + [f"B{number}" for number in range(1, 7)]
+        manifests = [
+            {
+                "collectionId": "putnam",
+                "setId": str(year),
+                "problems": [
+                    {
+                        "key": f"putnam/{year}/{problem_id}",
+                        "collectionId": "putnam",
+                        "setId": str(year),
+                        "problemId": problem_id,
+                        "ordinal": ordinal,
+                    }
+                    for ordinal, problem_id in enumerate(problem_ids, 1)
+                ],
+            }
+            for year in range(2020, 2026)
+        ]
+        AUDITOR.audit_travel_problem_identities(release, manifests)
+
+        manifests[0]["problems"][0].update({"key": "putnam/2020/C1", "problemId": "C1"})
+        with self.assertRaisesRegex(ValueError, "A1|B6|identity|ordinal"):
+            AUDITOR.audit_travel_problem_identities(release, manifests)
+
     def test_forbidden_development_files_are_rejected(self):
         for path in (
             "assets/content/paper.pdf",
@@ -209,6 +238,8 @@ class PackagedContentAuditTest(unittest.TestCase):
             "assets/content/original/raw.txt",
             "assets/content/review/note.txt",
             "assets/dexopt/disguised-source.pdf",
+            "res/raw/original.pdf",
+            "review/notes.txt",
         ):
             with self.subTest(path=path):
                 self.rebuild(extra_members={path: b"forbidden"})

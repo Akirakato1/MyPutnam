@@ -40,6 +40,15 @@ def audit_packaged_apk(apk_path, expected_release_path):
         asset_root.mkdir()
         _extract_asset_bytes(apk, asset_root)
         report = BUNDLE_AUDITOR.audit_content_bundle(asset_root, expected_release)
+        manifests = [
+            _read_json(
+                asset_root / "content" / collection_id / set_id / "manifest.json",
+                f"embedded set manifest {key}",
+            )
+            for key in expected_release.get("includedSets", [])
+            for collection_id, set_id in [key.split("/")]
+        ]
+        audit_travel_problem_identities(expected_release, manifests)
 
     audit_release_cardinality(expected_release, report["counts"])
     return {
@@ -77,6 +86,41 @@ def audit_release_cardinality(release, counts):
         )
 
 
+def audit_travel_problem_identities(release, manifests):
+    if release.get("releaseId") != TRAVEL_RELEASE_ID:
+        return
+    expected_problem_ids = [f"A{number}" for number in range(1, 7)] + [
+        f"B{number}" for number in range(1, 7)
+    ]
+    manifests_by_set = {
+        f"{manifest.get('collectionId')}/{manifest.get('setId')}": manifest
+        for manifest in manifests
+    }
+    if sorted(manifests_by_set) != TRAVEL_INCLUDED_SETS or len(manifests_by_set) != len(manifests):
+        raise ValueError(f"{TRAVEL_RELEASE_ID} embedded set identities do not match the release contract")
+    for key in TRAVEL_INCLUDED_SETS:
+        collection_id, set_id = key.split("/")
+        problems = sorted(manifests_by_set[key].get("problems", []), key=lambda item: item.get("ordinal", 0))
+        actual = [
+            (
+                problem.get("problemId"),
+                problem.get("ordinal"),
+                problem.get("key"),
+                problem.get("collectionId"),
+                problem.get("setId"),
+            )
+            for problem in problems
+        ]
+        expected = [
+            (problem_id, ordinal, f"{key}/{problem_id}", collection_id, set_id)
+            for ordinal, problem_id in enumerate(expected_problem_ids, 1)
+        ]
+        if actual != expected:
+            raise ValueError(
+                f"{key} must contain the exact A1 through B6 identities and ordinals 1 through 12"
+            )
+
+
 def _extract_asset_bytes(apk, destination):
     seen = set()
     normalized_seen = set()
@@ -101,18 +145,21 @@ def _extract_asset_bytes(apk, destination):
                 raise ValueError(f"Symbolic-link ZIP member is forbidden: {name}")
             if member.file_size > MAX_MEMBER_BYTES:
                 raise ValueError(f"ZIP member exceeds size limit: {name}")
+            archive_path = PurePosixPath(normalized)
+            lowered_parts = {part.lower() for part in archive_path.parts}
+            if (
+                archive_path.suffix.lower() in {".pdf", ".tex", ".jks", ".keystore"}
+                or "original" in lowered_parts
+                or "review" in lowered_parts
+                or archive_path.name.lower() == "keystore.properties"
+            ):
+                raise ValueError(f"Forbidden development or signing file in APK: {name}")
             if member.is_dir() or not normalized.startswith("assets/"):
                 continue
             relative = normalized[len("assets/"):]
             if not relative:
                 continue
             relative_path = PurePosixPath(relative)
-            if (
-                relative_path.suffix.lower() in {".pdf", ".tex"}
-                or "original" in relative_path.parts
-                or "review" in relative_path.parts
-            ):
-                raise ValueError(f"Forbidden development source file in APK: {name}")
             if not (relative.startswith("content/") or relative == "databases/content.db"):
                 continue
             total_asset_bytes += member.file_size

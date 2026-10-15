@@ -51,6 +51,22 @@ test('publisher rolls content back when database replacement fails', async (t) =
   assert.equal(await readFile(join(fixture.destination, 'databases', 'content.db'), 'utf8'), 'old database');
 });
 
+test('backup cleanup failure preserves the newly published coherent bundle', async (t) => {
+  assert.equal(typeof publishContract.publishReleaseAssets, 'function');
+  const fixture = await createFixture(t);
+  await assert.rejects(
+    publishContract.publishReleaseAssets({
+      ...fixture.options,
+      onPhase(phase) {
+        if (phase === 'content-backup-removed') throw new Error('injected backup cleanup failure');
+      },
+    }),
+    /cleanup|recovery|injected backup cleanup failure/i,
+  );
+  assert.equal(await readFile(join(fixture.destination, 'content', 'release.json'), 'utf8'), fixture.releaseText);
+  assert.equal(await readFile(join(fixture.destination, 'databases', 'content.db'), 'utf8'), 'new database');
+});
+
 async function createFixture(t) {
   const root = await mkdtemp(join(tmpdir(), 'putnam-publish-'));
   t.after(() => rm(root, { recursive: true, force: true }));
