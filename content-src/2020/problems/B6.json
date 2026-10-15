@@ -1,0 +1,175 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2020",
+  "problemId": "B6",
+  "label": "B6",
+  "ordinal": 12,
+  "topics": ["number-theory", "sequences-series", "inequalities"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B6" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " be a positive integer. Prove that" }
+      ] },
+      { "type": "displayMath", "tex": "\\sum_{k=1}^n(-1)^{\\lfloor k(\\sqrt2-1)\\rfloor}\\ge0." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "(As usual, " }, { "type": "inlineMath", "tex": "\\lfloor x\\rfloor" },
+        { "type": "text", "text": " denotes the greatest integer less than or equal to " }, { "type": "inlineMath", "tex": "x" }, { "type": "text", "text": ".)" }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1, "stage": "nudge", "title": "Look at runs of equal signs",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Put " }, { "type": "inlineMath", "tex": "\\alpha=\\sqrt2-1" }, { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "a_k=(-1)^{\\lfloor k\\alpha\\rfloor}" }, { "type": "text", "text": ". As " },
+        { "type": "inlineMath", "tex": "\\lfloor k\\alpha\\rfloor" }, { "type": "text", "text": " increases through consecutive integers, the signs occur in alternating runs. Determine the possible run lengths from " },
+        { "type": "inlineMath", "tex": "1/\\alpha=2+\\alpha" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2, "stage": "strategy", "title": "Compress every run",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Every run has length " }, { "type": "inlineMath", "tex": "2" }, { "type": "text", "text": " or " },
+        { "type": "inlineMath", "tex": "3" }, { "type": "text", "text": ". Delete two signs from every run. Short runs disappear and long runs leave one sign. Let " },
+        { "type": "inlineMath", "tex": "b_k" }, { "type": "text", "text": " be the sign left by the " }, { "type": "inlineMath", "tex": "k" },
+        { "type": "text", "text": "th long run. The key phenomenon is that the compressed sequence reproduces the original one." }
+      ] }] }
+    },
+    {
+      "order": 3, "stage": "knowledge", "title": "Locate the kth long run",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "Suppose the " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": "th long run corresponds to the value " },
+          { "type": "inlineMath", "tex": "t=\\lfloor j\\alpha\\rfloor" }, { "type": "text", "text": ". There are " }, { "type": "inlineMath", "tex": "2t+k-1" },
+          { "type": "text", "text": " terms before it, so its three indices begin at " }, { "type": "inlineMath", "tex": "2t+k" }, { "type": "text", "text": ". The endpoint inequalities imply" }
+        ] },
+        { "type": "displayMath", "tex": "t\\alpha<k<(t+1)\\alpha." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "Use " }, { "type": "inlineMath", "tex": "1/\\alpha=2+\\alpha" }, { "type": "text", "text": " to compare " },
+          { "type": "inlineMath", "tex": "(-1)^t" }, { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "a_k" }, { "type": "text", "text": "." }
+        ] }
+      ] }
+    },
+    {
+      "order": 4, "stage": "outline", "title": "Rule out the first negative partial sum",
+      "document": { "blocks": [
+        { "type": "list", "ordered": true, "items": [
+          [{ "type": "text", "text": "Assume a least index " }, { "type": "inlineMath", "tex": "N" }, { "type": "text", "text": " has negative partial sum." }],
+          [{ "type": "text", "text": "Show that this prefix must end with all three terms of a long negative run." }],
+          [{ "type": "text", "text": "Compress all complete runs in the prefix. Deleting two terms per run changes the sum by zero because the prefix starts with a positive run and ends with a negative run." }],
+          [{ "type": "text", "text": "The compressed prefix has length at most " }, { "type": "inlineMath", "tex": "N/3" }, { "type": "text", "text": " and, since " }, { "type": "inlineMath", "tex": "b_k=a_k" }, { "type": "text", "text": ", gives an earlier negative partial sum." }]
+        ] }
+      ] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1, "title": "Floor intervals and run lengths",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "inlineMath", "tex": "\\lfloor k\\alpha\\rfloor=t" }, { "type": "text", "text": " exactly when " },
+        { "type": "inlineMath", "tex": "t\\le k\\alpha<t+1" }, { "type": "text", "text": ". Thus the number of consecutive indices giving the same floor value is the number of integers in an interval of length " },
+        { "type": "inlineMath", "tex": "1/\\alpha" }, { "type": "text", "text": ". Irrationality ensures that no endpoint is an integer." }
+      ] }] }
+    },
+    {
+      "order": 2, "title": "The quadratic-unit identity",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "\\alpha=\\sqrt2-1,\\qquad \\frac1\\alpha=\\sqrt2+1=2+\\alpha." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "In particular, " }, { "type": "inlineMath", "tex": "2<1/\\alpha<3" },
+          { "type": "text", "text": ", and " }, { "type": "inlineMath", "tex": "\\lfloor k/\\alpha\\rfloor=2k+\\lfloor k\\alpha\\rfloor" },
+          { "type": "text", "text": " for every positive integer " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": "." }
+        ] }
+      ] }
+    },
+    {
+      "order": 3, "title": "Minimal-counterexample descent",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If a claimed inequality first fails at index " }, { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": ", any transformation that converts the bad prefix into an identical kind of bad prefix of length strictly less than " },
+        { "type": "inlineMath", "tex": "N" }, { "type": "text", "text": " gives a contradiction." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Set" }
+      ] },
+      { "type": "displayMath", "tex": "\\alpha=\\sqrt2-1,\\qquad a_k=(-1)^{\\lfloor k\\alpha\\rfloor}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The crucial identity is" }
+      ] },
+      { "type": "displayMath", "tex": "\\frac1\\alpha=\\sqrt2+1=2+\\alpha." },
+      { "type": "heading", "level": 2, "runs": [{ "type": "text", "text": "The sign runs reproduce themselves" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The indices for which " }, { "type": "inlineMath", "tex": "\\lfloor k\\alpha\\rfloor=t" },
+        { "type": "text", "text": " are the integers in an interval of length " }, { "type": "inlineMath", "tex": "1/\\alpha=2+\\alpha" },
+        { "type": "text", "text": ", strictly between " }, { "type": "inlineMath", "tex": "2" }, { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "3" }, { "type": "text", "text": ". Hence the signs " }, { "type": "inlineMath", "tex": "a_k" },
+        { "type": "text", "text": " occur in alternating runs of length " }, { "type": "inlineMath", "tex": "2" }, { "type": "text", "text": " or " },
+        { "type": "inlineMath", "tex": "3" }, { "type": "text", "text": ", beginning with two positive signs." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Delete two signs from every run. Runs of length two disappear; runs of length three leave one sign. Let " },
+        { "type": "inlineMath", "tex": "b_k" }, { "type": "text", "text": " be the sign left by the " }, { "type": "inlineMath", "tex": "k" },
+        { "type": "text", "text": "th long run. We claim that" }
+      ] },
+      { "type": "displayMath", "tex": "b_k=a_k\\qquad(k\\ge1)." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Suppose the " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": "th long run is the run with floor value " },
+        { "type": "inlineMath", "tex": "t" }, { "type": "text", "text": ". It has sign " }, { "type": "inlineMath", "tex": "b_k=(-1)^t" },
+        { "type": "text", "text": ". Among the previous " }, { "type": "inlineMath", "tex": "t" }, { "type": "text", "text": " runs, exactly " },
+        { "type": "inlineMath", "tex": "k-1" }, { "type": "text", "text": " were long, so there are " }, { "type": "inlineMath", "tex": "2t+k-1" },
+        { "type": "text", "text": " earlier terms. Thus this long run occupies indices " },
+        { "type": "inlineMath", "tex": "2t+k,2t+k+1,2t+k+2" }, { "type": "text", "text": ". Since all three have floor value " },
+        { "type": "inlineMath", "tex": "t" }, { "type": "text", "text": ", irrationality of " }, { "type": "inlineMath", "tex": "\\alpha" },
+        { "type": "text", "text": " gives" }
+      ] },
+      { "type": "displayMath", "tex": "t<(2t+k)\\alpha,\\qquad (2t+k+2)\\alpha<t+1." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Using " }, { "type": "inlineMath", "tex": "1/\\alpha-2=\\alpha" }, { "type": "text", "text": ", these inequalities are equivalent to" }
+      ] },
+      { "type": "displayMath", "tex": "t\\alpha<k<(t+1)\\alpha." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Therefore " }, { "type": "inlineMath", "tex": "\\lfloor k/\\alpha\\rfloor=t" },
+        { "type": "text", "text": ". But " }, { "type": "inlineMath", "tex": "k/\\alpha=2k+k\\alpha" }, { "type": "text", "text": ", so" }
+      ] },
+      { "type": "displayMath", "tex": "\\lfloor k\\alpha\\rfloor=t-2k." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Consequently " }, { "type": "inlineMath", "tex": "a_k=(-1)^{t-2k}=(-1)^t=b_k" },
+        { "type": "text", "text": ", proving the self-similarity claim." }
+      ] },
+      { "type": "heading", "level": 2, "runs": [{ "type": "text", "text": "Descent from a first negative prefix" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Assume for contradiction that some partial sum is negative, and choose the least " },
+        { "type": "inlineMath", "tex": "N" }, { "type": "text", "text": " for which" }
+      ] },
+      { "type": "displayMath", "tex": "A_N=\\sum_{k=1}^N a_k<0." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "This prefix must end at the third term of a long negative run. Indeed, before that third term the current negative run has contributed at most two minus signs, while the preceding positive run contributed at least two plus signs. Removing those two runs would then produce an earlier partial sum no larger than " },
+        { "type": "inlineMath", "tex": "A_N" }, { "type": "text", "text": ", contradicting the minimality of " }, { "type": "inlineMath", "tex": "N" }, { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "m" }, { "type": "text", "text": " be the number of long runs through this final negative run. Compress the complete prefix by deleting two terms from every run. The prefix begins with a positive run and ends with a negative run, so it contains equally many positive and negative runs; the deleted terms have total sum zero. The retained terms are exactly " },
+        { "type": "inlineMath", "tex": "b_1,\\ldots,b_m" }, { "type": "text", "text": ". Hence" }
+      ] },
+      { "type": "displayMath", "tex": "\\sum_{k=1}^m b_k=A_N<0." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Since " }, { "type": "inlineMath", "tex": "b_k=a_k" }, { "type": "text", "text": ", this says " },
+        { "type": "inlineMath", "tex": "A_m<0" }, { "type": "text", "text": ". Yet each long run uses three terms, so " },
+        { "type": "inlineMath", "tex": "m\\le N/3<N" }, { "type": "text", "text": ", contradicting the minimal choice of " },
+        { "type": "inlineMath", "tex": "N" }, { "type": "text", "text": ". Therefore every partial sum satisfies" }
+      ] },
+      { "type": "displayMath", "tex": "\\boxed{\\sum_{k=1}^n(-1)^{\\lfloor k(\\sqrt2-1)\\rfloor}\\ge0}." }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2020 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2020Putnam_final.pdf" },
+    { "kind": "solution", "label": "MAA official 2020 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2020-Putnam-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2020 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2020s.tex" }
+  ]
+}

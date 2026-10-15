@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2020",
+  "problemId": "B4",
+  "label": "B4",
+  "ordinal": 10,
+  "topics": ["combinatorics", "probability"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B4" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " be a positive integer, and let " }, { "type": "inlineMath", "tex": "V_n" },
+        { "type": "text", "text": " be the set of integer " }, { "type": "inlineMath", "tex": "(2n+1)" }, { "type": "text", "text": "-tuples " },
+        { "type": "inlineMath", "tex": "\\mathbf v=(s_0,s_1,\\ldots,s_{2n-1},s_{2n})" }, { "type": "text", "text": " for which " },
+        { "type": "inlineMath", "tex": "s_0=s_{2n}=0" }, { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "|s_j-s_{j-1}|=1" }, { "type": "text", "text": " for " },
+        { "type": "inlineMath", "tex": "j=1,2,\\ldots,2n" }, { "type": "text", "text": ". Define" }
+      ] },
+      { "type": "displayMath", "tex": "q(\\mathbf v)=1+\\sum_{j=1}^{2n-1}3^{s_j}," },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "and let " }, { "type": "inlineMath", "tex": "M(n)" }, { "type": "text", "text": " be the average of " },
+        { "type": "inlineMath", "tex": "1/q(\\mathbf v)" }, { "type": "text", "text": " over all " },
+        { "type": "inlineMath", "tex": "\\mathbf v\\in V_n" }, { "type": "text", "text": ". Evaluate " },
+        { "type": "inlineMath", "tex": "M(2020)" }, { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1, "stage": "nudge", "title": "Replace heights by steps",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Set " }, { "type": "inlineMath", "tex": "w_j=s_j-s_{j-1}" }, { "type": "text", "text": ". Then each " },
+        { "type": "inlineMath", "tex": "w_j" }, { "type": "text", "text": " is " }, { "type": "inlineMath", "tex": "+1" }, { "type": "text", "text": " or " },
+        { "type": "inlineMath", "tex": "-1" }, { "type": "text", "text": ", and exactly " }, { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " steps have each sign. Think about cyclically rotating this balanced step word." }
+      ] }] }
+    },
+    {
+      "order": 2, "stage": "strategy", "title": "Average one cyclic orbit at a time",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Cyclic rotation partitions all balanced step words into orbits. It is enough to prove that the average of " },
+        { "type": "inlineMath", "tex": "1/q" }, { "type": "text", "text": " is the same on every orbit, including orbits whose period is smaller than " },
+        { "type": "inlineMath", "tex": "2n" }, { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3, "stage": "knowledge", "title": "Track the shifted heights",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "Extend the steps periodically. If the word is rotated past its first " }, { "type": "inlineMath", "tex": "k" },
+          { "type": "text", "text": " steps, the new height after " }, { "type": "inlineMath", "tex": "j" }, { "type": "text", "text": " steps is " },
+          { "type": "inlineMath", "tex": "s_{j+k}-s_k" }, { "type": "text", "text": ". Also rewrite the initial " }, { "type": "inlineMath", "tex": "1" },
+          { "type": "text", "text": " in " }, { "type": "inlineMath", "tex": "q" }, { "type": "text", "text": " as the term " },
+          { "type": "inlineMath", "tex": "3^{s_{2n}}" }, { "type": "text", "text": "." }
+        ] }
+      ] }
+    },
+    {
+      "order": 4, "stage": "outline", "title": "Make the reciprocals sum to one",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "q_k=3^{-s_k}\\sum_{j=1}^{2n}3^{s_j}." },
+        { "type": "list", "ordered": true, "items": [
+          [{ "type": "text", "text": "Invert this identity and sum over " }, { "type": "inlineMath", "tex": "k=1,\\ldots,2n" }, { "type": "text", "text": "." }],
+          [{ "type": "text", "text": "The numerator sum becomes identical to the denominator, so the reciprocals sum to " }, { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": "." }],
+          [{ "type": "text", "text": "Divide by " }, { "type": "inlineMath", "tex": "2n" }, { "type": "text", "text": " and then substitute " }, { "type": "inlineMath", "tex": "n=2020" }, { "type": "text", "text": "." }]
+        ] }
+      ] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1, "title": "Lattice paths and increments",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "A height sequence with successive differences " }, { "type": "inlineMath", "tex": "\\pm1" },
+        { "type": "text", "text": " is equivalent to its step word. Returning to height " }, { "type": "inlineMath", "tex": "0" },
+        { "type": "text", "text": " after " }, { "type": "inlineMath", "tex": "2n" }, { "type": "text", "text": " steps means that the word contains " },
+        { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " plus signs and " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " minus signs." }
+      ] }] }
+    },
+    {
+      "order": 2, "title": "Cyclic orbits",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Repeated cyclic shifts partition a finite set into disjoint orbits. Listing all " }, { "type": "inlineMath", "tex": "2n" },
+        { "type": "text", "text": " shifts of a word visits every member of its orbit equally often, even when the word has a shorter period." }
+      ] }] }
+    },
+    {
+      "order": 3, "title": "Averaging by a partition",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If a finite set is partitioned into pieces and a quantity has the same average on every piece, then it has that average on the whole set. The sizes of the pieces need not be equal." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Encode " }, { "type": "inlineMath", "tex": "\\mathbf v" }, { "type": "text", "text": " by its increments " },
+        { "type": "inlineMath", "tex": "w_j=s_j-s_{j-1}\\in\\{-1,1\\}" }, { "type": "text", "text": ". Since " },
+        { "type": "inlineMath", "tex": "s_{2n}=s_0" }, { "type": "text", "text": ", exactly " }, { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " increments have each sign. This gives a bijection between " }, { "type": "inlineMath", "tex": "V_n" },
+        { "type": "text", "text": " and balanced words of length " }, { "type": "inlineMath", "tex": "2n" }, { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Partition these words into orbits under cyclic rotation. Fix one word, extend it periodically by " },
+        { "type": "inlineMath", "tex": "w_{2n+i}=w_i" }, { "type": "text", "text": ", and extend its partial sums by " },
+        { "type": "inlineMath", "tex": "s_{2n+i}=s_i" }, { "type": "text", "text": ". After rotating the word by " },
+        { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": " positions, its height after " },
+        { "type": "inlineMath", "tex": "j" }, { "type": "text", "text": " new steps is" }
+      ] },
+      { "type": "displayMath", "tex": "\\sum_{i=1}^j w_{i+k}=s_{j+k}-s_k." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Because " }, { "type": "inlineMath", "tex": "s_{2n}=0" }, { "type": "text", "text": ", we may write the leading " },
+        { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": " in " }, { "type": "inlineMath", "tex": "q" },
+        { "type": "text", "text": " as " }, { "type": "inlineMath", "tex": "3^{s_{2n}}" }, { "type": "text", "text": ". Therefore the value for the " },
+        { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": "th cyclic shift is" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned}q_k&=\\sum_{j=1}^{2n}3^{s_{j+k}-s_k}\\\\&=3^{-s_k}\\sum_{j=1}^{2n}3^{s_j}.\\end{aligned}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The final equality uses periodicity, which merely permutes the " }, { "type": "inlineMath", "tex": "2n" },
+        { "type": "text", "text": " terms in the sum. Taking reciprocals and summing over all shifts gives" }
+      ] },
+      { "type": "displayMath", "tex": "\\sum_{k=1}^{2n}\\frac1{q_k}=\\frac{\\sum_{k=1}^{2n}3^{s_k}}{\\sum_{j=1}^{2n}3^{s_j}}=1." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Thus the average over the list of all " }, { "type": "inlineMath", "tex": "2n" },
+        { "type": "text", "text": " shifts is " }, { "type": "inlineMath", "tex": "1/(2n)" }, { "type": "text", "text": ". If the word has a smaller period, this list repeats each member of its orbit the same number of times, so the actual orbit average is still " },
+        { "type": "inlineMath", "tex": "1/(2n)" }, { "type": "text", "text": ". Every orbit has this average, and hence so does all of " },
+        { "type": "inlineMath", "tex": "V_n" }, { "type": "text", "text": ". Therefore" }
+      ] },
+      { "type": "displayMath", "tex": "M(n)=\\frac1{2n},\\qquad M(2020)=\\boxed{\\frac1{4040}}." }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2020 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2020Putnam_final.pdf" },
+    { "kind": "solution", "label": "MAA official 2020 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2020-Putnam-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2020 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2020s.tex" }
+  ]
+}

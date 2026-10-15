@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2020",
+  "problemId": "B5",
+  "label": "B5",
+  "ordinal": 11,
+  "topics": ["algebra", "inequalities"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B5" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "j\\in\\{1,2,3,4\\}" }, { "type": "text", "text": ", let " },
+        { "type": "inlineMath", "tex": "z_j" }, { "type": "text", "text": " be a complex number with " }, { "type": "inlineMath", "tex": "|z_j|=1" },
+        { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "z_j\\ne1" }, { "type": "text", "text": ". Prove that" }
+      ] },
+      { "type": "displayMath", "tex": "3-z_1-z_2-z_3-z_4+z_1z_2z_3z_4\\ne0." }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1, "stage": "nudge", "title": "Move the forbidden point to infinity",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Because every " }, { "type": "inlineMath", "tex": "z_j\\ne1" }, { "type": "text", "text": ", the reciprocal " },
+        { "type": "inlineMath", "tex": "w_j=1/(1-z_j)" }, { "type": "text", "text": " is defined. The unit-circle condition forces all these new variables onto one vertical line." }
+      ] }] }
+    },
+    {
+      "order": 2, "stage": "strategy", "title": "Turn the unit circle into real variables",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "\\frac1{1-z}+\\frac1{1-\\overline z}=1\\qquad(|z|=1, z\\ne1)." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "Hence write " }, { "type": "inlineMath", "tex": "w_j=\\frac12+i v_j" },
+          { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "v_j\\in\\mathbb R" }, { "type": "text", "text": ". Now seek a contradiction using real symmetric sums." }
+        ] }
+      ] }
+    },
+    {
+      "order": 3, "stage": "knowledge", "title": "Use elementary symmetric sums",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "Put " }, { "type": "inlineMath", "tex": "y_j=1-z_j" }, { "type": "text", "text": " and denote elementary symmetric sums by " },
+          { "type": "inlineMath", "tex": "e_r" }, { "type": "text", "text": ". Expanding first in the " }, { "type": "inlineMath", "tex": "y_j" },
+          { "type": "text", "text": " and then replacing " }, { "type": "inlineMath", "tex": "y_j=1/w_j" }, { "type": "text", "text": " gives" }
+        ] },
+        { "type": "displayMath", "tex": "3-e_1(Z)+e_4(Z)=\\frac{1-e_1(W)+e_2(W)}{e_4(W)}." }
+      ] }
+    },
+    {
+      "order": 4, "stage": "outline", "title": "Separate real and imaginary parts",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "1-e_1(W)+e_2(W)=\\frac12-e_2(V)+\\frac{i}{2}e_1(V)." },
+        { "type": "list", "ordered": true, "items": [
+          [{ "type": "text", "text": "If the original expression vanished, then " }, { "type": "inlineMath", "tex": "e_1(V)=0" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "e_2(V)=1/2" }, { "type": "text", "text": "." }],
+          [{ "type": "text", "text": "Compare these values with " }, { "type": "inlineMath", "tex": "e_1(V)^2=\\sum_jv_j^2+2e_2(V)" }, { "type": "text", "text": "." }],
+          [{ "type": "text", "text": "Use the nonnegativity of the sum of squares to obtain the contradiction." }]
+        ] }
+      ] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1, "title": "Conjugation on the unit circle",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "|z|=1" }, { "type": "text", "text": ", then " },
+        { "type": "inlineMath", "tex": "\\overline z=1/z" }, { "type": "text", "text": ". For any complex number " },
+        { "type": "inlineMath", "tex": "w" }, { "type": "text", "text": ", the identity " }, { "type": "inlineMath", "tex": "w+\\overline w=2\\operatorname{Re}w" },
+        { "type": "text", "text": " converts a conjugate relation into a real-part condition." }
+      ] }] }
+    },
+    {
+      "order": 2, "title": "Elementary symmetric functions",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "e_1(x)=\\sum_jx_j,\\quad e_2(x)=\\sum_{j<k}x_jx_k,\\quad e_4(x)=x_1x_2x_3x_4." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "For four nonzero variables and their reciprocals, complementary products give " },
+          { "type": "inlineMath", "tex": "e_r(x)=e_4(x)e_{4-r}(1/x)" }, { "type": "text", "text": "." }
+        ] }
+      ] }
+    },
+    {
+      "order": 3, "title": "A symmetric sum-of-squares identity",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "\\left(\\sum_{j=1}^4v_j\\right)^2=\\sum_{j=1}^4v_j^2+2\\sum_{j<k}v_jv_k." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "When all " }, { "type": "inlineMath", "tex": "v_j" }, { "type": "text", "text": " are real, the square terms are nonnegative." }
+        ] }
+      ] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "Z=(z_1,z_2,z_3,z_4)" }, { "type": "text", "text": " and write " },
+        { "type": "inlineMath", "tex": "e_r(Z)" }, { "type": "text", "text": " for its " }, { "type": "inlineMath", "tex": "r" },
+        { "type": "text", "text": "th elementary symmetric sum. Define" }
+      ] },
+      { "type": "displayMath", "tex": "y_j=1-z_j,\\qquad w_j=\\frac1{y_j}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The variables " }, { "type": "inlineMath", "tex": "w_j" }, { "type": "text", "text": " are defined because " },
+        { "type": "inlineMath", "tex": "z_j\\ne1" }, { "type": "text", "text": ". Expanding " }, { "type": "inlineMath", "tex": "z_j=1-y_j" },
+        { "type": "text", "text": " gives" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned}3-e_1(Z)+e_4(Z)&=e_2(Y)-e_3(Y)+e_4(Y)\\\\&=\\frac{1-e_1(W)+e_2(W)}{e_4(W)}.\\end{aligned}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The second equality follows by pairing every product of reciprocals with its complementary product; also " },
+        { "type": "inlineMath", "tex": "e_4(W)\\ne0" }, { "type": "text", "text": ". It remains to prove that the numerator cannot vanish." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For any one of the given unit complex numbers," }
+      ] },
+      { "type": "displayMath", "tex": "\\frac1{1-z}+\\frac1{1-\\overline z}=\\frac1{1-z}+\\frac1{1-1/z}=1." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The left side is " }, { "type": "inlineMath", "tex": "w+\\overline w=2\\operatorname{Re}w" },
+        { "type": "text", "text": ", so " }, { "type": "inlineMath", "tex": "\\operatorname{Re}w_j=1/2" }, { "type": "text", "text": ". Write" }
+      ] },
+      { "type": "displayMath", "tex": "w_j=\\frac12+i v_j,\\qquad v_j\\in\\mathbb R." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "e_r(V)" }, { "type": "text", "text": " denote the symmetric sums of the real numbers " },
+        { "type": "inlineMath", "tex": "v_1,\\ldots,v_4" }, { "type": "text", "text": ". Directly," }
+      ] },
+      { "type": "displayMath", "tex": "e_1(W)=2+i e_1(V)." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For each pair," }
+      ] },
+      { "type": "displayMath", "tex": "w_jw_k=\\frac14-v_jv_k+\\frac{i}{2}(v_j+v_k)." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "There are six pairs, and each " }, { "type": "inlineMath", "tex": "v_j" }, { "type": "text", "text": " occurs in three of them. Hence" }
+      ] },
+      { "type": "displayMath", "tex": "e_2(W)=\\frac32-e_2(V)+\\frac{3i}{2}e_1(V)." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Therefore" }
+      ] },
+      { "type": "displayMath", "tex": "1-e_1(W)+e_2(W)=\\frac12-e_2(V)+\\frac{i}{2}e_1(V)." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "If this were zero, its imaginary and real parts would give" }
+      ] },
+      { "type": "displayMath", "tex": "e_1(V)=0,\\qquad e_2(V)=\\frac12." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "But for real " }, { "type": "inlineMath", "tex": "v_j" }, { "type": "text", "text": "," }
+      ] },
+      { "type": "displayMath", "tex": "e_1(V)^2=\\sum_{j=1}^4v_j^2+2e_2(V)." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The alleged values would say " }, { "type": "inlineMath", "tex": "0=\\sum_jv_j^2+1" },
+        { "type": "text", "text": ", impossible because every square is nonnegative. Thus the numerator, and hence the original expression, is nonzero." }
+      ] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2020 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2020Putnam_final.pdf" },
+    { "kind": "solution", "label": "MAA official 2020 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2020-Putnam-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2020 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2020s.tex" }
+  ]
+}
