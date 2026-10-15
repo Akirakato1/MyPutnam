@@ -23,7 +23,7 @@ class ContentIntegrityValidator(
         check(metadata.getValue("schema_version") == ContentDatabase.SCHEMA_VERSION.toString()) {
             "Unsupported packaged content schema"
         }
-        check(metadata.getValue("build_kind") in setOf("set", "archive")) {
+        check(ContentBuildKind.isSupported(metadata.getValue("build_kind"))) {
             "Invalid packaged content build kind"
         }
         listOf("catalog_sha256", "manifest_sha256").forEach { key ->
