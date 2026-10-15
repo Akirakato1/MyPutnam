@@ -1,0 +1,240 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2020",
+  "problemId": "B1",
+  "label": "B1",
+  "ordinal": 7,
+  "topics": ["number-theory", "combinatorics", "polynomials"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B1" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For a positive integer " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": ", define " },
+        { "type": "inlineMath", "tex": "d(n)" },
+        { "type": "text", "text": " to be the sum of the digits of " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " when written in binary (for example, " },
+        { "type": "inlineMath", "tex": "d(13)=1+1+0+1=3" },
+        { "type": "text", "text": "). Let" }
+      ] },
+      { "type": "displayMath", "tex": "S=\\sum_{k=1}^{2020}(-1)^{d(k)}k^3." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Determine " },
+        { "type": "inlineMath", "tex": "S" },
+        { "type": "text", "text": " modulo " },
+        { "type": "inlineMath", "tex": "2020" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Package the binary signs",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "For " },
+          { "type": "inlineMath", "tex": "m\\ge1" },
+          { "type": "text", "text": ", form the polynomial whose coefficient of " },
+          { "type": "inlineMath", "tex": "x^k" },
+          { "type": "text", "text": " is " },
+          { "type": "inlineMath", "tex": "(-1)^{d(k)}" },
+          { "type": "text", "text": " for " },
+          { "type": "inlineMath", "tex": "0\\le k<2^m" },
+          { "type": "text", "text": ". Each binary digit can be chosen independently." }
+        ] }
+      ] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Use zeros at x = 1",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "P_m(x)=\\prod_{j=0}^{m-1}(1-x^{2^j})=\\sum_{k=0}^{2^m-1}(-1)^{d(k)}x^k." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "The product has a zero of order " },
+          { "type": "inlineMath", "tex": "m" },
+          { "type": "text", "text": " at " },
+          { "type": "inlineMath", "tex": "x=1" },
+          { "type": "text", "text": ". Choose " },
+          { "type": "inlineMath", "tex": "m" },
+          { "type": "text", "text": " large enough that differentiating three times still leaves a zero." }
+        ] }
+      ] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Extract powers with the Euler operator",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "For " },
+          { "type": "inlineMath", "tex": "D=x\\frac{d}{dx}" },
+          { "type": "text", "text": ", one has " },
+          { "type": "inlineMath", "tex": "D^3(x^k)=k^3x^k" },
+          { "type": "text", "text": ". Thus evaluating " },
+          { "type": "inlineMath", "tex": "D^3P_m" },
+          { "type": "text", "text": " at " },
+          { "type": "inlineMath", "tex": "1" },
+          { "type": "text", "text": " turns a fourth-order-or-higher zero into a vanishing signed cubic moment." }
+        ] }
+      ] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Cancel everything before the final five terms",
+      "document": { "blocks": [
+        { "type": "list", "ordered": true, "items": [
+          [{ "type": "text", "text": "Use " }, { "type": "inlineMath", "tex": "P_{11}" }, { "type": "text", "text": " to show that the signed cubic sum from " }, { "type": "inlineMath", "tex": "0" }, { "type": "text", "text": " through " }, { "type": "inlineMath", "tex": "2047" }, { "type": "text", "text": " is zero." }],
+          [{ "type": "text", "text": "Since " }, { "type": "inlineMath", "tex": "2016" }, { "type": "text", "text": " has five trailing binary zeros and an even number of ones, use " }, { "type": "inlineMath", "tex": "x^{2016}P_5(x)" }, { "type": "text", "text": " for the block " }, { "type": "inlineMath", "tex": "2016\\le k\\le2047" }, { "type": "text", "text": "." }],
+          [{ "type": "text", "text": "Only " }, { "type": "inlineMath", "tex": "k=2016,\\ldots,2020" }, { "type": "text", "text": " remain; reduce their cubes modulo " }, { "type": "inlineMath", "tex": "2020" }, { "type": "text", "text": "." }]
+        ] }
+      ] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Binary digit parity",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "If two nonnegative integers have disjoint blocks of binary digits, adding them creates no carries, so their digit sums add. In particular, for " },
+          { "type": "inlineMath", "tex": "0\\le r<2^m" },
+          { "type": "text", "text": "," }
+        ] },
+        { "type": "displayMath", "tex": "d(2^mq+r)=d(q)+d(r)." }
+      ] }
+    },
+    {
+      "order": 2,
+      "title": "The binary-sign generating product",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "In the expansion of " },
+          { "type": "inlineMath", "tex": "\\prod_{j=0}^{m-1}(1-x^{2^j})" },
+          { "type": "text", "text": ", choosing " },
+          { "type": "inlineMath", "tex": "-x^{2^j}" },
+          { "type": "text", "text": " records a " },
+          { "type": "inlineMath", "tex": "1" },
+          { "type": "text", "text": " in binary position " },
+          { "type": "inlineMath", "tex": "j" },
+          { "type": "text", "text": ". Hence the coefficient sign is determined by the number of ones." }
+        ] }
+      ] }
+    },
+    {
+      "order": 3,
+      "title": "Euler differentiation",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "The operator " },
+          { "type": "inlineMath", "tex": "D=x\\frac{d}{dx}" },
+          { "type": "text", "text": " acts diagonally on monomials:" }
+        ] },
+        { "type": "displayMath", "tex": "D^q(x^k)=k^q x^k." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "If a polynomial is divisible by " },
+          { "type": "inlineMath", "tex": "(1-x)^m" },
+          { "type": "text", "text": ", then applying fewer than " },
+          { "type": "inlineMath", "tex": "m" },
+          { "type": "text", "text": " ordinary derivatives, or the same number of Euler operators, still gives zero at " },
+          { "type": "inlineMath", "tex": "x=1" },
+          { "type": "text", "text": "." }
+        ] }
+      ] }
+    },
+    {
+      "order": 4,
+      "title": "Reduction modulo a modulus",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "A polynomial expression may be evaluated after replacing each integer by any congruent residue. Near " },
+          { "type": "inlineMath", "tex": "2020" },
+          { "type": "text", "text": ", the convenient residues are " },
+          { "type": "inlineMath", "tex": "2016\\equiv-4,\\ldots,2019\\equiv-1" },
+          { "type": "text", "text": "." }
+        ] }
+      ] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Set " },
+        { "type": "inlineMath", "tex": "d(0)=0" },
+        { "type": "text", "text": ". Independent choices of binary digits give" }
+      ] },
+      { "type": "displayMath", "tex": "P_m(x)=\\prod_{j=0}^{m-1}(1-x^{2^j})=\\sum_{k=0}^{2^m-1}(-1)^{d(k)}x^k." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "D=x\\frac{d}{dx}" },
+        { "type": "text", "text": ". Since " },
+        { "type": "inlineMath", "tex": "D^3(x^k)=k^3x^k" },
+        { "type": "text", "text": "," }
+      ] },
+      { "type": "displayMath", "tex": "D^3P_m(1)=\\sum_{k=0}^{2^m-1}(-1)^{d(k)}k^3." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Every factor in " },
+        { "type": "inlineMath", "tex": "P_m" },
+        { "type": "text", "text": " has a simple zero at " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": ", so " },
+        { "type": "inlineMath", "tex": "P_m" },
+        { "type": "text", "text": " has a zero of order " },
+        { "type": "inlineMath", "tex": "m" },
+        { "type": "text", "text": " there. Consequently " },
+        { "type": "inlineMath", "tex": "D^3P_m(1)=0" },
+        { "type": "text", "text": " whenever " },
+        { "type": "inlineMath", "tex": "m\\ge4" },
+        { "type": "text", "text": ". Taking " },
+        { "type": "inlineMath", "tex": "m=11" },
+        { "type": "text", "text": " yields" }
+      ] },
+      { "type": "displayMath", "tex": "\\sum_{k=0}^{2047}(-1)^{d(k)}k^3=0." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Now " },
+        { "type": "inlineMath", "tex": "2016=11111100000_2" },
+        { "type": "text", "text": " has six ones followed by five zeros. Therefore, for " },
+        { "type": "inlineMath", "tex": "0\\le r<32" },
+        { "type": "text", "text": ", no binary carries occur and" }
+      ] },
+      { "type": "displayMath", "tex": "(-1)^{d(2016+r)}=(-1)^{6+d(r)}=(-1)^{d(r)}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Thus the generating polynomial for the signed block from " },
+        { "type": "inlineMath", "tex": "2016" },
+        { "type": "text", "text": " through " },
+        { "type": "inlineMath", "tex": "2047" },
+        { "type": "text", "text": " is " },
+        { "type": "inlineMath", "tex": "x^{2016}P_5(x)" },
+        { "type": "text", "text": ". This still has a fifth-order zero at " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": ", so" }
+      ] },
+      { "type": "displayMath", "tex": "\\sum_{k=2016}^{2047}(-1)^{d(k)}k^3=0." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Subtracting the two vanishing sums shows that the contribution from " },
+        { "type": "inlineMath", "tex": "0\\le k\\le2015" },
+        { "type": "text", "text": " is zero. Hence only five terms remain in " },
+        { "type": "inlineMath", "tex": "S" },
+        { "type": "text", "text": ". Their signs are " },
+        { "type": "inlineMath", "tex": "+,-,-,+,-" },
+        { "type": "text", "text": ", because the low five bits represent " },
+        { "type": "inlineMath", "tex": "0,1,2,3,4" },
+        { "type": "text", "text": ". Modulo " },
+        { "type": "inlineMath", "tex": "2020" },
+        { "type": "text", "text": "," }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned}S&\\equiv(-4)^3-(-3)^3-(-2)^3+(-1)^3-0^3\\\\&=-64+27+8-1\\\\&=-30\\equiv\\boxed{1990}\\pmod{2020}.\\end{aligned}" }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2020 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2020Putnam_final.pdf" },
+    { "kind": "solution", "label": "MAA official 2020 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2020-Putnam-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2020 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2020s.tex" }
+  ]
+}

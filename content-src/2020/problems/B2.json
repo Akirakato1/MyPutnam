@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2020",
+  "problemId": "B2",
+  "label": "B2",
+  "ordinal": 8,
+  "topics": ["combinatorics"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B2" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "k" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " be integers with " },
+        { "type": "inlineMath", "tex": "1\\le k<n" },
+        { "type": "text", "text": ". Alice and Bob play a game with " },
+        { "type": "inlineMath", "tex": "k" },
+        { "type": "text", "text": " pegs in a line of " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " holes. At the beginning of the game, the pegs occupy the " },
+        { "type": "inlineMath", "tex": "k" },
+        { "type": "text", "text": " leftmost holes. A legal move consists of moving a single peg to any vacant hole that is further to the right. The players alternate moves, with Alice playing first. The game ends when the pegs are in the " },
+        { "type": "inlineMath", "tex": "k" },
+        { "type": "text", "text": " rightmost holes, so whoever is next to play cannot move and therefore loses. For what values of " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "k" },
+        { "type": "text", "text": " does Alice have a winning strategy?" }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Test parity, not distance",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "Examine small boards while recording only whether " },
+          { "type": "inlineMath", "tex": "n" },
+          { "type": "text", "text": " and " },
+          { "type": "inlineMath", "tex": "k" },
+          { "type": "text", "text": " are even or odd. The exceptional parity class admits a response that restores a simple invariant after every pair of moves." }
+        ] }
+      ] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Pair adjacent holes",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "When both parameters are even, partition the holes into adjacent pairs " },
+          { "type": "inlineMath", "tex": "(1,2),(3,4),\\ldots,(n-1,n)" },
+          { "type": "text", "text": ". Call a position good if every pair is either full or empty. The initial and terminal positions are good." }
+        ] }
+      ] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Complete the opponent's move",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "A move from a good position takes one peg from a full pair to an empty pair. The partner peg can be moved to the partner destination hole, restoring goodness. Because the destination pair lies to the right of the source pair, this response is legal." }
+        ] }
+      ] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Reduce every other parity class",
+      "document": { "blocks": [
+        { "type": "list", "ordered": true, "items": [
+          [{ "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "n,k" }, { "type": "text", "text": " are both odd, move the peg in hole " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": " to hole " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": ", then remove that fixed peg and last hole from consideration." }],
+          [{ "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " is odd and " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": " is even, move the first peg to hole " }, { "type": "inlineMath", "tex": "k+1" }, { "type": "text", "text": " and discard the now-empty first hole." }],
+          [{ "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " is even and " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": " is odd, move the first peg to hole " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " and discard both end holes and the fixed peg." }],
+          [{ "type": "text", "text": "Each move leaves the opponent to start an even-even reduced game." }]
+        ] }
+      ] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Finite impartial games",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "Every move sends one peg strictly to the right, so the sum of occupied hole numbers strictly increases and is bounded. Therefore the game always terminates. A strategy that guarantees a legal response after every opponent move must eventually make the final move." }
+        ] }
+      ] }
+    },
+    {
+      "order": 2,
+      "title": "Pairing strategies",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "A pairing strategy partitions objects into fixed pairs and answers a move involving one member by making the corresponding move with its partner. The proof must verify that the partner source remains occupied, the partner destination remains vacant, and the response obeys the direction rule." }
+        ] }
+      ] }
+    },
+    {
+      "order": 3,
+      "title": "Reducing a game after a first move",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "If a first move permanently isolates some holes and pegs, deleting them may leave a smaller instance of the same game. Since the opponent moves next in that smaller instance, the original first player can adopt any known second-player strategy there." }
+        ] }
+      ] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Alice has a winning strategy exactly when at least one of " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "k" },
+        { "type": "text", "text": " is odd. We first prove that Bob wins when both are even." }
+      ] },
+      { "type": "heading", "level": 2, "runs": [{ "type": "text", "text": "The even-even game" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Pair the holes as" }
+      ] },
+      { "type": "displayMath", "tex": "(1,2),(3,4),\\ldots,(n-1,n)." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Call a configuration good if each pair contains either two pegs or no pegs. Since " },
+        { "type": "inlineMath", "tex": "k" },
+        { "type": "text", "text": " is even, the starting configuration is good." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Suppose Alice moves from a good configuration. Her source lies in a full pair and her destination in an empty pair. Bob moves the other peg of the source pair to the other hole of the destination pair. This is legal: Alice's destination is to the right of her source, so the entire destination pair is to the right of the entire source pair. Bob's move restores a good configuration." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Thus Bob always has a response. The game must terminate because the sum of occupied hole numbers increases on every move. Therefore Bob makes the last move and wins whenever " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "k" },
+        { "type": "text", "text": " are both even." }
+      ] },
+      { "type": "heading", "level": 2, "runs": [{ "type": "text", "text": "Alice's first moves in the other cases" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "In each remaining parity class, Alice makes one move that leaves Bob to move first in a smaller even-even game." }
+      ] },
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": " are both odd, Alice moves the peg in hole " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": " to hole " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": ". That peg and the last hole are thereafter out of play, leaving the " }, { "type": "inlineMath", "tex": "(n-1,k-1)" }, { "type": "text", "text": "-game, whose parameters are even." }],
+        [{ "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " is odd and " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": " is even, Alice moves the peg in hole " }, { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": " to hole " }, { "type": "inlineMath", "tex": "k+1" }, { "type": "text", "text": ". Hole " }, { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": " can never be used again, and holes " }, { "type": "inlineMath", "tex": "2,\\ldots,n" }, { "type": "text", "text": " now begin with " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": " occupied holes. This is the even-even " }, { "type": "inlineMath", "tex": "(n-1,k)" }, { "type": "text", "text": "-game." }],
+        [{ "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " is even and " }, { "type": "inlineMath", "tex": "k" }, { "type": "text", "text": " is odd, Alice moves the peg in hole " }, { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": " to hole " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": ". Delete the unusable first hole and the fixed last peg with its hole. Holes " }, { "type": "inlineMath", "tex": "2,\\ldots,n-1" }, { "type": "text", "text": " form the even-even " }, { "type": "inlineMath", "tex": "(n-2,k-1)" }, { "type": "text", "text": "-game." }]
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Alice now uses the even-even pairing strategy as the second player in the reduced game. Hence her winning cases are precisely" }
+      ] },
+      { "type": "displayMath", "tex": "\\boxed{n\\text{ is odd or }k\\text{ is odd}.}" }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2020 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2020Putnam_final.pdf" },
+    { "kind": "solution", "label": "MAA official 2020 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2020-Putnam-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2020 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2020s.tex" }
+  ]
+}

@@ -1,0 +1,264 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2020",
+  "problemId": "B3",
+  "label": "B3",
+  "ordinal": 9,
+  "topics": ["probability", "integrals", "functional-equations"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B3" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "x_0=1" },
+        { "type": "text", "text": ", and let " },
+        { "type": "inlineMath", "tex": "\\delta" },
+        { "type": "text", "text": " be some constant satisfying " },
+        { "type": "inlineMath", "tex": "0<\\delta<1" },
+        { "type": "text", "text": ". Iteratively, for " },
+        { "type": "inlineMath", "tex": "n=0,1,2,\\ldots" },
+        { "type": "text", "text": ", a point " },
+        { "type": "inlineMath", "tex": "x_{n+1}" },
+        { "type": "text", "text": " is chosen uniformly from the interval " },
+        { "type": "inlineMath", "tex": "[0,x_n]" },
+        { "type": "text", "text": ". Let " },
+        { "type": "inlineMath", "tex": "Z" },
+        { "type": "text", "text": " be the smallest value of " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " for which " },
+        { "type": "inlineMath", "tex": "x_n<\\delta" },
+        { "type": "text", "text": ". Find the expected value of " },
+        { "type": "inlineMath", "tex": "Z" },
+        { "type": "text", "text": ", as a function of " },
+        { "type": "inlineMath", "tex": "\\delta" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Condition on the first point",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "Let " },
+          { "type": "inlineMath", "tex": "f(\\delta)=\\mathbb E[Z]" },
+          { "type": "text", "text": ". Condition on " },
+          { "type": "inlineMath", "tex": "x_1=c" },
+          { "type": "text", "text": ". If " },
+          { "type": "inlineMath", "tex": "c<\\delta" },
+          { "type": "text", "text": ", the process stops immediately; otherwise one step has elapsed and the remaining process starts from " },
+          { "type": "inlineMath", "tex": "c" },
+          { "type": "text", "text": "." }
+        ] }
+      ] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Rescale the remaining interval",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "For " },
+          { "type": "inlineMath", "tex": "c\\ge\\delta" },
+          { "type": "text", "text": ", divide every later point by " },
+          { "type": "inlineMath", "tex": "c" },
+          { "type": "text", "text": ". The starting point becomes " },
+          { "type": "inlineMath", "tex": "1" },
+          { "type": "text", "text": " and the threshold becomes " },
+          { "type": "inlineMath", "tex": "\\delta/c" },
+          { "type": "text", "text": ". This gives a self-referential integral equation for " },
+          { "type": "inlineMath", "tex": "f" },
+          { "type": "text", "text": "." }
+        ] }
+      ] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Invert the threshold",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "f(\\delta)=1+\\int_{\\delta}^{1}f(\\delta/c)\\,dc." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "Set " },
+          { "type": "inlineMath", "tex": "h(t)=f(1/t)" },
+          { "type": "text", "text": " and substitute " },
+          { "type": "inlineMath", "tex": "u=ct" },
+          { "type": "text", "text": ". The equation becomes" }
+        ] },
+        { "type": "displayMath", "tex": "h(t)=1+\\frac1t\\int_1^t h(u)\\,du." }
+      ] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Differentiate the transformed equation",
+      "document": { "blocks": [
+        { "type": "list", "ordered": true, "items": [
+          [{ "type": "text", "text": "Multiply the equation by " }, { "type": "inlineMath", "tex": "t" }, { "type": "text", "text": "." }],
+          [{ "type": "text", "text": "Differentiate and cancel the common " }, { "type": "inlineMath", "tex": "h(t)" }, { "type": "text", "text": " term to obtain a first-order differential equation." }],
+          [{ "type": "text", "text": "Use " }, { "type": "inlineMath", "tex": "h(1)=f(1)=1" }, { "type": "text", "text": ", since a uniform point in " }, { "type": "inlineMath", "tex": "[0,1]" }, { "type": "text", "text": " is below " }, { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": " with probability " }, { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": "." }],
+          [{ "type": "text", "text": "Finally substitute " }, { "type": "inlineMath", "tex": "t=1/\\delta" }, { "type": "text", "text": "." }]
+        ] }
+      ] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Conditional expectation with a density",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "If " },
+          { "type": "inlineMath", "tex": "C" },
+          { "type": "text", "text": " is uniform on " },
+          { "type": "inlineMath", "tex": "[0,1]" },
+          { "type": "text", "text": " and a quantity has conditional expectation " },
+          { "type": "inlineMath", "tex": "G(c)" },
+          { "type": "text", "text": " given " },
+          { "type": "inlineMath", "tex": "C=c" },
+          { "type": "text", "text": ", then its expectation is " },
+          { "type": "inlineMath", "tex": "\\int_0^1G(c)\\,dc" },
+          { "type": "text", "text": "." }
+        ] }
+      ] }
+    },
+    {
+      "order": 2,
+      "title": "Scale invariance of a uniform interval",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "If " },
+          { "type": "inlineMath", "tex": "Y" },
+          { "type": "text", "text": " is uniform on " },
+          { "type": "inlineMath", "tex": "[0,c]" },
+          { "type": "text", "text": " with " },
+          { "type": "inlineMath", "tex": "c>0" },
+          { "type": "text", "text": ", then " },
+          { "type": "inlineMath", "tex": "Y/c" },
+          { "type": "text", "text": " is uniform on " },
+          { "type": "inlineMath", "tex": "[0,1]" },
+          { "type": "text", "text": ". Rescaling an entire trajectory preserves the transition rule while dividing the threshold by " },
+          { "type": "inlineMath", "tex": "c" },
+          { "type": "text", "text": "." }
+        ] }
+      ] }
+    },
+    {
+      "order": 3,
+      "title": "Differentiating an accumulated integral",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "For continuous " },
+          { "type": "inlineMath", "tex": "h" },
+          { "type": "text", "text": ", the fundamental theorem of calculus gives" }
+        ] },
+        { "type": "displayMath", "tex": "\\frac{d}{dt}\\int_1^t h(u)\\,du=h(t)." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "The integral equation itself makes " },
+          { "type": "inlineMath", "tex": "h" },
+          { "type": "text", "text": " continuous, so this differentiation is legitimate." }
+        ] }
+      ] }
+    },
+    {
+      "order": 4,
+      "title": "The logarithmic antiderivative",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "For " },
+          { "type": "inlineMath", "tex": "t>0" },
+          { "type": "text", "text": "," }
+        ] },
+        { "type": "displayMath", "tex": "\\int_1^t\\frac{du}{u}=\\ln t." }
+      ] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "While the process is still above the threshold, its conditional probability of crossing below " },
+        { "type": "inlineMath", "tex": "\\delta" },
+        { "type": "text", "text": " on the next step is " },
+        { "type": "inlineMath", "tex": "\\delta/x_n\\ge\\delta" },
+        { "type": "text", "text": ". Thus the stopping time has finite expectation, bounded by that of a geometric random variable with success probability " },
+        { "type": "inlineMath", "tex": "\\delta" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "f(\\delta)" },
+        { "type": "text", "text": " be the expected stopping index. Condition on the first point " },
+        { "type": "inlineMath", "tex": "x_1=c" },
+        { "type": "text", "text": ". If " },
+        { "type": "inlineMath", "tex": "c<\\delta" },
+        { "type": "text", "text": ", then " },
+        { "type": "inlineMath", "tex": "Z=1" },
+        { "type": "text", "text": ". If " },
+        { "type": "inlineMath", "tex": "c\\ge\\delta" },
+        { "type": "text", "text": ", one step has elapsed. Dividing all future points by " },
+        { "type": "inlineMath", "tex": "c" },
+        { "type": "text", "text": " turns the remaining process into the original process with threshold " },
+        { "type": "inlineMath", "tex": "\\delta/c" },
+        { "type": "text", "text": ". Hence the conditional expected value is " },
+        { "type": "inlineMath", "tex": "1+f(\\delta/c)" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Because " },
+        { "type": "inlineMath", "tex": "x_1" },
+        { "type": "text", "text": " is uniform on " },
+        { "type": "inlineMath", "tex": "[0,1]" },
+        { "type": "text", "text": ", averaging these two cases gives" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned}f(\\delta)&=\\int_0^{\\delta}1\\,dc+\\int_{\\delta}^{1}\\bigl(1+f(\\delta/c)\\bigr)\\,dc\\\\&=1+\\int_{\\delta}^{1}f(\\delta/c)\\,dc.\\end{aligned}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Invert the threshold by setting " },
+        { "type": "inlineMath", "tex": "h(t)=f(1/t)" },
+        { "type": "text", "text": " for " },
+        { "type": "inlineMath", "tex": "t\\ge1" },
+        { "type": "text", "text": ". Substituting " },
+        { "type": "inlineMath", "tex": "\\delta=1/t" },
+        { "type": "text", "text": " and then " },
+        { "type": "inlineMath", "tex": "u=ct" },
+        { "type": "text", "text": " yields" }
+      ] },
+      { "type": "displayMath", "tex": "h(t)=1+\\int_{1/t}^{1}h(ct)\\,dc=1+\\frac1t\\int_1^t h(u)\\,du." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Equivalently," }
+      ] },
+      { "type": "displayMath", "tex": "t h(t)=t+\\int_1^t h(u)\\,du." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The expectation is monotone in the threshold and locally bounded by the geometric estimate above, so the integral is well defined. This identity then makes " },
+        { "type": "inlineMath", "tex": "h" },
+        { "type": "text", "text": " continuous and then differentiable. Differentiating both sides gives" }
+      ] },
+      { "type": "displayMath", "tex": "h(t)+t h'(t)=1+h(t)," },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "so " },
+        { "type": "inlineMath", "tex": "h'(t)=1/t" },
+        { "type": "text", "text": ". At threshold " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": ", the first uniform sample is less than the threshold with probability " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": ", so " },
+        { "type": "inlineMath", "tex": "h(1)=f(1)=1" },
+        { "type": "text", "text": ". Therefore" }
+      ] },
+      { "type": "displayMath", "tex": "h(t)=1+\\ln t." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Finally, put " },
+        { "type": "inlineMath", "tex": "t=1/\\delta" },
+        { "type": "text", "text": ". The desired expectation is" }
+      ] },
+      { "type": "displayMath", "tex": "\\boxed{\\mathbb E[Z]=1+\\ln\\frac1\\delta=1-\\ln\\delta}." }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2020 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2020Putnam_final.pdf" },
+    { "kind": "solution", "label": "MAA official 2020 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2020-Putnam-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2020 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2020s.tex" }
+  ]
+}
