@@ -13,7 +13,7 @@ val releaseKeystore = Properties().apply {
         releaseKeystoreFile.inputStream().use(::load)
     }
 }
-val releaseVersionCode = providers.gradleProperty("versionCodeOverride").orNull?.toIntOrNull() ?: 3
+val releaseVersionCode = providers.gradleProperty("versionCodeOverride").orNull?.toIntOrNull() ?: 4
 
 fun releaseProperty(name: String): String =
     releaseKeystore.getProperty(name) ?: error("Missing $name in ${releaseKeystoreFile.path}")
@@ -31,7 +31,7 @@ android {
         minSdk = 29
         targetSdk = 36
         versionCode = releaseVersionCode
-        versionName = "0.3.0"
+        versionName = "0.4.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

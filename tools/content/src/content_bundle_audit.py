@@ -123,6 +123,10 @@ def _audit_database(path, release, catalog, manifests, counts):
             "set_count": str(counts["setCount"]),
             "topic_count": str(counts["topicCount"]),
             "problem_count": str(counts["problemCount"]),
+            "problem_topic_count": str(sum(
+                len(problem.get("topics", []))
+                for manifest in manifests for problem in manifest.get("problems", [])
+            )),
             "hint_count": str(counts["hintCount"]),
             "prerequisite_count": str(counts["prerequisiteCount"]),
         }
@@ -147,6 +151,104 @@ def _audit_database(path, release, catalog, manifests, counts):
         ).fetchall()
         if database_topics != expected_topics:
             raise ValueError("Database topic joins do not match embedded set manifests")
+        _audit_database_logical_rows(database, catalog, manifests)
+
+
+def _audit_database_logical_rows(database, catalog, manifests):
+    selected_sets = {(manifest["collectionId"], manifest["setId"]) for manifest in manifests}
+    selected_collections = {collection_id for collection_id, _ in selected_sets}
+    expected_collections = sorted(
+        (
+            item["id"], item["title"], item["kind"], item["displayOrder"]
+        )
+        for item in catalog.get("collections", []) if item["id"] in selected_collections
+    )
+    _assert_rows(
+        database,
+        "collection",
+        "SELECT id, title, kind, display_order FROM collection ORDER BY id",
+        expected_collections,
+    )
+
+    expected_sets = []
+    for collection in catalog.get("collections", []):
+        for item in collection.get("sets", []):
+            if (collection["id"], item["id"]) in selected_sets:
+                expected_sets.append((
+                    collection["id"], item["id"], item["title"], item["displayOrder"],
+                    item.get("metadata", {}).get("competitionYear"),
+                ))
+    _assert_rows(
+        database,
+        "problem-set",
+        "SELECT collection_id, set_id, title, display_order, competition_year "
+        "FROM problem_set ORDER BY collection_id, set_id",
+        sorted(expected_sets),
+    )
+
+    expected_catalog_topics = sorted(
+        (item["id"], item["label"], item["displayOrder"])
+        for item in catalog.get("topics", [])
+    )
+    _assert_rows(
+        database,
+        "catalog-topic",
+        "SELECT id, label, display_order FROM topic ORDER BY id",
+        expected_catalog_topics,
+    )
+
+    problems = [problem for manifest in manifests for problem in manifest.get("problems", [])]
+    expected_problems = sorted(
+        (
+            problem["key"], problem["collectionId"], problem["setId"], problem["problemId"],
+            problem["label"], problem["ordinal"],
+            problem["statement"]["assetPath"], problem["statement"]["sha256"],
+            problem["solution"]["assetPath"], problem["solution"]["sha256"],
+            canonical_json(problem["sources"]),
+        )
+        for problem in problems
+    )
+    _assert_rows(
+        database,
+        "problem",
+        "SELECT key, collection_id, set_id, problem_id, label, ordinal, "
+        "statement_asset_path, statement_sha256, solution_asset_path, solution_sha256, attribution_json "
+        "FROM problem ORDER BY key",
+        expected_problems,
+    )
+
+    expected_hints = sorted(
+        (problem["key"], hint["order"], hint["stage"], hint["title"], hint["assetPath"], hint["sha256"])
+        for problem in problems for hint in problem.get("hints", [])
+    )
+    _assert_rows(
+        database,
+        "hint",
+        "SELECT problem_key, hint_order, stage, title, asset_path, sha256 "
+        "FROM hint ORDER BY problem_key, hint_order",
+        expected_hints,
+    )
+
+    expected_prerequisites = sorted(
+        (
+            problem["key"], prerequisite["order"], prerequisite["title"],
+            prerequisite["assetPath"], prerequisite["sha256"],
+        )
+        for problem in problems for prerequisite in problem.get("prerequisites", [])
+    )
+    _assert_rows(
+        database,
+        "prerequisite",
+        "SELECT problem_key, prerequisite_order, title, asset_path, sha256 "
+        "FROM prerequisite ORDER BY problem_key, prerequisite_order",
+        expected_prerequisites,
+    )
+
+
+def _assert_rows(database, label, query, expected):
+    actual = database.execute(query).fetchall()
+    if actual != expected:
+        raise ValueError(f"Database {label} logical rows do not match embedded catalog/manifests")
 
 
 def _audit_dependencies(root, asset_records):
