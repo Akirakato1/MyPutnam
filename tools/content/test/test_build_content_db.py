@@ -376,6 +376,44 @@ class BuildContentDatabaseTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Duplicate problem key"):
             BUILDER.build_archive_database(duplicate_problem, self.catalog, archive_catalog, self.output)
 
+    def test_release_database_uses_explicit_selected_sets_and_release_metadata(self):
+        catalog = library_catalog((2023, 2024, 2025))
+        manifests = [
+            manifest(catalog, year, [problem("A1", 1, year), problem("B1", 2, year)])
+            for year in (2025, 2024)
+        ]
+        release = {
+            "schemaVersion": 1,
+            "releaseId": "putnam-2024-2025-test",
+            "contentSchemaVersion": 3,
+            "contentVersion": "putnam-2024-2025.test",
+            "appVersionName": "0.4.0",
+            "appVersionCode": 4,
+            "includedSets": ["putnam/2024", "putnam/2025"],
+        }
+
+        BUILDER.build_release_database(manifests, catalog, release, self.output)
+
+        with sqlite3.connect(self.output) as database:
+            self.assertEqual(
+                [("2024",), ("2025",)],
+                database.execute("SELECT set_id FROM problem_set ORDER BY set_id").fetchall(),
+            )
+            self.assertEqual("ok", database.execute("PRAGMA integrity_check").fetchone()[0])
+            self.assertEqual([], database.execute("PRAGMA foreign_key_check").fetchall())
+            metadata = dict(database.execute("SELECT key, value FROM content_meta"))
+        self.assertEqual("release", metadata["build_kind"])
+        self.assertEqual("putnam-2024-2025-test", metadata["release_id"])
+        self.assertEqual("putnam-2024-2025.test", metadata["content_version"])
+        self.assertEqual("2", metadata["set_count"])
+        self.assertEqual("4", metadata["problem_count"])
+        self.assertEqual("16", metadata["hint_count"])
+        self.assertEqual("8", metadata["prerequisite_count"])
+
+        outside = [manifests[0], manifest(catalog, 2023, [problem("A1", 1, 2023)])]
+        with self.assertRaisesRegex(ValueError, "selected sets|includedSets"):
+            BUILDER.build_release_database(outside, catalog, release, self.output)
+
 
 if __name__ == "__main__":
     unittest.main()

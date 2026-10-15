@@ -1,0 +1,1908 @@
+{
+  "schemaVersion": 3,
+  "contentVersion": "putnam-2020-2025.1",
+  "collectionId": "putnam",
+  "setId": "2021",
+  "problems": [
+    {
+      "key": "putnam/2021/A1",
+      "collectionId": "putnam",
+      "setId": "2021",
+      "problemId": "A1",
+      "label": "A1",
+      "ordinal": 1,
+      "topics": [
+        "geometry"
+      ],
+      "sourceRecord": "A1.json",
+      "statement": {
+        "assetPath": "content/putnam/2021/problems/A1/statement.html",
+        "sha256": "9b0e4790a4b6bca4af28d147ac8e31ec17f64e3240f03b1e3c84db908bdc3f22"
+      },
+      "hints": [
+        {
+          "order": 1,
+          "stage": "nudge",
+          "title": "Track one quantity",
+          "assetPath": "content/putnam/2021/problems/A1/hint-1.html",
+          "sha256": "be628849f964b0f062a47c73d7c71b6ee380049a667186cb69b03215dac72f61"
+        },
+        {
+          "order": 2,
+          "stage": "strategy",
+          "title": "List the useful displacement types",
+          "assetPath": "content/putnam/2021/problems/A1/hint-2.html",
+          "sha256": "fc2fbbdba2379a6ecc32dc8de1735c602500fb0f244f2e9def940792cf86291e"
+        },
+        {
+          "order": 3,
+          "stage": "knowledge",
+          "title": "Use a linear-functional lower bound",
+          "assetPath": "content/putnam/2021/problems/A1/hint-3.html",
+          "sha256": "b86efdb0e51a332903809985adaf0f65474ab4cd81d86541a04d301ee111effd"
+        },
+        {
+          "order": 4,
+          "stage": "outline",
+          "title": "Match the lower bound",
+          "assetPath": "content/putnam/2021/problems/A1/hint-4.html",
+          "sha256": "3f9d4ecd56bca11d0ae805deb2b0ce6dc7ece0ea9862b181f47ff005e9ae60bd"
+        }
+      ],
+      "prerequisites": [
+        {
+          "order": 1,
+          "title": "Integer points on a radius-five circle",
+          "assetPath": "content/putnam/2021/problems/A1/prerequisite-1.html",
+          "sha256": "32eee267a9cda3e8ee39ff39b1f27e816f03e1c48d5c2dbfb07541b1655782ad"
+        },
+        {
+          "order": 2,
+          "title": "Bounding moves with a linear functional",
+          "assetPath": "content/putnam/2021/problems/A1/prerequisite-2.html",
+          "sha256": "7f267a7f0865662b866db911419ff1edd81f567b7d9c063453334d63b92d728d"
+        }
+      ],
+      "solution": {
+        "assetPath": "content/putnam/2021/problems/A1/solution.html",
+        "sha256": "5f7829f087c3677ad18fe9dc6e7e29c0d2fa4d02270a2c5bf2967e12e797e8f6"
+      },
+      "sources": [
+        {
+          "kind": "problem",
+          "label": "MAA official 2021 problems",
+          "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems.pdf"
+        },
+        {
+          "kind": "solution",
+          "label": "MAA official 2021 problems and solutions",
+          "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems-and-solutions.pdf"
+        },
+        {
+          "kind": "reference",
+          "label": "Kedlaya 2021 TeX cross-check",
+          "url": "https://kskedlaya.org/putnam-archive/2021s.tex"
+        }
+      ]
+    },
+    {
+      "key": "putnam/2021/A2",
+      "collectionId": "putnam",
+      "setId": "2021",
+      "problemId": "A2",
+      "label": "A2",
+      "ordinal": 2,
+      "topics": [
+        "calculus",
+        "analysis"
+      ],
+      "sourceRecord": "A2.json",
+      "statement": {
+        "assetPath": "content/putnam/2021/problems/A2/statement.html",
+        "sha256": "1d2c1b1d622e00a4bc786b984bc133bae096d70d6400578c21f851c8c0a51e7b"
+      },
+      "hints": [
+        {
+          "order": 1,
+          "stage": "nudge",
+          "title": "Expose the indeterminate form",
+          "assetPath": "content/putnam/2021/problems/A2/hint-1.html",
+          "sha256": "7c6c976d65f09c0598df0690837b3286a2d5c6b221fa9434166f4153fc6c642d"
+        },
+        {
+          "order": 2,
+          "stage": "strategy",
+          "title": "Compute the inner limit exactly",
+          "assetPath": "content/putnam/2021/problems/A2/hint-2.html",
+          "sha256": "ab897c701f47a80ac7507b4680d83ecbf57b811cc6564a7664138b48446d4d62"
+        },
+        {
+          "order": 3,
+          "stage": "knowledge",
+          "title": "Differentiate powers with respect to the exponent",
+          "assetPath": "content/putnam/2021/problems/A2/hint-3.html",
+          "sha256": "d00c163150eef5c2764bd558cfde7cb973a53483cf83c9057719a46baa8cee7d"
+        },
+        {
+          "order": 4,
+          "stage": "outline",
+          "title": "Reduce to the standard limit for e",
+          "assetPath": "content/putnam/2021/problems/A2/hint-4.html",
+          "sha256": "32171f216fc09b9a247fa40607e4bd2ae2bcab23813479e36926a2057db7d124"
+        }
+      ],
+      "prerequisites": [
+        {
+          "order": 1,
+          "title": "Logarithms of variable powers",
+          "assetPath": "content/putnam/2021/problems/A2/prerequisite-1.html",
+          "sha256": "6056ecfad1cad750f74fe830f7478495ca3d114b9839eb6d74531d09bf3faedd"
+        },
+        {
+          "order": 2,
+          "title": "L'Hôpital's rule at zero",
+          "assetPath": "content/putnam/2021/problems/A2/prerequisite-2.html",
+          "sha256": "8234a1b70509b1acbb9278cb103de079d54671383721ce6b24e962fed98faaf4"
+        },
+        {
+          "order": 3,
+          "title": "The defining exponential limit",
+          "assetPath": "content/putnam/2021/problems/A2/prerequisite-3.html",
+          "sha256": "a4edf30e71a87ea7b1e013bf2a9f5b77e9375b9d40d84898eeaa456557a092d3"
+        }
+      ],
+      "solution": {
+        "assetPath": "content/putnam/2021/problems/A2/solution.html",
+        "sha256": "a436402b7c5ec2c5183f35f6a294158ac2b2afabec6f34bcad31d7559f506c72"
+      },
+      "sources": [
+        {
+          "kind": "problem",
+          "label": "MAA official 2021 problems",
+          "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems.pdf"
+        },
+        {
+          "kind": "solution",
+          "label": "MAA official 2021 problems and solutions",
+          "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems-and-solutions.pdf"
+        },
+        {
+          "kind": "reference",
+          "label": "Kedlaya 2021 TeX cross-check",
+          "url": "https://kskedlaya.org/putnam-archive/2021s.tex"
+        }
+      ]
+    },
+    {
+      "key": "putnam/2021/A3",
+      "collectionId": "putnam",
+      "setId": "2021",
+      "problemId": "A3",
+      "label": "A3",
+      "ordinal": 3,
+      "topics": [
+        "geometry",
+        "linear-algebra",
+        "number-theory"
+      ],
+      "sourceRecord": "A3.json",
+      "statement": {
+        "assetPath": "content/putnam/2021/problems/A3/statement.html",
+        "sha256": "6a9d9a1b1b036926c70fa5bc811775ab5f4f1504c0b4ee3e9819b7f06a1a202a"
+      },
+      "hints": [
+        {
+          "order": 1,
+          "stage": "nudge",
+          "title": "Translate geometry into dot products",
+          "assetPath": "content/putnam/2021/problems/A3/hint-1.html",
+          "sha256": "92d4137ef66e3d4e5836e4ba0a139aa30055a12872c1dfb30616dbdb3cc89442"
+        },
+        {
+          "order": 2,
+          "stage": "strategy",
+          "title": "Build a Gram matrix",
+          "assetPath": "content/putnam/2021/problems/A3/hint-2.html",
+          "sha256": "6dfaf41fe432605c2a0f3bb244205e7161a9799e5226a2ea8360bcd04d3c8474"
+        },
+        {
+          "order": 3,
+          "stage": "knowledge",
+          "title": "Use the Gram determinant identity",
+          "assetPath": "content/putnam/2021/problems/A3/hint-3.html",
+          "sha256": "753283655d38b8211cbdc8a71a34de3c3dd2b521eb94d4580336d57b74fdd466"
+        },
+        {
+          "order": 4,
+          "stage": "outline",
+          "title": "Prove necessity and sufficiency",
+          "assetPath": "content/putnam/2021/problems/A3/hint-4.html",
+          "sha256": "d15307fa9beb38f184f63c7da4287b58d7f8efc994ac751a3757a628ff1f2eab"
+        }
+      ],
+      "prerequisites": [
+        {
+          "order": 1,
+          "title": "Distances and dot products",
+          "assetPath": "content/putnam/2021/problems/A3/prerequisite-1.html",
+          "sha256": "aa13c267419d6d86cac552c96dd4f81fcf0a3bfcae441ebc71ded66d8474c6f9"
+        },
+        {
+          "order": 2,
+          "title": "Gram matrices and determinants",
+          "assetPath": "content/putnam/2021/problems/A3/prerequisite-2.html",
+          "sha256": "ef3d08b3316477c50eb51c677d1a4e78611b3aeb6ccdc0a959edcd97eb5934d6"
+        },
+        {
+          "order": 3,
+          "title": "Recognizing perfect squares by prime exponents",
+          "assetPath": "content/putnam/2021/problems/A3/prerequisite-3.html",
+          "sha256": "f800ff5292c316680e04abc5b60afc9b931a5a02cbafffe28c8ba9fdb3c3db4a"
+        }
+      ],
+      "solution": {
+        "assetPath": "content/putnam/2021/problems/A3/solution.html",
+        "sha256": "40c033fe9f87556ffcaec924dc015bee93a69c7bfd78276d4530cb0ca1edeed0"
+      },
+      "sources": [
+        {
+          "kind": "problem",
+          "label": "MAA official 2021 problems",
+          "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems.pdf"
+        },
+        {
+          "kind": "solution",
+          "label": "MAA official 2021 problems and solutions",
+          "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems-and-solutions.pdf"
+        },
+        {
+          "kind": "reference",
+          "label": "Kedlaya 2021 TeX cross-check",
+          "url": "https://kskedlaya.org/putnam-archive/2021s.tex"
+        }
+      ]
+    },
+    {
+      "key": "putnam/2021/A4",
+      "collectionId": "putnam",
+      "setId": "2021",
+      "problemId": "A4",
+      "label": "A4",
+      "ordinal": 4,
+      "topics": [
+        "integrals",
+        "analysis"
+      ],
+      "sourceRecord": "A4.json",
+      "statement": {
+        "assetPath": "content/putnam/2021/problems/A4/statement.html",
+        "sha256": "818bb6fbae81e1eeb1d5e39d12f8b3ba2f514a78d28e499b6b54b902ad5b084b"
+      },
+      "hints": [
+        {
+          "order": 1,
+          "stage": "nudge",
+          "title": "Exploit the circular domain",
+          "assetPath": "content/putnam/2021/problems/A4/hint-1.html",
+          "sha256": "d8b79a972fb998711a8c709cd70d6153a666c7966e42a14964a4e76398cf30e2"
+        },
+        {
+          "order": 2,
+          "stage": "strategy",
+          "title": "Turn two disks into one annulus",
+          "assetPath": "content/putnam/2021/problems/A4/hint-2.html",
+          "sha256": "4785c26f202e3c236ee981088e36a14460f62118cc2bad61a486639151500b41"
+        },
+        {
+          "order": 3,
+          "stage": "knowledge",
+          "title": "Rescale before taking the limit",
+          "assetPath": "content/putnam/2021/problems/A4/hint-3.html",
+          "sha256": "98814077ee9b1682eaa2fd1a48ced92fdea56a3bd9c804e89c200fede3f347e6"
+        },
+        {
+          "order": 4,
+          "stage": "outline",
+          "title": "Finish with one trigonometric integral",
+          "assetPath": "content/putnam/2021/problems/A4/hint-4.html",
+          "sha256": "f1a98844c593cb2fce8aae27bbf6d3395a4dc1c19cd4342a062765d483e71e46"
+        }
+      ],
+      "prerequisites": [
+        {
+          "order": 1,
+          "title": "Linear changes of variables",
+          "assetPath": "content/putnam/2021/problems/A4/prerequisite-1.html",
+          "sha256": "1fc21a19962933200c799fa78c2f29433e04b9ccc54c4ae908662c344bf6532f"
+        },
+        {
+          "order": 2,
+          "title": "Polar coordinates and dominated convergence",
+          "assetPath": "content/putnam/2021/problems/A4/prerequisite-2.html",
+          "sha256": "32ef845e4ee077a35ad54f7dfbd6d5e9eeacac79bd92ddbe8e954c373e63a139"
+        },
+        {
+          "order": 3,
+          "title": "A standard cosine integral",
+          "assetPath": "content/putnam/2021/problems/A4/prerequisite-3.html",
+          "sha256": "dcb128f4a9894525105442b86b9811317378f0585e2982e26b0b426177887551"
+        }
+      ],
+      "solution": {
+        "assetPath": "content/putnam/2021/problems/A4/solution.html",
+        "sha256": "8046a1da7387052a2b078e245190fb4d63bbef59ac94fbdd3812b7052cca61fe"
+      },
+      "sources": [
+        {
+          "kind": "problem",
+          "label": "MAA official 2021 problems",
+          "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems.pdf"
+        },
+        {
+          "kind": "solution",
+          "label": "MAA official 2021 problems and solutions",
+          "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems-and-solutions.pdf"
+        },
+        {
+          "kind": "reference",
+          "label": "Kedlaya 2021 TeX cross-check",
+          "url": "https://kskedlaya.org/putnam-archive/2021s.tex"
+        }
+      ]
+    },
+    {
+      "key": "putnam/2021/A5",
+      "collectionId": "putnam",
+      "setId": "2021",
+      "problemId": "A5",
+      "label": "A5",
+      "ordinal": 5,
+      "topics": [
+        "number-theory"
+      ],
+      "sourceRecord": "A5.json",
+      "statement": {
+        "assetPath": "content/putnam/2021/problems/A5/statement.html",
+        "sha256": "ea021b68acadd5e7fcdd2ca59edf58e2107a166f3d440b440c149a7b6d39b58f"
+      },
+      "hints": [
+        {
+          "order": 1,
+          "stage": "nudge",
+          "title": "Factor the modulus",
+          "assetPath": "content/putnam/2021/problems/A5/hint-1.html",
+          "sha256": "aab950d3178fd4fe79ab9b69311fb7c390427bf95af33606002f85b0673192d2"
+        },
+        {
+          "order": 2,
+          "stage": "strategy",
+          "title": "Count the same residues repeatedly",
+          "assetPath": "content/putnam/2021/problems/A5/hint-2.html",
+          "sha256": "33800ef4a67ca1af3639ad5c152d0c16caf9e941e41583ab836620b523067163"
+        },
+        {
+          "order": 3,
+          "stage": "knowledge",
+          "title": "Recall finite-field power sums",
+          "assetPath": "content/putnam/2021/problems/A5/hint-3.html",
+          "sha256": "bcce0af792f5ba77f8c139e79d239b750b7855039a24d738567b7ade9ae9652c"
+        },
+        {
+          "order": 4,
+          "stage": "outline",
+          "title": "Combine the two prime conditions",
+          "assetPath": "content/putnam/2021/problems/A5/hint-4.html",
+          "sha256": "f63a6265929f42ccb4a0a4ede509022edf8b009b82db791ded6f1f0bc4e87e0d"
+        }
+      ],
+      "prerequisites": [
+        {
+          "order": 1,
+          "title": "Chinese remainder counting",
+          "assetPath": "content/putnam/2021/problems/A5/prerequisite-1.html",
+          "sha256": "ff0f8746a61d4dcda2634263cb58ca3cd1bfce64db17d7d5556c884ef64a31ca"
+        },
+        {
+          "order": 2,
+          "title": "Primitive roots modulo a prime",
+          "assetPath": "content/putnam/2021/problems/A5/prerequisite-2.html",
+          "sha256": "0e2c2b5a2e2d695cc599c81ac3b27aa03298742a331665b73aa12f746a3a7ecc"
+        },
+        {
+          "order": 3,
+          "title": "Divisibility by a squarefree product",
+          "assetPath": "content/putnam/2021/problems/A5/prerequisite-3.html",
+          "sha256": "375563186c9a463b90ee4f277f217eed30749d99d371cbbf53f16a5e423fa8c7"
+        }
+      ],
+      "solution": {
+        "assetPath": "content/putnam/2021/problems/A5/solution.html",
+        "sha256": "83936efb7ddab5b5d6786e352e0a558c702a8ad23dfda3f07f0446e2a59307f7"
+      },
+      "sources": [
+        {
+          "kind": "problem",
+          "label": "MAA official 2021 problems",
+          "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems.pdf"
+        },
+        {
+          "kind": "solution",
+          "label": "MAA official 2021 problems and solutions",
+          "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems-and-solutions.pdf"
+        },
+        {
+          "kind": "reference",
+          "label": "Kedlaya 2021 TeX cross-check",
+          "url": "https://kskedlaya.org/putnam-archive/2021s.tex"
+        }
+      ]
+    },
+    {
+      "key": "putnam/2021/A6",
+      "collectionId": "putnam",
+      "setId": "2021",
+      "problemId": "A6",
+      "label": "A6",
+      "ordinal": 6,
+      "topics": [
+        "polynomials",
+        "number-theory"
+      ],
+      "sourceRecord": "A6.json",
+      "statement": {
+        "assetPath": "content/putnam/2021/problems/A6/statement.html",
+        "sha256": "f690ea03052ccf416b6e605124439b0462e3c1c1b91ba232ba3166bb729a7397"
+      },
+      "hints": [
+        {
+          "order": 1,
+          "stage": "nudge",
+          "title": "Assume the value is prime",
+          "assetPath": "content/putnam/2021/problems/A6/hint-1.html",
+          "sha256": "3022fffe787736ba0749d24ac9bc9cea1055191b25dc99fb1d729a6bc135fa18"
+        },
+        {
+          "order": 2,
+          "stage": "strategy",
+          "title": "Compare G at one and two",
+          "assetPath": "content/putnam/2021/problems/A6/hint-2.html",
+          "sha256": "a7baa72fc4299126acd6f27efdba104fa6c03c65c39780d1533450776b63dff7"
+        },
+        {
+          "order": 3,
+          "stage": "knowledge",
+          "title": "Locate one root in a half-plane",
+          "assetPath": "content/putnam/2021/problems/A6/hint-3.html",
+          "sha256": "883c268c58bd9098eff1ba89be6b524aa2346991458ff5fda5773078c1bad057"
+        },
+        {
+          "order": 4,
+          "stage": "outline",
+          "title": "Use the 0-1 coefficients for the contradiction",
+          "assetPath": "content/putnam/2021/problems/A6/hint-4.html",
+          "sha256": "36748470c039f3802ec39bb1c83f017e2d44dbb1c89e8b73edfcdceb7a799ac4"
+        }
+      ],
+      "prerequisites": [
+        {
+          "order": 1,
+          "title": "Evaluating an integer factorization",
+          "assetPath": "content/putnam/2021/problems/A6/prerequisite-1.html",
+          "sha256": "84ea7c4dee23fe340e8853458b3834016c21c4e8cc082c6b9bd35655907cd8ea"
+        },
+        {
+          "order": 2,
+          "title": "Root products as distance products",
+          "assetPath": "content/putnam/2021/problems/A6/prerequisite-2.html",
+          "sha256": "eafdfc5e929c3d034f3ae4255742046e765b5daac9b86328b9bfe50efdb07469"
+        },
+        {
+          "order": 3,
+          "title": "Real parts and a geometric tail",
+          "assetPath": "content/putnam/2021/problems/A6/prerequisite-3.html",
+          "sha256": "53bed64e44ed0077c3deab8ae5742ad25c8162cdaa76aa35c0599b17978fb7ee"
+        }
+      ],
+      "solution": {
+        "assetPath": "content/putnam/2021/problems/A6/solution.html",
+        "sha256": "68076e2a6bf461a4033982343829550b3a8f60480f4ef3d6c7a888d2523f1792"
+      },
+      "sources": [
+        {
+          "kind": "problem",
+          "label": "MAA official 2021 problems",
+          "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems.pdf"
+        },
+        {
+          "kind": "solution",
+          "label": "MAA official 2021 problems and solutions",
+          "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems-and-solutions.pdf"
+        },
+        {
+          "kind": "reference",
+          "label": "Kedlaya 2021 TeX cross-check",
+          "url": "https://kskedlaya.org/putnam-archive/2021s.tex"
+        }
+      ]
+    },
+    {
+      "key": "putnam/2021/B1",
+      "collectionId": "putnam",
+      "setId": "2021",
+      "problemId": "B1",
+      "label": "B1",
+      "ordinal": 7,
+      "topics": [
+        "probability",
+        "geometry"
+      ],
+      "sourceRecord": "B1.json",
+      "statement": {
+        "assetPath": "content/putnam/2021/problems/B1/statement.html",
+        "sha256": "e7cb9f966ef033e212cf28b7e66c969f1fe482997f041f06b51cb879905236af"
+      },
+      "hints": [
+        {
+          "order": 1,
+          "stage": "nudge",
+          "title": "Reduce position modulo the lattice",
+          "assetPath": "content/putnam/2021/problems/B1/hint-1.html",
+          "sha256": "4c1e7df8fc6acd234a1e47cef350238026b8488b41b722984349fb385a7a30e1"
+        },
+        {
+          "order": 2,
+          "stage": "strategy",
+          "title": "Fix the orientation first",
+          "assetPath": "content/putnam/2021/problems/B1/hint-2.html",
+          "sha256": "f4e5ecc0900d1ed3a4fff07233de245661e027f8157a4d67d333841ed37c605a"
+        },
+        {
+          "order": 3,
+          "stage": "knowledge",
+          "title": "Use the inset-square geometry",
+          "assetPath": "content/putnam/2021/problems/B1/hint-3.html",
+          "sha256": "529a68a83b0b5366bdde03737d4382aa4aa80ccf8202c9b6744708c3e6dcd3be"
+        },
+        {
+          "order": 4,
+          "stage": "outline",
+          "title": "Average over all orientations",
+          "assetPath": "content/putnam/2021/problems/B1/hint-4.html",
+          "sha256": "c43346b03926df638a1d0dcd5b0bd64dc12dc0196439b7a43dca2b61b724f71a"
+        }
+      ],
+      "prerequisites": [
+        {
+          "order": 1,
+          "title": "Fundamental domains",
+          "assetPath": "content/putnam/2021/problems/B1/prerequisite-1.html",
+          "sha256": "80c4cc0d6221ce65fe47cb21c9a75d0e013d7abb65cb2719f27b2e68bc52d1e5"
+        },
+        {
+          "order": 2,
+          "title": "Width of a rotated square",
+          "assetPath": "content/putnam/2021/problems/B1/prerequisite-2.html",
+          "sha256": "d4c346c772a5c12b42167896a7ce9bb396c9288ac59041d99152e78c3f5191d5"
+        },
+        {
+          "order": 3,
+          "title": "Conditional probability by area",
+          "assetPath": "content/putnam/2021/problems/B1/prerequisite-3.html",
+          "sha256": "58d89b64d92c52ed6e332b373d8177784b60770f5fa5faa7cb99097cddb80424"
+        }
+      ],
+      "solution": {
+        "assetPath": "content/putnam/2021/problems/B1/solution.html",
+        "sha256": "eeb553d9f0d9cae69c6d9825463eb15b92ce0563a8cb2d2a8d2fa180cc4eb6cb"
+      },
+      "sources": [
+        {
+          "kind": "problem",
+          "label": "MAA official 2021 problems",
+          "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems.pdf"
+        },
+        {
+          "kind": "solution",
+          "label": "MAA official 2021 problems and solutions",
+          "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems-and-solutions.pdf"
+        },
+        {
+          "kind": "reference",
+          "label": "Kedlaya 2021 TeX cross-check",
+          "url": "https://kskedlaya.org/putnam-archive/2021s.tex"
+        }
+      ]
+    },
+    {
+      "key": "putnam/2021/B2",
+      "collectionId": "putnam",
+      "setId": "2021",
+      "problemId": "B2",
+      "label": "B2",
+      "ordinal": 8,
+      "topics": [
+        "inequalities",
+        "sequences-series"
+      ],
+      "sourceRecord": "B2.json",
+      "statement": {
+        "assetPath": "content/putnam/2021/problems/B2/statement.html",
+        "sha256": "e82c313ace3277deab2c1117e370fafc5d63a35ffc921ad2dedfc634da86d6f3"
+      },
+      "hints": [
+        {
+          "order": 1,
+          "stage": "nudge",
+          "title": "Build a weighted AM–GM estimate",
+          "assetPath": "content/putnam/2021/problems/B2/hint-1.html",
+          "sha256": "9b5cdfa92c56bf65c1db47c9f4757551c85c278eb6c581677938b9188babc057"
+        },
+        {
+          "order": 2,
+          "stage": "strategy",
+          "title": "Cancel the factor n",
+          "assetPath": "content/putnam/2021/problems/B2/hint-2.html",
+          "sha256": "c8b001fffce7bbc203e0a1bc418d262c2c602f8c8f83f388c84ec66ed10437f2"
+        },
+        {
+          "order": 3,
+          "stage": "knowledge",
+          "title": "Reverse a nonnegative double sum",
+          "assetPath": "content/putnam/2021/problems/B2/hint-3.html",
+          "sha256": "748844f5006bc9d3deddefb59aaa8af3a9d56fa45a422bd94366ad14cd8aa265"
+        },
+        {
+          "order": 4,
+          "stage": "outline",
+          "title": "Track the equality case",
+          "assetPath": "content/putnam/2021/problems/B2/hint-4.html",
+          "sha256": "cd3a8fbf0ffdfc4d9c61bf21f8a627d9b87bb1346b412192b9dc613617cfe878"
+        }
+      ],
+      "prerequisites": [
+        {
+          "order": 1,
+          "title": "Arithmetic–geometric mean inequality",
+          "assetPath": "content/putnam/2021/problems/B2/prerequisite-1.html",
+          "sha256": "a81fdc221adb6519c54f4a982bd029a00483d78394aeb466e7b3efa0336b0078"
+        },
+        {
+          "order": 2,
+          "title": "Tonelli for series",
+          "assetPath": "content/putnam/2021/problems/B2/prerequisite-2.html",
+          "sha256": "5dde3901213cf73d99a7b17e0420d31be206d653d32755981f2c1457d0055d61"
+        },
+        {
+          "order": 3,
+          "title": "Geometric series",
+          "assetPath": "content/putnam/2021/problems/B2/prerequisite-3.html",
+          "sha256": "b9a12b4b72fa8f0e4d15cfb22e8ee9cddc67cdd491f5187773afe09b4a3dc149"
+        }
+      ],
+      "solution": {
+        "assetPath": "content/putnam/2021/problems/B2/solution.html",
+        "sha256": "07cbb7826569bcfe9a2355f8d3accac209a6a99ec91a0209bd160b4e5a4ea9c8"
+      },
+      "sources": [
+        {
+          "kind": "problem",
+          "label": "MAA official 2021 problems",
+          "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems.pdf"
+        },
+        {
+          "kind": "solution",
+          "label": "MAA official 2021 problems and solutions",
+          "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems-and-solutions.pdf"
+        },
+        {
+          "kind": "reference",
+          "label": "Kedlaya 2021 TeX cross-check",
+          "url": "https://kskedlaya.org/putnam-archive/2021s.tex"
+        }
+      ]
+    },
+    {
+      "key": "putnam/2021/B3",
+      "collectionId": "putnam",
+      "setId": "2021",
+      "problemId": "B3",
+      "label": "B3",
+      "ordinal": 9,
+      "topics": [
+        "analysis",
+        "calculus",
+        "geometry"
+      ],
+      "sourceRecord": "B3.json",
+      "statement": {
+        "assetPath": "content/putnam/2021/problems/B3/statement.html",
+        "sha256": "20a37c06f926640794e34cd7c32e691f4c1bfcbd36f0edac333a806eac5cb5c9"
+      },
+      "hints": [
+        {
+          "order": 1,
+          "stage": "nudge",
+          "title": "Rotate the center",
+          "assetPath": "content/putnam/2021/problems/B3/hint-1.html",
+          "sha256": "2b1751d40e0e774e2ac92dfbf00248f0521ef3a6cb998550c6f9be91311e7798"
+        },
+        {
+          "order": 2,
+          "stage": "strategy",
+          "title": "Average over a full revolution",
+          "assetPath": "content/putnam/2021/problems/B3/hint-2.html",
+          "sha256": "ab1b7909709cf3d78e1389b8199855f8445f3d2392f14c239d1459cb196c14bc"
+        },
+        {
+          "order": 3,
+          "stage": "knowledge",
+          "title": "Recognize an angular derivative",
+          "assetPath": "content/putnam/2021/problems/B3/hint-3.html",
+          "sha256": "9e37345aa5154027d2865a1cb292b5fd3bf2597b1a9e4904d521c665261a406b"
+        },
+        {
+          "order": 4,
+          "stage": "outline",
+          "title": "Finish with continuity",
+          "assetPath": "content/putnam/2021/problems/B3/hint-4.html",
+          "sha256": "6748fbe7ec6ced3295c8dc825adadf1358185dae626abb1426fe6eb36ff9b2ba"
+        }
+      ],
+      "prerequisites": [
+        {
+          "order": 1,
+          "title": "Angular derivatives",
+          "assetPath": "content/putnam/2021/problems/B3/prerequisite-1.html",
+          "sha256": "43bfdf3f8edc32e32b601ff3ecfee422f0a3e34db72f8bc8f479dedbc011673d"
+        },
+        {
+          "order": 2,
+          "title": "Fubini and rotational symmetry",
+          "assetPath": "content/putnam/2021/problems/B3/prerequisite-2.html",
+          "sha256": "65c57a1c56c9f97f378d43b00c2a47648b0bceea86cd69c6a8e443c378d98846"
+        },
+        {
+          "order": 3,
+          "title": "Zero average of a continuous function",
+          "assetPath": "content/putnam/2021/problems/B3/prerequisite-3.html",
+          "sha256": "9703b013652944419bbd157a1b6babf86327008a9c7c1f4e6c263d9be6dc70a0"
+        }
+      ],
+      "solution": {
+        "assetPath": "content/putnam/2021/problems/B3/solution.html",
+        "sha256": "45542c7830ce1603772d1d8051528224ec169fda3e1fdeda08f796ca3af5aa54"
+      },
+      "sources": [
+        {
+          "kind": "problem",
+          "label": "MAA official 2021 problems",
+          "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems.pdf"
+        },
+        {
+          "kind": "solution",
+          "label": "MAA official 2021 problems and solutions",
+          "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems-and-solutions.pdf"
+        },
+        {
+          "kind": "reference",
+          "label": "Kedlaya 2021 TeX cross-check",
+          "url": "https://kskedlaya.org/putnam-archive/2021s.tex"
+        }
+      ]
+    },
+    {
+      "key": "putnam/2021/B4",
+      "collectionId": "putnam",
+      "setId": "2021",
+      "problemId": "B4",
+      "label": "B4",
+      "ordinal": 10,
+      "topics": [
+        "number-theory",
+        "sequences-series"
+      ],
+      "sourceRecord": "B4.json",
+      "statement": {
+        "assetPath": "content/putnam/2021/problems/B4/statement.html",
+        "sha256": "4571c6bd4d966d6c2683ae26edc407a2f0276a3190158e555f396585c171ad2b"
+      },
+      "hints": [
+        {
+          "order": 1,
+          "stage": "nudge",
+          "title": "Split according to the modulus",
+          "assetPath": "content/putnam/2021/problems/B4/hint-1.html",
+          "sha256": "750ab420c0b519ad1885c6a01137a862b01734cd0e8c9d0fbdb3963bc59b1fcc"
+        },
+        {
+          "order": 2,
+          "stage": "strategy",
+          "title": "Square the hyperfactorial",
+          "assetPath": "content/putnam/2021/problems/B4/hint-2.html",
+          "sha256": "c23a17f900fa2410c8ea11683ff506e6c8c1d8146ddc88caeb3796121aa7e64f"
+        },
+        {
+          "order": 3,
+          "stage": "knowledge",
+          "title": "Bring in Fibonacci congruences",
+          "assetPath": "content/putnam/2021/problems/B4/hint-3.html",
+          "sha256": "902c645fe2cefc90f469f05db97d096426e3dc2f977065c2d71629d0ece54e0d"
+        },
+        {
+          "order": 4,
+          "stage": "outline",
+          "title": "Identify the possible remainders",
+          "assetPath": "content/putnam/2021/problems/B4/hint-4.html",
+          "sha256": "e16b51991ebb2eeb78c987668db249ebd9f4187c9c11b061bfac957617f80cfc"
+        }
+      ],
+      "prerequisites": [
+        {
+          "order": 1,
+          "title": "Fermat and Wilson",
+          "assetPath": "content/putnam/2021/problems/B4/prerequisite-1.html",
+          "sha256": "a772c5341f260db2adb101bfcb346c09852562f444b6b625a316b25b7bcf4197"
+        },
+        {
+          "order": 2,
+          "title": "Fibonacci parity identities",
+          "assetPath": "content/putnam/2021/problems/B4/prerequisite-2.html",
+          "sha256": "2bef657f2fb2ee520e12c40cb531c78523dce279009dfa0809aad1d6095440e2"
+        },
+        {
+          "order": 3,
+          "title": "Cassini's identity",
+          "assetPath": "content/putnam/2021/problems/B4/prerequisite-3.html",
+          "sha256": "1c5f9a116a6740cbf5517b1de31adac0db07988bf23f019b307d42c4b1067f96"
+        }
+      ],
+      "solution": {
+        "assetPath": "content/putnam/2021/problems/B4/solution.html",
+        "sha256": "a81fb64f9d12cd5b0bdb57258fc7389a2930f7ea9cc6e0edfa6913aeb1c15cc0"
+      },
+      "sources": [
+        {
+          "kind": "problem",
+          "label": "MAA official 2021 problems",
+          "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems.pdf"
+        },
+        {
+          "kind": "solution",
+          "label": "MAA official 2021 problems and solutions",
+          "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems-and-solutions.pdf"
+        },
+        {
+          "kind": "reference",
+          "label": "Kedlaya 2021 TeX cross-check",
+          "url": "https://kskedlaya.org/putnam-archive/2021s.tex"
+        }
+      ]
+    },
+    {
+      "key": "putnam/2021/B5",
+      "collectionId": "putnam",
+      "setId": "2021",
+      "problemId": "B5",
+      "label": "B5",
+      "ordinal": 11,
+      "topics": [
+        "linear-algebra",
+        "combinatorics"
+      ],
+      "sourceRecord": "B5.json",
+      "statement": {
+        "assetPath": "content/putnam/2021/problems/B5/statement.html",
+        "sha256": "38975dca6ab9dcddab40ebed9adb26f329cb04883f3175eb043b78a0b736545e"
+      },
+      "hints": [
+        {
+          "order": 1,
+          "stage": "nudge",
+          "title": "Work modulo two",
+          "assetPath": "content/putnam/2021/problems/B5/hint-1.html",
+          "sha256": "6ee12dbce7aa97e9e3541b5ab2a2bddfcb560871ce84a22cd2ba861a33dcc860"
+        },
+        {
+          "order": 2,
+          "stage": "strategy",
+          "title": "Turn the off-diagonal entries into a graph",
+          "assetPath": "content/putnam/2021/problems/B5/hint-2.html",
+          "sha256": "9b01ef043f607163f36e8f15dd1da3254c6e2aa5e0b67fbc5755744a3c8b0949"
+        },
+        {
+          "order": 3,
+          "stage": "knowledge",
+          "title": "Exclude a shortest directed cycle",
+          "assetPath": "content/putnam/2021/problems/B5/hint-3.html",
+          "sha256": "515ec6b908b94defe2ece0a1b25e07d94e5184dfcb8fd8bbcb417a768ed1cf85"
+        },
+        {
+          "order": 4,
+          "stage": "outline",
+          "title": "Topologically order and take powers",
+          "assetPath": "content/putnam/2021/problems/B5/hint-4.html",
+          "sha256": "a09b9510b15b0cf7293ab4507c3f9448994d1c5cfff91f89b911f64206948edc"
+        }
+      ],
+      "prerequisites": [
+        {
+          "order": 1,
+          "title": "Parity and reduction modulo two",
+          "assetPath": "content/putnam/2021/problems/B5/prerequisite-1.html",
+          "sha256": "908c94e1628c183cb9d52fd31824f664884d6aa5f9564c8b93333c95d153b5e3"
+        },
+        {
+          "order": 2,
+          "title": "Directed acyclic graphs",
+          "assetPath": "content/putnam/2021/problems/B5/prerequisite-2.html",
+          "sha256": "fcf7f874c8366b5a3c23178ae03ebde81cfb6d96df5a995a091e0f9e15b2d24e"
+        },
+        {
+          "order": 3,
+          "title": "Upper triangular matrices",
+          "assetPath": "content/putnam/2021/problems/B5/prerequisite-3.html",
+          "sha256": "f26a78cb05aeb1678f3e7a68f4efcbb293754229a21ee151557878a4050615e8"
+        }
+      ],
+      "solution": {
+        "assetPath": "content/putnam/2021/problems/B5/solution.html",
+        "sha256": "b2692c6ceafdecdca389b6ac1dc2405236b3b91e80375b6eba99828ebab8f4ff"
+      },
+      "sources": [
+        {
+          "kind": "problem",
+          "label": "MAA official 2021 problems",
+          "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems.pdf"
+        },
+        {
+          "kind": "solution",
+          "label": "MAA official 2021 problems and solutions",
+          "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems-and-solutions.pdf"
+        },
+        {
+          "kind": "reference",
+          "label": "Kedlaya 2021 TeX cross-check",
+          "url": "https://kskedlaya.org/putnam-archive/2021s.tex"
+        }
+      ]
+    },
+    {
+      "key": "putnam/2021/B6",
+      "collectionId": "putnam",
+      "setId": "2021",
+      "problemId": "B6",
+      "label": "B6",
+      "ordinal": 12,
+      "topics": [
+        "probability",
+        "analysis",
+        "inequalities"
+      ],
+      "sourceRecord": "B6.json",
+      "statement": {
+        "assetPath": "content/putnam/2021/problems/B6/statement.html",
+        "sha256": "3a5b9b0f9ff3766eca30c9e66689f007c5cb3c3efb42b88428fe6d0d81f637c2"
+      },
+      "hints": [
+        {
+          "order": 1,
+          "stage": "nudge",
+          "title": "Center the distribution",
+          "assetPath": "content/putnam/2021/problems/B6/hint-1.html",
+          "sha256": "608de80c6899f8be63bfc4e63b29eadcba945580d40e757757fc5b140b6db608"
+        },
+        {
+          "order": 2,
+          "stage": "strategy",
+          "title": "Find the median density",
+          "assetPath": "content/putnam/2021/problems/B6/hint-2.html",
+          "sha256": "a37b952a6e8504e2759e809977e7418d738e5d38096448623b72c2dbd51d9d4c"
+        },
+        {
+          "order": 3,
+          "stage": "knowledge",
+          "title": "Control the peak",
+          "assetPath": "content/putnam/2021/problems/B6/hint-3.html",
+          "sha256": "b90d196c999121f9d510470ea7b0553f5c99d355495b248f2c18c5438832f4b8"
+        },
+        {
+          "order": 4,
+          "stage": "outline",
+          "title": "Convert the density cap into a moment bound",
+          "assetPath": "content/putnam/2021/problems/B6/hint-4.html",
+          "sha256": "1b7b9573e4932e5609c3a1ccbb995c12a38b6d87e223f40b68ab1e22e0da7d53"
+        }
+      ],
+      "prerequisites": [
+        {
+          "order": 1,
+          "title": "Density of an order statistic",
+          "assetPath": "content/putnam/2021/problems/B6/prerequisite-1.html",
+          "sha256": "18715d7faa6f9bf120fff037c4018890ef29fb608f833e6aaf78fa3e682d0479"
+        },
+        {
+          "order": 2,
+          "title": "Symmetric densities",
+          "assetPath": "content/putnam/2021/problems/B6/prerequisite-2.html",
+          "sha256": "c1ca8e9f650836f4528dc8a63dad1bece26a6b2d273f72882e8bc08e39b83531"
+        },
+        {
+          "order": 3,
+          "title": "Integration by parts for a density",
+          "assetPath": "content/putnam/2021/problems/B6/prerequisite-3.html",
+          "sha256": "e983f8d389a9fa392c3976cba3c43b41d0c23af0b491dc57860f924e8976db97"
+        }
+      ],
+      "solution": {
+        "assetPath": "content/putnam/2021/problems/B6/solution.html",
+        "sha256": "8657e2bce6eec371c8a6058d335f72901352b1c0a4afed08eb231cf192e4ed68"
+      },
+      "sources": [
+        {
+          "kind": "problem",
+          "label": "MAA official 2021 problems",
+          "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems.pdf"
+        },
+        {
+          "kind": "solution",
+          "label": "MAA official 2021 problems and solutions",
+          "url": "https://maa.org/wp-content/uploads/2024/10/Putnam-2021-problems-and-solutions.pdf"
+        },
+        {
+          "kind": "reference",
+          "label": "Kedlaya 2021 TeX cross-check",
+          "url": "https://kskedlaya.org/putnam-archive/2021s.tex"
+        }
+      ]
+    }
+  ],
+  "assets": [
+    {
+      "path": "content/putnam/2021/problems/A1/hint-1.html",
+      "sha256": "be628849f964b0f062a47c73d7c71b6ee380049a667186cb69b03215dac72f61",
+      "bytes": 1532
+    },
+    {
+      "path": "content/putnam/2021/problems/A1/hint-2.html",
+      "sha256": "fc2fbbdba2379a6ecc32dc8de1735c602500fb0f244f2e9def940792cf86291e",
+      "bytes": 4479
+    },
+    {
+      "path": "content/putnam/2021/problems/A1/hint-3.html",
+      "sha256": "b86efdb0e51a332903809985adaf0f65474ab4cd81d86541a04d301ee111effd",
+      "bytes": 3749
+    },
+    {
+      "path": "content/putnam/2021/problems/A1/hint-4.html",
+      "sha256": "3f9d4ecd56bca11d0ae805deb2b0ce6dc7ece0ea9862b181f47ff005e9ae60bd",
+      "bytes": 4484
+    },
+    {
+      "path": "content/putnam/2021/problems/A1/prerequisite-1.html",
+      "sha256": "32eee267a9cda3e8ee39ff39b1f27e816f03e1c48d5c2dbfb07541b1655782ad",
+      "bytes": 6235
+    },
+    {
+      "path": "content/putnam/2021/problems/A1/prerequisite-2.html",
+      "sha256": "7f267a7f0865662b866db911419ff1edd81f567b7d9c063453334d63b92d728d",
+      "bytes": 2998
+    },
+    {
+      "path": "content/putnam/2021/problems/A1/solution.html",
+      "sha256": "5f7829f087c3677ad18fe9dc6e7e29c0d2fa4d02270a2c5bf2967e12e797e8f6",
+      "bytes": 17437
+    },
+    {
+      "path": "content/putnam/2021/problems/A1/statement.html",
+      "sha256": "9b0e4790a4b6bca4af28d147ac8e31ec17f64e3240f03b1e3c84db908bdc3f22",
+      "bytes": 2517
+    },
+    {
+      "path": "content/putnam/2021/problems/A2/hint-1.html",
+      "sha256": "7c6c976d65f09c0598df0690837b3286a2d5c6b221fa9434166f4153fc6c642d",
+      "bytes": 2410
+    },
+    {
+      "path": "content/putnam/2021/problems/A2/hint-2.html",
+      "sha256": "ab897c701f47a80ac7507b4680d83ecbf57b811cc6564a7664138b48446d4d62",
+      "bytes": 5866
+    },
+    {
+      "path": "content/putnam/2021/problems/A2/hint-3.html",
+      "sha256": "d00c163150eef5c2764bd558cfde7cb973a53483cf83c9057719a46baa8cee7d",
+      "bytes": 6331
+    },
+    {
+      "path": "content/putnam/2021/problems/A2/hint-4.html",
+      "sha256": "32171f216fc09b9a247fa40607e4bd2ae2bcab23813479e36926a2057db7d124",
+      "bytes": 3883
+    },
+    {
+      "path": "content/putnam/2021/problems/A2/prerequisite-1.html",
+      "sha256": "6056ecfad1cad750f74fe830f7478495ca3d114b9839eb6d74531d09bf3faedd",
+      "bytes": 3575
+    },
+    {
+      "path": "content/putnam/2021/problems/A2/prerequisite-2.html",
+      "sha256": "8234a1b70509b1acbb9278cb103de079d54671383721ce6b24e962fed98faaf4",
+      "bytes": 4339
+    },
+    {
+      "path": "content/putnam/2021/problems/A2/prerequisite-3.html",
+      "sha256": "a4edf30e71a87ea7b1e013bf2a9f5b77e9375b9d40d84898eeaa456557a092d3",
+      "bytes": 4121
+    },
+    {
+      "path": "content/putnam/2021/problems/A2/solution.html",
+      "sha256": "a436402b7c5ec2c5183f35f6a294158ac2b2afabec6f34bcad31d7559f506c72",
+      "bytes": 40350
+    },
+    {
+      "path": "content/putnam/2021/problems/A2/statement.html",
+      "sha256": "1d2c1b1d622e00a4bc786b984bc133bae096d70d6400578c21f851c8c0a51e7b",
+      "bytes": 8095
+    },
+    {
+      "path": "content/putnam/2021/problems/A3/hint-1.html",
+      "sha256": "92d4137ef66e3d4e5836e4ba0a139aa30055a12872c1dfb30616dbdb3cc89442",
+      "bytes": 3920
+    },
+    {
+      "path": "content/putnam/2021/problems/A3/hint-2.html",
+      "sha256": "6dfaf41fe432605c2a0f3bb244205e7161a9799e5226a2ea8360bcd04d3c8474",
+      "bytes": 4763
+    },
+    {
+      "path": "content/putnam/2021/problems/A3/hint-3.html",
+      "sha256": "753283655d38b8211cbdc8a71a34de3c3dd2b521eb94d4580336d57b74fdd466",
+      "bytes": 3582
+    },
+    {
+      "path": "content/putnam/2021/problems/A3/hint-4.html",
+      "sha256": "d15307fa9beb38f184f63c7da4287b58d7f8efc994ac751a3757a628ff1f2eab",
+      "bytes": 4626
+    },
+    {
+      "path": "content/putnam/2021/problems/A3/prerequisite-1.html",
+      "sha256": "aa13c267419d6d86cac552c96dd4f81fcf0a3bfcae441ebc71ded66d8474c6f9",
+      "bytes": 4466
+    },
+    {
+      "path": "content/putnam/2021/problems/A3/prerequisite-2.html",
+      "sha256": "ef3d08b3316477c50eb51c677d1a4e78611b3aeb6ccdc0a959edcd97eb5934d6",
+      "bytes": 5719
+    },
+    {
+      "path": "content/putnam/2021/problems/A3/prerequisite-3.html",
+      "sha256": "f800ff5292c316680e04abc5b60afc9b931a5a02cbafffe28c8ba9fdb3c3db4a",
+      "bytes": 6797
+    },
+    {
+      "path": "content/putnam/2021/problems/A3/solution.html",
+      "sha256": "40c033fe9f87556ffcaec924dc015bee93a69c7bfd78276d4530cb0ca1edeed0",
+      "bytes": 65273
+    },
+    {
+      "path": "content/putnam/2021/problems/A3/statement.html",
+      "sha256": "6a9d9a1b1b036926c70fa5bc811775ab5f4f1504c0b4ee3e9819b7f06a1a202a",
+      "bytes": 3932
+    },
+    {
+      "path": "content/putnam/2021/problems/A4/hint-1.html",
+      "sha256": "d8b79a972fb998711a8c709cd70d6153a666c7966e42a14964a4e76398cf30e2",
+      "bytes": 1641
+    },
+    {
+      "path": "content/putnam/2021/problems/A4/hint-2.html",
+      "sha256": "4785c26f202e3c236ee981088e36a14460f62118cc2bad61a486639151500b41",
+      "bytes": 6690
+    },
+    {
+      "path": "content/putnam/2021/problems/A4/hint-3.html",
+      "sha256": "98814077ee9b1682eaa2fd1a48ced92fdea56a3bd9c804e89c200fede3f347e6",
+      "bytes": 7846
+    },
+    {
+      "path": "content/putnam/2021/problems/A4/hint-4.html",
+      "sha256": "f1a98844c593cb2fce8aae27bbf6d3395a4dc1c19cd4342a062765d483e71e46",
+      "bytes": 3864
+    },
+    {
+      "path": "content/putnam/2021/problems/A4/prerequisite-1.html",
+      "sha256": "1fc21a19962933200c799fa78c2f29433e04b9ccc54c4ae908662c344bf6532f",
+      "bytes": 7314
+    },
+    {
+      "path": "content/putnam/2021/problems/A4/prerequisite-2.html",
+      "sha256": "32ef845e4ee077a35ad54f7dfbd6d5e9eeacac79bd92ddbe8e954c373e63a139",
+      "bytes": 2715
+    },
+    {
+      "path": "content/putnam/2021/problems/A4/prerequisite-3.html",
+      "sha256": "dcb128f4a9894525105442b86b9811317378f0585e2982e26b0b426177887551",
+      "bytes": 8355
+    },
+    {
+      "path": "content/putnam/2021/problems/A4/solution.html",
+      "sha256": "8046a1da7387052a2b078e245190fb4d63bbef59ac94fbdd3812b7052cca61fe",
+      "bytes": 85920
+    },
+    {
+      "path": "content/putnam/2021/problems/A4/statement.html",
+      "sha256": "818bb6fbae81e1eeb1d5e39d12f8b3ba2f514a78d28e499b6b54b902ad5b084b",
+      "bytes": 14542
+    },
+    {
+      "path": "content/putnam/2021/problems/A5/hint-1.html",
+      "sha256": "aab950d3178fd4fe79ab9b69311fb7c390427bf95af33606002f85b0673192d2",
+      "bytes": 1730
+    },
+    {
+      "path": "content/putnam/2021/problems/A5/hint-2.html",
+      "sha256": "33800ef4a67ca1af3639ad5c152d0c16caf9e941e41583ab836620b523067163",
+      "bytes": 2342
+    },
+    {
+      "path": "content/putnam/2021/problems/A5/hint-3.html",
+      "sha256": "bcce0af792f5ba77f8c139e79d239b750b7855039a24d738567b7ade9ae9652c",
+      "bytes": 7741
+    },
+    {
+      "path": "content/putnam/2021/problems/A5/hint-4.html",
+      "sha256": "f63a6265929f42ccb4a0a4ede509022edf8b009b82db791ded6f1f0bc4e87e0d",
+      "bytes": 3134
+    },
+    {
+      "path": "content/putnam/2021/problems/A5/prerequisite-1.html",
+      "sha256": "ff0f8746a61d4dcda2634263cb58ca3cd1bfce64db17d7d5556c884ef64a31ca",
+      "bytes": 1976
+    },
+    {
+      "path": "content/putnam/2021/problems/A5/prerequisite-2.html",
+      "sha256": "0e2c2b5a2e2d695cc599c81ac3b27aa03298742a331665b73aa12f746a3a7ecc",
+      "bytes": 4623
+    },
+    {
+      "path": "content/putnam/2021/problems/A5/prerequisite-3.html",
+      "sha256": "375563186c9a463b90ee4f277f217eed30749d99d371cbbf53f16a5e423fa8c7",
+      "bytes": 2905
+    },
+    {
+      "path": "content/putnam/2021/problems/A5/solution.html",
+      "sha256": "83936efb7ddab5b5d6786e352e0a558c702a8ad23dfda3f07f0446e2a59307f7",
+      "bytes": 46501
+    },
+    {
+      "path": "content/putnam/2021/problems/A5/statement.html",
+      "sha256": "ea021b68acadd5e7fcdd2ca59edf58e2107a166f3d440b440c149a7b6d39b58f",
+      "bytes": 8107
+    },
+    {
+      "path": "content/putnam/2021/problems/A6/hint-1.html",
+      "sha256": "3022fffe787736ba0749d24ac9bc9cea1055191b25dc99fb1d729a6bc135fa18",
+      "bytes": 3414
+    },
+    {
+      "path": "content/putnam/2021/problems/A6/hint-2.html",
+      "sha256": "a7baa72fc4299126acd6f27efdba104fa6c03c65c39780d1533450776b63dff7",
+      "bytes": 4078
+    },
+    {
+      "path": "content/putnam/2021/problems/A6/hint-3.html",
+      "sha256": "883c268c58bd9098eff1ba89be6b524aa2346991458ff5fda5773078c1bad057",
+      "bytes": 7603
+    },
+    {
+      "path": "content/putnam/2021/problems/A6/hint-4.html",
+      "sha256": "36748470c039f3802ec39bb1c83f017e2d44dbb1c89e8b73edfcdceb7a799ac4",
+      "bytes": 5026
+    },
+    {
+      "path": "content/putnam/2021/problems/A6/prerequisite-1.html",
+      "sha256": "84ea7c4dee23fe340e8853458b3834016c21c4e8cc082c6b9bd35655907cd8ea",
+      "bytes": 3925
+    },
+    {
+      "path": "content/putnam/2021/problems/A6/prerequisite-2.html",
+      "sha256": "eafdfc5e929c3d034f3ae4255742046e765b5daac9b86328b9bfe50efdb07469",
+      "bytes": 7833
+    },
+    {
+      "path": "content/putnam/2021/problems/A6/prerequisite-3.html",
+      "sha256": "53bed64e44ed0077c3deab8ae5742ad25c8162cdaa76aa35c0599b17978fb7ee",
+      "bytes": 9594
+    },
+    {
+      "path": "content/putnam/2021/problems/A6/solution.html",
+      "sha256": "68076e2a6bf461a4033982343829550b3a8f60480f4ef3d6c7a888d2523f1792",
+      "bytes": 62805
+    },
+    {
+      "path": "content/putnam/2021/problems/A6/statement.html",
+      "sha256": "f690ea03052ccf416b6e605124439b0462e3c1c1b91ba232ba3166bb729a7397",
+      "bytes": 3486
+    },
+    {
+      "path": "content/putnam/2021/problems/B1/hint-1.html",
+      "sha256": "4c1e7df8fc6acd234a1e47cef350238026b8488b41b722984349fb385a7a30e1",
+      "bytes": 2881
+    },
+    {
+      "path": "content/putnam/2021/problems/B1/hint-2.html",
+      "sha256": "f4e5ecc0900d1ed3a4fff07233de245661e027f8157a4d67d333841ed37c605a",
+      "bytes": 1269
+    },
+    {
+      "path": "content/putnam/2021/problems/B1/hint-3.html",
+      "sha256": "529a68a83b0b5366bdde03737d4382aa4aa80ccf8202c9b6744708c3e6dcd3be",
+      "bytes": 5256
+    },
+    {
+      "path": "content/putnam/2021/problems/B1/hint-4.html",
+      "sha256": "c43346b03926df638a1d0dcd5b0bd64dc12dc0196439b7a43dca2b61b724f71a",
+      "bytes": 2607
+    },
+    {
+      "path": "content/putnam/2021/problems/B1/prerequisite-1.html",
+      "sha256": "80c4cc0d6221ce65fe47cb21c9a75d0e013d7abb65cb2719f27b2e68bc52d1e5",
+      "bytes": 1707
+    },
+    {
+      "path": "content/putnam/2021/problems/B1/prerequisite-2.html",
+      "sha256": "d4c346c772a5c12b42167896a7ce9bb396c9288ac59041d99152e78c3f5191d5",
+      "bytes": 2978
+    },
+    {
+      "path": "content/putnam/2021/problems/B1/prerequisite-3.html",
+      "sha256": "58d89b64d92c52ed6e332b373d8177784b60770f5fa5faa7cb99097cddb80424",
+      "bytes": 1286
+    },
+    {
+      "path": "content/putnam/2021/problems/B1/solution.html",
+      "sha256": "eeb553d9f0d9cae69c6d9825463eb15b92ce0563a8cb2d2a8d2fa180cc4eb6cb",
+      "bytes": 35501
+    },
+    {
+      "path": "content/putnam/2021/problems/B1/statement.html",
+      "sha256": "e7cb9f966ef033e212cf28b7e66c969f1fe482997f041f06b51cb879905236af",
+      "bytes": 1004
+    },
+    {
+      "path": "content/putnam/2021/problems/B2/hint-1.html",
+      "sha256": "9b5cdfa92c56bf65c1db47c9f4757551c85c278eb6c581677938b9188babc057",
+      "bytes": 5063
+    },
+    {
+      "path": "content/putnam/2021/problems/B2/hint-2.html",
+      "sha256": "c8b001fffce7bbc203e0a1bc418d262c2c602f8c8f83f388c84ec66ed10437f2",
+      "bytes": 7695
+    },
+    {
+      "path": "content/putnam/2021/problems/B2/hint-3.html",
+      "sha256": "748844f5006bc9d3deddefb59aaa8af3a9d56fa45a422bd94366ad14cd8aa265",
+      "bytes": 3042
+    },
+    {
+      "path": "content/putnam/2021/problems/B2/hint-4.html",
+      "sha256": "cd3a8fbf0ffdfc4d9c61bf21f8a627d9b87bb1346b412192b9dc613617cfe878",
+      "bytes": 4229
+    },
+    {
+      "path": "content/putnam/2021/problems/B2/prerequisite-1.html",
+      "sha256": "a81fdc221adb6519c54f4a982bd029a00483d78394aeb466e7b3efa0336b0078",
+      "bytes": 7793
+    },
+    {
+      "path": "content/putnam/2021/problems/B2/prerequisite-2.html",
+      "sha256": "5dde3901213cf73d99a7b17e0420d31be206d653d32755981f2c1457d0055d61",
+      "bytes": 839
+    },
+    {
+      "path": "content/putnam/2021/problems/B2/prerequisite-3.html",
+      "sha256": "b9a12b4b72fa8f0e4d15cfb22e8ee9cddc67cdd491f5187773afe09b4a3dc149",
+      "bytes": 6516
+    },
+    {
+      "path": "content/putnam/2021/problems/B2/solution.html",
+      "sha256": "07cbb7826569bcfe9a2355f8d3accac209a6a99ec91a0209bd160b4e5a4ea9c8",
+      "bytes": 55709
+    },
+    {
+      "path": "content/putnam/2021/problems/B2/statement.html",
+      "sha256": "e82c313ace3277deab2c1117e370fafc5d63a35ffc921ad2dedfc634da86d6f3",
+      "bytes": 11643
+    },
+    {
+      "path": "content/putnam/2021/problems/B3/hint-1.html",
+      "sha256": "2b1751d40e0e774e2ac92dfbf00248f0521ef3a6cb998550c6f9be91311e7798",
+      "bytes": 5490
+    },
+    {
+      "path": "content/putnam/2021/problems/B3/hint-2.html",
+      "sha256": "ab1b7909709cf3d78e1389b8199855f8445f3d2392f14c239d1459cb196c14bc",
+      "bytes": 2562
+    },
+    {
+      "path": "content/putnam/2021/problems/B3/hint-3.html",
+      "sha256": "9e37345aa5154027d2865a1cb292b5fd3bf2597b1a9e4904d521c665261a406b",
+      "bytes": 6251
+    },
+    {
+      "path": "content/putnam/2021/problems/B3/hint-4.html",
+      "sha256": "6748fbe7ec6ced3295c8dc825adadf1358185dae626abb1426fe6eb36ff9b2ba",
+      "bytes": 4330
+    },
+    {
+      "path": "content/putnam/2021/problems/B3/prerequisite-1.html",
+      "sha256": "43bfdf3f8edc32e32b601ff3ecfee422f0a3e34db72f8bc8f479dedbc011673d",
+      "bytes": 4253
+    },
+    {
+      "path": "content/putnam/2021/problems/B3/prerequisite-2.html",
+      "sha256": "65c57a1c56c9f97f378d43b00c2a47648b0bceea86cd69c6a8e443c378d98846",
+      "bytes": 4923
+    },
+    {
+      "path": "content/putnam/2021/problems/B3/prerequisite-3.html",
+      "sha256": "9703b013652944419bbd157a1b6babf86327008a9c7c1f4e6c263d9be6dc70a0",
+      "bytes": 873
+    },
+    {
+      "path": "content/putnam/2021/problems/B3/solution.html",
+      "sha256": "45542c7830ce1603772d1d8051528224ec169fda3e1fdeda08f796ca3af5aa54",
+      "bytes": 46773
+    },
+    {
+      "path": "content/putnam/2021/problems/B3/statement.html",
+      "sha256": "20a37c06f926640794e34cd7c32e691f4c1bfcbd36f0edac333a806eac5cb5c9",
+      "bytes": 9147
+    },
+    {
+      "path": "content/putnam/2021/problems/B4/hint-1.html",
+      "sha256": "750ab420c0b519ad1885c6a01137a862b01734cd0e8c9d0fbdb3963bc59b1fcc",
+      "bytes": 1830
+    },
+    {
+      "path": "content/putnam/2021/problems/B4/hint-2.html",
+      "sha256": "c23a17f900fa2410c8ea11683ff506e6c8c1d8146ddc88caeb3796121aa7e64f",
+      "bytes": 6746
+    },
+    {
+      "path": "content/putnam/2021/problems/B4/hint-3.html",
+      "sha256": "902c645fe2cefc90f469f05db97d096426e3dc2f977065c2d71629d0ece54e0d",
+      "bytes": 7107
+    },
+    {
+      "path": "content/putnam/2021/problems/B4/hint-4.html",
+      "sha256": "e16b51991ebb2eeb78c987668db249ebd9f4187c9c11b061bfac957617f80cfc",
+      "bytes": 9892
+    },
+    {
+      "path": "content/putnam/2021/problems/B4/prerequisite-1.html",
+      "sha256": "a772c5341f260db2adb101bfcb346c09852562f444b6b625a316b25b7bcf4197",
+      "bytes": 4946
+    },
+    {
+      "path": "content/putnam/2021/problems/B4/prerequisite-2.html",
+      "sha256": "2bef657f2fb2ee520e12c40cb531c78523dce279009dfa0809aad1d6095440e2",
+      "bytes": 9872
+    },
+    {
+      "path": "content/putnam/2021/problems/B4/prerequisite-3.html",
+      "sha256": "1c5f9a116a6740cbf5517b1de31adac0db07988bf23f019b307d42c4b1067f96",
+      "bytes": 7052
+    },
+    {
+      "path": "content/putnam/2021/problems/B4/solution.html",
+      "sha256": "a81fb64f9d12cd5b0bdb57258fc7389a2930f7ea9cc6e0edfa6913aeb1c15cc0",
+      "bytes": 67533
+    },
+    {
+      "path": "content/putnam/2021/problems/B4/statement.html",
+      "sha256": "4571c6bd4d966d6c2683ae26edc407a2f0276a3190158e555f396585c171ad2b",
+      "bytes": 15693
+    },
+    {
+      "path": "content/putnam/2021/problems/B5/hint-1.html",
+      "sha256": "6ee12dbce7aa97e9e3541b5ab2a2bddfcb560871ce84a22cd2ba861a33dcc860",
+      "bytes": 3220
+    },
+    {
+      "path": "content/putnam/2021/problems/B5/hint-2.html",
+      "sha256": "9b01ef043f607163f36e8f15dd1da3254c6e2aa5e0b67fbc5755744a3c8b0949",
+      "bytes": 4186
+    },
+    {
+      "path": "content/putnam/2021/problems/B5/hint-3.html",
+      "sha256": "515ec6b908b94defe2ece0a1b25e07d94e5184dfcb8fd8bbcb417a768ed1cf85",
+      "bytes": 2241
+    },
+    {
+      "path": "content/putnam/2021/problems/B5/hint-4.html",
+      "sha256": "a09b9510b15b0cf7293ab4507c3f9448994d1c5cfff91f89b911f64206948edc",
+      "bytes": 1759
+    },
+    {
+      "path": "content/putnam/2021/problems/B5/prerequisite-1.html",
+      "sha256": "908c94e1628c183cb9d52fd31824f664884d6aa5f9564c8b93333c95d153b5e3",
+      "bytes": 1587
+    },
+    {
+      "path": "content/putnam/2021/problems/B5/prerequisite-2.html",
+      "sha256": "fcf7f874c8366b5a3c23178ae03ebde81cfb6d96df5a995a091e0f9e15b2d24e",
+      "bytes": 882
+    },
+    {
+      "path": "content/putnam/2021/problems/B5/prerequisite-3.html",
+      "sha256": "f26a78cb05aeb1678f3e7a68f4efcbb293754229a21ee151557878a4050615e8",
+      "bytes": 895
+    },
+    {
+      "path": "content/putnam/2021/problems/B5/solution.html",
+      "sha256": "b2692c6ceafdecdca389b6ac1dc2405236b3b91e80375b6eba99828ebab8f4ff",
+      "bytes": 31793
+    },
+    {
+      "path": "content/putnam/2021/problems/B5/statement.html",
+      "sha256": "38975dca6ab9dcddab40ebed9adb26f329cb04883f3175eb043b78a0b736545e",
+      "bytes": 10256
+    },
+    {
+      "path": "content/putnam/2021/problems/B6/hint-1.html",
+      "sha256": "608de80c6899f8be63bfc4e63b29eadcba945580d40e757757fc5b140b6db608",
+      "bytes": 3007
+    },
+    {
+      "path": "content/putnam/2021/problems/B6/hint-2.html",
+      "sha256": "a37b952a6e8504e2759e809977e7418d738e5d38096448623b72c2dbd51d9d4c",
+      "bytes": 3214
+    },
+    {
+      "path": "content/putnam/2021/problems/B6/hint-3.html",
+      "sha256": "b90d196c999121f9d510470ea7b0553f5c99d355495b248f2c18c5438832f4b8",
+      "bytes": 13468
+    },
+    {
+      "path": "content/putnam/2021/problems/B6/hint-4.html",
+      "sha256": "1b7b9573e4932e5609c3a1ccbb995c12a38b6d87e223f40b68ab1e22e0da7d53",
+      "bytes": 10775
+    },
+    {
+      "path": "content/putnam/2021/problems/B6/prerequisite-1.html",
+      "sha256": "18715d7faa6f9bf120fff037c4018890ef29fb608f833e6aaf78fa3e682d0479",
+      "bytes": 3316
+    },
+    {
+      "path": "content/putnam/2021/problems/B6/prerequisite-2.html",
+      "sha256": "c1ca8e9f650836f4528dc8a63dad1bece26a6b2d273f72882e8bc08e39b83531",
+      "bytes": 4955
+    },
+    {
+      "path": "content/putnam/2021/problems/B6/prerequisite-3.html",
+      "sha256": "e983f8d389a9fa392c3976cba3c43b41d0c23af0b491dc57860f924e8976db97",
+      "bytes": 9729
+    },
+    {
+      "path": "content/putnam/2021/problems/B6/solution.html",
+      "sha256": "8657e2bce6eec371c8a6058d335f72901352b1c0a4afed08eb231cf192e4ed68",
+      "bytes": 75809
+    },
+    {
+      "path": "content/putnam/2021/problems/B6/statement.html",
+      "sha256": "3a5b9b0f9ff3766eca30c9e66689f007c5cb3c3efb42b88428fe6d0d81f637c2",
+      "bytes": 10948
+    },
+    {
+      "path": "content/shared/content.css",
+      "sha256": "5f5cd01e68d4e1ebe9ee0664b3e3b359190e5579f1e8a0b6b134301ed5ecf046",
+      "bytes": 1226
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_AMS-Regular.ttf",
+      "sha256": "68534840bcfdd2bffb6f0e8deb48684dd01e7f04ea2813267577afb906de1d13",
+      "bytes": 63632
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_AMS-Regular.woff",
+      "sha256": "30da91e84c893f875e252689faebdc590b2871145e8adc7f9a9d4dbd8ce0b251",
+      "bytes": 33516
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_AMS-Regular.woff2",
+      "sha256": "0cdd387c9590a1a9f9794560022dbb59654a7d86f187aa0c81495ad42d3a7308",
+      "bytes": 28076
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Caligraphic-Bold.ttf",
+      "sha256": "07d8e303ce4fc12b4bb54f1004170dd190a1f3db45d400fe68060df3e0897268",
+      "bytes": 12368
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Caligraphic-Bold.woff",
+      "sha256": "1ae6bd7475590e97e7f145a89e09ccde322f7a6bc0b91607b1c8b8ee28290fed",
+      "bytes": 7716
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Caligraphic-Bold.woff2",
+      "sha256": "de7701e42cf1f4cf0b766c03fb27977207eee2f4fd5d76fa82188406da43ea4c",
+      "bytes": 6912
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Caligraphic-Regular.ttf",
+      "sha256": "ed0b74372feefcbb9c0666b2e210da37b7e49fa7fbbf3eeb11db5f693dacfbb7",
+      "bytes": 12344
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Caligraphic-Regular.woff",
+      "sha256": "3398dd02302557a793f2863f88e02d96ce10df2abffa07c8e9fa90775116e65c",
+      "bytes": 7656
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Caligraphic-Regular.woff2",
+      "sha256": "5d53e70ad607c2352162dec9e0923fb54ecdafaccbf604cd8dcf7d00facb989b",
+      "bytes": 6908
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Fraktur-Bold.ttf",
+      "sha256": "9163df9c7122432e6495b4229fa9071cf9ae86a758ae5efc4924ec2e1a6dbce1",
+      "bytes": 19584
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Fraktur-Bold.woff",
+      "sha256": "9be7ceb88004ab8ad124082246fbfcca4091e36385d4ec6ed1df67375dad50fb",
+      "bytes": 13296
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Fraktur-Bold.woff2",
+      "sha256": "74444efd593c005e3f4573b44524704c0af0a937fe911cca9e94068d0d140d3f",
+      "bytes": 11348
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Fraktur-Regular.ttf",
+      "sha256": "1e6f9579e90e2cac37f8f60a597c436e075c114385652b7cbeb0dec0421291b3",
+      "bytes": 19572
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Fraktur-Regular.woff",
+      "sha256": "5e28753be717dac97f559f49bc10be9cf3c124ddcabda6659d11cb68febc6463",
+      "bytes": 13208
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Fraktur-Regular.woff2",
+      "sha256": "51814d270d06ff0255dba0799994fa4d8c84d11f09951d47595f4abb1f3602dc",
+      "bytes": 11316
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Main-Bold.ttf",
+      "sha256": "138ac28d1663b3037e9c5f52371fa5c63d8324f4a38d22cd573e6ea3a3fd0cf8",
+      "bytes": 51336
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Main-Bold.woff",
+      "sha256": "c76c5d696297d51b9cb1639c7da4334f0e7dec81b42b11213b5e25ef671bb822",
+      "bytes": 29912
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Main-Bold.woff2",
+      "sha256": "0f60d1b897938ec918c8ce073092411baf9438f6739465693ff18b0f9d20b021",
+      "bytes": 25324
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Main-BoldItalic.ttf",
+      "sha256": "70ee1f64a20f2048c21940ef46d0144fd215baa953ca69afd1e31e98544f708f",
+      "bytes": 32968
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Main-BoldItalic.woff",
+      "sha256": "a6f7ec0d846ac7ad975adb8959c37ed49b94acbc4ae436db9ce9e20287e4a64c",
+      "bytes": 19412
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Main-BoldItalic.woff2",
+      "sha256": "99cd42a3c072d918f2f44984a807cf7aa16e13545fd0875fc07c6c65f99e715b",
+      "bytes": 16780
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Main-Italic.ttf",
+      "sha256": "0d85ae7cc30f23790a7f1a58c4a112fdca8aae769b6ba11429af1d98b1b6cb3a",
+      "bytes": 33580
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Main-Italic.woff",
+      "sha256": "f1d6ef86f3b11a528bd5185199bd2443ecb2b0dead96d88674b5a2c12be24bdf",
+      "bytes": 19676
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Main-Italic.woff2",
+      "sha256": "97479ca6cce906abc961ecac96faa5f9ca2e61b8e7670d475826bcdee9a7c267",
+      "bytes": 16988
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Main-Regular.ttf",
+      "sha256": "d0332f52868370fd83ae7fa46470f90c8f2eab2fcf12bc4f88080b340c95a830",
+      "bytes": 53580
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Main-Regular.woff",
+      "sha256": "c6368d87e8a1a3a5d337623d83d8dc4b868f242a9ad476237d6f8d1e0f168cdc",
+      "bytes": 30772
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Main-Regular.woff2",
+      "sha256": "c2342cd8b869e01752a9321dc17213fc40d4d04c79688c1d43f2cf316abd7866",
+      "bytes": 26272
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Math-BoldItalic.ttf",
+      "sha256": "f9377ab0271cda59af24bcffbd46a4d0c8a3572ffafdbb38de2ad5ea7b0d5ee5",
+      "bytes": 31196
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Math-BoldItalic.woff",
+      "sha256": "850c0af5c2238497febaf5e461d880bf458c341f42f4f330f1b1ab5698b1998e",
+      "bytes": 18668
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Math-BoldItalic.woff2",
+      "sha256": "dc47344dbb6cb5b655c8460d561f4df5f501b90c804ad3c6cec65fe322351ab1",
+      "bytes": 16400
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Math-Italic.ttf",
+      "sha256": "08ce98e51b04d58945a301e639e02b6998af29fdfd61a7b8afdd07bbfc479d4a",
+      "bytes": 31308
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Math-Italic.woff",
+      "sha256": "8a8d244581371912b8f3f5a23e2437cb2a59cd9bcaebb0346e722c05737a2571",
+      "bytes": 18748
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Math-Italic.woff2",
+      "sha256": "7af58c5ec8f132a2ddde9027c6d7814decce4d3b822a11192a42a20e2e973264",
+      "bytes": 16440
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_SansSerif-Bold.ttf",
+      "sha256": "1ece03f79f95277d57dc7f6b435a74e1379b0d46104a8530286b60ff49369ea0",
+      "bytes": 24504
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_SansSerif-Bold.woff",
+      "sha256": "ece03cfd83e22c212cdef66feb8442d25a083beb988db3f1883f3f9738d750ba",
+      "bytes": 14408
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_SansSerif-Bold.woff2",
+      "sha256": "e99ae51144bf1232efcc1bfe5add36262c6866b0faab24fa75740e1b98577a62",
+      "bytes": 12216
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_SansSerif-Italic.ttf",
+      "sha256": "3931dd81faed86ba021bb2bbdc36f5bed9a38d6b4f4077aca59b265aa1b02083",
+      "bytes": 22364
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_SansSerif-Italic.woff",
+      "sha256": "91ee67500cc0129aa0ace3ac5c61ff1692102f0f31d02b69347fba35dcb75bf2",
+      "bytes": 14112
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_SansSerif-Italic.woff2",
+      "sha256": "00b26ac825e2095056396e0553b8ac26d3f8ad158c3826e28b4c45b385c4714a",
+      "bytes": 12028
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_SansSerif-Regular.ttf",
+      "sha256": "f36ea897e19f4a2e571d1e900e4e3710e438deb05a842486045ba0a3e616a4ad",
+      "bytes": 19436
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_SansSerif-Regular.woff",
+      "sha256": "11e4dc8a6471ff6d6ee561d53d10fde8f7489e798257ff449c5d37c197435605",
+      "bytes": 12316
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_SansSerif-Regular.woff2",
+      "sha256": "68e8c73ef42afd3ccec58bf0fba302cce448938e7fc020a5e31f8a952eee1342",
+      "bytes": 10344
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Script-Regular.ttf",
+      "sha256": "1c67f068fea8bb09bf099c088b1cf64bd27516a6e07f4684344873564bb66a67",
+      "bytes": 16648
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Script-Regular.woff",
+      "sha256": "d96cdf2b3bdd4d64a8fd5f74a4c467f123a8a73931cd435889f08ffaf9bf947a",
+      "bytes": 10588
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Script-Regular.woff2",
+      "sha256": "036d4e95149b69ff9bcc0cd55771efeb25ffa3947293e69acd78d5ac328c684b",
+      "bytes": 9644
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Size1-Regular.ttf",
+      "sha256": "95b6d2f1a50173bfedb8c63e1d1c99b10427d0a4df4201cb44513b226951a22b",
+      "bytes": 12228
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Size1-Regular.woff",
+      "sha256": "c943cc986384f59e86bea5fd7dc50a9c4dfe567a7c05eb40d6790720dead97c9",
+      "bytes": 6496
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Size1-Regular.woff2",
+      "sha256": "6b47c40166b6dbe21a5dfca7718413f2147fd2399be1ba605d8ad39cedf25dfe",
+      "bytes": 5468
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Size2-Regular.ttf",
+      "sha256": "a6b2099fb555c60e3a0db3a08842ebf1d732c6eb4e4bf44913613bed4fc4e39b",
+      "bytes": 11508
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Size2-Regular.woff",
+      "sha256": "2014c523c3210bcc166648c4d4cc57f05b747df07a24277bf71c51e67dc79e3d",
+      "bytes": 6188
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Size2-Regular.woff2",
+      "sha256": "d04c54219f9eaec6d4d4fd42dfb28785975a4794d6b2fc71e566b9cd6db842dd",
+      "bytes": 5208
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Size3-Regular.ttf",
+      "sha256": "500e04d54f0d51666332c9d2089aa803be22aa878eca539e59fa53c6e522b082",
+      "bytes": 7588
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Size3-Regular.woff",
+      "sha256": "6ab6b62e9b62dae2c00dd90f791bd10950be0ecc3490d7d6045f51c2e8fe0949",
+      "bytes": 4420
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Size3-Regular.woff2",
+      "sha256": "73d591271b1604960cb10bb90fee021670af7297017e0e98480b332d11f51995",
+      "bytes": 3624
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Size4-Regular.ttf",
+      "sha256": "c647367d1dd4e162468717d020e1fc0f1dc5c26ebfdffbe55261713bf88c5877",
+      "bytes": 10364
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Size4-Regular.woff",
+      "sha256": "99f9c6750b489c9462bf04900bd3f939df9b829339daaaaa99ef5495cdddea58",
+      "bytes": 5980
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Size4-Regular.woff2",
+      "sha256": "a4af7d414440a1c1790825cfb700cf9cf43b0f2c4b04f0ebc523011ad9853ec0",
+      "bytes": 4928
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Typewriter-Regular.ttf",
+      "sha256": "f01f3e87d9c6a61c0c081ceb577abd864eb00a612f7ac1620dd6915fad2ef5aa",
+      "bytes": 27556
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Typewriter-Regular.woff",
+      "sha256": "e14fed02b1aba7ce9f5afd5844b5d0321b22351febc720e0de8b8723527609f7",
+      "bytes": 16028
+    },
+    {
+      "path": "content/shared/katex/fonts/KaTeX_Typewriter-Regular.woff2",
+      "sha256": "71d517d67827787cfabdf186914cc3358eda539e37931941f2b2fd4a21f68c0b",
+      "bytes": 13568
+    },
+    {
+      "path": "content/shared/katex/katex.min.css",
+      "sha256": "b9ce0e8ce93f0c18c4986fe1f1c3c269d921b56a69e6c97f83a507916b38aab5",
+      "bytes": 24788
+    }
+  ],
+  "catalogSha256": "7909387b7112485799023cd039ffd7a4b9d0af9c769ca776d0666fb77528086f",
+  "manifestSha256": "cad335d327639208585461d5b16204bd26d60ff1d6bb75f309aaff897818c8e9"
+}

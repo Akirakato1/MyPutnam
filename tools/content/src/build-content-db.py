@@ -288,7 +288,32 @@ def build_archive_database(manifests, catalog, archive_catalog, output_path):
     )
 
 
-def _build_database(manifests, catalog, output_path, *, content_version, build_kind, manifest_sha256):
+def build_release_database(manifests, catalog, release, output_path):
+    """Atomically create a schema-v3 database for one explicit progressive release."""
+    normalized_catalog = _load_json_value(catalog)
+    normalized_release = _load_json_value(release)
+    normalized_manifests = sorted(
+        (_load_json_value(manifest) for manifest in manifests),
+        key=lambda item: (item["collectionId"], item["setId"]),
+    )
+    _validate_library_catalog(normalized_catalog)
+    _validate_release(normalized_release, normalized_manifests)
+    _validate_manifests(normalized_manifests, normalized_catalog)
+    _build_database(
+        normalized_manifests,
+        normalized_catalog,
+        output_path,
+        content_version=normalized_release["contentVersion"],
+        build_kind="release",
+        release_id=normalized_release["releaseId"],
+        manifest_sha256=_sha256(normalized_manifests),
+    )
+
+
+def _build_database(
+    manifests, catalog, output_path, *, content_version, build_kind, manifest_sha256,
+    release_id="",
+):
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     file_descriptor, temporary_name = tempfile.mkstemp(
@@ -301,7 +326,10 @@ def _build_database(manifests, catalog, output_path, *, content_version, build_k
             with database:
                 database.execute("PRAGMA foreign_keys = ON")
                 database.executescript(SCHEMA_PATH.read_text(encoding="utf-8"))
-                _insert_v3(database, manifests, catalog, content_version, build_kind, manifest_sha256)
+                _insert_v3(
+                    database, manifests, catalog, content_version, build_kind,
+                    manifest_sha256, release_id,
+                )
                 violations = database.execute("PRAGMA foreign_key_check").fetchall()
                 if violations:
                     raise ValueError(f"Foreign-key violations: {violations}")
@@ -353,6 +381,24 @@ def _validate_archive_catalog(archive_catalog, manifests):
             raise ValueError("Putnam archive set IDs must be competition years") from None
     if sorted(manifest_years) != targets:
         raise ValueError(f"Archive target years {targets} do not match manifest years {sorted(manifest_years)}")
+
+
+def _validate_release(release, manifests):
+    if release.get("schemaVersion") != 1 or release.get("contentSchemaVersion") != 3:
+        raise ValueError("Release manifest must use schema 1 and content schema 3")
+    for field in ("releaseId", "contentVersion", "appVersionName"):
+        if not isinstance(release.get(field), str) or not release[field]:
+            raise ValueError(f"Release manifest {field} must be a nonempty string")
+    if not isinstance(release.get("appVersionCode"), int) or release["appVersionCode"] < 1:
+        raise ValueError("Release manifest appVersionCode must be positive")
+    included_sets = release.get("includedSets")
+    if not isinstance(included_sets, list) or included_sets != sorted(set(included_sets)):
+        raise ValueError("Release includedSets must be unique and strictly ascending")
+    manifest_sets = [f"{item.get('collectionId')}/{item.get('setId')}" for item in manifests]
+    if manifest_sets != included_sets:
+        raise ValueError(
+            f"Release selected sets {included_sets} do not match manifest sets {manifest_sets}"
+        )
 
 
 def _validate_manifests(manifests, catalog):
@@ -444,7 +490,10 @@ def _validate_asset_reference(reference, asset_hashes, collection_id, set_id):
         raise ValueError(f"Problem asset reference is missing or stale: {path}")
 
 
-def _insert_v3(database, manifests, catalog, content_version, build_kind, manifest_sha256):
+def _insert_v3(
+    database, manifests, catalog, content_version, build_kind, manifest_sha256,
+    release_id="",
+):
     installed_sets = {(manifest["collectionId"], manifest["setId"]) for manifest in manifests}
     installed_collection_ids = {collection_id for collection_id, _ in installed_sets}
     collections = sorted(
@@ -488,7 +537,7 @@ def _insert_v3(database, manifests, catalog, content_version, build_kind, manife
         ("schema_version", str(CONTENT_SCHEMA_VERSION)),
         ("content_version", content_version),
         ("build_kind", build_kind),
-        ("release_id", ""),
+        ("release_id", release_id),
         ("catalog_sha256", _sha256(catalog)),
         ("manifest_sha256", manifest_sha256),
         ("collection_count", str(len(collections))),
@@ -554,13 +603,23 @@ def parse_arguments():
     parser.add_argument("--manifest", type=Path, action="append", required=True)
     parser.add_argument("--catalog", type=Path, required=True)
     parser.add_argument("--archive-catalog", type=Path)
+    parser.add_argument("--release", type=Path)
     parser.add_argument("--output", required=True, type=Path)
     return parser.parse_args()
 
 
 def main():
     arguments = parse_arguments()
-    if arguments.archive_catalog:
+    if arguments.archive_catalog and arguments.release:
+        raise ValueError("--archive-catalog and --release are mutually exclusive")
+    if arguments.release:
+        build_release_database(
+            arguments.manifest,
+            arguments.catalog,
+            arguments.release,
+            arguments.output,
+        )
+    elif arguments.archive_catalog:
         build_archive_database(
             arguments.manifest,
             arguments.catalog,
