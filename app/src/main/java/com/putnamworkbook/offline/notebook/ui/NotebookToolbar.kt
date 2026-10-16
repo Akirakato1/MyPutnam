@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.IconButton
@@ -37,7 +36,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.putnamworkbook.offline.domain.model.BrushSpec
 import com.putnamworkbook.offline.notebook.edit.NotebookToolMode
-import kotlin.math.roundToInt
 
 const val UNDO_TEST_TAG = "notebook-undo"
 const val REDO_TEST_TAG = "notebook-redo"
@@ -93,15 +91,7 @@ fun NotebookToolbar(
             ToolbarIconButton("Add page", ToolbarGlyph.ADD_PAGE, onAddPage)
             ToolbarIconButton("Clear page", ToolbarGlyph.CLEAR_PAGE, onClearPage)
             ToolbarIconButton("Delete page", ToolbarGlyph.DELETE_PAGE, onDeletePage)
-            Text(
-                when (saveState) {
-                    NotebookSaveState.SAVING -> "Saving…"
-                    NotebookSaveState.SAVED -> "Saved"
-                    NotebookSaveState.ERROR -> "Save failed"
-                    NotebookSaveState.LOADING -> "Loading…"
-                    NotebookSaveState.IDLE -> ""
-                },
-            )
+            SaveStateIndicator(saveState)
             Spacer(Modifier.weight(1f))
             ToolbarIconButton(
                 description = "Previous page",
@@ -132,7 +122,7 @@ fun NotebookToolbar(
                         .testTag(BRUSH_COLOR_PALETTE_TEST_TAG)
                         .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(24.dp))
                         .selectableGroup()
-                        .padding(horizontal = 4.dp, vertical = 2.dp),
+                        .padding(vertical = 2.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     NOTEBOOK_BRUSH_COLORS.forEach { choice ->
@@ -143,14 +133,15 @@ fun NotebookToolbar(
                         )
                     }
                 }
-                Spacer(Modifier.width(8.dp))
-                Text("Width ${brush.width.roundToInt()}")
                 Slider(
                     value = brush.width,
                     onValueChange = { width -> onBrushChanged(brush.copy(width = width)) },
                     valueRange = 1f..12f,
                     steps = 10,
-                    modifier = Modifier.weight(1f).testTag(BRUSH_WIDTH_TEST_TAG),
+                    modifier = Modifier
+                        .weight(1f)
+                        .testTag(BRUSH_WIDTH_TEST_TAG)
+                        .semantics { contentDescription = "Pen width" },
                 )
             }
         } else {
@@ -205,7 +196,6 @@ private fun ToolbarIconButton(
     val content = enabledContent.copy(alpha = if (enabled) 1f else 0.38f)
     Box(
         modifier = Modifier
-            .padding(horizontal = 2.dp)
             .clip(CircleShape)
             .background(container),
     ) {
@@ -218,6 +208,35 @@ private fun ToolbarIconButton(
         ) {
             ToolbarGlyphCanvas(glyph, content)
         }
+    }
+}
+
+@Composable
+private fun SaveStateIndicator(saveState: NotebookSaveState) {
+    val description = when (saveState) {
+        NotebookSaveState.SAVING -> "Saving"
+        NotebookSaveState.SAVED -> "Saved"
+        NotebookSaveState.ERROR -> "Save failed"
+        NotebookSaveState.LOADING -> "Loading"
+        NotebookSaveState.IDLE -> null
+    }
+    val glyph = when (saveState) {
+        NotebookSaveState.SAVING, NotebookSaveState.LOADING -> ToolbarGlyph.SAVE_WORKING
+        NotebookSaveState.SAVED -> ToolbarGlyph.SAVE_SAVED
+        NotebookSaveState.ERROR -> ToolbarGlyph.SAVE_ERROR
+        NotebookSaveState.IDLE -> null
+    }
+    val color = when (saveState) {
+        NotebookSaveState.ERROR -> MaterialTheme.colorScheme.error
+        else -> MaterialTheme.colorScheme.onSurfaceVariant
+    }
+    Box(
+        modifier = Modifier
+            .size(SAVE_STATUS_SIZE)
+            .semantics { description?.let { contentDescription = it } },
+        contentAlignment = Alignment.Center,
+    ) {
+        if (glyph != null) ToolbarGlyphCanvas(glyph, color)
     }
 }
 
@@ -273,6 +292,9 @@ private enum class ToolbarGlyph {
     COPY,
     PASTE,
     DELETE_SELECTION,
+    SAVE_WORKING,
+    SAVE_SAVED,
+    SAVE_ERROR,
 }
 
 @Composable
@@ -428,11 +450,34 @@ private fun ToolbarGlyphCanvas(glyph: ToolbarGlyph, color: Color) {
                 drawLine(color, point(0.38f, 0.38f), point(0.62f, 0.62f), strokeWidth, StrokeCap.Round)
                 drawLine(color, point(0.62f, 0.38f), point(0.38f, 0.62f), strokeWidth, StrokeCap.Round)
             }
+            ToolbarGlyph.SAVE_WORKING -> {
+                drawArc(
+                    color = color,
+                    startAngle = -70f,
+                    sweepAngle = 280f,
+                    useCenter = false,
+                    topLeft = point(0.18f, 0.18f),
+                    size = androidx.compose.ui.geometry.Size(size.width * 0.64f, size.height * 0.64f),
+                    style = line,
+                )
+                drawLine(color, point(0.76f, 0.18f), point(0.82f, 0.38f), strokeWidth, StrokeCap.Round)
+                drawLine(color, point(0.76f, 0.18f), point(0.56f, 0.24f), strokeWidth, StrokeCap.Round)
+            }
+            ToolbarGlyph.SAVE_SAVED -> {
+                drawLine(color, point(0.18f, 0.52f), point(0.42f, 0.76f), strokeWidth, StrokeCap.Round)
+                drawLine(color, point(0.42f, 0.76f), point(0.84f, 0.26f), strokeWidth, StrokeCap.Round)
+            }
+            ToolbarGlyph.SAVE_ERROR -> {
+                drawCircle(color, size.width * 0.34f, point(0.50f, 0.50f), style = line)
+                drawLine(color, point(0.50f, 0.30f), point(0.50f, 0.56f), strokeWidth, StrokeCap.Round)
+                drawCircle(color, strokeWidth * 0.6f, point(0.50f, 0.70f))
+            }
         }
     }
 }
 
 private val CONTEXT_TOOLBAR_HEIGHT = 52.dp
+private val SAVE_STATUS_SIZE = 24.dp
 
 private data class NotebookBrushColor(
     val label: String,

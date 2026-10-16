@@ -16,6 +16,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.width
 import com.putnamworkbook.offline.domain.model.BrushSpec
 import com.putnamworkbook.offline.domain.model.PaperStyle
 import com.putnamworkbook.offline.domain.model.ProblemKey
@@ -125,7 +126,7 @@ class NotebookPaneTest {
         )
         composeRule.setContent {
             NotebookPane(
-                state = NotebookUiState(document = document),
+                state = NotebookUiState(document = document, saveState = NotebookSaveState.SAVED),
                 brush = BrushSpec(),
                 onStrokeFinished = {},
                 onUndo = {},
@@ -137,6 +138,7 @@ class NotebookPaneTest {
                 onConfirmClearPage = {},
                 onDismissConfirmation = {},
                 onSelectPage = {},
+                modifier = Modifier.width(504.dp),
             )
         }
 
@@ -151,6 +153,32 @@ class NotebookPaneTest {
         val pageBounds = composeRule.onNodeWithTag(PAGE_INDEX_TEST_TAG).getUnclippedBoundsInRoot()
         assertTrue("Page navigation must share the main toolbar row", modeBounds.top < pageBounds.bottom)
         assertTrue("Page navigation must share the main toolbar row", pageBounds.top < modeBounds.bottom)
+
+        val toolbarBounds = composeRule.onNodeWithTag(NOTEBOOK_TOOLBAR_TEST_TAG).getUnclippedBoundsInRoot()
+        listOf(
+            "Pen mode",
+            "Undo",
+            "Redo",
+            "Add page",
+            "Clear page",
+            "Delete page",
+            "Previous page",
+            "Next page",
+        ).forEach { label ->
+            val bounds = composeRule.onNodeWithContentDescription(label).getUnclippedBoundsInRoot()
+            assertTrue("$label must retain a 48dp target at 504dp pane width", bounds.right - bounds.left >= 48.dp)
+            assertTrue("$label must remain inside the toolbar", bounds.left >= toolbarBounds.left)
+            assertTrue("$label must remain inside the toolbar", bounds.right <= toolbarBounds.right)
+        }
+        assertTrue("Page index must remain inside the toolbar", pageBounds.right <= toolbarBounds.right)
+        val saveBounds = composeRule.onNodeWithContentDescription("Saved").getUnclippedBoundsInRoot()
+        assertTrue("Save indicator must remain inside the toolbar", saveBounds.right <= toolbarBounds.right)
+
+        val paletteBounds = composeRule.onNodeWithTag(BRUSH_COLOR_PALETTE_TEST_TAG).getUnclippedBoundsInRoot()
+        val sliderBounds = composeRule.onNodeWithTag(BRUSH_WIDTH_TEST_TAG).getUnclippedBoundsInRoot()
+        assertTrue("Eight 48dp colors must remain fully visible", paletteBounds.right - paletteBounds.left >= 384.dp)
+        assertTrue("Pen-width slider must retain usable width", sliderBounds.right - sliderBounds.left >= 120.dp)
+        assertTrue("Pen-width slider must remain inside the toolbar", sliderBounds.right <= toolbarBounds.right)
     }
 
     @Test

@@ -128,7 +128,8 @@ class NotebookSelectionTest {
                 }
             assertEquals(width.toFloat(), brush.width)
         }
-        composeRule.onNodeWithText("Width 12").assertExists()
+        composeRule.onNodeWithTag(BRUSH_WIDTH_TEST_TAG).assertContentDescriptionEquals("Pen width")
+        composeRule.onNodeWithText("Width 12").assertDoesNotExist()
 
         composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).performClick()
         composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).assertContentDescriptionEquals("Select mode")
