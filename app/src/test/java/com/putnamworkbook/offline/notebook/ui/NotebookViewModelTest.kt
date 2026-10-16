@@ -13,7 +13,11 @@ import com.putnamworkbook.offline.notebook.storage.NotebookRepository
 import com.putnamworkbook.offline.notebook.edit.NotebookClipboard
 import com.putnamworkbook.offline.notebook.edit.CanvasViewport
 import com.putnamworkbook.offline.notebook.edit.NormalizedRect
+import com.putnamworkbook.offline.notebook.edit.NormalizedPoint
 import com.putnamworkbook.offline.notebook.edit.NotebookToolMode
+import com.putnamworkbook.offline.notebook.edit.SelectionCorner
+import com.putnamworkbook.offline.notebook.edit.SelectionFlipAxis
+import com.putnamworkbook.offline.notebook.edit.corner
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -451,6 +455,180 @@ class NotebookViewModelTest {
     }
 
     @Test
+    fun rotationSnapDefaultsOffAndCanBeToggled() = runBlocking {
+        val repository = FileNotebookRepository(temporaryFolder.newFolder("rotation-snap").toPath())
+        val viewModel = viewModel(repository, FakeSettingsRepository(), wait = { })
+
+        viewModel.open(key)
+        viewModel.awaitIdle()
+        assertFalse(viewModel.uiState.value.rotationSnapEnabled)
+        viewModel.setRotationSnapEnabled(true)
+        assertTrue(viewModel.uiState.value.rotationSnapEnabled)
+
+        viewModel.open(ProblemKey("putnam", "2025", "A2"))
+        viewModel.awaitIdle()
+        assertFalse(viewModel.uiState.value.rotationSnapEnabled)
+        viewModel.close()
+    }
+
+    @Test
+    fun viewportResizeCancelsPreviewAndRebuildsAxisAlignedFrame() = runBlocking {
+        val portrait = CanvasViewport(320f, 640f)
+        val landscape = CanvasViewport(1_200f, 600f)
+        val viewModel = selectedViewModel(
+            "rotation-resize",
+            portrait,
+            strokeAt("shape", 0.4f, 0.45f, 0.6f, 0.55f),
+        )
+
+        viewModel.previewRotation(degrees(30f))
+        assertTrue(viewModel.uiState.value.selection!!.previewStrokes != null)
+        assertTrue(viewModel.uiState.value.selection!!.previewFrame != null)
+
+        viewModel.updateViewport(landscape)
+        val selection = viewModel.uiState.value.selection!!
+        assertNull(selection.previewStrokes)
+        assertNull(selection.previewFrame)
+        assertEquals(0f, selection.frame.rotationRadians, 0f)
+        assertEquals(landscape, selection.frame.viewport)
+        viewModel.close()
+    }
+
+    @Test
+    fun invalidRotationPreviewKeepsTheLastValidPreview() = runBlocking {
+        val viewport = CanvasViewport(100f, 100f)
+        val diagonal = StrokeRecord(
+            id = "diagonal",
+            brush = BrushSpec(width = 20f),
+            samples = listOf(
+                StrokeSample(0.1f, 0.1f, 0L, 0.25f),
+                StrokeSample(0.9f, 0.9f, 10L, 0.75f),
+            ),
+        )
+        val viewModel = selectedViewModel("invalid-rotation", viewport, diagonal)
+
+        viewModel.previewRotation(degrees(90f))
+        val lastValid = viewModel.uiState.value.selection!!
+        val lastValidSamples = lastValid.previewStrokes!!.single().samples
+        assertEquals(degrees(90f), lastValid.previewFrame!!.rotationRadians, 0.0001f)
+
+        viewModel.previewRotation(degrees(45f))
+        val afterInvalid = viewModel.uiState.value.selection!!
+        assertEquals(lastValidSamples, afterInvalid.previewStrokes!!.single().samples)
+        assertEquals(degrees(90f), afterInvalid.previewFrame!!.rotationRadians, 0.0001f)
+        viewModel.close()
+    }
+
+    @Test
+    fun rotationCommitUsesLatestPreviewAsOneEditGroup() = runBlocking {
+        val repository = FileNotebookRepository(temporaryFolder.newFolder("rotation-commit").toPath())
+        val viewModel = viewModel(repository, FakeSettingsRepository(), wait = { })
+        val original = strokeAt("original", 0.4f, 0.45f, 0.6f, 0.55f)
+        val viewport = CanvasViewport(1_000f, 1_000f)
+        viewModel.open(key)
+        viewModel.awaitIdle()
+        viewModel.commitStroke(original)
+        viewModel.awaitIdle()
+        viewModel.setToolMode(NotebookToolMode.SELECT)
+        viewModel.select(NormalizedRect(0f, 0f, 1f, 1f), viewport)
+
+        viewModel.previewRotation(degrees(15f))
+        viewModel.previewRotation(degrees(30f))
+        val latestPreview = viewModel.uiState.value.selection!!.previewStrokes!!.single()
+        viewModel.commitRotationPreview()
+
+        assertEquals(latestPreview, viewModel.uiState.value.strokes.single())
+        assertEquals(degrees(30f), viewModel.uiState.value.selection!!.frame.rotationRadians, 0.0001f)
+        assertTrue(viewModel.uiState.value.strokes.none { it.id == original.id })
+        viewModel.awaitIdle()
+
+        viewModel.undo()
+        viewModel.awaitIdle()
+        assertEquals(original.samples, viewModel.uiState.value.strokes.single().samples)
+        assertEquals(original.id, viewModel.uiState.value.strokes.single().id)
+        viewModel.close()
+    }
+
+    @Test
+    fun eachFlipIsOneUndoableReplacement() = runBlocking {
+        val repository = FileNotebookRepository(temporaryFolder.newFolder("selection-flips").toPath())
+        val viewModel = viewModel(repository, FakeSettingsRepository(), wait = { })
+        val original = strokeAt("shape", 0.3f, 0.4f, 0.6f, 0.55f)
+        val viewport = CanvasViewport(1_000f, 1_000f)
+        viewModel.open(key)
+        viewModel.awaitIdle()
+        viewModel.commitStroke(original)
+        viewModel.awaitIdle()
+        viewModel.setToolMode(NotebookToolMode.SELECT)
+        viewModel.select(NormalizedRect(0f, 0f, 1f, 1f), viewport)
+        val baselineAppliedEdits = viewModel.uiState.value.document!!.pages.single().appliedEditCount
+
+        viewModel.flipSelection(SelectionFlipAxis.HORIZONTAL)
+        val horizontal = viewModel.uiState.value.strokes.single().samples
+        assertEquals(
+            baselineAppliedEdits + 1,
+            viewModel.uiState.value.document!!.pages.single().appliedEditCount,
+        )
+        viewModel.awaitIdle()
+        viewModel.undo()
+        viewModel.awaitIdle()
+        assertEquals(original.samples, viewModel.uiState.value.strokes.single().samples)
+
+        viewModel.select(NormalizedRect(0f, 0f, 1f, 1f), viewport)
+        viewModel.flipSelection(SelectionFlipAxis.VERTICAL)
+        val vertical = viewModel.uiState.value.strokes.single().samples
+        assertNotEquals(horizontal, vertical)
+        assertEquals(
+            baselineAppliedEdits + 1,
+            viewModel.uiState.value.document!!.pages.single().appliedEditCount,
+        )
+        viewModel.awaitIdle()
+        viewModel.undo()
+        viewModel.awaitIdle()
+        assertEquals(original.samples, viewModel.uiState.value.strokes.single().samples)
+        viewModel.close()
+    }
+
+    @Test
+    fun moveAndScalePreserveSelectionAngle() = runBlocking {
+        val viewport = CanvasViewport(1_000f, 1_000f)
+        val viewModel = selectedViewModel(
+            "oriented-move-scale",
+            viewport,
+            strokeAt("shape", 0.4f, 0.45f, 0.6f, 0.55f),
+        )
+        viewModel.previewRotation(degrees(30f))
+        viewModel.commitRotationPreview()
+        assertEquals(degrees(30f), viewModel.uiState.value.selection!!.frame.rotationRadians, 0.0001f)
+
+        viewModel.previewMove(0.05f, 0.03f)
+        assertEquals(
+            degrees(30f),
+            viewModel.uiState.value.selection!!.previewFrame!!.rotationRadians,
+            0.0001f,
+        )
+        viewModel.commitMove(0.05f, 0.03f)
+        assertEquals(degrees(30f), viewModel.uiState.value.selection!!.frame.rotationRadians, 0.0001f)
+
+        val frame = viewModel.uiState.value.selection!!.frame
+        val anchor = frame.corner(SelectionCorner.BOTTOM_LEFT)
+        val handle = frame.corner(SelectionCorner.TOP_RIGHT)
+        val target = NormalizedPoint(
+            x = anchor.x + (handle.x - anchor.x) * 1.2f,
+            y = anchor.y + (handle.y - anchor.y) * 1.2f,
+        )
+        viewModel.previewScale(SelectionCorner.TOP_RIGHT, target)
+        assertEquals(
+            degrees(30f),
+            viewModel.uiState.value.selection!!.previewFrame!!.rotationRadians,
+            0.0001f,
+        )
+        viewModel.commitScale(SelectionCorner.TOP_RIGHT, target)
+        assertEquals(degrees(30f), viewModel.uiState.value.selection!!.frame.rotationRadians, 0.0001f)
+        viewModel.close()
+    }
+
+    @Test
     fun newPagesUseCurrentDefaultWithoutChangingExistingPages() = runBlocking {
         val repository = FileNotebookRepository(temporaryFolder.newFolder("defaults").toPath())
         val settings = FakeSettingsRepository()
@@ -512,6 +690,22 @@ class NotebookViewModelTest {
         clipboard: NotebookClipboard = NotebookClipboard(),
     ) = NotebookViewModel(repository, settings, CoroutineScope(Dispatchers.Default), wait, clipboard)
 
+    private suspend fun selectedViewModel(
+        folder: String,
+        viewport: CanvasViewport,
+        vararg strokes: StrokeRecord,
+    ): NotebookViewModel {
+        val repository = FileNotebookRepository(temporaryFolder.newFolder(folder).toPath())
+        val viewModel = viewModel(repository, FakeSettingsRepository(), wait = { })
+        viewModel.open(key)
+        viewModel.awaitIdle()
+        strokes.forEach(viewModel::commitStroke)
+        viewModel.awaitIdle()
+        viewModel.setToolMode(NotebookToolMode.SELECT)
+        viewModel.select(NormalizedRect(0f, 0f, 1f, 1f), viewport)
+        return viewModel
+    }
+
     private suspend fun assertBrushSurvivesDelayedOperation(
         folder: String,
         blockedCall: GatedCall,
@@ -551,6 +745,8 @@ class NotebookViewModelTest {
             StrokeSample(x2, y2, 10L, null),
         ),
     )
+
+    private fun degrees(value: Float): Float = Math.toRadians(value.toDouble()).toFloat()
 
     private companion object {
         val OLD_BRUSH = BrushSpec(colorArgb = 0xFF1D4ED8L, width = 4f)

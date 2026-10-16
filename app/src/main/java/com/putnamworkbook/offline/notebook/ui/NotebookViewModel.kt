@@ -17,11 +17,14 @@ import com.putnamworkbook.offline.notebook.edit.NotebookSelectionState
 import com.putnamworkbook.offline.notebook.edit.NotebookToolMode
 import com.putnamworkbook.offline.notebook.edit.NormalizedPoint
 import com.putnamworkbook.offline.notebook.edit.NormalizedRect
+import com.putnamworkbook.offline.notebook.edit.OrientedSelectionFrame
 import com.putnamworkbook.offline.notebook.edit.SelectionCorner
+import com.putnamworkbook.offline.notebook.edit.SelectionFlipAxis
 import com.putnamworkbook.offline.notebook.edit.StrokeTransform
 import com.putnamworkbook.offline.notebook.edit.intersects
 import com.putnamworkbook.offline.notebook.edit.selectionBounds
 import com.putnamworkbook.offline.notebook.edit.toOrientedFrame
+import com.putnamworkbook.offline.notebook.edit.snapRotationRadians
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -69,6 +72,7 @@ class NotebookViewModel(
 
     fun open(key: ProblemKey, initialPageIndex: Int = 0) {
         currentKey = key
+        mutableUiState.update { it.copy(rotationSnapEnabled = false) }
         launchOperation(NotebookSaveState.LOADING) {
             val openingBrushRevision = brushRevision.get()
             val settings = settingsRepository.observe().first()
@@ -155,19 +159,27 @@ class NotebookViewModel(
         )
     }
 
+    fun setRotationSnapEnabled(enabled: Boolean) {
+        mutableUiState.value = mutableUiState.value.copy(rotationSnapEnabled = enabled)
+    }
+
     fun updateViewport(viewport: CanvasViewport) {
         mutableUiState.update { current ->
             val selectedIds = current.selection?.selectedStrokeIds
             val selected = if (selectedIds == null) {
                 emptyList()
             } else {
-                current.selection.previewStrokes
-                    ?: current.strokes.filter { it.id in selectedIds }
+                current.strokes.filter { it.id in selectedIds }
             }
+            val viewportChanged = current.canvasViewport != null && current.canvasViewport != viewport
             current.copy(
                 canvasViewport = viewport,
                 selection = current.selection?.let { selection ->
-                    selected.selectionBounds(viewport)?.let { bounds -> selection.copy(bounds = bounds) }
+                    if (viewportChanged) {
+                        selected.selectionState(viewport)
+                    } else {
+                        selection
+                    }
                 },
                 clipboardHasContent = clipboard.hasContent,
             )
@@ -184,43 +196,116 @@ class NotebookViewModel(
 
     fun previewMove(dx: Float, dy: Float) {
         val viewport = mutableUiState.value.canvasViewport ?: return
+        val selection = mutableUiState.value.selection ?: return
         val selected = selectedStrokes()
         val replacements = StrokeTransform.move(selected, dx, dy, viewport) { "preview-${UUID.randomUUID()}" }
-        updatePreview(replacements)
+        val replacementBounds = replacements.selectionBounds(viewport) ?: return
+        val oldCenter = selection.bounds.center()
+        val newCenter = replacementBounds.center()
+        updatePreview(
+            replacements,
+            selection.frame.copy(
+                center = NormalizedPoint(
+                    x = selection.frame.center.x + newCenter.x - oldCenter.x,
+                    y = selection.frame.center.y + newCenter.y - oldCenter.y,
+                ),
+            ),
+        )
     }
 
     fun commitMove(dx: Float, dy: Float) {
         val viewport = mutableUiState.value.canvasViewport ?: return
+        val selection = mutableUiState.value.selection ?: return
+        if (selection.previewStrokes != null && selection.previewFrame != null) {
+            commitPreviewedReplacement(viewport)
+            return
+        }
         val selected = selectedStrokes()
         if (selected.isEmpty()) return
+        val replacements = StrokeTransform.move(selected, dx, dy, viewport) { UUID.randomUUID().toString() }
+        val replacementBounds = replacements.selectionBounds(viewport) ?: return
+        val oldCenter = selection.bounds.center()
+        val newCenter = replacementBounds.center()
         commitReplacement(
             selected,
-            StrokeTransform.move(selected, dx, dy, viewport) { UUID.randomUUID().toString() },
+            replacements,
             viewport,
+            selection.frame.copy(
+                center = NormalizedPoint(
+                    x = selection.frame.center.x + newCenter.x - oldCenter.x,
+                    y = selection.frame.center.y + newCenter.y - oldCenter.y,
+                ),
+            ),
         )
     }
 
     fun previewScale(corner: SelectionCorner, target: NormalizedPoint) {
         val viewport = mutableUiState.value.canvasViewport ?: return
         val selection = mutableUiState.value.selection ?: return
-        val replacements = StrokeTransform.scaleFromCorner(
-            selectedStrokes(), selection.bounds, corner, target, viewport,
+        val result = StrokeTransform.scaleFromCorner(
+            selectedStrokes(), selection.frame, corner, target, viewport,
         ) { "preview-${UUID.randomUUID()}" }
-        updatePreview(replacements)
+        updatePreview(result.strokes, result.frame)
     }
 
     fun commitScale(corner: SelectionCorner, target: NormalizedPoint) {
         val viewport = mutableUiState.value.canvasViewport ?: return
         val selection = mutableUiState.value.selection ?: return
+        if (selection.previewStrokes != null && selection.previewFrame != null) {
+            commitPreviewedReplacement(viewport)
+            return
+        }
         val selected = selectedStrokes()
         if (selected.isEmpty()) return
+        val result = StrokeTransform.scaleFromCorner(
+            selected, selection.frame, corner, target, viewport,
+        ) { UUID.randomUUID().toString() }
         commitReplacement(
             selected,
-            StrokeTransform.scaleFromCorner(selected, selection.bounds, corner, target, viewport) {
-                UUID.randomUUID().toString()
-            },
+            result.strokes,
             viewport,
+            result.frame,
         )
+    }
+
+    fun previewRotation(requestedAngleRadians: Float) {
+        val state = mutableUiState.value
+        val viewport = state.canvasViewport ?: return
+        val selection = state.selection ?: return
+        val selected = selectedStrokes()
+        if (selected.isEmpty()) return
+        val requested = if (state.rotationSnapEnabled) {
+            snapRotationRadians(requestedAngleRadians)
+        } else {
+            requestedAngleRadians
+        }
+        val result = StrokeTransform.rotate(
+            selected,
+            selection.frame,
+            requested,
+            viewport,
+        ) { "preview-${UUID.randomUUID()}" } ?: return
+        updatePreview(result.strokes, result.frame)
+    }
+
+    fun commitRotationPreview() {
+        val viewport = mutableUiState.value.canvasViewport ?: return
+        commitPreviewedReplacement(viewport)
+    }
+
+    fun flipSelection(axis: SelectionFlipAxis) {
+        val state = mutableUiState.value
+        val viewport = state.canvasViewport ?: return
+        val selection = state.selection ?: return
+        val selected = selectedStrokes()
+        if (selected.isEmpty()) return
+        val result = StrokeTransform.flip(
+            selected,
+            selection.frame,
+            axis,
+            viewport,
+        ) { UUID.randomUUID().toString() }
+        commitReplacement(selected, result.strokes, viewport, result.frame)
     }
 
     fun copySelection() {
@@ -270,7 +355,7 @@ class NotebookViewModel(
     fun cancelTransformPreview() {
         val selection = mutableUiState.value.selection ?: return
         mutableUiState.value = mutableUiState.value.copy(
-            selection = selection.copy(previewStrokes = null),
+            selection = selection.copy(previewStrokes = null, previewFrame = null),
         )
     }
 
@@ -506,6 +591,7 @@ class NotebookViewModel(
         originals: List<StrokeRecord>,
         replacements: List<StrokeRecord>,
         viewport: CanvasViewport,
+        frame: OrientedSelectionFrame,
     ) {
         commitOptimisticEdit(
             NotebookEdit(
@@ -516,8 +602,17 @@ class NotebookViewModel(
                 ),
                 replacements,
             ),
-            selectionAfter = replacements.selectionState(viewport),
+            selectionAfter = replacements.selectionState(viewport, frame),
         )
+    }
+
+    private fun commitPreviewedReplacement(viewport: CanvasViewport) {
+        val selection = mutableUiState.value.selection ?: return
+        val replacements = selection.previewStrokes ?: return
+        val frame = selection.previewFrame ?: return
+        val originals = selectedStrokes()
+        if (originals.isEmpty() || replacements.isEmpty()) return
+        commitReplacement(originals, replacements, viewport, frame)
     }
 
     private fun commitOptimisticEdit(
@@ -558,21 +653,32 @@ class NotebookViewModel(
         return mutableUiState.value.strokes.filter { it.id in ids }
     }
 
-    private fun updatePreview(replacements: List<StrokeRecord>) {
+    private fun updatePreview(
+        replacements: List<StrokeRecord>,
+        frame: OrientedSelectionFrame,
+    ) {
         val selection = mutableUiState.value.selection ?: return
         mutableUiState.value = mutableUiState.value.copy(
-            selection = selection.copy(previewStrokes = replacements),
+            selection = selection.copy(previewStrokes = replacements, previewFrame = frame),
         )
     }
 
-    private fun List<StrokeRecord>.selectionState(viewport: CanvasViewport): NotebookSelectionState? {
+    private fun List<StrokeRecord>.selectionState(
+        viewport: CanvasViewport,
+        frame: OrientedSelectionFrame? = null,
+    ): NotebookSelectionState? {
         val bounds = selectionBounds(viewport) ?: return null
         return NotebookSelectionState(
             selectedStrokeIds = mapTo(linkedSetOf()) { it.id },
             bounds = bounds,
-            frame = bounds.toOrientedFrame(viewport),
+            frame = frame ?: bounds.toOrientedFrame(viewport),
         )
     }
+
+    private fun NormalizedRect.center(): NormalizedPoint = NormalizedPoint(
+        x = (left + right) / 2f,
+        y = (top + bottom) / 2f,
+    )
 }
 
 private data class BrushPersistenceFailure(

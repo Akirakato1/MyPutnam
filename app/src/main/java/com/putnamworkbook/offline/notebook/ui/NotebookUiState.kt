@@ -37,4 +37,5 @@ data class NotebookUiState(
     val clipboardHasContent: Boolean = false,
     val brush: BrushSpec = BrushSpec(),
     val canvasViewport: CanvasViewport? = null,
+    val rotationSnapEnabled: Boolean = false,
 )
