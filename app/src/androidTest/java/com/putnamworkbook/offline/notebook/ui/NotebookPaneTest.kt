@@ -10,6 +10,8 @@ import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.assertIsNotSelected
+import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -214,6 +216,50 @@ class NotebookPaneTest {
         composeRule.onNodeWithTag(PAGE_INDEX_TEST_TAG)
             .assertTextEquals("10000 / 10000")
             .assertContentDescriptionEquals("Page 10000 of 10000")
+    }
+
+    @Test
+    fun selectActionsRetainTouchTargetsAndSnapStateAtNarrowSplitWidth() {
+        var snapEnabled by mutableStateOf(false)
+        composeRule.setContent {
+            NotebookToolbar(
+                saveState = NotebookSaveState.SAVED,
+                toolMode = NotebookToolMode.SELECT,
+                brush = BrushSpec(),
+                hasSelection = true,
+                clipboardHasContent = true,
+                rotationSnapEnabled = snapEnabled,
+                onSetToolMode = {},
+                onBrushChanged = {},
+                onCut = {}, onCopy = {}, onPaste = {}, onDeleteSelection = {},
+                onFlipHorizontal = {}, onFlipVertical = {},
+                onSetRotationSnapEnabled = { snapEnabled = it },
+                onUndo = {}, onRedo = {}, onAddPage = {}, onClearPage = {}, onDeletePage = {},
+                activePageIndex = 0,
+                pageCount = 1,
+                onSelectPage = {},
+                modifier = Modifier.width(504.dp).testTag(NOTEBOOK_TOOLBAR_TEST_TAG),
+            )
+        }
+
+        val toolbarBounds = composeRule.onNodeWithTag(NOTEBOOK_TOOLBAR_TEST_TAG).getUnclippedBoundsInRoot()
+        listOf(
+            CUT_SELECTION_TEST_TAG,
+            COPY_SELECTION_TEST_TAG,
+            PASTE_SELECTION_TEST_TAG,
+            DELETE_SELECTION_TEST_TAG,
+            FLIP_HORIZONTAL_TEST_TAG,
+            FLIP_VERTICAL_TEST_TAG,
+            SNAP_ROTATION_TEST_TAG,
+        ).forEach { tag ->
+            val bounds = composeRule.onNodeWithTag(tag).getUnclippedBoundsInRoot()
+            assertTrue("$tag must retain a 48dp target", bounds.right - bounds.left >= 48.dp)
+            assertTrue("$tag must remain inside the toolbar", bounds.left >= toolbarBounds.left)
+            assertTrue("$tag must remain inside the toolbar", bounds.right <= toolbarBounds.right)
+        }
+        composeRule.onNodeWithTag(SNAP_ROTATION_TEST_TAG).assertIsNotSelected().performClick()
+        composeRule.onNodeWithTag(SNAP_ROTATION_TEST_TAG).assertIsSelected().performClick()
+        composeRule.onNodeWithTag(SNAP_ROTATION_TEST_TAG).assertIsNotSelected()
     }
 
     @Test

@@ -33,6 +33,8 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -49,6 +51,9 @@ const val CUT_SELECTION_TEST_TAG = "notebook-cut-selection"
 const val COPY_SELECTION_TEST_TAG = "notebook-copy-selection"
 const val PASTE_SELECTION_TEST_TAG = "notebook-paste-selection"
 const val DELETE_SELECTION_TEST_TAG = "notebook-delete-selection"
+const val FLIP_HORIZONTAL_TEST_TAG = "notebook-flip-horizontal"
+const val FLIP_VERTICAL_TEST_TAG = "notebook-flip-vertical"
+const val SNAP_ROTATION_TEST_TAG = "notebook-snap-rotation"
 
 @Composable
 fun NotebookToolbar(
@@ -57,12 +62,16 @@ fun NotebookToolbar(
     brush: BrushSpec,
     hasSelection: Boolean,
     clipboardHasContent: Boolean,
+    rotationSnapEnabled: Boolean = false,
     onSetToolMode: (NotebookToolMode) -> Unit,
     onBrushChanged: (BrushSpec) -> Unit,
     onCut: () -> Unit,
     onCopy: () -> Unit,
     onPaste: () -> Unit,
     onDeleteSelection: () -> Unit,
+    onFlipHorizontal: () -> Unit = {},
+    onFlipVertical: () -> Unit = {},
+    onSetRotationSnapEnabled: (Boolean) -> Unit = {},
     onUndo: () -> Unit,
     onRedo: () -> Unit,
     onAddPage: () -> Unit,
@@ -187,6 +196,28 @@ fun NotebookToolbar(
                     Modifier.testTag(DELETE_SELECTION_TEST_TAG),
                     enabled = hasSelection,
                 )
+                ToolbarIconButton(
+                    "Flip horizontal",
+                    ToolbarGlyph.FLIP_HORIZONTAL,
+                    onFlipHorizontal,
+                    Modifier.testTag(FLIP_HORIZONTAL_TEST_TAG),
+                    enabled = hasSelection,
+                )
+                ToolbarIconButton(
+                    "Flip vertical",
+                    ToolbarGlyph.FLIP_VERTICAL,
+                    onFlipVertical,
+                    Modifier.testTag(FLIP_VERTICAL_TEST_TAG),
+                    enabled = hasSelection,
+                )
+                ToolbarIconButton(
+                    "Snap rotation to 15 degrees",
+                    ToolbarGlyph.SNAP_ROTATION,
+                    { onSetRotationSnapEnabled(!rotationSnapEnabled) },
+                    Modifier.testTag(SNAP_ROTATION_TEST_TAG),
+                    highlighted = rotationSnapEnabled,
+                    selected = rotationSnapEnabled,
+                )
             }
         }
     }
@@ -200,6 +231,7 @@ private fun ToolbarIconButton(
     modifier: Modifier = Modifier,
     highlighted: Boolean = false,
     enabled: Boolean = true,
+    selected: Boolean? = null,
 ) {
     val container = if (highlighted) MaterialTheme.colorScheme.primaryContainer else Color.Transparent
     val enabledContent = if (highlighted) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface
@@ -214,7 +246,13 @@ private fun ToolbarIconButton(
             enabled = enabled,
             modifier = modifier
                 .size(48.dp)
-                .semantics(mergeDescendants = true) { contentDescription = description },
+                .semantics(mergeDescendants = true) {
+                    contentDescription = description
+                    selected?.let {
+                        this.selected = it
+                        stateDescription = if (it) "On" else "Off"
+                    }
+                },
         ) {
             ToolbarGlyphCanvas(glyph, content)
         }
@@ -302,6 +340,9 @@ private enum class ToolbarGlyph {
     COPY,
     PASTE,
     DELETE_SELECTION,
+    FLIP_HORIZONTAL,
+    FLIP_VERTICAL,
+    SNAP_ROTATION,
     SAVE_WORKING,
     SAVE_SAVED,
     SAVE_ERROR,
@@ -459,6 +500,39 @@ private fun ToolbarGlyphCanvas(glyph: ToolbarGlyph, color: Color) {
                 }
                 drawLine(color, point(0.38f, 0.38f), point(0.62f, 0.62f), strokeWidth, StrokeCap.Round)
                 drawLine(color, point(0.62f, 0.38f), point(0.38f, 0.62f), strokeWidth, StrokeCap.Round)
+            }
+            ToolbarGlyph.FLIP_HORIZONTAL -> {
+                drawLine(color, point(0.50f, 0.12f), point(0.50f, 0.88f), strokeWidth, StrokeCap.Round)
+                drawLine(color, point(0.42f, 0.50f), point(0.14f, 0.50f), strokeWidth, StrokeCap.Round)
+                drawLine(color, point(0.14f, 0.50f), point(0.30f, 0.34f), strokeWidth, StrokeCap.Round)
+                drawLine(color, point(0.14f, 0.50f), point(0.30f, 0.66f), strokeWidth, StrokeCap.Round)
+                drawLine(color, point(0.58f, 0.50f), point(0.86f, 0.50f), strokeWidth, StrokeCap.Round)
+                drawLine(color, point(0.86f, 0.50f), point(0.70f, 0.34f), strokeWidth, StrokeCap.Round)
+                drawLine(color, point(0.86f, 0.50f), point(0.70f, 0.66f), strokeWidth, StrokeCap.Round)
+            }
+            ToolbarGlyph.FLIP_VERTICAL -> {
+                drawLine(color, point(0.12f, 0.50f), point(0.88f, 0.50f), strokeWidth, StrokeCap.Round)
+                drawLine(color, point(0.50f, 0.42f), point(0.50f, 0.14f), strokeWidth, StrokeCap.Round)
+                drawLine(color, point(0.50f, 0.14f), point(0.34f, 0.30f), strokeWidth, StrokeCap.Round)
+                drawLine(color, point(0.50f, 0.14f), point(0.66f, 0.30f), strokeWidth, StrokeCap.Round)
+                drawLine(color, point(0.50f, 0.58f), point(0.50f, 0.86f), strokeWidth, StrokeCap.Round)
+                drawLine(color, point(0.50f, 0.86f), point(0.34f, 0.70f), strokeWidth, StrokeCap.Round)
+                drawLine(color, point(0.50f, 0.86f), point(0.66f, 0.70f), strokeWidth, StrokeCap.Round)
+            }
+            ToolbarGlyph.SNAP_ROTATION -> {
+                drawArc(
+                    color = color,
+                    startAngle = 205f,
+                    sweepAngle = 250f,
+                    useCenter = false,
+                    topLeft = point(0.18f, 0.18f),
+                    size = androidx.compose.ui.geometry.Size(size.width * 0.64f, size.height * 0.64f),
+                    style = line,
+                )
+                drawLine(color, point(0.20f, 0.60f), point(0.14f, 0.34f), strokeWidth, StrokeCap.Round)
+                drawLine(color, point(0.20f, 0.60f), point(0.42f, 0.48f), strokeWidth, StrokeCap.Round)
+                drawLine(color, point(0.64f, 0.18f), point(0.70f, 0.08f), strokeWidth, StrokeCap.Round)
+                drawLine(color, point(0.78f, 0.28f), point(0.90f, 0.24f), strokeWidth, StrokeCap.Round)
             }
             ToolbarGlyph.SAVE_WORKING -> {
                 drawArc(

@@ -47,6 +47,7 @@ import com.putnamworkbook.offline.export.ExportResult
 import com.putnamworkbook.offline.export.WorkbookExportOptions
 import com.putnamworkbook.offline.notebook.storage.NotebookRepository
 import com.putnamworkbook.offline.notebook.edit.NotebookClipboard
+import com.putnamworkbook.offline.notebook.edit.SelectionFlipAxis
 import com.putnamworkbook.offline.notebook.ui.NotebookPane
 import com.putnamworkbook.offline.notebook.ui.NotebookViewModel
 import kotlinx.coroutines.CancellationException
@@ -375,11 +376,16 @@ private fun WorkspaceDestination(
                 onCommitMove = notebookViewModel::commitMove,
                 onPreviewScale = notebookViewModel::previewScale,
                 onCommitScale = notebookViewModel::commitScale,
+                onPreviewRotation = notebookViewModel::previewRotation,
+                onCommitRotation = notebookViewModel::commitRotationPreview,
                 onCancelPreview = notebookViewModel::cancelTransformPreview,
                 onCutSelection = notebookViewModel::cutSelection,
                 onCopySelection = notebookViewModel::copySelection,
                 onPaste = notebookViewModel::paste,
                 onDeleteSelection = notebookViewModel::deleteSelection,
+                onFlipHorizontal = { notebookViewModel.flipSelection(SelectionFlipAxis.HORIZONTAL) },
+                onFlipVertical = { notebookViewModel.flipSelection(SelectionFlipAxis.VERTICAL) },
+                onSetRotationSnapEnabled = notebookViewModel::setRotationSnapEnabled,
                 onClearSelection = notebookViewModel::cancelSelection,
             )
         },

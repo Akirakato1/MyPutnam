@@ -5,6 +5,7 @@ import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.click
@@ -144,6 +145,7 @@ class NotebookSelectionTest {
     @Test
     fun contextualCutCopyPasteAndDeleteControlsInvokeOnceWithoutCancelButton() {
         val calls = mutableListOf<String>()
+        var snapEnabled by mutableStateOf(false)
         val stroke = StrokeRecord("selected", BrushSpec(), listOf(StrokeSample(0.5f, 0.5f, 0L, null)))
         composeRule.setContent {
             NotebookPane(
@@ -152,6 +154,7 @@ class NotebookSelectionTest {
                     strokes = listOf(stroke),
                     selection = selectionState(),
                     clipboardHasContent = true,
+                    rotationSnapEnabled = snapEnabled,
                 ),
                 brush = BrushSpec(), onStrokeFinished = {},
                 onUndo = {}, onRedo = {}, onAddPage = {},
@@ -162,6 +165,12 @@ class NotebookSelectionTest {
                 onCopySelection = { calls += "copy" },
                 onPaste = { calls += "paste" },
                 onDeleteSelection = { calls += "delete" },
+                onFlipHorizontal = { calls += "flip-horizontal" },
+                onFlipVertical = { calls += "flip-vertical" },
+                onSetRotationSnapEnabled = {
+                    calls += "snap:$it"
+                    snapEnabled = it
+                },
             )
         }
 
@@ -170,9 +179,17 @@ class NotebookSelectionTest {
             COPY_SELECTION_TEST_TAG,
             PASTE_SELECTION_TEST_TAG,
             DELETE_SELECTION_TEST_TAG,
+            FLIP_HORIZONTAL_TEST_TAG,
+            FLIP_VERTICAL_TEST_TAG,
         ).forEach { tag -> composeRule.onNodeWithTag(tag).assertIsEnabled().performClick() }
+        composeRule.onNodeWithTag(SNAP_ROTATION_TEST_TAG).assertIsEnabled().assertIsNotSelected().performClick()
+        composeRule.onNodeWithTag(SNAP_ROTATION_TEST_TAG).assertIsSelected().performClick()
+        composeRule.onNodeWithTag(SNAP_ROTATION_TEST_TAG).assertIsNotSelected()
         composeRule.onNodeWithText("Cancel").assertDoesNotExist()
-        assertEquals(listOf("cut", "copy", "paste", "delete"), calls)
+        assertEquals(
+            listOf("cut", "copy", "paste", "delete", "flip-horizontal", "flip-vertical", "snap:true", "snap:false"),
+            calls,
+        )
     }
 
     @Test
@@ -197,6 +214,8 @@ class NotebookSelectionTest {
             COPY_SELECTION_TEST_TAG to "Copy",
             PASTE_SELECTION_TEST_TAG to "Paste",
             DELETE_SELECTION_TEST_TAG to "Delete selection",
+            FLIP_HORIZONTAL_TEST_TAG to "Flip horizontal",
+            FLIP_VERTICAL_TEST_TAG to "Flip vertical",
         ).forEach { (tag, label) ->
             composeRule.onNodeWithTag(tag)
                 .assertExists()
@@ -204,6 +223,12 @@ class NotebookSelectionTest {
                 .assertContentDescriptionEquals(label)
             composeRule.onNodeWithText(label).assertDoesNotExist()
         }
+        composeRule.onNodeWithTag(SNAP_ROTATION_TEST_TAG)
+            .assertExists()
+            .assertIsEnabled()
+            .assertIsNotSelected()
+            .assertContentDescriptionEquals("Snap rotation to 15 degrees")
+        composeRule.onNodeWithText("Snap rotation to 15 degrees").assertDoesNotExist()
     }
 
     @Test
@@ -381,6 +406,7 @@ class NotebookSelectionTest {
         selection: NotebookSelectionState? = null,
         clipboardHasContent: Boolean = false,
         brush: BrushSpec = BrushSpec(),
+        rotationSnapEnabled: Boolean = false,
     ) = NotebookUiState(
         document = NotebookDocument(
             key = ProblemKey("putnam", "2025", "A1"),
@@ -391,6 +417,7 @@ class NotebookSelectionTest {
         selection = selection,
         clipboardHasContent = clipboardHasContent,
         brush = brush,
+        rotationSnapEnabled = rotationSnapEnabled,
     )
 
     private fun selectionState(): NotebookSelectionState {
