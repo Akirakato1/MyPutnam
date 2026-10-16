@@ -44,6 +44,28 @@ class NotebookViewModelTest {
     private val key = ProblemKey("putnam", "2025", "A1")
 
     @Test
+    fun durableSaveHookCoversInkAndPageMutations() = runBlocking {
+        val repository = FileNotebookRepository(temporaryFolder.newFolder("durable-hook").toPath())
+        val notifications = mutableListOf<Long>()
+        val viewModel = viewModel(
+            repository,
+            FakeSettingsRepository(),
+            wait = { },
+            onDurableSave = notifications::add,
+        )
+        viewModel.open(key)
+        viewModel.awaitIdle()
+
+        viewModel.commitStroke(stroke("ink"))
+        viewModel.awaitIdle()
+        viewModel.addPage()
+        viewModel.awaitIdle()
+
+        assertEquals(listOf(1L, 2L), notifications)
+        viewModel.close()
+    }
+
+    @Test
     fun firstOpenAutosavesBufferedStrokeAndUndoRedoSurviveReload() = runBlocking {
         val repository = FileNotebookRepository(temporaryFolder.newFolder("autosave").toPath())
         val settings = FakeSettingsRepository()
@@ -688,7 +710,15 @@ class NotebookViewModelTest {
         settings: SettingsRepository,
         wait: suspend (Long) -> Unit = { delay(it) },
         clipboard: NotebookClipboard = NotebookClipboard(),
-    ) = NotebookViewModel(repository, settings, CoroutineScope(Dispatchers.Default), wait, clipboard)
+        onDurableSave: (Long) -> Unit = {},
+    ) = NotebookViewModel(
+        repository = repository,
+        settingsRepository = settings,
+        providedScope = CoroutineScope(Dispatchers.Default),
+        saveWait = wait,
+        clipboard = clipboard,
+        onDurableSave = onDurableSave,
+    )
 
     private suspend fun selectedViewModel(
         folder: String,

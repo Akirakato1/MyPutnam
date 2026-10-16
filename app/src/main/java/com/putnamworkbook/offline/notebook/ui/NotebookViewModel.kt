@@ -47,6 +47,7 @@ class NotebookViewModel(
     private val providedScope: CoroutineScope? = null,
     saveWait: suspend (Long) -> Unit = { delay(it) },
     private val clipboard: NotebookClipboard = NotebookClipboard(),
+    private val onDurableSave: (revision: Long) -> Unit = {},
 ) : ViewModel() {
     private val scope = providedScope ?: viewModelScope
     private val mutableUiState = MutableStateFlow(NotebookUiState())
@@ -56,6 +57,7 @@ class NotebookViewModel(
     private var latestOperation: Job? = null
     private var latestBrushUpdate: Job? = null
     private val brushRevision = AtomicLong(0L)
+    private val durableNotificationRevision = AtomicLong(0L)
     private var brushPersistenceFailure: BrushPersistenceFailure? = null
     private val saveCoordinator = NotebookSaveCoordinator(
         scope = scope,
@@ -362,13 +364,19 @@ class NotebookViewModel(
     fun undo() = launchSaving {
         saveCoordinator.flush()
         val (key, pageId) = currentPage()
-        publishDocument(repository.undo(key, pageId), mutableUiState.value.activePageIndex)
+        val before = requireDocument()
+        val changed = repository.undo(key, pageId)
+        publishDocument(changed, mutableUiState.value.activePageIndex)
+        if (changed != before) notifyDurableMutation()
     }
 
     fun redo() = launchSaving {
         saveCoordinator.flush()
         val (key, pageId) = currentPage()
-        publishDocument(repository.redo(key, pageId), mutableUiState.value.activePageIndex)
+        val before = requireDocument()
+        val changed = repository.redo(key, pageId)
+        publishDocument(changed, mutableUiState.value.activePageIndex)
+        if (changed != before) notifyDurableMutation()
     }
 
     fun addPage() = launchSaving {
@@ -379,6 +387,7 @@ class NotebookViewModel(
         val document = repository.addPage(key, pageId, paper)
         val newIndex = document.pages.indexOfFirst { it.id !in oldIds }
         publishDocument(document, newIndex)
+        notifyDurableMutation()
     }
 
     fun requestDeletePage(pageId: String) {
@@ -401,6 +410,7 @@ class NotebookViewModel(
                 else -> mutableUiState.value.activePageIndex.coerceAtMost(document.pages.lastIndex)
             }
             publishDocument(document, activeIndex, pendingConfirmation = null)
+            notifyDurableMutation()
         }
     }
 
@@ -417,6 +427,7 @@ class NotebookViewModel(
             saveCoordinator.flush()
             val document = repository.clearPage(requireNotNull(currentKey), confirmation.pageId)
             publishDocument(document, mutableUiState.value.activePageIndex, pendingConfirmation = null)
+            notifyDurableMutation()
         }
     }
 
@@ -573,6 +584,14 @@ class NotebookViewModel(
                 )
             }
         }
+        notifyDurableMutation(revision)
+    }
+
+    private fun notifyDurableMutation(sourceRevision: Long? = null) {
+        val notificationRevision = durableNotificationRevision.updateAndGet { current ->
+            maxOf(current + 1, sourceRevision ?: 0L)
+        }
+        onDurableSave(notificationRevision)
     }
 
     private fun handleSaveFailure(revision: Long, error: Exception) {

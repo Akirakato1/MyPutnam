@@ -39,6 +39,9 @@ import com.putnamworkbook.offline.feature.home.HomeScreen
 import com.putnamworkbook.offline.feature.home.HomeViewModel
 import com.putnamworkbook.offline.feature.freenotebook.FreeWorkspaceLibraryScreen
 import com.putnamworkbook.offline.feature.freenotebook.FreeWorkspaceListViewModel
+import com.putnamworkbook.offline.feature.freenotebook.DurableSaveNotifier
+import com.putnamworkbook.offline.feature.freenotebook.FreeNotebookEditorCoordinator
+import com.putnamworkbook.offline.feature.freenotebook.FreeNotebookEditorScreen
 import com.putnamworkbook.offline.feature.settings.SettingsScreen
 import com.putnamworkbook.offline.feature.settings.SettingsViewModel
 import com.putnamworkbook.offline.feature.workspace.ReferencePane
@@ -53,6 +56,7 @@ import com.putnamworkbook.offline.notebook.edit.SelectionFlipAxis
 import com.putnamworkbook.offline.notebook.ui.NotebookPane
 import com.putnamworkbook.offline.notebook.ui.NotebookViewModel
 import com.putnamworkbook.offline.freeworkspace.FreeWorkspaceRepository
+import com.putnamworkbook.offline.freeworkspace.FreeWorkspaceResult
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import androidx.lifecycle.Lifecycle
@@ -62,6 +66,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import java.util.UUID
+import java.io.IOException
+import java.util.concurrent.atomic.AtomicReference
 
 data class WorkspaceDependencies(
     val settingsRepository: SettingsRepository,
@@ -76,6 +82,7 @@ data class WorkspaceDependencies(
 
 private class NotebookViewModelFactory(
     private val dependencies: WorkspaceDependencies,
+    private val onDurableSave: (Long) -> Unit = {},
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         require(modelClass.isAssignableFrom(NotebookViewModel::class.java))
@@ -84,6 +91,7 @@ private class NotebookViewModelFactory(
             dependencies.notebookRepository,
             dependencies.settingsRepository,
             clipboard = dependencies.notebookClipboard,
+            onDurableSave = onDurableSave,
         ) as T
     }
 }
@@ -165,10 +173,29 @@ fun PutnamNavHost(
             val workspaceId = parseStrictUuid(rawId)
             if (workspaceId == null) {
                 Placeholder(text = "This free notebook link is invalid", tag = "free-workspace-invalid-route")
-            } else {
+            } else if (workspaceDependencies == null || freeWorkspaceRepository == null) {
                 Placeholder(
                     text = "Free notebook $workspaceId",
                     tag = "free-workspace-placeholder-$workspaceId",
+                )
+            } else {
+                FreeNotebookDestination(
+                    workspaceId = workspaceId,
+                    repository = freeWorkspaceRepository,
+                    dependencies = workspaceDependencies,
+                    viewModelStoreOwner = entry,
+                    onWorkspaceActiveChanged = onWorkspaceActiveChanged,
+                    onBack = {
+                        if (!navController.popBackStack()) {
+                            navController.navigate(AppRoute.FreeWorkspaces.path) { launchSingleTop = true }
+                        }
+                    },
+                    onWorkspaceReplaced = { replacementId ->
+                        navController.navigate(AppRoute.FreeWorkspace(replacementId).path) {
+                            popUpTo(AppRoute.FreeWorkspace(workspaceId).path) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    },
                 )
             }
         }
@@ -250,6 +277,122 @@ fun PutnamNavHost(
 private fun parseStrictUuid(value: String): UUID? = runCatching { UUID.fromString(value) }
     .getOrNull()
     ?.takeIf { it.toString().equals(value, ignoreCase = true) }
+
+@Composable
+private fun FreeNotebookDestination(
+    workspaceId: UUID,
+    repository: FreeWorkspaceRepository,
+    dependencies: WorkspaceDependencies,
+    viewModelStoreOwner: ViewModelStoreOwner,
+    onWorkspaceActiveChanged: (Boolean) -> Unit,
+    onBack: () -> Unit,
+    onWorkspaceReplaced: (UUID) -> Unit,
+) {
+    val scope = rememberCoroutineScope()
+    val coordinatorReference = remember(workspaceId) {
+        AtomicReference<FreeNotebookEditorCoordinator?>(null)
+    }
+    val notifier = remember(workspaceId, repository, scope) {
+        DurableSaveNotifier(
+            scope = scope,
+            notify = {
+                when (val result = repository.markModified(workspaceId)) {
+                    is FreeWorkspaceResult.Success -> Unit
+                    is FreeWorkspaceResult.Failure -> throw IOException(result.message)
+                    is FreeWorkspaceResult.NameRejected -> throw IOException("Workspace metadata could not be updated")
+                }
+            },
+            onFailure = { error -> coordinatorReference.get()?.reportSaveFailure(error) },
+        )
+    }
+    val notebookFactory = remember(dependencies, notifier) {
+        NotebookViewModelFactory(dependencies, notifier::enqueue)
+    }
+    val notebookViewModel = remember(viewModelStoreOwner, workspaceId, notebookFactory) {
+        ViewModelProvider(viewModelStoreOwner, notebookFactory).get(
+            "free-notebook-$workspaceId",
+            NotebookViewModel::class.java,
+        )
+    }
+    val coordinator = remember(workspaceId, repository, notifier, notebookViewModel) {
+        FreeNotebookEditorCoordinator(
+            workspaceId = workspaceId,
+            repository = repository,
+            notifier = notifier,
+            scope = scope,
+            openNotebook = { key -> notebookViewModel.open(key) },
+            awaitNotebookIdle = notebookViewModel::awaitIdle,
+            onBackReady = onBack,
+            onWorkspaceReplaced = onWorkspaceReplaced,
+        )
+    }
+    coordinatorReference.set(coordinator)
+    val editorState by coordinator.uiState.collectAsState()
+    val notebookState by notebookViewModel.uiState.collectAsState()
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    DisposableEffect(coordinator) {
+        onWorkspaceActiveChanged(true)
+        onDispose {
+            onWorkspaceActiveChanged(false)
+            coordinatorReference.compareAndSet(coordinator, null)
+            coordinator.close()
+        }
+    }
+    DisposableEffect(lifecycleOwner, notebookViewModel) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) notebookViewModel.requestFlush()
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
+
+    BackHandler(onBack = coordinator::back)
+    FreeNotebookEditorScreen(
+        state = editorState,
+        onBack = coordinator::back,
+        onSave = coordinator::save,
+        onSaveAs = coordinator::requestSaveAs,
+        onSaveAsNameChanged = coordinator::updateSaveAsName,
+        onSaveAsConfirmed = coordinator::confirmSaveAs,
+        onSaveAsDismissed = coordinator::dismissSaveAs,
+        notebookContent = {
+            NotebookPane(
+                state = notebookState,
+                brush = notebookState.brush,
+                onStrokeFinished = notebookViewModel::commitStroke,
+                onUndo = notebookViewModel::undo,
+                onRedo = notebookViewModel::redo,
+                onAddPage = notebookViewModel::addPage,
+                onRequestDeletePage = notebookViewModel::requestDeletePage,
+                onRequestClearPage = notebookViewModel::requestClearPage,
+                onConfirmDeletePage = notebookViewModel::confirmDeletePage,
+                onConfirmClearPage = notebookViewModel::confirmClearPage,
+                onDismissConfirmation = notebookViewModel::dismissConfirmation,
+                onSelectPage = notebookViewModel::selectPage,
+                onSetToolMode = notebookViewModel::setToolMode,
+                onBrushChanged = notebookViewModel::setBrush,
+                onSelect = notebookViewModel::select,
+                onViewportChanged = notebookViewModel::updateViewport,
+                onPreviewMove = notebookViewModel::previewMove,
+                onCommitMove = notebookViewModel::commitMove,
+                onPreviewScale = notebookViewModel::previewScale,
+                onCommitScale = notebookViewModel::commitScale,
+                onPreviewRotation = notebookViewModel::previewRotation,
+                onCommitRotation = notebookViewModel::commitRotationPreview,
+                onCancelPreview = notebookViewModel::cancelTransformPreview,
+                onCutSelection = notebookViewModel::cutSelection,
+                onCopySelection = notebookViewModel::copySelection,
+                onPaste = notebookViewModel::paste,
+                onDeleteSelection = notebookViewModel::deleteSelection,
+                onFlipHorizontal = { notebookViewModel.flipSelection(SelectionFlipAxis.HORIZONTAL) },
+                onFlipVertical = { notebookViewModel.flipSelection(SelectionFlipAxis.VERTICAL) },
+                onSetRotationSnapEnabled = notebookViewModel::setRotationSnapEnabled,
+                onClearSelection = notebookViewModel::cancelSelection,
+            )
+        },
+    )
+}
 
 @Composable
 private fun WorkspaceDestination(
