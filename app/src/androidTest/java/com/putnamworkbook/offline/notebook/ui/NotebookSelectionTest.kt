@@ -28,7 +28,9 @@ import com.putnamworkbook.offline.domain.model.PaperStyle
 import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.notebook.edit.NotebookSelectionState
 import com.putnamworkbook.offline.notebook.edit.NotebookToolMode
+import com.putnamworkbook.offline.notebook.edit.CanvasViewport
 import com.putnamworkbook.offline.notebook.edit.NormalizedRect
+import com.putnamworkbook.offline.notebook.edit.toOrientedFrame
 import com.putnamworkbook.offline.notebook.model.NotebookDocument
 import com.putnamworkbook.offline.notebook.model.NotebookPage
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
@@ -148,7 +150,7 @@ class NotebookSelectionTest {
                 state = state(
                     toolMode = NotebookToolMode.SELECT,
                     strokes = listOf(stroke),
-                    selection = NotebookSelectionState(setOf("selected"), NormalizedRect(0.4f, 0.4f, 0.6f, 0.6f)),
+                    selection = selectionState(),
                     clipboardHasContent = true,
                 ),
                 brush = BrushSpec(), onStrokeFinished = {},
@@ -213,7 +215,7 @@ class NotebookSelectionTest {
                 state = state(
                     toolMode = NotebookToolMode.SELECT,
                     strokes = listOf(stroke),
-                    selection = NotebookSelectionState(setOf("selected"), NormalizedRect(0.4f, 0.4f, 0.6f, 0.6f)),
+                    selection = selectionState(),
                 ),
                 brush = BrushSpec(), onStrokeFinished = {},
                 onUndo = {}, onRedo = {}, onAddPage = {},
@@ -240,7 +242,7 @@ class NotebookSelectionTest {
                 state = state(
                     toolMode = NotebookToolMode.SELECT,
                     strokes = listOf(stroke),
-                    selection = NotebookSelectionState(setOf("selected"), NormalizedRect(0.4f, 0.4f, 0.6f, 0.6f)),
+                    selection = selectionState(),
                 ),
                 brush = BrushSpec(), onStrokeFinished = {},
                 onUndo = {}, onRedo = {}, onAddPage = {},
@@ -268,7 +270,7 @@ class NotebookSelectionTest {
                 state = state(
                     toolMode = NotebookToolMode.SELECT,
                     strokes = listOf(stroke),
-                    selection = NotebookSelectionState(setOf("selected"), NormalizedRect(0.4f, 0.4f, 0.6f, 0.6f)),
+                    selection = selectionState(),
                 ),
                 brush = BrushSpec(), onStrokeFinished = {},
                 onUndo = {}, onRedo = {}, onAddPage = {},
@@ -303,7 +305,7 @@ class NotebookSelectionTest {
                 state = state(
                     toolMode = NotebookToolMode.SELECT,
                     strokes = listOf(stroke),
-                    selection = NotebookSelectionState(setOf("selected"), NormalizedRect(0.4f, 0.4f, 0.6f, 0.6f)),
+                    selection = selectionState(),
                 ),
                 brush = BrushSpec(), onStrokeFinished = {},
                 onUndo = {}, onRedo = {}, onAddPage = {},
@@ -346,4 +348,13 @@ class NotebookSelectionTest {
         clipboardHasContent = clipboardHasContent,
         brush = brush,
     )
+
+    private fun selectionState(): NotebookSelectionState {
+        val bounds = NormalizedRect(0.4f, 0.4f, 0.6f, 0.6f)
+        return NotebookSelectionState(
+            selectedStrokeIds = setOf("selected"),
+            bounds = bounds,
+            frame = bounds.toOrientedFrame(CanvasViewport(1f, 1f)),
+        )
+    }
 }

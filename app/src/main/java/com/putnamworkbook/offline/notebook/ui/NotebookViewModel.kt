@@ -21,6 +21,7 @@ import com.putnamworkbook.offline.notebook.edit.SelectionCorner
 import com.putnamworkbook.offline.notebook.edit.StrokeTransform
 import com.putnamworkbook.offline.notebook.edit.intersects
 import com.putnamworkbook.offline.notebook.edit.selectionBounds
+import com.putnamworkbook.offline.notebook.edit.toOrientedFrame
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -566,7 +567,11 @@ class NotebookViewModel(
 
     private fun List<StrokeRecord>.selectionState(viewport: CanvasViewport): NotebookSelectionState? {
         val bounds = selectionBounds(viewport) ?: return null
-        return NotebookSelectionState(mapTo(linkedSetOf()) { it.id }, bounds)
+        return NotebookSelectionState(
+            selectedStrokeIds = mapTo(linkedSetOf()) { it.id },
+            bounds = bounds,
+            frame = bounds.toOrientedFrame(viewport),
+        )
     }
 }
 
