@@ -3,26 +3,23 @@ package com.putnamworkbook.offline.notebook.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -70,11 +67,14 @@ fun NotebookToolbar(
     onAddPage: () -> Unit,
     onClearPage: () -> Unit,
     onDeletePage: () -> Unit,
+    activePageIndex: Int,
+    pageCount: Int,
+    onSelectPage: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+    Column(modifier.fillMaxWidth()) {
         Row(
-            modifier = Modifier.horizontalScroll(rememberScrollState()),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             ToolbarIconButton(
@@ -102,10 +102,29 @@ fun NotebookToolbar(
                     NotebookSaveState.IDLE -> ""
                 },
             )
+            Spacer(Modifier.weight(1f))
+            ToolbarIconButton(
+                description = "Previous page",
+                glyph = ToolbarGlyph.PREVIOUS_PAGE,
+                onClick = { onSelectPage(activePageIndex - 1) },
+                modifier = Modifier.testTag(PREVIOUS_PAGE_TEST_TAG),
+                enabled = activePageIndex > 0,
+            )
+            Text(
+                "Page ${activePageIndex + 1} of $pageCount",
+                modifier = Modifier.testTag(PAGE_INDEX_TEST_TAG),
+            )
+            ToolbarIconButton(
+                description = "Next page",
+                glyph = ToolbarGlyph.NEXT_PAGE,
+                onClick = { onSelectPage(activePageIndex + 1) },
+                modifier = Modifier.testTag(NEXT_PAGE_TEST_TAG),
+                enabled = activePageIndex < pageCount - 1,
+            )
         }
         if (toolMode == NotebookToolMode.PEN) {
             Row(
-                modifier = Modifier.horizontalScroll(rememberScrollState()),
+                modifier = Modifier.fillMaxWidth().height(CONTEXT_TOOLBAR_HEIGHT),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Row(
@@ -131,15 +150,42 @@ fun NotebookToolbar(
                     onValueChange = { width -> onBrushChanged(brush.copy(width = width)) },
                     valueRange = 1f..12f,
                     steps = 10,
-                    modifier = Modifier.width(180.dp).testTag(BRUSH_WIDTH_TEST_TAG),
+                    modifier = Modifier.weight(1f).testTag(BRUSH_WIDTH_TEST_TAG),
                 )
             }
-        } else if (hasSelection || clipboardHasContent) {
-            Row(modifier = Modifier.horizontalScroll(rememberScrollState())) {
-                TextButton(onClick = onCut, enabled = hasSelection, modifier = Modifier.testTag(CUT_SELECTION_TEST_TAG)) { Text("Cut") }
-                TextButton(onClick = onCopy, enabled = hasSelection, modifier = Modifier.testTag(COPY_SELECTION_TEST_TAG)) { Text("Copy") }
-                TextButton(onClick = onPaste, enabled = clipboardHasContent, modifier = Modifier.testTag(PASTE_SELECTION_TEST_TAG)) { Text("Paste") }
-                TextButton(onClick = onDeleteSelection, enabled = hasSelection, modifier = Modifier.testTag(DELETE_SELECTION_TEST_TAG)) { Text("Delete selection") }
+        } else {
+            Row(
+                modifier = Modifier.fillMaxWidth().height(CONTEXT_TOOLBAR_HEIGHT),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                ToolbarIconButton(
+                    "Cut",
+                    ToolbarGlyph.CUT,
+                    onCut,
+                    Modifier.testTag(CUT_SELECTION_TEST_TAG),
+                    enabled = hasSelection,
+                )
+                ToolbarIconButton(
+                    "Copy",
+                    ToolbarGlyph.COPY,
+                    onCopy,
+                    Modifier.testTag(COPY_SELECTION_TEST_TAG),
+                    enabled = hasSelection,
+                )
+                ToolbarIconButton(
+                    "Paste",
+                    ToolbarGlyph.PASTE,
+                    onPaste,
+                    Modifier.testTag(PASTE_SELECTION_TEST_TAG),
+                    enabled = clipboardHasContent,
+                )
+                ToolbarIconButton(
+                    "Delete selection",
+                    ToolbarGlyph.DELETE_SELECTION,
+                    onDeleteSelection,
+                    Modifier.testTag(DELETE_SELECTION_TEST_TAG),
+                    enabled = hasSelection,
+                )
             }
         }
     }
@@ -152,9 +198,11 @@ private fun ToolbarIconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     highlighted: Boolean = false,
+    enabled: Boolean = true,
 ) {
     val container = if (highlighted) MaterialTheme.colorScheme.primaryContainer else Color.Transparent
-    val content = if (highlighted) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface
+    val enabledContent = if (highlighted) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface
+    val content = enabledContent.copy(alpha = if (enabled) 1f else 0.38f)
     Box(
         modifier = Modifier
             .padding(horizontal = 2.dp)
@@ -163,6 +211,7 @@ private fun ToolbarIconButton(
     ) {
         IconButton(
             onClick = onClick,
+            enabled = enabled,
             modifier = modifier
                 .size(48.dp)
                 .semantics(mergeDescendants = true) { contentDescription = description },
@@ -210,7 +259,21 @@ private fun BrushColorCircle(
     )
 }
 
-private enum class ToolbarGlyph { PEN, SELECT, UNDO, REDO, ADD_PAGE, CLEAR_PAGE, DELETE_PAGE }
+private enum class ToolbarGlyph {
+    PEN,
+    SELECT,
+    UNDO,
+    REDO,
+    ADD_PAGE,
+    CLEAR_PAGE,
+    DELETE_PAGE,
+    PREVIOUS_PAGE,
+    NEXT_PAGE,
+    CUT,
+    COPY,
+    PASTE,
+    DELETE_SELECTION,
+}
 
 @Composable
 private fun ToolbarGlyphCanvas(glyph: ToolbarGlyph, color: Color) {
@@ -304,9 +367,72 @@ private fun ToolbarGlyphCanvas(glyph: ToolbarGlyph, color: Color) {
                 drawLine(color, point(0.44f, 0.46f), point(0.44f, 0.74f), strokeWidth, StrokeCap.Round)
                 drawLine(color, point(0.58f, 0.46f), point(0.58f, 0.74f), strokeWidth, StrokeCap.Round)
             }
+            ToolbarGlyph.PREVIOUS_PAGE, ToolbarGlyph.NEXT_PAGE -> {
+                val next = glyph == ToolbarGlyph.NEXT_PAGE
+                val tip = if (next) point(0.72f, 0.50f) else point(0.28f, 0.50f)
+                val upper = if (next) point(0.44f, 0.22f) else point(0.56f, 0.22f)
+                val lower = if (next) point(0.44f, 0.78f) else point(0.56f, 0.78f)
+                drawLine(color, upper, tip, strokeWidth, StrokeCap.Round)
+                drawLine(color, tip, lower, strokeWidth, StrokeCap.Round)
+            }
+            ToolbarGlyph.CUT -> {
+                drawCircle(color, size.width * 0.13f, point(0.25f, 0.25f), style = line)
+                drawCircle(color, size.width * 0.13f, point(0.25f, 0.75f), style = line)
+                drawLine(color, point(0.35f, 0.34f), point(0.82f, 0.74f), strokeWidth, StrokeCap.Round)
+                drawLine(color, point(0.35f, 0.66f), point(0.82f, 0.26f), strokeWidth, StrokeCap.Round)
+            }
+            ToolbarGlyph.COPY -> {
+                drawRoundRect(
+                    color = color,
+                    topLeft = point(0.18f, 0.28f),
+                    size = androidx.compose.ui.geometry.Size(size.width * 0.50f, size.height * 0.58f),
+                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(strokeWidth, strokeWidth),
+                    style = line,
+                )
+                drawRoundRect(
+                    color = color,
+                    topLeft = point(0.34f, 0.14f),
+                    size = androidx.compose.ui.geometry.Size(size.width * 0.50f, size.height * 0.58f),
+                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(strokeWidth, strokeWidth),
+                    style = line,
+                )
+            }
+            ToolbarGlyph.PASTE -> {
+                drawRoundRect(
+                    color = color,
+                    topLeft = point(0.22f, 0.20f),
+                    size = androidx.compose.ui.geometry.Size(size.width * 0.58f, size.height * 0.68f),
+                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(strokeWidth, strokeWidth),
+                    style = line,
+                )
+                drawRoundRect(
+                    color = color,
+                    topLeft = point(0.36f, 0.10f),
+                    size = androidx.compose.ui.geometry.Size(size.width * 0.30f, size.height * 0.20f),
+                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(strokeWidth, strokeWidth),
+                    style = line,
+                )
+                drawLine(color, point(0.34f, 0.50f), point(0.68f, 0.50f), strokeWidth, StrokeCap.Round)
+                drawLine(color, point(0.34f, 0.68f), point(0.60f, 0.68f), strokeWidth, StrokeCap.Round)
+            }
+            ToolbarGlyph.DELETE_SELECTION -> {
+                val segments = listOf(
+                    0.14f to 0.34f, 0.14f to 0.14f, 0.14f to 0.14f, 0.34f to 0.14f,
+                    0.66f to 0.14f, 0.86f to 0.14f, 0.86f to 0.14f, 0.86f to 0.34f,
+                    0.86f to 0.66f, 0.86f to 0.86f, 0.86f to 0.86f, 0.66f to 0.86f,
+                    0.34f to 0.86f, 0.14f to 0.86f, 0.14f to 0.86f, 0.14f to 0.66f,
+                )
+                segments.chunked(2).forEach { (start, end) ->
+                    drawLine(color, point(start.first, start.second), point(end.first, end.second), strokeWidth, StrokeCap.Round)
+                }
+                drawLine(color, point(0.38f, 0.38f), point(0.62f, 0.62f), strokeWidth, StrokeCap.Round)
+                drawLine(color, point(0.62f, 0.38f), point(0.38f, 0.62f), strokeWidth, StrokeCap.Round)
+            }
         }
     }
 }
+
+private val CONTEXT_TOOLBAR_HEIGHT = 52.dp
 
 private data class NotebookBrushColor(
     val label: String,

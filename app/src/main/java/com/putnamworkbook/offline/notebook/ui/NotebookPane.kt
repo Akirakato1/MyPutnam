@@ -5,10 +5,7 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -82,27 +79,11 @@ fun NotebookPane(
             onAddPage = onAddPage,
             onClearPage = { onRequestClearPage(page.id) },
             onDeletePage = { onRequestDeletePage(page.id) },
+            activePageIndex = state.activePageIndex,
+            pageCount = document.pages.size,
+            onSelectPage = onSelectPage,
             modifier = Modifier.testTag(NOTEBOOK_TOOLBAR_TEST_TAG),
         )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End,
-        ) {
-            TextButton(
-                onClick = { onSelectPage(state.activePageIndex - 1) },
-                enabled = state.activePageIndex > 0,
-                modifier = Modifier.testTag(PREVIOUS_PAGE_TEST_TAG),
-            ) { Text("←") }
-            Text(
-                "Page ${state.activePageIndex + 1} of ${document.pages.size}",
-                modifier = Modifier.testTag(PAGE_INDEX_TEST_TAG),
-            )
-            TextButton(
-                onClick = { onSelectPage(state.activePageIndex + 1) },
-                enabled = state.activePageIndex < document.pages.lastIndex,
-                modifier = Modifier.testTag(NEXT_PAGE_TEST_TAG),
-            ) { Text("→") }
-        }
         AnimatedContent(
             targetState = state.activePageIndex,
             transitionSpec = {

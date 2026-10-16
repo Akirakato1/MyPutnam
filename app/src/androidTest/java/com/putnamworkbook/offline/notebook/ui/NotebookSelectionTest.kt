@@ -4,6 +4,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.click
@@ -169,6 +170,37 @@ class NotebookSelectionTest {
         ).forEach { tag -> composeRule.onNodeWithTag(tag).assertIsEnabled().performClick() }
         composeRule.onNodeWithText("Cancel").assertDoesNotExist()
         assertEquals(listOf("cut", "copy", "paste", "delete"), calls)
+    }
+
+    @Test
+    fun selectModeAlwaysShowsIconActionsAndDisablesUnavailableOperations() {
+        composeRule.setContent {
+            NotebookPane(
+                state = state(
+                    toolMode = NotebookToolMode.SELECT,
+                    clipboardHasContent = false,
+                ),
+                brush = BrushSpec(),
+                onStrokeFinished = {},
+                onUndo = {}, onRedo = {}, onAddPage = {},
+                onRequestDeletePage = {}, onRequestClearPage = {},
+                onConfirmDeletePage = {}, onConfirmClearPage = {}, onDismissConfirmation = {},
+                onSelectPage = {},
+            )
+        }
+
+        mapOf(
+            CUT_SELECTION_TEST_TAG to "Cut",
+            COPY_SELECTION_TEST_TAG to "Copy",
+            PASTE_SELECTION_TEST_TAG to "Paste",
+            DELETE_SELECTION_TEST_TAG to "Delete selection",
+        ).forEach { (tag, label) ->
+            composeRule.onNodeWithTag(tag)
+                .assertExists()
+                .assertIsNotEnabled()
+                .assertContentDescriptionEquals(label)
+            composeRule.onNodeWithText(label).assertDoesNotExist()
+        }
     }
 
     @Test

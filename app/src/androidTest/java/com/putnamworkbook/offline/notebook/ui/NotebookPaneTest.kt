@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -21,6 +22,7 @@ import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.notebook.model.NotebookDocument
 import com.putnamworkbook.offline.notebook.model.NotebookPage
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
+import com.putnamworkbook.offline.notebook.edit.NotebookToolMode
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -144,6 +146,44 @@ class NotebookPaneTest {
         composeRule.onNodeWithText("Move left").assertDoesNotExist()
         composeRule.onNodeWithText("Move right").assertDoesNotExist()
         composeRule.onNodeWithText("Page 1").assertDoesNotExist()
+
+        val modeBounds = composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).getUnclippedBoundsInRoot()
+        val pageBounds = composeRule.onNodeWithTag(PAGE_INDEX_TEST_TAG).getUnclippedBoundsInRoot()
+        assertTrue("Page navigation must share the main toolbar row", modeBounds.top < pageBounds.bottom)
+        assertTrue("Page navigation must share the main toolbar row", pageBounds.top < modeBounds.bottom)
+    }
+
+    @Test
+    fun switchingBetweenPenAndSelectKeepsCanvasTopFixed() {
+        var mode by mutableStateOf(NotebookToolMode.PEN)
+        composeRule.setContent {
+            NotebookPane(
+                state = NotebookUiState(
+                    document = NotebookDocument(
+                        key = ProblemKey("putnam", "2025", "A1"),
+                        pages = listOf(NotebookPage("page-1", PaperStyle.BLANK)),
+                    ),
+                    toolMode = mode,
+                ),
+                brush = BrushSpec(),
+                onStrokeFinished = {},
+                onUndo = {}, onRedo = {}, onAddPage = {},
+                onRequestDeletePage = {}, onRequestClearPage = {},
+                onConfirmDeletePage = {}, onConfirmClearPage = {}, onDismissConfirmation = {},
+                onSelectPage = {},
+                onSetToolMode = { mode = it },
+                modifier = Modifier,
+            )
+        }
+
+        val penCanvasTop = composeRule.onNodeWithTag(NOTEBOOK_CANVAS_TEST_TAG)
+            .fetchSemanticsNode().boundsInRoot.top
+        composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).performClick()
+        composeRule.waitForIdle()
+        val selectCanvasTop = composeRule.onNodeWithTag(NOTEBOOK_CANVAS_TEST_TAG)
+            .fetchSemanticsNode().boundsInRoot.top
+
+        assertEquals(penCanvasTop, selectCanvasTop, 0.5f)
     }
 
     @Test
