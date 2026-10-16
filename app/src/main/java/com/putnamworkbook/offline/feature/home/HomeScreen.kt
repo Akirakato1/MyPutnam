@@ -24,6 +24,7 @@ fun HomeScreen(
     state: HomeUiState,
     onContinue: (ProblemKey) -> Unit,
     onSelectProblem: () -> Unit,
+    onFreeNotebook: () -> Unit,
     onSettings: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -65,6 +66,15 @@ fun HomeScreen(
                     .testTag("home-select-problem"),
             ) {
                 Text("Select problem")
+            }
+            Button(
+                onClick = onFreeNotebook,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(64.dp)
+                    .testTag("home-free-notebook"),
+            ) {
+                Text("Free Notebook")
             }
             OutlinedButton(
                 onClick = onSettings,

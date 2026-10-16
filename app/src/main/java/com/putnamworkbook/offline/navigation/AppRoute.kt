@@ -3,6 +3,7 @@ package com.putnamworkbook.offline.navigation
 import android.net.Uri
 import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.domain.model.ProblemSetKey
+import java.util.UUID
 
 sealed interface AppRoute {
     val path: String
@@ -27,6 +28,14 @@ sealed interface AppRoute {
         override val path = SETTINGS
     }
 
+    data object FreeWorkspaces : AppRoute {
+        override val path = FREE_WORKSPACES
+    }
+
+    data class FreeWorkspace(val id: UUID) : AppRoute {
+        override val path = "$FREE_WORKSPACES/${Uri.encode(id.toString())}"
+    }
+
     companion object {
         const val HOME = "home"
         const val LIBRARY = "library"
@@ -35,5 +44,7 @@ sealed interface AppRoute {
         const val WORKSPACE_PREFIX = "workspace"
         const val WORKSPACE_PATTERN = "$WORKSPACE_PREFIX/{collectionId}/{setId}/{problemId}"
         const val SETTINGS = "settings"
+        const val FREE_WORKSPACES = "free-notebooks"
+        const val FREE_WORKSPACE_PATTERN = "$FREE_WORKSPACES/{workspaceId}"
     }
 }

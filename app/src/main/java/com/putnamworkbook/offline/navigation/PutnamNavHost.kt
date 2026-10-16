@@ -37,6 +37,8 @@ import com.putnamworkbook.offline.feature.archive.ArchiveViewModel
 import com.putnamworkbook.offline.feature.archive.ProblemListScreen
 import com.putnamworkbook.offline.feature.home.HomeScreen
 import com.putnamworkbook.offline.feature.home.HomeViewModel
+import com.putnamworkbook.offline.feature.freenotebook.FreeWorkspaceLibraryScreen
+import com.putnamworkbook.offline.feature.freenotebook.FreeWorkspaceListViewModel
 import com.putnamworkbook.offline.feature.settings.SettingsScreen
 import com.putnamworkbook.offline.feature.settings.SettingsViewModel
 import com.putnamworkbook.offline.feature.workspace.ReferencePane
@@ -50,6 +52,7 @@ import com.putnamworkbook.offline.notebook.edit.NotebookClipboard
 import com.putnamworkbook.offline.notebook.edit.SelectionFlipAxis
 import com.putnamworkbook.offline.notebook.ui.NotebookPane
 import com.putnamworkbook.offline.notebook.ui.NotebookViewModel
+import com.putnamworkbook.offline.freeworkspace.FreeWorkspaceRepository
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import androidx.lifecycle.Lifecycle
@@ -58,6 +61,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import java.util.UUID
 
 data class WorkspaceDependencies(
     val settingsRepository: SettingsRepository,
@@ -67,6 +71,7 @@ data class WorkspaceDependencies(
     val exportCoordinator: ExportCoordinator,
     val appVersion: String,
     val contentVersion: String,
+    val freeWorkspaceRepository: FreeWorkspaceRepository,
 )
 
 private class NotebookViewModelFactory(
@@ -88,6 +93,8 @@ fun PutnamNavHost(
     contentRepository: ContentRepository,
     progressRepository: ProgressRepository,
     workspaceDependencies: WorkspaceDependencies? = null,
+    freeWorkspaceRepository: FreeWorkspaceRepository? = workspaceDependencies?.freeWorkspaceRepository,
+    startDestination: String = AppRoute.Home.path,
     onWorkspaceActiveChanged: (Boolean) -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
@@ -110,7 +117,7 @@ fun PutnamNavHost(
 
     NavHost(
         navController = navController,
-        startDestination = AppRoute.Home.path,
+        startDestination = startDestination,
         modifier = modifier,
     ) {
         composable(AppRoute.HOME) {
@@ -118,8 +125,52 @@ fun PutnamNavHost(
                 state = homeState,
                 onContinue = { key -> navController.navigate(AppRoute.Workspace(key).path) },
                 onSelectProblem = { navController.navigate(AppRoute.Library.path) },
+                onFreeNotebook = { navController.navigate(AppRoute.FreeWorkspaces.path) },
                 onSettings = { navController.navigate(AppRoute.Settings.path) },
             )
+        }
+        composable(AppRoute.FREE_WORKSPACES) { entry ->
+            if (freeWorkspaceRepository == null) {
+                Placeholder(text = "Free Notebook", tag = "free-workspace-library-placeholder")
+            } else {
+                val viewModel = remember(entry, freeWorkspaceRepository) {
+                    FreeWorkspaceListViewModel(
+                        repository = freeWorkspaceRepository,
+                        onWorkspaceCreated = { id -> navController.navigate(AppRoute.FreeWorkspace(id).path) },
+                    )
+                }
+                val state by viewModel.uiState.collectAsState()
+                DisposableEffect(viewModel) { onDispose { viewModel.close() } }
+                FreeWorkspaceLibraryScreen(
+                    state = state,
+                    onBack = { navController.popBackStack() },
+                    onNew = viewModel::requestCreate,
+                    onOpen = { id -> navController.navigate(AppRoute.FreeWorkspace(id).path) },
+                    onRename = viewModel::requestRename,
+                    onDelete = viewModel::requestDelete,
+                    onNameChanged = viewModel::updateName,
+                    onNameConfirmed = viewModel::submitName,
+                    onNameDismissed = viewModel::dismissNameDialog,
+                    onDeleteConfirmed = viewModel::confirmDelete,
+                    onDeleteDismissed = viewModel::dismissDelete,
+                    onRetry = viewModel::retry,
+                )
+            }
+        }
+        composable(
+            route = AppRoute.FREE_WORKSPACE_PATTERN,
+            arguments = listOf(navArgument("workspaceId") { type = NavType.StringType }),
+        ) { entry ->
+            val rawId = Uri.decode(entry.arguments?.getString("workspaceId").orEmpty())
+            val workspaceId = parseStrictUuid(rawId)
+            if (workspaceId == null) {
+                Placeholder(text = "This free notebook link is invalid", tag = "free-workspace-invalid-route")
+            } else {
+                Placeholder(
+                    text = "Free notebook $workspaceId",
+                    tag = "free-workspace-placeholder-$workspaceId",
+                )
+            }
         }
         composable(AppRoute.LIBRARY) {
             ArchiveScreen(
@@ -195,6 +246,10 @@ fun PutnamNavHost(
         }
     }
 }
+
+private fun parseStrictUuid(value: String): UUID? = runCatching { UUID.fromString(value) }
+    .getOrNull()
+    ?.takeIf { it.toString().equals(value, ignoreCase = true) }
 
 @Composable
 private fun WorkspaceDestination(

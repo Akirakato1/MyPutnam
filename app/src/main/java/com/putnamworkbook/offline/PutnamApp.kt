@@ -105,6 +105,7 @@ fun PutnamApp(
                             exportCoordinator = exportCoordinator,
                             appVersion = appVersion,
                             contentVersion = state.contentVersion,
+                            freeWorkspaceRepository = container.freeWorkspaceRepository,
                         ),
                         onWorkspaceActiveChanged = { workspaceActive = it },
                     )
