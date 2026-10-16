@@ -33,7 +33,9 @@ internal object NioFreeWorkspaceFileOps : FreeWorkspaceFileOps {
     override fun isRegularFile(path: Path): Boolean = Files.isRegularFile(path)
 
     override fun list(path: Path): List<Path> =
-        if (!Files.isDirectory(path)) emptyList() else Files.list(path).use { it.toList() }
+        if (!Files.isDirectory(path)) emptyList() else Files.list(path).use { stream ->
+            stream.iterator().asSequence().toList()
+        }
 
     override fun move(source: Path, target: Path) {
         Files.createDirectories(target.parent)

@@ -14,6 +14,12 @@ import com.putnamworkbook.offline.domain.model.PaperStyle
 import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.domain.model.ReferenceTab
 import com.putnamworkbook.offline.feature.workspace.WorkspaceViewModel
+import com.putnamworkbook.offline.freeworkspace.EpochMillisClock
+import com.putnamworkbook.offline.freeworkspace.FileFreeWorkspaceRepository
+import com.putnamworkbook.offline.freeworkspace.FreeWorkspaceResult
+import com.putnamworkbook.offline.domain.model.BrushSpec
+import com.putnamworkbook.offline.notebook.model.StrokeRecord
+import com.putnamworkbook.offline.notebook.model.StrokeSample
 import com.putnamworkbook.offline.notebook.storage.FileNotebookRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -52,6 +58,55 @@ class BackupRestoreTest {
     fun tearDown() {
         database.close()
         deleteTree(testRoot)
+    }
+
+    @Test
+    fun backupRestoreRoundTripsFreeWorkspaceCatalogAndInk() = runBlocking {
+        val notebooks = FileNotebookRepository(notebookRoot)
+        var now = 100L
+        val workspaces = FileFreeWorkspaceRepository(
+            notebookRoot,
+            notebooks,
+            clock = EpochMillisClock { now },
+        )
+        val first = (workspaces.create("Algebra scratch", PaperStyle.SQUARE_GRID) as FreeWorkspaceResult.Success).value
+        now = 200L
+        val second = (workspaces.create("Integral ideas", PaperStyle.BLANK) as FreeWorkspaceResult.Success).value
+        val firstKey = workspaces.notebookKey(first.id)
+        val firstPage = notebooks.loadExisting(firstKey)!!.pages.single()
+        val secondPage = notebooks.addPage(firstKey, firstPage.id, PaperStyle.BLANK).pages.last()
+        val ink = StrokeRecord(
+            id = "backup-free-ink",
+            brush = BrushSpec(colorArgb = 0xFF2563EBL, width = 7f),
+            samples = listOf(
+                StrokeSample(0.1f, 0.2f, 0L, null),
+                StrokeSample(0.4f, 0.6f, 12L, 0.8f),
+            ),
+        )
+        notebooks.commitStroke(firstKey, secondPage.id, ink)
+        now = 300L
+        workspaces.markModified(first.id)
+        val expectedEntries = (workspaces.list() as FreeWorkspaceResult.Success).value
+
+        val backup = ByteArrayOutputStream()
+        assertTrue(BackupCoordinator(database, notebookRoot).create(backup) is BackupResult.Success)
+        workspaces.delete(first.id)
+        workspaces.delete(second.id)
+
+        assertTrue(
+            BackupCoordinator(database, notebookRoot).validateAndRestore(
+                ByteArrayInputStream(backup.toByteArray()),
+            ) is RestoreResult.Success,
+        )
+
+        val restoredNotebooks = FileNotebookRepository(notebookRoot)
+        val restoredWorkspaces = FileFreeWorkspaceRepository(notebookRoot, restoredNotebooks)
+        val restoredEntries = (restoredWorkspaces.list() as FreeWorkspaceResult.Success).value
+        assertEquals(expectedEntries, restoredEntries)
+        assertEquals(listOf(first.id, second.id), restoredEntries.map { it.record.id })
+        val restoredDocument = restoredNotebooks.loadExisting(restoredWorkspaces.notebookKey(first.id))!!
+        assertEquals(listOf(PaperStyle.SQUARE_GRID, PaperStyle.BLANK), restoredDocument.pages.map { it.paperStyle })
+        assertEquals(listOf(ink), restoredNotebooks.loadStrokes(restoredDocument.key, restoredDocument.pages.last().id))
     }
 
     @Test
