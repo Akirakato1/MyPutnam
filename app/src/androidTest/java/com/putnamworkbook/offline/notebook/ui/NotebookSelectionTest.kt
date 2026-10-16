@@ -297,6 +297,50 @@ class NotebookSelectionTest {
     }
 
     @Test
+    fun draggingRotationHandlePreviewsAndCommitsWithoutClearingSelection() {
+        val previews = mutableListOf<Float>()
+        var commitCount = 0
+        var selectCount = 0
+        var clearCount = 0
+        val stroke = StrokeRecord("selected", BrushSpec(), listOf(StrokeSample(0.5f, 0.5f, 0L, null)))
+        composeRule.setContent {
+            NotebookPane(
+                state = state(
+                    toolMode = NotebookToolMode.SELECT,
+                    strokes = listOf(stroke),
+                    selection = selectionState(),
+                ),
+                brush = BrushSpec(), onStrokeFinished = {},
+                onUndo = {}, onRedo = {}, onAddPage = {},
+                onRequestDeletePage = {}, onRequestClearPage = {},
+                onConfirmDeletePage = {}, onConfirmClearPage = {}, onDismissConfirmation = {},
+                onSelectPage = {},
+                onSelect = { _, _ -> selectCount += 1 },
+                onPreviewRotation = { previews += it },
+                onCommitRotation = { commitCount += 1 },
+                onClearSelection = { clearCount += 1 },
+            )
+        }
+
+        val overlay = composeRule.onNodeWithTag(SELECTION_OVERLAY_TEST_TAG)
+        val bounds = overlay.fetchSemanticsNode().boundsInRoot
+        val stemPixels = with(composeRule.density) { 32.dp.toPx() }
+        overlay.performTouchInput {
+            swipe(
+                start = Offset(bounds.width * 0.5f, bounds.height * 0.4f - stemPixels),
+                end = Offset(bounds.width * 0.7f, bounds.height * 0.5f),
+                durationMillis = 400L,
+            )
+        }
+        composeRule.waitForIdle()
+
+        assertTrue(previews.isNotEmpty())
+        assertEquals(1, commitCount)
+        assertEquals(0, selectCount)
+        assertEquals(0, clearCount)
+    }
+
+    @Test
     fun draggingOutsideTheSelectionCreatesAReplacementMarquee() {
         var replacement: NormalizedRect? = null
         val stroke = StrokeRecord("selected", BrushSpec(), listOf(StrokeSample(0.5f, 0.5f, 0L, null)))

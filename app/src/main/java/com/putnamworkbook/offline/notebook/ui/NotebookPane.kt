@@ -47,6 +47,8 @@ fun NotebookPane(
     onCommitMove: (Float, Float) -> Unit = { _, _ -> },
     onPreviewScale: (SelectionCorner, NormalizedPoint) -> Unit = { _, _ -> },
     onCommitScale: (SelectionCorner, NormalizedPoint) -> Unit = { _, _ -> },
+    onPreviewRotation: (Float) -> Unit = {},
+    onCommitRotation: () -> Unit = {},
     onCancelPreview: () -> Unit = {},
     onCutSelection: () -> Unit = {},
     onCopySelection: () -> Unit = {},
@@ -111,6 +113,8 @@ fun NotebookPane(
                 onCommitMove = onCommitMove,
                 onPreviewScale = onPreviewScale,
                 onCommitScale = onCommitScale,
+                onPreviewRotation = onPreviewRotation,
+                onCommitRotation = onCommitRotation,
                 onCancelPreview = onCancelPreview,
                 onClearSelection = onClearSelection,
             )
