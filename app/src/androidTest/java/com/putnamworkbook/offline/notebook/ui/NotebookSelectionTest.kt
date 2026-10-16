@@ -1,6 +1,7 @@
 package com.putnamworkbook.offline.notebook.ui
 
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsSelected
@@ -86,7 +87,8 @@ class NotebookSelectionTest {
         }
 
         composeRule.onAllNodesWithTag(TOOL_MODE_TOGGLE_TEST_TAG).assertCountEquals(1)
-        composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).assertTextEquals("Pen mode")
+        composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).assertContentDescriptionEquals("Pen mode")
+        composeRule.onNodeWithText("Pen mode").assertDoesNotExist()
         composeRule.onNodeWithText("Erase last").assertDoesNotExist()
         composeRule.onNodeWithText("Cancel").assertDoesNotExist()
         listOf(
@@ -98,10 +100,15 @@ class NotebookSelectionTest {
         listOf("ink", "blue", "red", "green", "purple", "orange", "teal", "pink").forEach { name ->
             composeRule.onNodeWithTag("notebook-brush-color-$name").assertExists()
         }
+        composeRule.onNodeWithTag("notebook-brush-color-palette").assertExists()
+        listOf("Ink", "Blue", "Red", "Green", "Purple", "Orange", "Teal", "Pink").forEach { name ->
+            composeRule.onNodeWithText(name).assertDoesNotExist()
+        }
 
         composeRule.onNodeWithTag("notebook-brush-color-green").performClick()
         assertEquals(0xFF15803DL, brush.colorArgb)
         composeRule.onNodeWithTag("notebook-brush-color-green").assertIsSelected()
+        composeRule.onNodeWithTag("notebook-brush-color-green").assertContentDescriptionEquals("Green")
         (1..12).forEach { width ->
             composeRule.onNodeWithTag(BRUSH_WIDTH_TEST_TAG)
                 .performSemanticsAction(SemanticsActions.SetProgress) { setProgress ->
@@ -112,7 +119,8 @@ class NotebookSelectionTest {
         composeRule.onNodeWithText("Width 12").assertExists()
 
         composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).performClick()
-        composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).assertTextEquals("Select mode")
+        composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).assertContentDescriptionEquals("Select mode")
+        composeRule.onNodeWithText("Select mode").assertDoesNotExist()
         composeRule.onNodeWithTag("notebook-brush-color-green").assertDoesNotExist()
         composeRule.onNodeWithTag(BRUSH_WIDTH_TEST_TAG).assertDoesNotExist()
         composeRule.onNodeWithTag(PASTE_SELECTION_TEST_TAG).assertIsEnabled()

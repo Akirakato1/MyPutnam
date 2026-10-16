@@ -12,6 +12,8 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
@@ -154,7 +156,7 @@ class OfflineWorkbookAcceptanceTest {
     }
 
     private fun addNotebookPageAndMarkCompleted() {
-        composeRule.onNodeWithText("Add page").performClick()
+        composeRule.onNodeWithContentDescription("Add page").performClick()
         waitForText("Page 2 of 2")
         composeRule.onNodeWithTag("workspace-completed").performClick()
         composeRule.onNodeWithTag("workspace-completed").assertTextEquals("Completed")
@@ -243,9 +245,9 @@ class OfflineWorkbookAcceptanceTest {
         waitForText("Page 2 of 2")
         waitForRenderedStrokeCount(1)
 
-        composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).assertTextEquals("Pen mode")
+        composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).assertContentDescriptionEquals("Pen mode")
         composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).performClick()
-        composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).assertTextEquals("Select mode")
+        composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).assertContentDescriptionEquals("Select mode")
 
         val overlay = composeRule.onNodeWithTag(SELECTION_OVERLAY_TEST_TAG)
         val overlayBounds = overlay.fetchSemanticsNode().boundsInRoot
@@ -315,7 +317,7 @@ class OfflineWorkbookAcceptanceTest {
         waitForRenderedStrokeCount(2)
 
         composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).performClick()
-        composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).assertTextEquals("Pen mode")
+        composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).assertContentDescriptionEquals("Pen mode")
         listOf(
             CUT_SELECTION_TEST_TAG,
             COPY_SELECTION_TEST_TAG,
@@ -323,7 +325,7 @@ class OfflineWorkbookAcceptanceTest {
             DELETE_SELECTION_TEST_TAG,
         ).forEach { tag -> composeRule.onNodeWithTag(tag).assertDoesNotExist() }
         composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).performClick()
-        composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).assertTextEquals("Select mode")
+        composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).assertContentDescriptionEquals("Select mode")
         composeRule.onNodeWithTag(PASTE_SELECTION_TEST_TAG).assertIsEnabled()
     }
 

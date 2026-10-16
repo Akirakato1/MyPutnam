@@ -9,6 +9,7 @@ import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -27,6 +28,40 @@ import org.junit.Test
 class NotebookPaneTest {
     @get:Rule
     val composeRule = createComposeRule()
+
+    @Test
+    fun compactToolbarIconsInvokeEveryNotebookActionWithoutVisibleTextLabels() {
+        val calls = mutableListOf<String>()
+        composeRule.setContent {
+            NotebookPane(
+                state = NotebookUiState(
+                    document = NotebookDocument(
+                        key = ProblemKey("putnam", "2025", "A1"),
+                        pages = listOf(NotebookPage("page-1", PaperStyle.BLANK)),
+                    ),
+                ),
+                brush = BrushSpec(),
+                onStrokeFinished = {},
+                onUndo = { calls += "undo" },
+                onRedo = { calls += "redo" },
+                onAddPage = { calls += "add" },
+                onRequestDeletePage = { calls += "delete:$it" },
+                onRequestClearPage = { calls += "clear:$it" },
+                onConfirmDeletePage = {},
+                onConfirmClearPage = {},
+                onDismissConfirmation = {},
+                onSelectPage = {},
+            )
+        }
+
+        listOf("Undo", "Redo", "Add page", "Clear page", "Delete page").forEach { label ->
+            composeRule.onNodeWithContentDescription(label).performClick()
+            composeRule.onNodeWithText(label).assertDoesNotExist()
+        }
+        composeRule.onNodeWithText("Clear").assertDoesNotExist()
+
+        assertEquals(listOf("undo", "redo", "add", "clear:page-1", "delete:page-1"), calls)
+    }
 
     @Test
     fun onlyExplicitControlsTurnPagesAndHorizontalCanvasDragDoesNot() {
