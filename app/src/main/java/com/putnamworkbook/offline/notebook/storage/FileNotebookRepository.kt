@@ -18,6 +18,7 @@ import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
+import java.util.Comparator
 import java.util.UUID
 
 class FileNotebookRepository(
@@ -49,6 +50,65 @@ class FileNotebookRepository(
 
     override suspend fun loadOrCreate(key: ProblemKey, defaultPaper: PaperStyle): NotebookDocument = locked {
         loadOrCreateLocked(key, defaultPaper)
+    }
+
+    override suspend fun createNotebook(
+        key: ProblemKey,
+        defaultPaper: PaperStyle,
+    ): NotebookDocument = locked {
+        val target = notebookDirectory(key)
+        check(!Files.exists(target)) { "Notebook already exists: ${key.canonical}" }
+        val stage = stageDirectory(target)
+        try {
+            val document = NotebookDocument(
+                key = key,
+                pages = listOf(NotebookPage(idFactory(), defaultPaper)),
+            )
+            writeManifest(stage, document)
+            publishStage(stage, target)
+            document
+        } catch (error: Exception) {
+            deleteRecursively(stage)
+            throw error
+        }
+    }
+
+    override suspend fun cloneNotebook(
+        sourceKey: ProblemKey,
+        targetKey: ProblemKey,
+    ): NotebookDocument = locked {
+        require(sourceKey != targetKey) { "Source and target notebook keys must differ" }
+        val sourceDirectory = notebookDirectory(sourceKey)
+        val targetDirectory = notebookDirectory(targetKey)
+        check(Files.isRegularFile(sourceDirectory.resolve(MANIFEST_FILE))) {
+            "Source notebook does not exist: ${sourceKey.canonical}"
+        }
+        check(!Files.exists(targetDirectory)) { "Notebook already exists: ${targetKey.canonical}" }
+        val source = loadExistingDocument(sourceKey)
+        val clone = source.copy(key = targetKey)
+        val stage = stageDirectory(targetDirectory)
+        try {
+            source.pages.forEach { page ->
+                page.strokes.forEach { reference ->
+                    val sourceStroke = strokePath(sourceDirectory, page.id, reference.strokeId)
+                    if (!Files.isRegularFile(sourceStroke)) {
+                        throw IOException("Referenced stroke file is missing: $sourceStroke")
+                    }
+                    val bytes = Files.readAllBytes(sourceStroke)
+                    val decoded = StrokeCodec.decode(bytes)
+                    if (decoded.id != reference.strokeId) {
+                        throw IOException("Stroke id does not match its manifest reference")
+                    }
+                    writer.write(strokePath(stage, page.id, reference.strokeId), bytes)
+                }
+            }
+            writeManifest(stage, clone)
+            publishStage(stage, targetDirectory)
+            clone
+        } catch (error: Exception) {
+            deleteRecursively(stage)
+            throw error
+        }
     }
 
     override suspend fun loadStrokes(key: ProblemKey, pageId: String): List<StrokeRecord> = locked {
@@ -226,10 +286,33 @@ class FileNotebookRepository(
         writer.write(manifestPath(document.key), NotebookManifestCodec.encode(document))
     }
 
+    private fun writeManifest(directory: Path, document: NotebookDocument) {
+        writer.write(directory.resolve(MANIFEST_FILE), NotebookManifestCodec.encode(document))
+    }
+
     private fun manifestPath(key: ProblemKey): Path = notebookDirectory(key).resolve(MANIFEST_FILE)
 
     private fun strokePath(key: ProblemKey, pageId: String, strokeId: String): Path =
-        notebookDirectory(key).resolve("strokes").resolve(pageId).resolve("$strokeId.stroke")
+        strokePath(notebookDirectory(key), pageId, strokeId)
+
+    private fun strokePath(directory: Path, pageId: String, strokeId: String): Path =
+        directory.resolve("strokes").resolve(pageId).resolve("$strokeId.stroke")
+
+    private fun stageDirectory(target: Path): Path =
+        target.resolveSibling(".${target.fileName}.stage-${UUID.randomUUID()}")
+
+    private fun publishStage(stage: Path, target: Path) {
+        Files.createDirectories(target.parent)
+        check(!Files.exists(target)) { "Notebook already exists: $target" }
+        Files.move(stage, target, StandardCopyOption.ATOMIC_MOVE)
+    }
+
+    private fun deleteRecursively(directory: Path) {
+        if (!Files.exists(directory)) return
+        Files.walk(directory).use { paths ->
+            paths.sorted(Comparator.reverseOrder()).forEach(Files::deleteIfExists)
+        }
+    }
 
     private fun notebookDirectory(key: ProblemKey): Path {
         val normalizedRoot = root.toAbsolutePath().normalize()

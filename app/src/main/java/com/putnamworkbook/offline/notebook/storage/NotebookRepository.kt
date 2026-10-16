@@ -24,6 +24,10 @@ interface NotebookRepository {
 
     suspend fun loadOrCreate(key: ProblemKey, defaultPaper: PaperStyle): NotebookDocument
 
+    suspend fun createNotebook(key: ProblemKey, defaultPaper: PaperStyle): NotebookDocument
+
+    suspend fun cloneNotebook(sourceKey: ProblemKey, targetKey: ProblemKey): NotebookDocument
+
     suspend fun loadStrokes(key: ProblemKey, pageId: String): List<StrokeRecord>
 
     suspend fun applyEdits(key: ProblemKey, pageId: String, edits: List<NotebookEdit>): NotebookDocument

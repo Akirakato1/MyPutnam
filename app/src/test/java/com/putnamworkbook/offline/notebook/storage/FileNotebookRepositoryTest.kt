@@ -11,6 +11,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -26,6 +27,136 @@ class FileNotebookRepositoryTest {
     val temporaryFolder = TemporaryFolder()
 
     private val key = ProblemKey("putnam", "2025", "A1")
+
+    @Test
+    fun createPublishesOnePageNotebookOnlyAfterManifestIsDurable() = runBlocking {
+        val root = temporaryFolder.newFolder("staged-create").toPath()
+        val target = ProblemKey("__local__", "free-workspaces", "workspace-1")
+        val finalDirectory = root.resolve("__local__/free-workspaces/workspace-1")
+        val durableWriter = DurableAtomicFileWriter()
+        var observedManifestWrite = false
+        val observingWriter = AtomicFileWriter { path, bytes ->
+            if (path.fileName.toString() == "manifest.bin") {
+                observedManifestWrite = true
+                assertFalse("Final directory must not be visible before the staged manifest is durable", Files.exists(finalDirectory))
+            }
+            durableWriter.write(path, bytes)
+        }
+        val repository = FileNotebookRepository(root, observingWriter, idFactory = { "page-created" })
+
+        val created = repository.createNotebook(target, PaperStyle.SQUARE_GRID)
+
+        assertTrue(observedManifestWrite)
+        assertEquals(target, created.key)
+        assertEquals(listOf("page-created"), created.pages.map { it.id })
+        assertEquals(PaperStyle.SQUARE_GRID, created.pages.single().paperStyle)
+        assertEquals(created, repository.loadExisting(target))
+    }
+
+    @Test
+    fun createRejectsAnExistingTarget() = runBlocking {
+        val root = temporaryFolder.newFolder("create-existing").toPath()
+        val repository = FileNotebookRepository(root)
+        repository.createNotebook(key, PaperStyle.BLANK)
+
+        assertThrows(IllegalStateException::class.java) {
+            runBlocking { repository.createNotebook(key, PaperStyle.SQUARE_GRID) }
+        }
+        assertEquals(PaperStyle.BLANK, repository.loadExisting(key)!!.pages.single().paperStyle)
+    }
+
+    @Test
+    fun cloneCopiesCompleteHistoryAndEveryReferencedStroke() = runBlocking {
+        val root = temporaryFolder.newFolder("complete-clone").toPath()
+        val source = ProblemKey("__local__", "free-workspaces", "source")
+        val target = ProblemKey("__local__", "free-workspaces", "target")
+        val repository = FileNotebookRepository(root)
+        val pageId = repository.createNotebook(source, PaperStyle.SQUARE_GRID).pages.single().id
+        repository.commitStroke(source, pageId, stroke("active", 0.2f))
+        repository.commitStroke(source, pageId, stroke("undone", 0.8f))
+        val sourceDocument = repository.undo(source, pageId)
+
+        val cloned = repository.cloneNotebook(source, target)
+
+        assertEquals(sourceDocument.copy(key = target), cloned)
+        assertEquals(listOf("active"), repository.loadStrokes(target, pageId).map { it.id })
+        listOf("active", "undone").forEach { strokeId ->
+            assertArrayEquals(
+                Files.readAllBytes(root.resolve("__local__/free-workspaces/source/strokes/$pageId/$strokeId.stroke")),
+                Files.readAllBytes(root.resolve("__local__/free-workspaces/target/strokes/$pageId/$strokeId.stroke")),
+            )
+        }
+        assertEquals(sourceDocument, repository.loadExisting(source))
+    }
+
+    @Test
+    fun cloneRewritesOnlyTheDocumentKey() = runBlocking {
+        val root = temporaryFolder.newFolder("clone-key").toPath()
+        val source = ProblemKey("putnam", "2025", "A2")
+        val target = ProblemKey("__local__", "free-workspaces", "copy")
+        val repository = FileNotebookRepository(root)
+        val sourceDocument = repository.createNotebook(source, PaperStyle.BLANK)
+
+        val cloned = repository.cloneNotebook(source, target)
+
+        assertEquals(target, cloned.key)
+        assertEquals(sourceDocument.pages, cloned.pages)
+        assertEquals(sourceDocument, repository.loadExisting(source))
+    }
+
+    @Test
+    fun cloneRejectsAnExistingTarget() = runBlocking {
+        val root = temporaryFolder.newFolder("clone-existing").toPath()
+        val source = ProblemKey("putnam", "2025", "A3")
+        val target = ProblemKey("__local__", "free-workspaces", "existing")
+        val repository = FileNotebookRepository(root)
+        repository.createNotebook(source, PaperStyle.BLANK)
+        val existing = repository.createNotebook(target, PaperStyle.SQUARE_GRID)
+
+        assertThrows(IllegalStateException::class.java) {
+            runBlocking { repository.cloneNotebook(source, target) }
+        }
+        assertEquals(existing, repository.loadExisting(target))
+    }
+
+    @Test
+    fun cloneRejectsUnsafeKeys() {
+        assertThrows(IllegalArgumentException::class.java) {
+            ProblemKey("..", "free-workspaces", "escape")
+        }
+        assertThrows(IllegalArgumentException::class.java) {
+            ProblemKey("__local__", "free-workspaces", "../escape")
+        }
+    }
+
+    @Test
+    fun failedCloneLeavesNoTargetManifestOrDamageToSibling() = runBlocking {
+        val root = temporaryFolder.newFolder("failed-clone").toPath()
+        val source = ProblemKey("putnam", "2025", "A4")
+        val sibling = ProblemKey("putnam", "2025", "A5")
+        val target = ProblemKey("__local__", "free-workspaces", "failed")
+        val durableWriter = DurableAtomicFileWriter()
+        val setup = FileNotebookRepository(root, durableWriter)
+        val sourcePage = setup.createNotebook(source, PaperStyle.BLANK).pages.single().id
+        setup.commitStroke(source, sourcePage, stroke("source-stroke", 0.4f))
+        val siblingDocument = setup.createNotebook(sibling, PaperStyle.SQUARE_GRID)
+        val failingWriter = AtomicFileWriter { path, bytes ->
+            if (path.fileName.toString() == "manifest.bin" && path.toString().contains(".failed.stage-")) {
+                throw IOException("injected clone failure")
+            }
+            durableWriter.write(path, bytes)
+        }
+
+        assertThrows(IOException::class.java) {
+            runBlocking { FileNotebookRepository(root, failingWriter).cloneNotebook(source, target) }
+        }
+
+        assertNull(FileNotebookRepository(root).loadExisting(target))
+        assertEquals(siblingDocument, FileNotebookRepository(root).loadExisting(sibling))
+        Files.list(root.resolve("__local__/free-workspaces")).use { entries ->
+            assertFalse(entries.anyMatch { it.fileName.toString().startsWith(".failed.stage-") })
+        }
+    }
 
     @Test
     fun tenEditsWriteEveryStrokeButReplaceTheManifestOnlyOnce() = runBlocking {
