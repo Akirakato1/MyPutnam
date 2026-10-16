@@ -14,6 +14,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.unit.dp
 import com.putnamworkbook.offline.domain.model.BrushSpec
 import com.putnamworkbook.offline.domain.model.PaperStyle
 import com.putnamworkbook.offline.domain.model.ProblemKey
@@ -55,7 +56,11 @@ class NotebookPaneTest {
         }
 
         listOf("Undo", "Redo", "Add page", "Clear page", "Delete page").forEach { label ->
-            composeRule.onNodeWithContentDescription(label).performClick()
+            val control = composeRule.onNodeWithContentDescription(label)
+            val bounds = control.getUnclippedBoundsInRoot()
+            assertTrue("$label touch target is narrower than 48dp", bounds.right - bounds.left >= 48.dp)
+            assertTrue("$label touch target is shorter than 48dp", bounds.bottom - bounds.top >= 48.dp)
+            control.performClick()
             composeRule.onNodeWithText(label).assertDoesNotExist()
         }
         composeRule.onNodeWithText("Clear").assertDoesNotExist()

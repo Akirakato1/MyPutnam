@@ -7,6 +7,7 @@ import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.click
+import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -16,6 +17,8 @@ import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipe
 import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -31,6 +34,7 @@ import com.putnamworkbook.offline.notebook.model.StrokeRecord
 import com.putnamworkbook.offline.notebook.model.StrokeSample
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 
@@ -101,6 +105,10 @@ class NotebookSelectionTest {
             composeRule.onNodeWithTag("notebook-brush-color-$name").assertExists()
         }
         composeRule.onNodeWithTag("notebook-brush-color-palette").assertExists()
+        assertTrue(
+            composeRule.onNodeWithTag("notebook-brush-color-palette")
+                .fetchSemanticsNode().config.contains(SemanticsProperties.SelectableGroup),
+        )
         listOf("Ink", "Blue", "Red", "Green", "Purple", "Orange", "Teal", "Pink").forEach { name ->
             composeRule.onNodeWithText(name).assertDoesNotExist()
         }
@@ -109,6 +117,9 @@ class NotebookSelectionTest {
         assertEquals(0xFF15803DL, brush.colorArgb)
         composeRule.onNodeWithTag("notebook-brush-color-green").assertIsSelected()
         composeRule.onNodeWithTag("notebook-brush-color-green").assertContentDescriptionEquals("Green")
+        val greenBounds = composeRule.onNodeWithTag("notebook-brush-color-green").getUnclippedBoundsInRoot()
+        assertTrue(greenBounds.right - greenBounds.left >= 48.dp)
+        assertTrue(greenBounds.bottom - greenBounds.top >= 48.dp)
         (1..12).forEach { width ->
             composeRule.onNodeWithTag(BRUSH_WIDTH_TEST_TAG)
                 .performSemanticsAction(SemanticsActions.SetProgress) { setProgress ->

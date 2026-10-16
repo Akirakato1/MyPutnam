@@ -3,8 +3,9 @@ package com.putnamworkbook.offline.notebook.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,8 +36,6 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.putnamworkbook.offline.domain.model.BrushSpec
@@ -113,6 +112,7 @@ fun NotebookToolbar(
                     modifier = Modifier
                         .testTag(BRUSH_COLOR_PALETTE_TEST_TAG)
                         .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(24.dp))
+                        .selectableGroup()
                         .padding(horizontal = 4.dp, vertical = 2.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -164,7 +164,7 @@ private fun ToolbarIconButton(
         IconButton(
             onClick = onClick,
             modifier = modifier
-                .size(44.dp)
+                .size(48.dp)
                 .semantics(mergeDescendants = true) { contentDescription = description },
         ) {
             ToolbarGlyphCanvas(glyph, content)
@@ -179,24 +179,33 @@ private fun BrushColorCircle(
     onClick: () -> Unit,
 ) {
     val ring = Color(0xFFFFD54F)
+    val contrastOutline = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.82f)
     Box(
         modifier = Modifier
-            .size(44.dp)
+            .size(48.dp)
             .testTag("notebook-brush-color-${choice.tag}")
-            .semantics {
-                contentDescription = choice.label
-                this.selected = selected
-                role = Role.RadioButton
-            }
+            .semantics { contentDescription = choice.label }
             .clip(CircleShape)
-            .clickable(onClick = onClick)
+            .selectable(selected = selected, role = Role.RadioButton, onClick = onClick)
             .drawBehind {
                 val center = Offset(size.width / 2f, size.height / 2f)
                 if (selected) {
-                    drawCircle(ring.copy(alpha = 0.28f), radius = 15.dp.toPx(), center = center)
-                    drawCircle(ring, radius = 12.5.dp.toPx(), center = center, style = Stroke(2.dp.toPx()))
+                    drawCircle(ring.copy(alpha = 0.32f), radius = 17.dp.toPx(), center = center)
+                    drawCircle(
+                        contrastOutline,
+                        radius = 14.dp.toPx(),
+                        center = center,
+                        style = Stroke(3.dp.toPx()),
+                    )
+                    drawCircle(ring, radius = 13.dp.toPx(), center = center, style = Stroke(2.dp.toPx()))
                 }
                 drawCircle(Color(choice.argb), radius = 10.dp.toPx(), center = center)
+                drawCircle(
+                    contrastOutline,
+                    radius = 10.dp.toPx(),
+                    center = center,
+                    style = Stroke(1.dp.toPx()),
+                )
             },
     )
 }
@@ -238,7 +247,7 @@ private fun ToolbarGlyphCanvas(glyph: ToolbarGlyph, color: Color) {
                 val redo = glyph == ToolbarGlyph.REDO
                 drawArc(
                     color = color,
-                    startAngle = if (redo) 210f else 105f,
+                    startAngle = if (redo) 210f else -30f,
                     sweepAngle = if (redo) -230f else 230f,
                     useCenter = false,
                     topLeft = point(0.20f, 0.20f),
