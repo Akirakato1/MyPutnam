@@ -1,6 +1,29 @@
 package com.putnamworkbook.offline.notebook.edit
 
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
+import com.putnamworkbook.offline.notebook.model.StrokeSample
+import kotlin.math.PI
+import kotlin.math.abs
+import kotlin.math.cos
+import kotlin.math.round
+import kotlin.math.sin
+
+enum class SelectionFlipAxis {
+    HORIZONTAL,
+    VERTICAL,
+}
+
+data class SelectionTransformResult(
+    val strokes: List<StrokeRecord>,
+    val frame: OrientedSelectionFrame,
+)
+
+fun snapRotationRadians(angleRadians: Float, incrementDegrees: Int = 15): Float {
+    require(angleRadians.isFinite()) { "Rotation angle must be finite" }
+    require(incrementDegrees > 0) { "Rotation increment must be positive" }
+    val increment = (incrementDegrees * PI / 180.0).toFloat()
+    return round(angleRadians / increment) * increment
+}
 
 object StrokeTransform {
     const val MIN_SELECTION_SIZE = 0.01f
@@ -28,6 +51,132 @@ object StrokeTransform {
         }
     }
 
+    fun rotate(
+        strokes: List<StrokeRecord>,
+        frame: OrientedSelectionFrame,
+        requestedAngleRadians: Float,
+        viewport: CanvasViewport,
+        idFactory: () -> String,
+    ): SelectionTransformResult? {
+        require(requestedAngleRadians.isFinite()) { "Rotation angle must be finite" }
+        requireMatchingViewport(frame, viewport)
+        if (strokes.isEmpty()) return SelectionTransformResult(emptyList(), frame)
+        val delta = requestedAngleRadians - frame.rotationRadians
+        val cosine = cos(delta)
+        val sine = sin(delta)
+        val center = frame.center.toPixels(viewport)
+        val transformed = strokes.toPixelStrokes(viewport).mapPoints { point ->
+            val dx = point.x - center.x
+            val dy = point.y - center.y
+            PixelPoint(
+                x = center.x + dx * cosine - dy * sine,
+                y = center.y + dx * sine + dy * cosine,
+            )
+        }
+        return transformed.fitToPage(viewport, frame.copy(rotationRadians = requestedAngleRadians), idFactory)
+    }
+
+    fun flip(
+        strokes: List<StrokeRecord>,
+        frame: OrientedSelectionFrame,
+        axis: SelectionFlipAxis,
+        viewport: CanvasViewport,
+        idFactory: () -> String,
+    ): SelectionTransformResult {
+        requireMatchingViewport(frame, viewport)
+        if (strokes.isEmpty()) return SelectionTransformResult(emptyList(), frame)
+        val transformed = strokes.toPixelStrokes(viewport).mapPoints { point ->
+            val local = frame.pixelToLocal(point)
+            frame.localToPixel(
+                when (axis) {
+                    SelectionFlipAxis.HORIZONTAL -> PixelPoint(-local.x, local.y)
+                    SelectionFlipAxis.VERTICAL -> PixelPoint(local.x, -local.y)
+                },
+            )
+        }
+        return checkNotNull(transformed.fitToPage(viewport, frame, idFactory)) {
+            "A valid selection must remain page-fit after a local-axis flip"
+        }
+    }
+
+    fun scaleFromCorner(
+        strokes: List<StrokeRecord>,
+        frame: OrientedSelectionFrame,
+        corner: SelectionCorner,
+        target: NormalizedPoint,
+        viewport: CanvasViewport,
+        idFactory: () -> String,
+    ): SelectionTransformResult {
+        requireMatchingViewport(frame, viewport)
+        if (strokes.isEmpty()) return SelectionTransformResult(emptyList(), frame)
+        val anchor = frame.localCorner(opposite(corner))
+        val dragged = frame.localCorner(corner)
+        val targetLocal = frame.pixelToLocal(target.toPixels(viewport))
+        val requestedScale = minOf(
+            abs(targetLocal.x - anchor.x) / abs(dragged.x - anchor.x),
+            abs(targetLocal.y - anchor.y) / abs(dragged.y - anchor.y),
+        )
+        val minimumScale = maxOf(
+            MIN_SELECTION_SIZE * viewport.widthPixels / frame.widthPixels,
+            MIN_SELECTION_SIZE * viewport.heightPixels / frame.heightPixels,
+        )
+        val desiredScale = requestedScale.coerceAtLeast(minimumScale)
+        val source = strokes.toPixelStrokes(viewport)
+
+        fun scaled(scale: Float): ScaledSelection {
+            val transformed = source.mapPoints { point ->
+                val local = frame.pixelToLocal(point)
+                frame.localToPixel(
+                    PixelPoint(
+                        x = anchor.x + (local.x - anchor.x) * scale,
+                        y = anchor.y + (local.y - anchor.y) * scale,
+                    ),
+                )
+            }
+            val centerPixels = frame.localToPixel(
+                PixelPoint(
+                    x = anchor.x * (1f - scale),
+                    y = anchor.y * (1f - scale),
+                ),
+            )
+            return ScaledSelection(
+                strokes = transformed,
+                centerPixels = centerPixels,
+                widthPixels = frame.widthPixels * scale,
+                heightPixels = frame.heightPixels * scale,
+            )
+        }
+
+        var chosen = scaled(desiredScale)
+        if (!chosen.strokes.fitsPage(viewport) && desiredScale > 1f) {
+            var lower = 1f
+            var upper = desiredScale
+            var best = scaled(lower)
+            require(best.strokes.fitsPage(viewport)) {
+                "The source selection must fit within the page before scaling"
+            }
+            repeat(SCALE_SEARCH_STEPS) {
+                val candidateScale = (lower + upper) / 2f
+                val candidate = scaled(candidateScale)
+                if (candidate.strokes.fitsPage(viewport)) {
+                    lower = candidateScale
+                    best = candidate
+                } else {
+                    upper = candidateScale
+                }
+            }
+            chosen = best
+        }
+        val chosenFrame = frame.copy(
+            center = chosen.centerPixels.toNormalized(viewport),
+            widthPixels = chosen.widthPixels,
+            heightPixels = chosen.heightPixels,
+        )
+        return checkNotNull(chosen.strokes.fitToPage(viewport, chosenFrame, idFactory)) {
+            "A scaled selection must fit within the page"
+        }
+    }
+
     fun scaleFromCorner(
         strokes: List<StrokeRecord>,
         bounds: NormalizedRect,
@@ -35,76 +184,54 @@ object StrokeTransform {
         target: NormalizedPoint,
         viewport: CanvasViewport,
         idFactory: () -> String,
-    ): List<StrokeRecord> {
-        if (strokes.isEmpty()) return emptyList()
-        val width = bounds.width.coerceAtLeast(0.000001f)
-        val height = bounds.height.coerceAtLeast(0.000001f)
-        val anchor = oppositeCorner(bounds, corner)
-        val requestedX = kotlin.math.abs(target.x - anchor.x) / width
-        val requestedY = kotlin.math.abs(target.y - anchor.y) / height
-        val minimumScale = maxOf(MIN_SELECTION_SIZE / width, MIN_SELECTION_SIZE / height)
-        val maximumScale = maximumScale(anchor, width, height, corner)
-        val scale = minOf(requestedX, requestedY).coerceIn(
-            minimumScale.coerceAtMost(maximumScale),
-            maximumScale,
-        )
-        val scaled = strokes.map { stroke ->
-            stroke.copy(
-                id = idFactory(),
-                samples = stroke.samples.map { sample ->
-                    sample.copy(
-                        x = (anchor.x + (sample.x - anchor.x) * scale).coerceIn(0f, 1f),
-                        y = (anchor.y + (sample.y - anchor.y) * scale).coerceIn(0f, 1f),
-                    )
-                },
-            )
-        }
-        return scaled.clampVisibleGeometry(viewport)
+    ): List<StrokeRecord> = scaleFromCorner(
+        strokes = strokes,
+        frame = bounds.toOrientedFrame(viewport),
+        corner = corner,
+        target = target,
+        viewport = viewport,
+        idFactory = idFactory,
+    ).strokes
+
+    private fun requireMatchingViewport(frame: OrientedSelectionFrame, viewport: CanvasViewport) {
+        require(frame.viewport == viewport) { "Selection frame viewport does not match the canvas" }
     }
 
-    private fun oppositeCorner(bounds: NormalizedRect, corner: SelectionCorner): NormalizedPoint =
-        when (corner) {
-            SelectionCorner.TOP_LEFT -> NormalizedPoint(bounds.right, bounds.bottom)
-            SelectionCorner.TOP_RIGHT -> NormalizedPoint(bounds.left, bounds.bottom)
-            SelectionCorner.BOTTOM_LEFT -> NormalizedPoint(bounds.right, bounds.top)
-            SelectionCorner.BOTTOM_RIGHT -> NormalizedPoint(bounds.left, bounds.top)
-        }
+    private fun opposite(corner: SelectionCorner): SelectionCorner = when (corner) {
+        SelectionCorner.TOP_LEFT -> SelectionCorner.BOTTOM_RIGHT
+        SelectionCorner.TOP_RIGHT -> SelectionCorner.BOTTOM_LEFT
+        SelectionCorner.BOTTOM_LEFT -> SelectionCorner.TOP_RIGHT
+        SelectionCorner.BOTTOM_RIGHT -> SelectionCorner.TOP_LEFT
+    }
 
-    private fun maximumScale(
-        anchor: NormalizedPoint,
-        width: Float,
-        height: Float,
-        corner: SelectionCorner,
-    ): Float = when (corner) {
-        SelectionCorner.TOP_LEFT -> minOf(anchor.x / width, anchor.y / height)
-        SelectionCorner.TOP_RIGHT -> minOf((1f - anchor.x) / width, anchor.y / height)
-        SelectionCorner.BOTTOM_LEFT -> minOf(anchor.x / width, (1f - anchor.y) / height)
-        SelectionCorner.BOTTOM_RIGHT -> minOf((1f - anchor.x) / width, (1f - anchor.y) / height)
-    }.coerceAtLeast(1f)
+    private fun OrientedSelectionFrame.localCorner(corner: SelectionCorner): PixelPoint = PixelPoint(
+        x = when (corner) {
+            SelectionCorner.TOP_LEFT, SelectionCorner.BOTTOM_LEFT -> -widthPixels / 2f
+            SelectionCorner.TOP_RIGHT, SelectionCorner.BOTTOM_RIGHT -> widthPixels / 2f
+        },
+        y = when (corner) {
+            SelectionCorner.TOP_LEFT, SelectionCorner.TOP_RIGHT -> -heightPixels / 2f
+            SelectionCorner.BOTTOM_LEFT, SelectionCorner.BOTTOM_RIGHT -> heightPixels / 2f
+        },
+    )
 
-    private fun List<StrokeRecord>.clampVisibleGeometry(viewport: CanvasViewport): List<StrokeRecord> {
-        val bounds = visibleBounds(viewport) ?: return this
-        val shiftX = when {
-            bounds.left < 0f -> -bounds.left
-            bounds.right > 1f -> 1f - bounds.right
-            else -> 0f
-        }
-        val shiftY = when {
-            bounds.top < 0f -> -bounds.top
-            bounds.bottom > 1f -> 1f - bounds.bottom
-            else -> 0f
-        }
-        if (shiftX == 0f && shiftY == 0f) return this
-        return map { stroke ->
-            stroke.copy(
-                samples = stroke.samples.map { sample ->
-                    sample.copy(
-                        x = (sample.x + shiftX).coerceIn(0f, 1f),
-                        y = (sample.y + shiftY).coerceIn(0f, 1f),
-                    )
-                },
-            )
-        }
+    private fun OrientedSelectionFrame.pixelToLocal(point: PixelPoint): PixelPoint {
+        val centerPixels = center.toPixels(viewport)
+        val dx = point.x - centerPixels.x
+        val dy = point.y - centerPixels.y
+        val cosine = cos(rotationRadians)
+        val sine = sin(rotationRadians)
+        return PixelPoint(dx * cosine + dy * sine, -dx * sine + dy * cosine)
+    }
+
+    private fun OrientedSelectionFrame.localToPixel(point: PixelPoint): PixelPoint {
+        val centerPixels = center.toPixels(viewport)
+        val cosine = cos(rotationRadians)
+        val sine = sin(rotationRadians)
+        return PixelPoint(
+            x = centerPixels.x + point.x * cosine - point.y * sine,
+            y = centerPixels.y + point.x * sine + point.y * cosine,
+        )
     }
 
     private fun Collection<StrokeRecord>.visibleBounds(viewport: CanvasViewport): RawVisibleBounds? {
@@ -127,10 +254,161 @@ object StrokeTransform {
         return if (initialized) RawVisibleBounds(left, top, right, bottom) else null
     }
 
+    private fun List<StrokeRecord>.toPixelStrokes(viewport: CanvasViewport): List<PixelStroke> =
+        map { stroke ->
+            PixelStroke(
+                source = stroke,
+                points = stroke.samples.map { sample ->
+                    PixelSample(
+                        point = PixelPoint(
+                            x = sample.x * viewport.widthPixels,
+                            y = sample.y * viewport.heightPixels,
+                        ),
+                        source = sample,
+                    )
+                },
+            )
+        }
+
+    private fun List<PixelStroke>.mapPoints(transform: (PixelPoint) -> PixelPoint): List<PixelStroke> =
+        map { stroke ->
+            stroke.copy(points = stroke.points.map { it.copy(point = transform(it.point)) })
+        }
+
+    private fun List<PixelStroke>.fitToPage(
+        viewport: CanvasViewport,
+        frame: OrientedSelectionFrame,
+        idFactory: () -> String,
+    ): SelectionTransformResult? {
+        val bounds = pixelBounds() ?: return SelectionTransformResult(emptyList(), frame)
+        if (bounds.width > viewport.widthPixels + PIXEL_EPSILON ||
+            bounds.height > viewport.heightPixels + PIXEL_EPSILON
+        ) {
+            return null
+        }
+        val shiftX = when {
+            bounds.left < 0f -> -bounds.left
+            bounds.right > viewport.widthPixels -> viewport.widthPixels - bounds.right
+            else -> 0f
+        }
+        val shiftY = when {
+            bounds.top < 0f -> -bounds.top
+            bounds.bottom > viewport.heightPixels -> viewport.heightPixels - bounds.bottom
+            else -> 0f
+        }
+        val shifted = if (shiftX == 0f && shiftY == 0f) this else mapPoints { point ->
+            PixelPoint(point.x + shiftX, point.y + shiftY)
+        }
+        val centerPixels = frame.center.toPixels(viewport)
+        return SelectionTransformResult(
+            strokes = shifted.materialize(viewport, idFactory),
+            frame = frame.copy(
+                center = PixelPoint(centerPixels.x + shiftX, centerPixels.y + shiftY)
+                    .toNormalized(viewport),
+            ),
+        )
+    }
+
+    private fun List<PixelStroke>.fitsPage(viewport: CanvasViewport): Boolean {
+        val bounds = pixelBounds() ?: return true
+        return bounds.left >= -PIXEL_EPSILON &&
+            bounds.top >= -PIXEL_EPSILON &&
+            bounds.right <= viewport.widthPixels + PIXEL_EPSILON &&
+            bounds.bottom <= viewport.heightPixels + PIXEL_EPSILON
+    }
+
+    private fun List<PixelStroke>.pixelBounds(): PixelBounds? {
+        if (isEmpty()) return null
+        var initialized = false
+        var left = Float.POSITIVE_INFINITY
+        var top = Float.POSITIVE_INFINITY
+        var right = Float.NEGATIVE_INFINITY
+        var bottom = Float.NEGATIVE_INFINITY
+        forEach { stroke ->
+            val radius = stroke.source.brush.width / 2f
+            stroke.points.forEach { sample ->
+                initialized = true
+                left = minOf(left, sample.point.x - radius)
+                top = minOf(top, sample.point.y - radius)
+                right = maxOf(right, sample.point.x + radius)
+                bottom = maxOf(bottom, sample.point.y + radius)
+            }
+        }
+        return if (initialized) PixelBounds(left, top, right, bottom) else null
+    }
+
+    private fun List<PixelStroke>.materialize(
+        viewport: CanvasViewport,
+        idFactory: () -> String,
+    ): List<StrokeRecord> = map { transformed ->
+        transformed.source.copy(
+            id = idFactory(),
+            samples = transformed.points.map { pixelSample ->
+                pixelSample.source.copy(
+                    x = normalizedCoordinate(pixelSample.point.x, viewport.widthPixels),
+                    y = normalizedCoordinate(pixelSample.point.y, viewport.heightPixels),
+                )
+            },
+        )
+    }
+
+    private fun normalizedCoordinate(value: Float, extent: Float): Float {
+        val normalized = value / extent
+        return when {
+            normalized in 0f..1f -> normalized
+            normalized > -NORMALIZED_EPSILON && normalized < 0f -> 0f
+            normalized > 1f && normalized < 1f + NORMALIZED_EPSILON -> 1f
+            else -> error("Transformed sample lies outside the page")
+        }
+    }
+
+    private fun NormalizedPoint.toPixels(viewport: CanvasViewport): PixelPoint = PixelPoint(
+        x = x * viewport.widthPixels,
+        y = y * viewport.heightPixels,
+    )
+
+    private fun PixelPoint.toNormalized(viewport: CanvasViewport): NormalizedPoint = NormalizedPoint(
+        x = normalizedCoordinate(x, viewport.widthPixels),
+        y = normalizedCoordinate(y, viewport.heightPixels),
+    )
+
     private data class RawVisibleBounds(
         val left: Float,
         val top: Float,
         val right: Float,
         val bottom: Float,
     )
+
+    private data class PixelPoint(val x: Float, val y: Float)
+
+    private data class PixelSample(
+        val point: PixelPoint,
+        val source: StrokeSample,
+    )
+
+    private data class PixelStroke(
+        val source: StrokeRecord,
+        val points: List<PixelSample>,
+    )
+
+    private data class PixelBounds(
+        val left: Float,
+        val top: Float,
+        val right: Float,
+        val bottom: Float,
+    ) {
+        val width: Float get() = right - left
+        val height: Float get() = bottom - top
+    }
+
+    private data class ScaledSelection(
+        val strokes: List<PixelStroke>,
+        val centerPixels: PixelPoint,
+        val widthPixels: Float,
+        val heightPixels: Float,
+    )
+
+    private const val SCALE_SEARCH_STEPS = 32
+    private const val PIXEL_EPSILON = 0.001f
+    private const val NORMALIZED_EPSILON = 0.00001f
 }

@@ -4,6 +4,7 @@ import com.putnamworkbook.offline.domain.model.BrushSpec
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
 import com.putnamworkbook.offline.notebook.model.StrokeSample
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -90,6 +91,175 @@ class StrokeTransformTest {
         assertEquals(original.brush.width, scaled.single().brush.width)
     }
 
+    @Test
+    fun rotationUsesPixelSpaceOnRectangularViewport() {
+        val viewport = CanvasViewport(320f, 640f)
+        val frame = OrientedSelectionFrame(
+            center = NormalizedPoint(0.5f, 0.5f),
+            widthPixels = 160f,
+            heightPixels = 320f,
+            rotationRadians = 0f,
+            viewport = viewport,
+        )
+        val original = stroke("old", 2f, 0.25f to 0.5f, 0.5f to 0.625f)
+
+        val result = StrokeTransform.rotate(
+            listOf(original), frame, degrees(90f), viewport,
+        ) { "rotated" }!!
+
+        assertPoint(0.5f, 0.375f, result.strokes.single().samples[0])
+        assertPoint(0.25f, 0.5f, result.strokes.single().samples[1])
+        assertEquals(degrees(90f), result.frame.rotationRadians, 0.0001f)
+    }
+
+    @Test
+    fun snapRoundsAbsoluteRotationToNearestFifteenDegrees() {
+        assertEquals(0f, snapRotationRadians(degrees(7f)), 0.0001f)
+        assertEquals(degrees(15f), snapRotationRadians(degrees(8f)), 0.0001f)
+        assertEquals(degrees(-15f), snapRotationRadians(degrees(-8f)), 0.0001f)
+    }
+
+    @Test
+    fun rotationPreservesBrushPressureAndTiming() {
+        val brush = BrushSpec(colorArgb = 0xFF123456L, width = 7f)
+        val original = StrokeRecord(
+            id = "old",
+            brush = brush,
+            samples = listOf(
+                StrokeSample(0.4f, 0.5f, 17L, null),
+                StrokeSample(0.6f, 0.5f, 31L, 0.75f),
+            ),
+        )
+        val frame = NormalizedRect(0.35f, 0.45f, 0.65f, 0.55f).toOrientedFrame(square)
+
+        val rotated = StrokeTransform.rotate(
+            listOf(original), frame, degrees(30f), square,
+        ) { "new" }!!.strokes.single()
+
+        assertEquals("new", rotated.id)
+        assertEquals(brush, rotated.brush)
+        assertEquals(listOf<Long>(17L, 31L), rotated.samples.map { it.elapsedMillis })
+        assertEquals(listOf<Float?>(null, 0.75f), rotated.samples.map { it.pressure })
+    }
+
+    @Test
+    fun rotationFitsTheWholeGroupWithoutClampingSamples() {
+        val viewport = CanvasViewport(100f, 100f)
+        val frame = OrientedSelectionFrame(
+            center = NormalizedPoint(0.85f, 0.5f),
+            widthPixels = 10f,
+            heightPixels = 70f,
+            rotationRadians = 0f,
+            viewport = viewport,
+        )
+        val original = stroke("edge", 10f, 0.85f to 0.2f, 0.85f to 0.8f)
+
+        val result = StrokeTransform.rotate(
+            listOf(original), frame, degrees(90f), viewport,
+        ) { "rotated" }!!
+
+        assertPoint(0.95f, 0.5f, result.strokes.single().samples[0])
+        assertPoint(0.35f, 0.5f, result.strokes.single().samples[1])
+        assertEquals(0.65f, result.frame.center.x, 0.0001f)
+        assertEquals(0.6f, kotlin.math.abs(
+            result.strokes.single().samples[0].x - result.strokes.single().samples[1].x,
+        ), 0.0001f)
+    }
+
+    @Test
+    fun rotationReturnsNullWhenRequestedAngleCannotFit() {
+        val viewport = CanvasViewport(100f, 100f)
+        val original = stroke("diagonal", 20f, 0.1f to 0.1f, 0.9f to 0.9f)
+        val frame = OrientedSelectionFrame(
+            center = NormalizedPoint(0.5f, 0.5f),
+            widthPixels = 100f,
+            heightPixels = 100f,
+            rotationRadians = 0f,
+            viewport = viewport,
+        )
+
+        assertNull(
+            StrokeTransform.rotate(listOf(original), frame, degrees(45f), viewport) { "unused" },
+        )
+    }
+
+    @Test
+    fun horizontalFlipMirrorsLocalXAtNinetyDegrees() {
+        val frame = OrientedSelectionFrame(
+            NormalizedPoint(0.5f, 0.5f), 200f, 100f, degrees(90f), square,
+        )
+        val original = stroke("asymmetric", 2f, 0.48f to 0.58f)
+
+        val result = StrokeTransform.flip(
+            listOf(original), frame, SelectionFlipAxis.HORIZONTAL, square,
+        ) { "horizontal" }
+
+        assertPoint(0.48f, 0.42f, result.strokes.single().samples.single())
+        assertEquals(frame, result.frame)
+    }
+
+    @Test
+    fun verticalFlipMirrorsLocalYAtNinetyDegrees() {
+        val frame = OrientedSelectionFrame(
+            NormalizedPoint(0.5f, 0.5f), 200f, 100f, degrees(90f), square,
+        )
+        val original = stroke("asymmetric", 2f, 0.48f to 0.58f)
+
+        val result = StrokeTransform.flip(
+            listOf(original), frame, SelectionFlipAxis.VERTICAL, square,
+        ) { "vertical" }
+
+        assertPoint(0.52f, 0.58f, result.strokes.single().samples.single())
+        assertEquals(frame, result.frame)
+    }
+
+    @Test
+    fun rotatedCornerScalingUsesTheOppositeLocalCorner() {
+        val frame = OrientedSelectionFrame(
+            NormalizedPoint(0.5f, 0.5f), 200f, 100f, degrees(90f), square,
+        )
+        val original = stroke("diagonal", 2f, 0.45f to 0.4f, 0.55f to 0.6f)
+
+        val result = StrokeTransform.scaleFromCorner(
+            listOf(original),
+            frame,
+            SelectionCorner.TOP_RIGHT,
+            NormalizedPoint(0.65f, 0.8f),
+            square,
+        ) { "scaled" }
+
+        assertPoint(0.45f, 0.4f, result.strokes.single().samples[0])
+        assertPoint(0.65f, 0.8f, result.strokes.single().samples[1])
+        assertEquals(400f, result.frame.widthPixels, 0.001f)
+        assertEquals(200f, result.frame.heightPixels, 0.001f)
+        assertEquals(degrees(90f), result.frame.rotationRadians, 0.0001f)
+        assertEquals(0.55f, result.frame.center.x, 0.0001f)
+        assertEquals(0.6f, result.frame.center.y, 0.0001f)
+    }
+
+    @Test
+    fun orientedScaleStopsAtPageBoundary() {
+        val frame = OrientedSelectionFrame(
+            NormalizedPoint(0.8f, 0.5f), 200f, 100f, degrees(90f), square,
+        )
+        val original = stroke("edge", 20f, 0.75f to 0.4f, 0.85f to 0.6f)
+
+        val result = StrokeTransform.scaleFromCorner(
+            listOf(original),
+            frame,
+            SelectionCorner.TOP_RIGHT,
+            NormalizedPoint(0.95f, 2f),
+            square,
+        ) { "scaled" }
+        val visibleBounds = result.strokes.selectionBounds(square)!!
+
+        assertTrue(visibleBounds.left >= 0f)
+        assertTrue(visibleBounds.top >= 0f)
+        assertTrue(visibleBounds.right <= 1f)
+        assertTrue(visibleBounds.bottom <= 1f)
+        assertEquals(frame.rotationRadians, result.frame.rotationRadians, 0f)
+    }
+
     private fun stroke(id: String, vararg points: Pair<Float, Float>) =
         stroke(id, 2f, *points)
 
@@ -100,4 +270,11 @@ class StrokeTransformTest {
             StrokeSample(point.first, point.second, index * 10L, 0.4f + index * 0.1f)
         },
     )
+
+    private fun assertPoint(expectedX: Float, expectedY: Float, actual: StrokeSample) {
+        assertEquals(expectedX, actual.x, 0.0001f)
+        assertEquals(expectedY, actual.y, 0.0001f)
+    }
+
+    private fun degrees(value: Float): Float = Math.toRadians(value.toDouble()).toFloat()
 }
