@@ -15,6 +15,8 @@ import com.putnamworkbook.offline.data.user.UserDatabase
 import com.putnamworkbook.offline.export.ExportCoordinator
 import com.putnamworkbook.offline.export.WebViewContentRasterizer
 import com.putnamworkbook.offline.export.WorkbookPdfExporter
+import com.putnamworkbook.offline.freeworkspace.FileFreeWorkspaceRepository
+import com.putnamworkbook.offline.freeworkspace.FreeWorkspaceRepository
 import com.putnamworkbook.offline.notebook.storage.FileNotebookRepository
 import com.putnamworkbook.offline.notebook.storage.NotebookRepository
 import com.putnamworkbook.offline.notebook.edit.NotebookClipboard
@@ -38,6 +40,9 @@ class AppContainer(
     val notebookRoot: Path by lazy { applicationContext.filesDir.toPath().resolve("notebooks") }
     val notebookRepository: NotebookRepository by lazy {
         FileNotebookRepository(notebookRoot)
+    }
+    val freeWorkspaceRepository: FreeWorkspaceRepository by lazy {
+        FileFreeWorkspaceRepository(notebookRoot, notebookRepository)
     }
     val notebookClipboard: NotebookClipboard by lazy { NotebookClipboard() }
     val backupCoordinator: BackupCoordinator by lazy {
