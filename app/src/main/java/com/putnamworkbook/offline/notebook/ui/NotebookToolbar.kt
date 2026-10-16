@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.IconButton
@@ -33,6 +34,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.putnamworkbook.offline.domain.model.BrushSpec
 import com.putnamworkbook.offline.notebook.edit.NotebookToolMode
@@ -101,8 +104,15 @@ fun NotebookToolbar(
                 enabled = activePageIndex > 0,
             )
             Text(
-                "Page ${activePageIndex + 1} of $pageCount",
-                modifier = Modifier.testTag(PAGE_INDEX_TEST_TAG),
+                "${activePageIndex + 1} / $pageCount",
+                modifier = Modifier
+                    .width(PAGE_INDEX_WIDTH)
+                    .testTag(PAGE_INDEX_TEST_TAG)
+                    .semantics { contentDescription = "Page ${activePageIndex + 1} of $pageCount" },
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.labelSmall,
             )
             ToolbarIconButton(
                 description = "Next page",
@@ -478,6 +488,7 @@ private fun ToolbarGlyphCanvas(glyph: ToolbarGlyph, color: Color) {
 
 private val CONTEXT_TOOLBAR_HEIGHT = 52.dp
 private val SAVE_STATUS_SIZE = 24.dp
+private val PAGE_INDEX_WIDTH = 88.dp
 
 private data class NotebookBrushColor(
     val label: String,

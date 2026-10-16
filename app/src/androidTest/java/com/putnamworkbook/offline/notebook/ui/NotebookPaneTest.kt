@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -142,7 +144,9 @@ class NotebookPaneTest {
             )
         }
 
-        composeRule.onNodeWithTag(PAGE_INDEX_TEST_TAG).assertTextEquals("Page 1 of 2")
+        composeRule.onNodeWithTag(PAGE_INDEX_TEST_TAG)
+            .assertTextEquals("1 / 2")
+            .assertContentDescriptionEquals("Page 1 of 2")
         composeRule.onNodeWithTag(PREVIOUS_PAGE_TEST_TAG).assertIsNotEnabled()
         composeRule.onNodeWithTag(NEXT_PAGE_TEST_TAG).assertIsEnabled()
         composeRule.onNodeWithText("Move left").assertDoesNotExist()
@@ -179,6 +183,37 @@ class NotebookPaneTest {
         assertTrue("Eight 48dp colors must remain fully visible", paletteBounds.right - paletteBounds.left >= 384.dp)
         assertTrue("Pen-width slider must retain usable width", sliderBounds.right - sliderBounds.left >= 120.dp)
         assertTrue("Pen-width slider must remain inside the toolbar", sliderBounds.right <= toolbarBounds.right)
+    }
+
+    @Test
+    fun maximumPageIndexKeepsBothNavigationTargetsAtNarrowSplitWidth() {
+        composeRule.setContent {
+            NotebookToolbar(
+                saveState = NotebookSaveState.SAVED,
+                toolMode = NotebookToolMode.PEN,
+                brush = BrushSpec(),
+                hasSelection = false,
+                clipboardHasContent = false,
+                onSetToolMode = {},
+                onBrushChanged = {},
+                onCut = {}, onCopy = {}, onPaste = {}, onDeleteSelection = {},
+                onUndo = {}, onRedo = {}, onAddPage = {}, onClearPage = {}, onDeletePage = {},
+                activePageIndex = 9_999,
+                pageCount = 10_000,
+                onSelectPage = {},
+                modifier = Modifier.width(504.dp).testTag(NOTEBOOK_TOOLBAR_TEST_TAG),
+            )
+        }
+
+        val toolbarBounds = composeRule.onNodeWithTag(NOTEBOOK_TOOLBAR_TEST_TAG).getUnclippedBoundsInRoot()
+        listOf(PREVIOUS_PAGE_TEST_TAG, NEXT_PAGE_TEST_TAG).forEach { tag ->
+            val bounds = composeRule.onNodeWithTag(tag).getUnclippedBoundsInRoot()
+            assertTrue("$tag must retain a 48dp target", bounds.right - bounds.left >= 48.dp)
+            assertTrue("$tag must remain inside the toolbar", bounds.right <= toolbarBounds.right)
+        }
+        composeRule.onNodeWithTag(PAGE_INDEX_TEST_TAG)
+            .assertTextEquals("10000 / 10000")
+            .assertContentDescriptionEquals("Page 10000 of 10000")
     }
 
     @Test
