@@ -192,7 +192,7 @@ class StrokeTransformTest {
 
         val result = StrokeTransform.flip(
             listOf(original), frame, SelectionFlipAxis.HORIZONTAL, square,
-        ) { "horizontal" }
+        ) { "horizontal" }!!
 
         assertPoint(0.48f, 0.42f, result.strokes.single().samples.single())
         assertEquals(frame, result.frame)
@@ -207,10 +207,29 @@ class StrokeTransformTest {
 
         val result = StrokeTransform.flip(
             listOf(original), frame, SelectionFlipAxis.VERTICAL, square,
-        ) { "vertical" }
+        ) { "vertical" }!!
 
         assertPoint(0.52f, 0.58f, result.strokes.single().samples.single())
         assertEquals(frame, result.frame)
+    }
+
+    @Test
+    fun flipReturnsNullWhenReflectedSparseSelectionCannotFit() {
+        val viewport = CanvasViewport(100f, 100f)
+        val frame = OrientedSelectionFrame(
+            center = NormalizedPoint(0.5f, 0.5f),
+            widthPixels = 127f,
+            heightPixels = 10f,
+            rotationRadians = degrees(22.5f),
+            viewport = viewport,
+        )
+        val diagonal = stroke("diagonal", 2f, 0.05f to 0.05f, 0.95f to 0.95f)
+
+        assertNull(
+            StrokeTransform.flip(
+                listOf(diagonal), frame, SelectionFlipAxis.HORIZONTAL, viewport,
+            ) { "unused" },
+        )
     }
 
     @Test
@@ -226,7 +245,7 @@ class StrokeTransformTest {
             SelectionCorner.TOP_RIGHT,
             NormalizedPoint(0.65f, 0.8f),
             square,
-        ) { "scaled" }
+        ) { "scaled" }!!
 
         assertPoint(0.45f, 0.4f, result.strokes.single().samples[0])
         assertPoint(0.65f, 0.8f, result.strokes.single().samples[1])
@@ -250,7 +269,7 @@ class StrokeTransformTest {
             SelectionCorner.TOP_RIGHT,
             NormalizedPoint(0.95f, 2f),
             square,
-        ) { "scaled" }
+        ) { "scaled" }!!
         val visibleBounds = result.strokes.selectionBounds(square)!!
 
         assertTrue(visibleBounds.left >= 0f)
@@ -258,6 +277,29 @@ class StrokeTransformTest {
         assertTrue(visibleBounds.right <= 1f)
         assertTrue(visibleBounds.bottom <= 1f)
         assertEquals(frame.rotationRadians, result.frame.rotationRadians, 0f)
+    }
+
+    @Test
+    fun orientedScaleReturnsNullWhenSparseFrameCenterWouldLeavePage() {
+        val viewport = CanvasViewport(100f, 100f)
+        val frame = OrientedSelectionFrame(
+            center = NormalizedPoint(0.5f, 0.5f),
+            widthPixels = 100f,
+            heightPixels = 100f,
+            rotationRadians = 0f,
+            viewport = viewport,
+        )
+        val sparse = stroke("sparse", 2f, 0.99f to 0.99f)
+
+        assertNull(
+            StrokeTransform.scaleFromCorner(
+                listOf(sparse),
+                frame,
+                SelectionCorner.TOP_LEFT,
+                NormalizedPoint(-2f, -2f),
+                viewport,
+            ) { "unused" },
+        )
     }
 
     private fun stroke(id: String, vararg points: Pair<Float, Float>) =

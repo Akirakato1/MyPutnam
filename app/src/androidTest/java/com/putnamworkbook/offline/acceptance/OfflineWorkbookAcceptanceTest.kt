@@ -6,6 +6,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -19,6 +20,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipe
+import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.putnamworkbook.offline.MainActivity
@@ -38,11 +40,14 @@ import com.putnamworkbook.offline.notebook.edit.CanvasViewport
 import com.putnamworkbook.offline.notebook.ui.COPY_SELECTION_TEST_TAG
 import com.putnamworkbook.offline.notebook.ui.CUT_SELECTION_TEST_TAG
 import com.putnamworkbook.offline.notebook.ui.DELETE_SELECTION_TEST_TAG
+import com.putnamworkbook.offline.notebook.ui.FLIP_HORIZONTAL_TEST_TAG
+import com.putnamworkbook.offline.notebook.ui.FLIP_VERTICAL_TEST_TAG
 import com.putnamworkbook.offline.notebook.ui.NEXT_PAGE_TEST_TAG
 import com.putnamworkbook.offline.notebook.ui.NOTEBOOK_CANVAS_TEST_TAG
 import com.putnamworkbook.offline.notebook.ui.PASTE_SELECTION_TEST_TAG
 import com.putnamworkbook.offline.notebook.ui.PREVIOUS_PAGE_TEST_TAG
 import com.putnamworkbook.offline.notebook.ui.REDO_TEST_TAG
+import com.putnamworkbook.offline.notebook.ui.SNAP_ROTATION_TEST_TAG
 import com.putnamworkbook.offline.notebook.ui.RenderedStrokeCountKey
 import com.putnamworkbook.offline.notebook.ui.SELECTION_OVERLAY_TEST_TAG
 import com.putnamworkbook.offline.notebook.ui.TOOL_MODE_TOGGLE_TEST_TAG
@@ -62,6 +67,7 @@ import java.nio.file.Files
 class OfflineWorkbookAcceptanceTest {
     @get:Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
+    private var expectedTransformedStrokes = emptyList<StrokeRecord>()
 
     @Test
     fun offlineWorkbookFlowKeepsContentInkProgressBackupAndExport() {
@@ -175,12 +181,25 @@ class OfflineWorkbookAcceptanceTest {
                 key,
                 activePage.id,
                 StrokeRecord(
-                    id = "acceptance-stroke",
+                    id = "acceptance-stroke-a",
                     brush = BrushSpec(colorArgb = 0xFF1D4ED8L, width = 8f),
                     samples = listOf(
                         StrokeSample(0.15f, 0.25f, 0L, null),
                         StrokeSample(0.35f, 0.35f, 10L, null),
                         StrokeSample(0.55f, 0.45f, 20L, null),
+                    ),
+                ),
+            )
+            application.container.notebookRepository.commitStroke(
+                key,
+                activePage.id,
+                StrokeRecord(
+                    id = "acceptance-stroke-b",
+                    brush = BrushSpec(colorArgb = 0xFFB91C1CL, width = 5f),
+                    samples = listOf(
+                        StrokeSample(0.20f, 0.42f, 0L, 0.4f),
+                        StrokeSample(0.28f, 0.18f, 12L, 0.8f),
+                        StrokeSample(0.44f, 0.30f, 24L, 0.6f),
                     ),
                 ),
             )
@@ -236,14 +255,14 @@ class OfflineWorkbookAcceptanceTest {
     }
 
     private fun exerciseSelectionEditingAndPageNavigation() {
-        waitForRenderedStrokeCount(1)
+        waitForRenderedStrokeCount(2)
         composeRule.onNodeWithTag(NEXT_PAGE_TEST_TAG).assertIsNotEnabled()
         composeRule.onNodeWithTag(PREVIOUS_PAGE_TEST_TAG).assertIsEnabled().performClick()
         waitForText("Page 1 of 2")
         composeRule.onNodeWithTag(PREVIOUS_PAGE_TEST_TAG).assertIsNotEnabled()
         composeRule.onNodeWithTag(NEXT_PAGE_TEST_TAG).assertIsEnabled().performClick()
         waitForText("Page 2 of 2")
-        waitForRenderedStrokeCount(1)
+        waitForRenderedStrokeCount(2)
 
         composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).assertContentDescriptionEquals("Pen mode")
         composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).performClick()
@@ -281,21 +300,20 @@ class OfflineWorkbookAcceptanceTest {
                 val key = ProblemKey("putnam", "2025", "A1")
                 val notebook = application.container.notebookRepository.loadExisting(key) ?: return@runBlocking false
                 val stored = application.container.notebookRepository.loadStrokes(key, notebook.pages.last().id)
-                stored.size == 1 && stored.none { it.id == "acceptance-stroke" }
+                stored.size == 2 && stored.none { it.id.startsWith("acceptance-stroke-") }
             }
         }
         composeRule.onNodeWithText("Save failed").assertDoesNotExist()
-        val movedBounds = runBlocking {
+        val movedStrokes = runBlocking {
             val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
             val application = targetContext.applicationContext as PutnamApplication
             val key = ProblemKey("putnam", "2025", "A1")
             val notebook = requireNotNull(application.container.notebookRepository.loadExisting(key))
-            requireNotNull(
-                application.container.notebookRepository
-                    .loadStrokes(key, notebook.pages.last().id)
-                    .selectionBounds(CanvasViewport(selectedOverlayWidth, selectedOverlayHeight)),
-            )
+            application.container.notebookRepository.loadStrokes(key, notebook.pages.last().id)
         }
+        val movedBounds = requireNotNull(
+            movedStrokes.selectionBounds(CanvasViewport(selectedOverlayWidth, selectedOverlayHeight)),
+        )
         overlay.performTouchInput {
             swipe(
                 start = Offset(selectedOverlayWidth * movedBounds.right, selectedOverlayHeight * movedBounds.bottom),
@@ -308,13 +326,78 @@ class OfflineWorkbookAcceptanceTest {
         }
         composeRule.onNodeWithTag(COPY_SELECTION_TEST_TAG).assertIsEnabled()
 
+        val scaledStrokes = waitForStoredReplacement(movedStrokes.mapTo(mutableSetOf()) { it.id })
+        val scaledBounds = requireNotNull(
+            scaledStrokes.selectionBounds(CanvasViewport(selectedOverlayWidth, selectedOverlayHeight)),
+        )
+        val stemPixels = with(composeRule.density) { 32.dp.toPx() }
+        val centerX = selectedOverlayWidth * (scaledBounds.left + scaledBounds.right) / 2f
+        val centerY = selectedOverlayHeight * (scaledBounds.top + scaledBounds.bottom) / 2f
+        val rotationRadius = selectedOverlayHeight * scaledBounds.height / 2f + stemPixels
+        overlay.performTouchInput {
+            swipe(
+                start = Offset(centerX, centerY - rotationRadius),
+                end = Offset(centerX + rotationRadius, centerY),
+                durationMillis = 500L,
+            )
+        }
+        val rotatedStrokes = waitForStoredReplacement(scaledStrokes.mapTo(mutableSetOf()) { it.id })
+        assertGeometryChanged(scaledStrokes, rotatedStrokes, "Free rotation must change stored geometry")
+        composeRule.onNodeWithTag(SNAP_ROTATION_TEST_TAG).performClick().assertIsSelected()
+        val rotatedBounds = requireNotNull(
+            rotatedStrokes.selectionBounds(CanvasViewport(selectedOverlayWidth, selectedOverlayHeight)),
+        )
+        overlay.performTouchInput {
+            swipe(
+                start = Offset(
+                    selectedOverlayWidth * rotatedBounds.right + stemPixels,
+                    selectedOverlayHeight * (rotatedBounds.top + rotatedBounds.bottom) / 2f,
+                ),
+                end = Offset(
+                    selectedOverlayWidth * (rotatedBounds.left + rotatedBounds.right) / 2f,
+                    selectedOverlayHeight * rotatedBounds.bottom + stemPixels,
+                ),
+                durationMillis = 500L,
+            )
+        }
+        val snappedStrokes = waitForStoredReplacement(rotatedStrokes.mapTo(mutableSetOf()) { it.id })
+        assertGeometryChanged(rotatedStrokes, snappedStrokes, "Snapped rotation must change stored geometry")
+        composeRule.onNodeWithTag(FLIP_HORIZONTAL_TEST_TAG).assertIsEnabled().performClick()
+        val horizontalFlip = waitForStoredReplacement(snappedStrokes.mapTo(mutableSetOf()) { it.id })
+        assertGeometryChanged(snappedStrokes, horizontalFlip, "Horizontal flip must change stored geometry")
+        composeRule.onNodeWithTag(FLIP_VERTICAL_TEST_TAG).assertIsEnabled().performClick()
+        val verticalFlip = waitForStoredReplacement(horizontalFlip.mapTo(mutableSetOf()) { it.id })
+        assertGeometryChanged(horizontalFlip, verticalFlip, "Vertical flip must change stored geometry")
+
+        composeRule.onNodeWithTag(UNDO_TEST_TAG).performClick()
+        val undoVertical = waitForStoredReplacement(verticalFlip.mapTo(mutableSetOf()) { it.id })
+        assertGeometryEquals(horizontalFlip, undoVertical, "Undo must revert only the vertical flip")
+        composeRule.onNodeWithTag(UNDO_TEST_TAG).performClick()
+        val undoHorizontal = waitForStoredReplacement(undoVertical.mapTo(mutableSetOf()) { it.id })
+        assertGeometryEquals(snappedStrokes, undoHorizontal, "Undo must revert only the horizontal flip")
+        composeRule.onNodeWithTag(REDO_TEST_TAG).performClick()
+        val redoHorizontal = waitForStoredReplacement(undoHorizontal.mapTo(mutableSetOf()) { it.id })
+        assertGeometryEquals(horizontalFlip, redoHorizontal, "Redo must restore only the horizontal flip")
+        composeRule.onNodeWithTag(REDO_TEST_TAG).performClick()
+        val redoVertical = waitForStoredReplacement(redoHorizontal.mapTo(mutableSetOf()) { it.id })
+        assertGeometryEquals(verticalFlip, redoVertical, "Redo must restore only the vertical flip")
+        expectedTransformedStrokes = redoVertical
+
+        overlay.performTouchInput {
+            swipe(
+                start = Offset(selectedOverlayWidth * 0.01f, selectedOverlayHeight * 0.01f),
+                end = Offset(selectedOverlayWidth * 0.99f, selectedOverlayHeight * 0.99f),
+                durationMillis = 500L,
+            )
+        }
+        composeRule.onNodeWithTag(COPY_SELECTION_TEST_TAG).assertIsEnabled()
         composeRule.onNodeWithTag(COPY_SELECTION_TEST_TAG).performClick()
         composeRule.onNodeWithTag(PASTE_SELECTION_TEST_TAG).assertIsEnabled().performClick()
-        waitForRenderedStrokeCount(2)
+        waitForRenderedStrokeCount(4)
         composeRule.onNodeWithTag(UNDO_TEST_TAG).performClick()
-        waitForRenderedStrokeCount(1)
-        composeRule.onNodeWithTag(REDO_TEST_TAG).performClick()
         waitForRenderedStrokeCount(2)
+        composeRule.onNodeWithTag(REDO_TEST_TAG).performClick()
+        waitForRenderedStrokeCount(4)
 
         composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).performClick()
         composeRule.onNodeWithTag(TOOL_MODE_TOGGLE_TEST_TAG).assertContentDescriptionEquals("Pen mode")
@@ -335,7 +418,7 @@ class OfflineWorkbookAcceptanceTest {
         composeRule.onNodeWithTag("home-continue").performClick()
         waitForTag("workspace-screen")
         waitForText("Page 2 of 2")
-        waitForRenderedStrokeCount(2)
+        waitForRenderedStrokeCount(4)
 
         val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
         val application = targetContext.applicationContext as PutnamApplication
@@ -343,9 +426,20 @@ class OfflineWorkbookAcceptanceTest {
             val key = ProblemKey("putnam", "2025", "A1")
             val notebook = requireNotNull(application.container.notebookRepository.loadExisting(key))
             val strokes = application.container.notebookRepository.loadStrokes(key, notebook.pages.last().id)
-            assertEquals(2, strokes.size)
-            assertEquals(2, strokes.map { it.id }.distinct().size)
-            assertTrue("Move/scale should replace the original geometry", strokes.none { it.id == "acceptance-stroke" })
+            assertEquals(4, strokes.size)
+            assertEquals(4, strokes.map { it.id }.distinct().size)
+            assertTrue(
+                "Move/scale/rotate/flip should replace the original geometry",
+                strokes.none { it.id.startsWith("acceptance-stroke-") },
+            )
+            val persistedTransforms = expectedTransformedStrokes.map { expected ->
+                requireNotNull(strokes.singleOrNull { it.id == expected.id })
+            }
+            assertGeometryEquals(
+                expectedTransformedStrokes,
+                persistedTransforms,
+                "Exact rotated and flipped geometry must survive Home and reopen",
+            )
         }
     }
 
@@ -354,6 +448,38 @@ class OfflineWorkbookAcceptanceTest {
             composeRule.onNodeWithTag(NOTEBOOK_CANVAS_TEST_TAG)
                 .fetchSemanticsNode().config[RenderedStrokeCountKey] == expected
         }
+    }
+
+    private fun waitForStoredReplacement(previousIds: Set<String>): List<StrokeRecord> {
+        var replacement = emptyList<StrokeRecord>()
+        composeRule.waitUntil(timeoutMillis = 15_000) {
+            replacement = runBlocking {
+                val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
+                val application = targetContext.applicationContext as PutnamApplication
+                val key = ProblemKey("putnam", "2025", "A1")
+                val notebook = application.container.notebookRepository.loadExisting(key) ?: return@runBlocking emptyList()
+                application.container.notebookRepository.loadStrokes(key, notebook.pages.last().id)
+            }
+            replacement.size == previousIds.size && replacement.mapTo(mutableSetOf()) { it.id } != previousIds
+        }
+        return replacement
+    }
+
+    private fun assertGeometryChanged(
+        before: List<StrokeRecord>,
+        after: List<StrokeRecord>,
+        message: String,
+    ) {
+        assertTrue(message, before.map { it.samples } != after.map { it.samples })
+    }
+
+    private fun assertGeometryEquals(
+        expected: List<StrokeRecord>,
+        actual: List<StrokeRecord>,
+        message: String,
+    ) {
+        assertEquals(message, expected.map { it.brush }, actual.map { it.brush })
+        assertEquals(message, expected.map { it.samples }, actual.map { it.samples })
     }
 
     private fun waitForTag(tag: String) {

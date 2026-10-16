@@ -82,7 +82,7 @@ object StrokeTransform {
         axis: SelectionFlipAxis,
         viewport: CanvasViewport,
         idFactory: () -> String,
-    ): SelectionTransformResult {
+    ): SelectionTransformResult? {
         requireMatchingViewport(frame, viewport)
         if (strokes.isEmpty()) return SelectionTransformResult(emptyList(), frame)
         val transformed = strokes.toPixelStrokes(viewport).mapPoints { point ->
@@ -94,9 +94,7 @@ object StrokeTransform {
                 },
             )
         }
-        return checkNotNull(transformed.fitToPage(viewport, frame, idFactory)) {
-            "A valid selection must remain page-fit after a local-axis flip"
-        }
+        return transformed.fitToPage(viewport, frame, idFactory)
     }
 
     fun scaleFromCorner(
@@ -106,7 +104,7 @@ object StrokeTransform {
         target: NormalizedPoint,
         viewport: CanvasViewport,
         idFactory: () -> String,
-    ): SelectionTransformResult {
+    ): SelectionTransformResult? {
         requireMatchingViewport(frame, viewport)
         if (strokes.isEmpty()) return SelectionTransformResult(emptyList(), frame)
         val anchor = frame.localCorner(opposite(corner))
@@ -167,14 +165,14 @@ object StrokeTransform {
             }
             chosen = best
         }
-        val chosenFrame = frame.copy(
-            center = chosen.centerPixels.toNormalized(viewport),
-            widthPixels = chosen.widthPixels,
-            heightPixels = chosen.heightPixels,
+        return chosen.strokes.fitToPage(
+            viewport = viewport,
+            frameCenterPixels = chosen.centerPixels,
+            frameWidthPixels = chosen.widthPixels,
+            frameHeightPixels = chosen.heightPixels,
+            frameRotationRadians = frame.rotationRadians,
+            idFactory = idFactory,
         )
-        return checkNotNull(chosen.strokes.fitToPage(viewport, chosenFrame, idFactory)) {
-            "A scaled selection must fit within the page"
-        }
     }
 
     fun scaleFromCorner(
@@ -191,7 +189,7 @@ object StrokeTransform {
         target = target,
         viewport = viewport,
         idFactory = idFactory,
-    ).strokes
+    )?.strokes ?: strokes
 
     private fun requireMatchingViewport(frame: OrientedSelectionFrame, viewport: CanvasViewport) {
         require(frame.viewport == viewport) { "Selection frame viewport does not match the canvas" }
@@ -279,8 +277,33 @@ object StrokeTransform {
         viewport: CanvasViewport,
         frame: OrientedSelectionFrame,
         idFactory: () -> String,
+    ): SelectionTransformResult? = fitToPage(
+        viewport = viewport,
+        frameCenterPixels = frame.center.toPixels(viewport),
+        frameWidthPixels = frame.widthPixels,
+        frameHeightPixels = frame.heightPixels,
+        frameRotationRadians = frame.rotationRadians,
+        idFactory = idFactory,
+    )
+
+    private fun List<PixelStroke>.fitToPage(
+        viewport: CanvasViewport,
+        frameCenterPixels: PixelPoint,
+        frameWidthPixels: Float,
+        frameHeightPixels: Float,
+        frameRotationRadians: Float,
+        idFactory: () -> String,
     ): SelectionTransformResult? {
-        val bounds = pixelBounds() ?: return SelectionTransformResult(emptyList(), frame)
+        val bounds = pixelBounds() ?: return SelectionTransformResult(
+            emptyList(),
+            OrientedSelectionFrame(
+                center = frameCenterPixels.toNormalizedOrNull(viewport) ?: return null,
+                widthPixels = frameWidthPixels,
+                heightPixels = frameHeightPixels,
+                rotationRadians = frameRotationRadians,
+                viewport = viewport,
+            ),
+        )
         if (bounds.width > viewport.widthPixels + PIXEL_EPSILON ||
             bounds.height > viewport.heightPixels + PIXEL_EPSILON
         ) {
@@ -299,12 +322,18 @@ object StrokeTransform {
         val shifted = if (shiftX == 0f && shiftY == 0f) this else mapPoints { point ->
             PixelPoint(point.x + shiftX, point.y + shiftY)
         }
-        val centerPixels = frame.center.toPixels(viewport)
+        val shiftedCenter = PixelPoint(
+            frameCenterPixels.x + shiftX,
+            frameCenterPixels.y + shiftY,
+        ).toNormalizedOrNull(viewport) ?: return null
         return SelectionTransformResult(
             strokes = shifted.materialize(viewport, idFactory),
-            frame = frame.copy(
-                center = PixelPoint(centerPixels.x + shiftX, centerPixels.y + shiftY)
-                    .toNormalized(viewport),
+            frame = OrientedSelectionFrame(
+                center = shiftedCenter,
+                widthPixels = frameWidthPixels,
+                heightPixels = frameHeightPixels,
+                rotationRadians = frameRotationRadians,
+                viewport = viewport,
             ),
         )
     }
@@ -367,10 +396,16 @@ object StrokeTransform {
         y = y * viewport.heightPixels,
     )
 
-    private fun PixelPoint.toNormalized(viewport: CanvasViewport): NormalizedPoint = NormalizedPoint(
-        x = normalizedCoordinate(x, viewport.widthPixels),
-        y = normalizedCoordinate(y, viewport.heightPixels),
-    )
+    private fun PixelPoint.toNormalizedOrNull(viewport: CanvasViewport): NormalizedPoint? {
+        val normalizedX = x / viewport.widthPixels
+        val normalizedY = y / viewport.heightPixels
+        if (normalizedX !in -NORMALIZED_EPSILON..1f + NORMALIZED_EPSILON ||
+            normalizedY !in -NORMALIZED_EPSILON..1f + NORMALIZED_EPSILON
+        ) {
+            return null
+        }
+        return NormalizedPoint(normalizedX.coerceIn(0f, 1f), normalizedY.coerceIn(0f, 1f))
+    }
 
     private data class RawVisibleBounds(
         val left: Float,

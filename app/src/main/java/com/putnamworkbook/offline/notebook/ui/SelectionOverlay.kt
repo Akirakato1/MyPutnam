@@ -3,6 +3,11 @@ package com.putnamworkbook.offline.notebook.ui
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -15,6 +20,11 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.putnamworkbook.offline.notebook.edit.CanvasViewport
 import com.putnamworkbook.offline.notebook.edit.NormalizedPoint
@@ -30,9 +40,11 @@ import com.putnamworkbook.offline.notebook.edit.rotationHandle
 import com.putnamworkbook.offline.notebook.edit.toOrientedFrame
 import kotlin.math.atan2
 import kotlin.math.cos
+import kotlin.math.roundToInt
 import kotlin.math.sin
 
 const val SELECTION_OVERLAY_TEST_TAG = "notebook-selection-overlay"
+const val ROTATION_HANDLE_TEST_TAG = "notebook-rotation-handle"
 
 @Composable
 fun SelectionOverlay(
@@ -56,134 +68,177 @@ fun SelectionOverlay(
     val frameStrokePixels = with(density) { FRAME_STROKE_WIDTH.toPx() }
     var gesture by remember { mutableStateOf<SelectionGesture?>(null) }
     var currentPoint by remember { mutableStateOf<NormalizedPoint?>(null) }
-    Canvas(
-        modifier = modifier
-            .testTag(SELECTION_OVERLAY_TEST_TAG)
-            .pointerInput(selection?.frame) {
-                detectTapGestures { tap ->
-                    val viewport = CanvasViewport(size.width.toFloat(), size.height.toFloat())
-                    val point = tap.normalized(size.width, size.height)
-                    val frame = selection?.displayFrame(viewport)
-                    if (
-                        frame != null &&
-                        !frame.contains(point) &&
-                        frame.hitCorner(point, handleHitRadiusPixels) == null &&
-                        !frame.hitRotationHandle(point, handleHitRadiusPixels, rotationStemPixels)
-                    ) {
-                        onClearSelection()
+    BoxWithConstraints(modifier = modifier) {
+        Canvas(
+            modifier = Modifier
+                .fillMaxSize()
+                .testTag(SELECTION_OVERLAY_TEST_TAG)
+                .pointerInput(selection?.frame) {
+                    detectTapGestures { tap ->
+                        val viewport = CanvasViewport(size.width.toFloat(), size.height.toFloat())
+                        val point = tap.normalized(size.width, size.height)
+                        val frame = selection?.displayFrame(viewport)
+                        if (
+                            frame != null &&
+                            !frame.contains(point) &&
+                            frame.hitCorner(point, handleHitRadiusPixels) == null &&
+                            !frame.hitRotationHandle(point, handleHitRadiusPixels, rotationStemPixels)
+                        ) {
+                            onClearSelection()
+                        }
                     }
                 }
-            }
-            .pointerInput(selection?.selectedStrokeIds, selection?.frame) {
-                detectDragGestures(
-                    onDragStart = { start ->
-                        val viewport = CanvasViewport(size.width.toFloat(), size.height.toFloat())
-                        val point = start.normalized(size.width, size.height)
-                        val frame = selection?.displayFrame(viewport)
-                        val isRotationHandle = frame?.hitRotationHandle(
-                            point,
-                            handleHitRadiusPixels,
-                            rotationStemPixels,
-                        ) == true
-                        val corner = frame?.hitCorner(point, handleHitRadiusPixels)
-                        gesture = when (
-                            resolveSelectionDragIntent(
-                                isRotationHandle = isRotationHandle,
-                                isCorner = corner != null,
-                                isInsideSelection = frame?.contains(point) == true,
-                            )
-                        ) {
-                            SelectionDragIntent.MARQUEE -> SelectionGesture.Marquee(point)
-                            SelectionDragIntent.MOVE -> SelectionGesture.Move(point)
-                            SelectionDragIntent.SCALE -> SelectionGesture.Scale(requireNotNull(corner), point)
-                            SelectionDragIntent.ROTATE -> SelectionGesture.Rotate(
-                                initialPointerAngle = requireNotNull(frame).pointerAngle(point),
-                                initialFrameAngle = frame.rotationRadians,
-                            )
-                        }
-                        currentPoint = point
-                    },
-                    onDrag = { change, _ ->
-                        change.consume()
-                        val point = change.position.normalized(size.width, size.height)
-                        currentPoint = point
-                        when (val active = gesture) {
-                            is SelectionGesture.Move -> onPreviewMove(point.x - active.start.x, point.y - active.start.y)
-                            is SelectionGesture.Scale -> onPreviewScale(active.corner, point)
-                            is SelectionGesture.Rotate -> {
-                                val viewport = CanvasViewport(size.width.toFloat(), size.height.toFloat())
-                                val frame = selection?.displayFrame(viewport) ?: return@detectDragGestures
-                                val delta = shortestAngle(frame.pointerAngle(point) - active.initialPointerAngle)
-                                onPreviewRotation(active.initialFrameAngle + delta)
-                            }
-                            else -> Unit
-                        }
-                    },
-                    onDragEnd = {
-                        val end = currentPoint
-                        when (val active = gesture) {
-                            is SelectionGesture.Marquee -> if (end != null) {
-                                onSelect(
-                                    NormalizedRect.fromPoints(active.start, end),
-                                    CanvasViewport(size.width.toFloat(), size.height.toFloat()),
+                .pointerInput(selection?.selectedStrokeIds, selection?.frame) {
+                    detectDragGestures(
+                        orientationLock = null,
+                        onDragStart = { down, _, _ ->
+                            val viewport = CanvasViewport(size.width.toFloat(), size.height.toFloat())
+                            val point = down.position.normalized(size.width, size.height)
+                            val frame = selection?.displayFrame(viewport)
+                            val isRotationHandle = frame?.hitRotationHandle(
+                                point,
+                                handleHitRadiusPixels,
+                                rotationStemPixels,
+                            ) == true
+                            val corner = frame?.hitCorner(point, handleHitRadiusPixels)
+                            gesture = when (
+                                resolveSelectionDragIntent(
+                                    isRotationHandle = isRotationHandle,
+                                    isCorner = corner != null,
+                                    isInsideSelection = frame?.contains(point) == true,
+                                )
+                            ) {
+                                SelectionDragIntent.MARQUEE -> SelectionGesture.Marquee(point)
+                                SelectionDragIntent.MOVE -> SelectionGesture.Move(point)
+                                SelectionDragIntent.SCALE -> SelectionGesture.Scale(requireNotNull(corner), point)
+                                SelectionDragIntent.ROTATE -> SelectionGesture.Rotate(
+                                    initialPointerAngle = requireNotNull(frame).pointerAngle(point),
+                                    initialFrameAngle = frame.rotationRadians,
                                 )
                             }
-                            is SelectionGesture.Move -> if (end != null) {
-                                onCommitMove(end.x - active.start.x, end.y - active.start.y)
+                            currentPoint = point
+                        },
+                        onDragEnd = {
+                            val end = currentPoint
+                            when (val active = gesture) {
+                                is SelectionGesture.Marquee -> if (end != null) {
+                                    onSelect(
+                                        NormalizedRect.fromPoints(active.start, end),
+                                        CanvasViewport(size.width.toFloat(), size.height.toFloat()),
+                                    )
+                                }
+                                is SelectionGesture.Move -> if (end != null) {
+                                    onCommitMove(end.x - active.start.x, end.y - active.start.y)
+                                }
+                                is SelectionGesture.Scale -> if (end != null) onCommitScale(active.corner, end)
+                                is SelectionGesture.Rotate -> onCommitRotation()
+                                null -> Unit
                             }
-                            is SelectionGesture.Scale -> if (end != null) onCommitScale(active.corner, end)
-                            is SelectionGesture.Rotate -> onCommitRotation()
-                            null -> Unit
-                        }
-                        gesture = null
-                        currentPoint = null
-                    },
-                    onDragCancel = {
-                        onCancelPreview()
-                        gesture = null
-                        currentPoint = null
-                    },
+                            gesture = null
+                            currentPoint = null
+                        },
+                        onDragCancel = {
+                            onCancelPreview()
+                            gesture = null
+                            currentPoint = null
+                        },
+                        shouldAwaitTouchSlop = { true },
+                        onDrag = { change, _ ->
+                            change.consume()
+                            val point = change.position.normalized(size.width, size.height)
+                            currentPoint = point
+                            when (val active = gesture) {
+                                is SelectionGesture.Move -> onPreviewMove(point.x - active.start.x, point.y - active.start.y)
+                                is SelectionGesture.Scale -> onPreviewScale(active.corner, point)
+                                is SelectionGesture.Rotate -> {
+                                    val viewport = CanvasViewport(size.width.toFloat(), size.height.toFloat())
+                                    val frame = selection?.displayFrame(viewport) ?: return@detectDragGestures
+                                    onPreviewRotation(
+                                        resolveRotationAngle(
+                                            initialFrameAngle = active.initialFrameAngle,
+                                            initialPointerAngle = active.initialPointerAngle,
+                                            currentPointerAngle = frame.pointerAngle(point),
+                                        ),
+                                    )
+                                }
+                                else -> Unit
+                            }
+                        },
+                    )
+                },
+        ) {
+            val viewport = CanvasViewport(size.width, size.height)
+            selection?.displayFrame(viewport)?.let { frame ->
+                val corners = listOf(
+                    frame.corner(SelectionCorner.TOP_LEFT),
+                    frame.corner(SelectionCorner.TOP_RIGHT),
+                    frame.corner(SelectionCorner.BOTTOM_RIGHT),
+                    frame.corner(SelectionCorner.BOTTOM_LEFT),
+                ).map { it.toOffset(size.width, size.height) }
+                corners.indices.forEach { index ->
+                    drawLine(
+                        color = FRAME_COLOR,
+                        start = corners[index],
+                        end = corners[(index + 1) % corners.size],
+                        strokeWidth = frameStrokePixels,
+                    )
+                }
+                val topCenter = Offset(
+                    x = (corners[0].x + corners[1].x) / 2f,
+                    y = (corners[0].y + corners[1].y) / 2f,
                 )
-            },
-    ) {
-        val viewport = CanvasViewport(size.width, size.height)
-        selection?.displayFrame(viewport)?.let { frame ->
-            val corners = listOf(
-                frame.corner(SelectionCorner.TOP_LEFT),
-                frame.corner(SelectionCorner.TOP_RIGHT),
-                frame.corner(SelectionCorner.BOTTOM_RIGHT),
-                frame.corner(SelectionCorner.BOTTOM_LEFT),
-            ).map { it.toOffset(size.width, size.height) }
-            corners.indices.forEach { index ->
-                drawLine(
-                    color = FRAME_COLOR,
-                    start = corners[index],
-                    end = corners[(index + 1) % corners.size],
-                    strokeWidth = frameStrokePixels,
+                val rotationHandle = frame.rotationHandle(rotationStemPixels).toOffset(size.width, size.height)
+                drawLine(FRAME_COLOR, topCenter, rotationHandle, strokeWidth = frameStrokePixels)
+                corners.forEach { handle ->
+                    drawCircle(Color.White, handleRadiusPixels, handle)
+                    drawCircle(FRAME_COLOR, handleRadiusPixels, handle, style = Stroke(handleStrokePixels))
+                }
+                drawCircle(Color.White, handleRadiusPixels, rotationHandle)
+                drawCircle(FRAME_COLOR, handleRadiusPixels, rotationHandle, style = Stroke(handleStrokePixels))
+            }
+            val marquee = (gesture as? SelectionGesture.Marquee)?.let { active ->
+                currentPoint?.let { NormalizedRect.fromPoints(active.start, it) }
+            }
+            marquee?.let {
+                drawRect(
+                    FRAME_COLOR,
+                    Offset(it.left * size.width, it.top * size.height),
+                    androidx.compose.ui.geometry.Size(it.width * size.width, it.height * size.height),
+                    style = Stroke(width = frameStrokePixels),
                 )
             }
-            val topCenter = Offset(
-                x = (corners[0].x + corners[1].x) / 2f,
-                y = (corners[0].y + corners[1].y) / 2f,
-            )
-            val rotationHandle = frame.rotationHandle(rotationStemPixels).toOffset(size.width, size.height)
-            drawLine(FRAME_COLOR, topCenter, rotationHandle, strokeWidth = frameStrokePixels)
-            corners.forEach { handle ->
-                drawCircle(Color.White, handleRadiusPixels, handle)
-                drawCircle(FRAME_COLOR, handleRadiusPixels, handle, style = Stroke(handleStrokePixels))
-            }
-            drawCircle(Color.White, handleRadiusPixels, rotationHandle)
-            drawCircle(FRAME_COLOR, handleRadiusPixels, rotationHandle, style = Stroke(handleStrokePixels))
         }
-        val marquee = (gesture as? SelectionGesture.Marquee)?.let { active ->
-            currentPoint?.let { NormalizedRect.fromPoints(active.start, it) }
-        }
-        marquee?.let {
-            drawRect(
-                FRAME_COLOR,
-                Offset(it.left * size.width, it.top * size.height),
-                androidx.compose.ui.geometry.Size(it.width * size.width, it.height * size.height),
-                style = Stroke(width = frameStrokePixels),
+        val accessibilityViewport = CanvasViewport(
+            constraints.maxWidth.toFloat().coerceAtLeast(1f),
+            constraints.maxHeight.toFloat().coerceAtLeast(1f),
+        )
+        selection?.displayFrame(accessibilityViewport)?.let { frame ->
+            val handle = frame.rotationHandle(rotationStemPixels)
+            Box(
+                Modifier
+                    .offset {
+                        IntOffset(
+                            x = (handle.x * accessibilityViewport.widthPixels - handleHitRadiusPixels).roundToInt(),
+                            y = (handle.y * accessibilityViewport.heightPixels - handleHitRadiusPixels).roundToInt(),
+                        )
+                    }
+                    .size(HANDLE_HIT_DIAMETER)
+                    .testTag(ROTATION_HANDLE_TEST_TAG)
+                    .semantics {
+                        contentDescription = "Rotate selection"
+                        customActions = listOf(
+                            CustomAccessibilityAction("Rotate clockwise 15 degrees") {
+                                onPreviewRotation(frame.rotationRadians + ROTATION_ACCESSIBILITY_STEP_RADIANS)
+                                onCommitRotation()
+                                true
+                            },
+                            CustomAccessibilityAction("Rotate counterclockwise 15 degrees") {
+                                onPreviewRotation(frame.rotationRadians - ROTATION_ACCESSIBILITY_STEP_RADIANS)
+                                onCommitRotation()
+                                true
+                            },
+                        )
+                    },
             )
         }
     }
@@ -217,6 +272,12 @@ internal fun resolveSelectionDragIntent(
     else -> SelectionDragIntent.MARQUEE
 }
 
+internal fun resolveRotationAngle(
+    initialFrameAngle: Float,
+    initialPointerAngle: Float,
+    currentPointerAngle: Float,
+): Float = initialFrameAngle + shortestAngle(currentPointerAngle - initialPointerAngle)
+
 private fun Offset.normalized(width: Int, height: Int): NormalizedPoint = NormalizedPoint(
     x = x / width.coerceAtLeast(1),
     y = y / height.coerceAtLeast(1),
@@ -243,6 +304,8 @@ private fun shortestAngle(angle: Float): Float = atan2(sin(angle), cos(angle))
 private val FRAME_COLOR = Color(0xFF2563EB)
 private val ROTATION_STEM_LENGTH = 32.dp
 private val HANDLE_HIT_RADIUS = 24.dp
+private val HANDLE_HIT_DIAMETER = 48.dp
 private val HANDLE_VISIBLE_RADIUS = 8.dp
 private val HANDLE_STROKE_WIDTH = 2.dp
 private val FRAME_STROKE_WIDTH = 2.dp
+private val ROTATION_ACCESSIBILITY_STEP_RADIANS = Math.toRadians(15.0).toFloat()

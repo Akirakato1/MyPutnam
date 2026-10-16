@@ -349,6 +349,15 @@ class NotebookSelectionTest {
 
         val overlay = composeRule.onNodeWithTag(SELECTION_OVERLAY_TEST_TAG)
         val bounds = overlay.fetchSemanticsNode().boundsInRoot
+        val accessibleHandle = composeRule.onNodeWithTag(ROTATION_HANDLE_TEST_TAG)
+        accessibleHandle.assertContentDescriptionEquals("Rotate selection")
+        val handleBounds = accessibleHandle.getUnclippedBoundsInRoot()
+        assertTrue(handleBounds.right - handleBounds.left >= 48.dp)
+        assertTrue(handleBounds.bottom - handleBounds.top >= 48.dp)
+        assertEquals(
+            listOf("Rotate clockwise 15 degrees", "Rotate counterclockwise 15 degrees"),
+            accessibleHandle.fetchSemanticsNode().config[SemanticsActions.CustomActions].map { it.label },
+        )
         val stemPixels = with(composeRule.density) { 32.dp.toPx() }
         overlay.performTouchInput {
             swipe(
@@ -360,6 +369,7 @@ class NotebookSelectionTest {
         composeRule.waitForIdle()
 
         assertTrue(previews.isNotEmpty())
+        assertEquals(Math.toRadians(90.0).toFloat(), previews.last(), 0.08f)
         assertEquals(1, commitCount)
         assertEquals(0, selectCount)
         assertEquals(0, clearCount)

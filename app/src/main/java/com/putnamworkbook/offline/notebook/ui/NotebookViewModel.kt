@@ -244,7 +244,7 @@ class NotebookViewModel(
         val selection = mutableUiState.value.selection ?: return
         val result = StrokeTransform.scaleFromCorner(
             selectedStrokes(), selection.frame, corner, target, viewport,
-        ) { "preview-${UUID.randomUUID()}" }
+        ) { "preview-${UUID.randomUUID()}" } ?: return
         updatePreview(result.strokes, result.frame)
     }
 
@@ -259,7 +259,7 @@ class NotebookViewModel(
         if (selected.isEmpty()) return
         val result = StrokeTransform.scaleFromCorner(
             selected, selection.frame, corner, target, viewport,
-        ) { UUID.randomUUID().toString() }
+        ) { UUID.randomUUID().toString() } ?: return
         commitReplacement(
             selected,
             result.strokes,
@@ -304,7 +304,7 @@ class NotebookViewModel(
             selection.frame,
             axis,
             viewport,
-        ) { UUID.randomUUID().toString() }
+        ) { UUID.randomUUID().toString() } ?: return
         commitReplacement(selected, result.strokes, viewport, result.frame)
     }
 

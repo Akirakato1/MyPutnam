@@ -5,6 +5,17 @@ import org.junit.Test
 
 class SelectionGestureResolverTest {
     @Test
+    fun requestedRotationIncludesMotionBeforeTouchSlop() {
+        val result = resolveRotationAngle(
+            initialFrameAngle = degrees(15f),
+            initialPointerAngle = degrees(-90f),
+            currentPointerAngle = degrees(0f),
+        )
+
+        assertEquals(degrees(105f), result, 0.0001f)
+    }
+
+    @Test
     fun rotationHandleHasHighestDragPriorityAndDoesNotClearSelection() {
         assertEquals(
             SelectionDragIntent.ROTATE,
@@ -47,4 +58,6 @@ class SelectionGestureResolverTest {
             ),
         )
     }
+
+    private fun degrees(value: Float): Float = Math.toRadians(value.toDouble()).toFloat()
 }
