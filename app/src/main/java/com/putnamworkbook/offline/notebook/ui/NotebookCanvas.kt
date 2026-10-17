@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.nativeCanvas
@@ -104,7 +105,7 @@ fun NotebookCanvas(
             }
             .semantics { renderedStrokeCount = renderedStrokes.size },
     ) {
-        Canvas(Modifier.fillMaxSize()) {
+        Canvas(Modifier.fillMaxSize().clipToBounds()) {
             drawRect(Color.White)
             if (page.paperStyle == PaperStyle.SQUARE_GRID) {
                 val spacing = 32.dp.toPx()
@@ -133,7 +134,7 @@ fun NotebookCanvas(
                         onInkHandoffEvent = onInkHandoffEvent,
                     )
                 },
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize().clipToBounds(),
                 update = { layer ->
                     layer.brush = brush
                     layer.onStrokeFinished = onStrokeFinished

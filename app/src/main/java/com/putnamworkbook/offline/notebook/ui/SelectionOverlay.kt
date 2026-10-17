@@ -4,10 +4,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,11 +17,6 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.CustomAccessibilityAction
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.customActions
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.putnamworkbook.offline.notebook.edit.CanvasViewport
 import com.putnamworkbook.offline.notebook.edit.NormalizedPoint
@@ -40,11 +32,9 @@ import com.putnamworkbook.offline.notebook.edit.rotationHandle
 import com.putnamworkbook.offline.notebook.edit.toOrientedFrame
 import kotlin.math.atan2
 import kotlin.math.cos
-import kotlin.math.roundToInt
 import kotlin.math.sin
 
 const val SELECTION_OVERLAY_TEST_TAG = "notebook-selection-overlay"
-const val ROTATION_HANDLE_TEST_TAG = "notebook-rotation-handle"
 
 @Composable
 fun SelectionOverlay(
@@ -68,7 +58,7 @@ fun SelectionOverlay(
     val frameStrokePixels = with(density) { FRAME_STROKE_WIDTH.toPx() }
     var gesture by remember { mutableStateOf<SelectionGesture?>(null) }
     var currentPoint by remember { mutableStateOf<NormalizedPoint?>(null) }
-    BoxWithConstraints(modifier = modifier) {
+    Box(modifier = modifier) {
         Canvas(
             modifier = Modifier
                 .fillMaxSize()
@@ -208,39 +198,6 @@ fun SelectionOverlay(
                 )
             }
         }
-        val accessibilityViewport = CanvasViewport(
-            constraints.maxWidth.toFloat().coerceAtLeast(1f),
-            constraints.maxHeight.toFloat().coerceAtLeast(1f),
-        )
-        selection?.displayFrame(accessibilityViewport)?.let { frame ->
-            val handle = frame.rotationHandle(rotationStemPixels)
-            Box(
-                Modifier
-                    .offset {
-                        IntOffset(
-                            x = (handle.x * accessibilityViewport.widthPixels - handleHitRadiusPixels).roundToInt(),
-                            y = (handle.y * accessibilityViewport.heightPixels - handleHitRadiusPixels).roundToInt(),
-                        )
-                    }
-                    .size(HANDLE_HIT_DIAMETER)
-                    .testTag(ROTATION_HANDLE_TEST_TAG)
-                    .semantics {
-                        contentDescription = "Rotate selection"
-                        customActions = listOf(
-                            CustomAccessibilityAction("Rotate clockwise 15 degrees") {
-                                onPreviewRotation(frame.rotationRadians + ROTATION_ACCESSIBILITY_STEP_RADIANS)
-                                onCommitRotation()
-                                true
-                            },
-                            CustomAccessibilityAction("Rotate counterclockwise 15 degrees") {
-                                onPreviewRotation(frame.rotationRadians - ROTATION_ACCESSIBILITY_STEP_RADIANS)
-                                onCommitRotation()
-                                true
-                            },
-                        )
-                    },
-            )
-        }
     }
 }
 
@@ -278,6 +235,22 @@ internal fun resolveRotationAngle(
     currentPointerAngle: Float,
 ): Float = initialFrameAngle + shortestAngle(currentPointerAngle - initialPointerAngle)
 
+internal class RotationGestureBaseline private constructor(
+    private val frame: OrientedSelectionFrame,
+    private val initialPointerAngle: Float,
+) {
+    fun angleFor(pointer: NormalizedPoint): Float = resolveRotationAngle(
+        initialFrameAngle = frame.rotationRadians,
+        initialPointerAngle = initialPointerAngle,
+        currentPointerAngle = frame.pointerAngle(pointer),
+    )
+
+    companion object {
+        fun start(frame: OrientedSelectionFrame, pointer: NormalizedPoint): RotationGestureBaseline =
+            RotationGestureBaseline(frame, frame.pointerAngle(pointer))
+    }
+}
+
 private fun Offset.normalized(width: Int, height: Int): NormalizedPoint = NormalizedPoint(
     x = x / width.coerceAtLeast(1),
     y = y / height.coerceAtLeast(1),
@@ -288,12 +261,12 @@ private fun NormalizedPoint.toOffset(width: Float, height: Float): Offset = Offs
     y = y * height,
 )
 
-private fun NotebookSelectionState.displayFrame(viewport: CanvasViewport): OrientedSelectionFrame {
+internal fun NotebookSelectionState.displayFrame(viewport: CanvasViewport): OrientedSelectionFrame {
     val candidate = previewFrame ?: frame
     return if (candidate.viewport == viewport) candidate else bounds.toOrientedFrame(viewport)
 }
 
-private fun OrientedSelectionFrame.pointerAngle(point: NormalizedPoint): Float {
+internal fun OrientedSelectionFrame.pointerAngle(point: NormalizedPoint): Float {
     val dx = (point.x - center.x) * viewport.widthPixels
     val dy = (point.y - center.y) * viewport.heightPixels
     return atan2(dy, dx)
@@ -302,10 +275,8 @@ private fun OrientedSelectionFrame.pointerAngle(point: NormalizedPoint): Float {
 private fun shortestAngle(angle: Float): Float = atan2(sin(angle), cos(angle))
 
 private val FRAME_COLOR = Color(0xFF2563EB)
-private val ROTATION_STEM_LENGTH = 32.dp
+internal val ROTATION_STEM_LENGTH = 32.dp
 private val HANDLE_HIT_RADIUS = 24.dp
-private val HANDLE_HIT_DIAMETER = 48.dp
 private val HANDLE_VISIBLE_RADIUS = 8.dp
 private val HANDLE_STROKE_WIDTH = 2.dp
 private val FRAME_STROKE_WIDTH = 2.dp
-private val ROTATION_ACCESSIBILITY_STEP_RADIANS = Math.toRadians(15.0).toFloat()

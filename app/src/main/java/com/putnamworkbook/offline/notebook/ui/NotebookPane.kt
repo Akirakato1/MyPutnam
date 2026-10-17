@@ -4,13 +4,20 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.testTag
 import com.putnamworkbook.offline.domain.model.BrushSpec
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
@@ -68,66 +75,94 @@ fun NotebookPane(
         return
     }
     val page = document.pages[state.activePageIndex]
-    Column(modifier.fillMaxSize()) {
-        NotebookToolbar(
-            saveState = state.saveState,
-            toolMode = state.toolMode,
-            brush = brush,
-            hasSelection = state.selection != null,
-            clipboardHasContent = state.clipboardHasContent,
-            rotationSnapEnabled = state.rotationSnapEnabled,
-            onSetToolMode = onSetToolMode,
-            onBrushChanged = onBrushChanged,
-            onCut = onCutSelection,
-            onCopy = onCopySelection,
-            onPaste = onPaste,
-            onDeleteSelection = onDeleteSelection,
-            onFlipHorizontal = onFlipHorizontal,
-            onFlipVertical = onFlipVertical,
-            onSetRotationSnapEnabled = onSetRotationSnapEnabled,
-            onUndo = onUndo,
-            onRedo = onRedo,
-            onAddPage = onAddPage,
-            onClearPage = { onRequestClearPage(page.id) },
-            onDeletePage = { onRequestDeletePage(page.id) },
-            deletePageEnabled = canDeleteNotebookPage(document.pages.size),
-            activePageIndex = state.activePageIndex,
-            pageCount = document.pages.size,
-            onSelectPage = onSelectPage,
-            modifier = Modifier.testTag(NOTEBOOK_TOOLBAR_TEST_TAG),
-        )
-        AnimatedContent(
-            targetState = state.activePageIndex,
-            transitionSpec = {
-                val direction = if (targetState > initialState) {
-                    AnimatedContentTransitionScope.SlideDirection.Left
-                } else {
-                    AnimatedContentTransitionScope.SlideDirection.Right
+    var canvasPlacement by remember { mutableStateOf<NotebookCanvasPlacement?>(null) }
+    Box(modifier.fillMaxSize()) {
+        Column(Modifier.fillMaxSize()) {
+            NotebookToolbar(
+                saveState = state.saveState,
+                toolMode = state.toolMode,
+                brush = brush,
+                hasSelection = state.selection != null,
+                clipboardHasContent = state.clipboardHasContent,
+                rotationSnapEnabled = state.rotationSnapEnabled,
+                onSetToolMode = onSetToolMode,
+                onBrushChanged = onBrushChanged,
+                onCut = onCutSelection,
+                onCopy = onCopySelection,
+                onPaste = onPaste,
+                onDeleteSelection = onDeleteSelection,
+                onFlipHorizontal = onFlipHorizontal,
+                onFlipVertical = onFlipVertical,
+                onSetRotationSnapEnabled = onSetRotationSnapEnabled,
+                onUndo = onUndo,
+                onRedo = onRedo,
+                onAddPage = onAddPage,
+                onClearPage = { onRequestClearPage(page.id) },
+                onDeletePage = { onRequestDeletePage(page.id) },
+                deletePageEnabled = canDeleteNotebookPage(document.pages.size),
+                activePageIndex = state.activePageIndex,
+                pageCount = document.pages.size,
+                onSelectPage = onSelectPage,
+                modifier = Modifier.testTag(NOTEBOOK_TOOLBAR_TEST_TAG),
+            )
+            AnimatedContent(
+                targetState = state.activePageIndex,
+                transitionSpec = {
+                    val direction = if (targetState > initialState) {
+                        AnimatedContentTransitionScope.SlideDirection.Left
+                    } else {
+                        AnimatedContentTransitionScope.SlideDirection.Right
+                    }
+                    slideIntoContainer(direction, tween(PAGE_TURN_MILLIS)) togetherWith
+                        slideOutOfContainer(direction, tween(PAGE_TURN_MILLIS))
+                },
+                label = "notebook-page-turn",
+                modifier = Modifier
+                    .weight(1f)
+                    .onGloballyPositioned { coordinates ->
+                        if (coordinates.size.width > 0 && coordinates.size.height > 0) {
+                            val measured = NotebookCanvasPlacement(
+                                topLeftInPane = coordinates.positionInParent(),
+                                size = coordinates.size,
+                            )
+                            if (canvasPlacement != measured) canvasPlacement = measured
+                        }
+                    },
+            ) { pageIndex ->
+                pageForAnimatedIndex(document, pageIndex)?.let { animatedPage ->
+                    NotebookCanvas(
+                        page = animatedPage,
+                        strokes = if (pageIndex == state.activePageIndex) state.strokes else emptyList(),
+                        brush = brush,
+                        onStrokeFinished = onStrokeFinished,
+                        toolMode = state.toolMode,
+                        selection = state.selection,
+                        onSelect = onSelect,
+                        onViewportChanged = onViewportChanged,
+                        onPreviewMove = onPreviewMove,
+                        onCommitMove = onCommitMove,
+                        onPreviewScale = onPreviewScale,
+                        onCommitScale = onCommitScale,
+                        onPreviewRotation = onPreviewRotation,
+                        onCommitRotation = onCommitRotation,
+                        onCancelPreview = onCancelPreview,
+                        onClearSelection = onClearSelection,
+                    )
                 }
-                slideIntoContainer(direction, tween(PAGE_TURN_MILLIS)) togetherWith
-                    slideOutOfContainer(direction, tween(PAGE_TURN_MILLIS))
-            },
-            label = "notebook-page-turn",
-            modifier = Modifier.weight(1f),
-        ) { pageIndex ->
-            pageForAnimatedIndex(document, pageIndex)?.let { animatedPage ->
-                NotebookCanvas(
-                    page = animatedPage,
-                    strokes = if (pageIndex == state.activePageIndex) state.strokes else emptyList(),
-                    brush = brush,
-                    onStrokeFinished = onStrokeFinished,
-                    toolMode = state.toolMode,
-                    selection = state.selection,
-                    onSelect = onSelect,
-                    onViewportChanged = onViewportChanged,
-                    onPreviewMove = onPreviewMove,
-                    onCommitMove = onCommitMove,
+            }
+        }
+        if (state.toolMode == NotebookToolMode.SELECT) {
+            val selection = state.selection
+            val placement = canvasPlacement
+            if (selection != null && placement != null) {
+                SelectionHandleOverlay(
+                    selection = selection,
+                    canvasPlacement = placement,
                     onPreviewScale = onPreviewScale,
                     onCommitScale = onCommitScale,
                     onPreviewRotation = onPreviewRotation,
                     onCommitRotation = onCommitRotation,
                     onCancelPreview = onCancelPreview,
-                    onClearSelection = onClearSelection,
                 )
             }
         }

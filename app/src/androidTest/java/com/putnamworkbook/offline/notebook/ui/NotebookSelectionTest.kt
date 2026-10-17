@@ -1,6 +1,7 @@
 package com.putnamworkbook.offline.notebook.ui
 
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsEnabled
@@ -21,6 +22,8 @@ import androidx.compose.ui.test.swipe
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -31,6 +34,7 @@ import com.putnamworkbook.offline.notebook.edit.NotebookSelectionState
 import com.putnamworkbook.offline.notebook.edit.NotebookToolMode
 import com.putnamworkbook.offline.notebook.edit.CanvasViewport
 import com.putnamworkbook.offline.notebook.edit.NormalizedRect
+import com.putnamworkbook.offline.notebook.edit.SelectionCorner
 import com.putnamworkbook.offline.notebook.edit.toOrientedFrame
 import com.putnamworkbook.offline.notebook.model.NotebookDocument
 import com.putnamworkbook.offline.notebook.model.NotebookPage
@@ -322,6 +326,83 @@ class NotebookSelectionTest {
     }
 
     @Test
+    fun topCornerRemainsDraggableWhereItExtendsAboveTheWorkbook() {
+        var clearCount = 0
+        var scaleCommitCount = 0
+        var undoCount = 0
+        val stroke = StrokeRecord("selected", BrushSpec(), listOf(StrokeSample(0.5f, 0.1f, 0L, null)))
+        composeRule.setContent {
+            NotebookPane(
+                state = state(
+                    toolMode = NotebookToolMode.SELECT,
+                    strokes = listOf(stroke),
+                    selection = topEdgeSelectionState(),
+                ),
+                brush = BrushSpec(), onStrokeFinished = {},
+                onUndo = { undoCount += 1 }, onRedo = {}, onAddPage = {},
+                onRequestDeletePage = {}, onRequestClearPage = {},
+                onConfirmDeletePage = {}, onConfirmClearPage = {}, onDismissConfirmation = {},
+                onSelectPage = {},
+                onCommitScale = { _, _ -> scaleCommitCount += 1 },
+                onClearSelection = { clearCount += 1 },
+            )
+        }
+
+        val canvasBounds = composeRule.onNodeWithTag(NOTEBOOK_CANVAS_TEST_TAG).getUnclippedBoundsInRoot()
+        val handle = composeRule.onNodeWithTag(selectionCornerHandleTestTag(SelectionCorner.TOP_LEFT))
+        val handleBounds = handle.getUnclippedBoundsInRoot()
+        assertTrue(handleBounds.top < canvasBounds.top)
+        assertTrue(handleBounds.right - handleBounds.left >= 48.dp)
+        assertTrue(handleBounds.bottom - handleBounds.top >= 48.dp)
+
+        val fourDp = with(composeRule.density) { 4.dp.toPx() }
+        handle.performTouchInput {
+            swipe(
+                start = Offset(center.x, fourDp),
+                end = Offset(center.x - 32f, center.y + 32f),
+                durationMillis = 400L,
+            )
+        }
+        composeRule.waitForIdle()
+
+        assertEquals(1, scaleCommitCount)
+        assertEquals(0, clearCount)
+        composeRule.onNodeWithTag(UNDO_TEST_TAG).performTouchInput { click() }
+        assertEquals(1, undoCount)
+    }
+
+    @Test
+    fun topCornerTargetUsesCanvasCoordinatesInRtlLayouts() {
+        val stroke = StrokeRecord("selected", BrushSpec(), listOf(StrokeSample(0.5f, 0.1f, 0L, null)))
+        composeRule.setContent {
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+                NotebookPane(
+                    state = state(
+                        toolMode = NotebookToolMode.SELECT,
+                        strokes = listOf(stroke),
+                        selection = topEdgeSelectionState(),
+                    ),
+                    brush = BrushSpec(), onStrokeFinished = {},
+                    onUndo = {}, onRedo = {}, onAddPage = {},
+                    onRequestDeletePage = {}, onRequestClearPage = {},
+                    onConfirmDeletePage = {}, onConfirmClearPage = {}, onDismissConfirmation = {},
+                    onSelectPage = {},
+                )
+            }
+        }
+
+        val canvasBounds = composeRule.onNodeWithTag(NOTEBOOK_CANVAS_TEST_TAG).getUnclippedBoundsInRoot()
+        val handleBounds = composeRule
+            .onNodeWithTag(selectionCornerHandleTestTag(SelectionCorner.TOP_LEFT))
+            .getUnclippedBoundsInRoot()
+        val expectedCenterX = canvasBounds.left + (canvasBounds.right - canvasBounds.left) * 0.4f
+        val actualCenterX = (handleBounds.left + handleBounds.right) / 2
+
+        assertEquals(expectedCenterX.value, actualCenterX.value, 1f)
+        assertTrue(handleBounds.top < canvasBounds.top)
+    }
+
+    @Test
     fun draggingRotationHandlePreviewsAndCommitsWithoutClearingSelection() {
         val previews = mutableListOf<Float>()
         var commitCount = 0
@@ -372,6 +453,49 @@ class NotebookSelectionTest {
         assertEquals(Math.toRadians(90.0).toFloat(), previews.last(), 0.08f)
         assertEquals(1, commitCount)
         assertEquals(0, selectCount)
+        assertEquals(0, clearCount)
+    }
+
+    @Test
+    fun rotationHandleRemainsDraggableInsideTheToolbarAboveTheWorkbook() {
+        val previews = mutableListOf<Float>()
+        var commitCount = 0
+        var clearCount = 0
+        val stroke = StrokeRecord("selected", BrushSpec(), listOf(StrokeSample(0.5f, 0.1f, 0L, null)))
+        composeRule.setContent {
+            NotebookPane(
+                state = state(
+                    toolMode = NotebookToolMode.SELECT,
+                    strokes = listOf(stroke),
+                    selection = topEdgeSelectionState(),
+                ),
+                brush = BrushSpec(), onStrokeFinished = {},
+                onUndo = {}, onRedo = {}, onAddPage = {},
+                onRequestDeletePage = {}, onRequestClearPage = {},
+                onConfirmDeletePage = {}, onConfirmClearPage = {}, onDismissConfirmation = {},
+                onSelectPage = {},
+                onPreviewRotation = { previews += it },
+                onCommitRotation = { commitCount += 1 },
+                onClearSelection = { clearCount += 1 },
+            )
+        }
+
+        val canvasBounds = composeRule.onNodeWithTag(NOTEBOOK_CANVAS_TEST_TAG).getUnclippedBoundsInRoot()
+        val handle = composeRule.onNodeWithTag(ROTATION_HANDLE_TEST_TAG)
+        val handleBounds = handle.getUnclippedBoundsInRoot()
+        assertTrue((handleBounds.top + handleBounds.bottom) / 2 < canvasBounds.top)
+
+        handle.performTouchInput {
+            swipe(
+                start = center,
+                end = Offset(center.x + 64f, center.y + 48f),
+                durationMillis = 400L,
+            )
+        }
+        composeRule.waitForIdle()
+
+        assertTrue(previews.isNotEmpty())
+        assertEquals(1, commitCount)
         assertEquals(0, clearCount)
     }
 
@@ -432,6 +556,15 @@ class NotebookSelectionTest {
 
     private fun selectionState(): NotebookSelectionState {
         val bounds = NormalizedRect(0.4f, 0.4f, 0.6f, 0.6f)
+        return NotebookSelectionState(
+            selectedStrokeIds = setOf("selected"),
+            bounds = bounds,
+            frame = bounds.toOrientedFrame(CanvasViewport(1f, 1f)),
+        )
+    }
+
+    private fun topEdgeSelectionState(): NotebookSelectionState {
+        val bounds = NormalizedRect(0.4f, 0f, 0.6f, 0.2f)
         return NotebookSelectionState(
             selectedStrokeIds = setOf("selected"),
             bounds = bounds,
