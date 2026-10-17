@@ -150,8 +150,15 @@ object StrokeTransform {
             var lower = 1f
             var upper = desiredScale
             var best = scaled(lower)
-            require(best.strokes.fitsPage(viewport)) {
-                "The source selection must fit within the page before scaling"
+            if (!best.strokes.fitsPage(viewport)) {
+                return best.strokes.fitToPage(
+                    viewport = viewport,
+                    frameCenterPixels = best.centerPixels,
+                    frameWidthPixels = best.widthPixels,
+                    frameHeightPixels = best.heightPixels,
+                    frameRotationRadians = frame.rotationRadians,
+                    idFactory = idFactory,
+                )
             }
             repeat(SCALE_SEARCH_STEPS) {
                 val candidateScale = (lower + upper) / 2f

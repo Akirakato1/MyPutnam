@@ -40,6 +40,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.delay
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicLong
+import java.util.concurrent.atomic.AtomicReference
 
 class NotebookViewModel(
     private val repository: NotebookRepository,
@@ -47,7 +48,7 @@ class NotebookViewModel(
     private val providedScope: CoroutineScope? = null,
     saveWait: suspend (Long) -> Unit = { delay(it) },
     private val clipboard: NotebookClipboard = NotebookClipboard(),
-    private val onDurableSave: (revision: Long) -> Unit = {},
+    onDurableSave: (revision: Long) -> Unit = {},
 ) : ViewModel() {
     private val scope = providedScope ?: viewModelScope
     private val mutableUiState = MutableStateFlow(NotebookUiState())
@@ -58,6 +59,7 @@ class NotebookViewModel(
     private var latestBrushUpdate: Job? = null
     private val brushRevision = AtomicLong(0L)
     private val durableNotificationRevision = AtomicLong(0L)
+    private val durableSaveListener = AtomicReference(onDurableSave)
     private var brushPersistenceFailure: BrushPersistenceFailure? = null
     private val saveCoordinator = NotebookSaveCoordinator(
         scope = scope,
@@ -71,6 +73,12 @@ class NotebookViewModel(
     )
 
     val uiState: StateFlow<NotebookUiState> = mutableUiState.asStateFlow()
+
+    fun updateDurableSaveListener(listener: (revision: Long) -> Unit) {
+        durableSaveListener.set(listener)
+    }
+
+    fun durableSaveRevision(): Long = durableNotificationRevision.get()
 
     fun open(key: ProblemKey, initialPageIndex: Int = 0) {
         currentKey = key
@@ -591,7 +599,7 @@ class NotebookViewModel(
         val notificationRevision = durableNotificationRevision.updateAndGet { current ->
             maxOf(current + 1, sourceRevision ?: 0L)
         }
-        onDurableSave(notificationRevision)
+        durableSaveListener.get()(notificationRevision)
     }
 
     private fun handleSaveFailure(revision: Long, error: Exception) {

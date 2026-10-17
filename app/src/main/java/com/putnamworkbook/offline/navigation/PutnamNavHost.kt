@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -314,6 +315,9 @@ private fun FreeNotebookDestination(
             NotebookViewModel::class.java,
         )
     }
+    SideEffect {
+        notebookViewModel.updateDurableSaveListener(notifier::enqueue)
+    }
     val coordinator = remember(workspaceId, repository, notifier, notebookViewModel) {
         FreeNotebookEditorCoordinator(
             workspaceId = workspaceId,
@@ -322,6 +326,7 @@ private fun FreeNotebookDestination(
             scope = scope,
             openNotebook = { key -> notebookViewModel.open(key) },
             awaitNotebookIdle = notebookViewModel::awaitIdle,
+            notebookRevision = notebookViewModel::durableSaveRevision,
             onBackReady = onBack,
             onWorkspaceReplaced = onWorkspaceReplaced,
         )

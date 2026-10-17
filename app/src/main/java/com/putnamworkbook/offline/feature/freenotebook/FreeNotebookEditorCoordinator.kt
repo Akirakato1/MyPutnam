@@ -35,6 +35,7 @@ class FreeNotebookEditorCoordinator(
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate),
     private val openNotebook: (ProblemKey) -> Unit,
     private val awaitNotebookIdle: suspend () -> Unit,
+    private val notebookRevision: () -> Long,
     private val onBackReady: () -> Unit,
     private val onWorkspaceReplaced: (UUID) -> Unit,
 ) {
@@ -168,8 +169,13 @@ class FreeNotebookEditorCoordinator(
     }
 
     private suspend fun flushAll() {
-        awaitNotebookIdle()
-        notifier.awaitIdle().getOrThrow()
+        while (true) {
+            awaitNotebookIdle()
+            val revisionBeforeMetadata = notebookRevision()
+            notifier.awaitIdle().getOrThrow()
+            awaitNotebookIdle()
+            if (notebookRevision() == revisionBeforeMetadata) return
+        }
     }
 
     private fun rejectName(error: FreeWorkspaceNameError) {

@@ -66,6 +66,31 @@ class NotebookViewModelTest {
     }
 
     @Test
+    fun durableSaveHookCanRebindAfterActivityRecreation() = runBlocking {
+        val repository = FileNotebookRepository(temporaryFolder.newFolder("durable-rebind").toPath())
+        val originalNotifications = mutableListOf<Long>()
+        val replacementNotifications = mutableListOf<Long>()
+        val viewModel = viewModel(
+            repository,
+            FakeSettingsRepository(),
+            wait = { },
+            onDurableSave = originalNotifications::add,
+        )
+        viewModel.open(key)
+        viewModel.awaitIdle()
+
+        viewModel.commitStroke(stroke("before-recreation"))
+        viewModel.awaitIdle()
+        viewModel.updateDurableSaveListener(replacementNotifications::add)
+        viewModel.addPage()
+        viewModel.awaitIdle()
+
+        assertEquals(listOf(1L), originalNotifications)
+        assertEquals(listOf(2L), replacementNotifications)
+        viewModel.close()
+    }
+
+    @Test
     fun firstOpenAutosavesBufferedStrokeAndUndoRedoSurviveReload() = runBlocking {
         val repository = FileNotebookRepository(temporaryFolder.newFolder("autosave").toPath())
         val settings = FakeSettingsRepository()

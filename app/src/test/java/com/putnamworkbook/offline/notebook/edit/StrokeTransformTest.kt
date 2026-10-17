@@ -69,6 +69,27 @@ class StrokeTransformTest {
     }
 
     @Test
+    fun scalingEdgeTouchingInkNeverThrowsWhenBrushOverhangsThePage() {
+        val original = stroke("edge", 20f, 0f to 0f, 0.08f to 0.08f)
+        val bounds = listOf(original).selectionBounds(square)!!
+
+        val result = StrokeTransform.scaleFromCorner(
+            listOf(original),
+            bounds,
+            SelectionCorner.BOTTOM_RIGHT,
+            NormalizedPoint(2f, 2f),
+            square,
+        ) { "scaled" }
+
+        assertTrue(result.isNotEmpty())
+        val visibleBounds = result.selectionBounds(square)!!
+        assertTrue(visibleBounds.left >= 0f)
+        assertTrue(visibleBounds.top >= 0f)
+        assertTrue(visibleBounds.right <= 1f)
+        assertTrue(visibleBounds.bottom <= 1f)
+    }
+
+    @Test
     fun moveAndScaleClampRenderedBrushEdgesOnRectangularViewports() {
         val viewport = CanvasViewport(320f, 640f)
         val original = stroke("wide", 20f, 0.08f to 0.08f, 0.2f to 0.2f)

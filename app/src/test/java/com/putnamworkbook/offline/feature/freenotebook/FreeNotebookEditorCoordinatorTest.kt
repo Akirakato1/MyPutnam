@@ -9,6 +9,7 @@ import com.putnamworkbook.offline.freeworkspace.FreeWorkspaceRepository
 import com.putnamworkbook.offline.freeworkspace.FreeWorkspaceResult
 import com.putnamworkbook.offline.freeworkspace.FreeWorkspaceStorageState
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
@@ -115,11 +116,49 @@ class FreeNotebookEditorCoordinatorTest {
         coordinator.close()
     }
 
+    @Test
+    fun saveReflushesAnEditThatArrivesDuringMetadataWriteAndReportsItsFailure() = runBlocking {
+        val repository = EditorRepository()
+        val metadataStarted = CompletableDeferred<Unit>()
+        val releaseMetadata = CompletableDeferred<Unit>()
+        var notebookRevision = 1L
+        var notebookFlushes = 0
+        val notifier = DurableSaveNotifier(testScope(), notify = {
+            metadataStarted.complete(Unit)
+            releaseMetadata.await()
+        })
+        val coordinator = coordinator(
+            repository,
+            notifier,
+            awaitNotebookIdle = {
+                notebookFlushes += 1
+                if (notebookFlushes > 1 && notebookRevision == 2L) {
+                    throw IOException("new ink failed")
+                }
+            },
+            notebookRevision = { notebookRevision },
+        )
+        waitUntil { coordinator.uiState.value.record != null }
+        notifier.enqueue(1)
+
+        coordinator.save()
+        metadataStarted.await()
+        notebookRevision = 2L
+        releaseMetadata.complete(Unit)
+        waitUntil { coordinator.uiState.value.errorMessage != null }
+
+        assertEquals("new ink failed", coordinator.uiState.value.errorMessage)
+        assertNull(coordinator.uiState.value.statusMessage)
+        assertTrue(notebookFlushes >= 2)
+        coordinator.close()
+    }
+
     private fun coordinator(
         repository: EditorRepository,
         notifier: DurableSaveNotifier,
         openNotebook: (ProblemKey) -> Unit = {},
         awaitNotebookIdle: suspend () -> Unit = {},
+        notebookRevision: () -> Long = { 0L },
         onBackReady: () -> Unit = {},
         onWorkspaceReplaced: (UUID) -> Unit = {},
     ) = FreeNotebookEditorCoordinator(
@@ -129,6 +168,7 @@ class FreeNotebookEditorCoordinatorTest {
         scope = testScope(),
         openNotebook = openNotebook,
         awaitNotebookIdle = awaitNotebookIdle,
+        notebookRevision = notebookRevision,
         onBackReady = onBackReady,
         onWorkspaceReplaced = onWorkspaceReplaced,
     )
