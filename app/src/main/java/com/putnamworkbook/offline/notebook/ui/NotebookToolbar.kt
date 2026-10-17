@@ -77,6 +77,7 @@ fun NotebookToolbar(
     onAddPage: () -> Unit,
     onClearPage: () -> Unit,
     onDeletePage: () -> Unit,
+    deletePageEnabled: Boolean = true,
     activePageIndex: Int,
     pageCount: Int,
     onSelectPage: (Int) -> Unit,
@@ -102,7 +103,12 @@ fun NotebookToolbar(
             ToolbarIconButton("Redo", ToolbarGlyph.REDO, onRedo, Modifier.testTag(REDO_TEST_TAG))
             ToolbarIconButton("Add page", ToolbarGlyph.ADD_PAGE, onAddPage)
             ToolbarIconButton("Clear page", ToolbarGlyph.CLEAR_PAGE, onClearPage)
-            ToolbarIconButton("Delete page", ToolbarGlyph.DELETE_PAGE, onDeletePage)
+            ToolbarIconButton(
+                "Delete page",
+                ToolbarGlyph.DELETE_PAGE,
+                onDeletePage,
+                enabled = deletePageEnabled,
+            )
             SaveStateIndicator(saveState)
             Spacer(Modifier.weight(1f))
             ToolbarIconButton(
@@ -398,7 +404,7 @@ private fun ToolbarGlyphCanvas(glyph: ToolbarGlyph, color: Color) {
                     drawLine(color, point(0.20f, 0.30f), point(0.44f, 0.34f), strokeWidth, StrokeCap.Round)
                 }
             }
-            ToolbarGlyph.ADD_PAGE -> {
+            ToolbarGlyph.ADD_PAGE, ToolbarGlyph.CLEAR_PAGE, ToolbarGlyph.DELETE_PAGE -> {
                 val page = Path().apply {
                     moveTo(size.width * 0.20f, size.height * 0.10f)
                     lineTo(size.width * 0.64f, size.height * 0.10f)
@@ -411,34 +417,29 @@ private fun ToolbarGlyphCanvas(glyph: ToolbarGlyph, color: Color) {
                     lineTo(size.width * 0.82f, size.height * 0.28f)
                 }
                 drawPath(page, color, style = line)
-                drawLine(color, point(0.36f, 0.60f), point(0.66f, 0.60f), strokeWidth, StrokeCap.Round)
-                drawLine(color, point(0.51f, 0.45f), point(0.51f, 0.75f), strokeWidth, StrokeCap.Round)
-            }
-            ToolbarGlyph.CLEAR_PAGE -> {
-                val eraser = Path().apply {
-                    moveTo(size.width * 0.18f, size.height * 0.66f)
-                    lineTo(size.width * 0.56f, size.height * 0.18f)
-                    lineTo(size.width * 0.84f, size.height * 0.42f)
-                    lineTo(size.width * 0.46f, size.height * 0.86f)
-                    lineTo(size.width * 0.26f, size.height * 0.86f)
-                    close()
+                when (glyph) {
+                    ToolbarGlyph.ADD_PAGE -> {
+                        drawLine(color, point(0.36f, 0.60f), point(0.66f, 0.60f), strokeWidth, StrokeCap.Round)
+                        drawLine(color, point(0.51f, 0.45f), point(0.51f, 0.75f), strokeWidth, StrokeCap.Round)
+                    }
+                    ToolbarGlyph.CLEAR_PAGE -> {
+                        drawLine(color, point(0.36f, 0.46f), point(0.66f, 0.74f), strokeWidth, StrokeCap.Round)
+                        drawLine(color, point(0.66f, 0.46f), point(0.36f, 0.74f), strokeWidth, StrokeCap.Round)
+                    }
+                    ToolbarGlyph.DELETE_PAGE -> {
+                        drawLine(color, point(0.36f, 0.50f), point(0.66f, 0.50f), strokeWidth, StrokeCap.Round)
+                        drawLine(color, point(0.44f, 0.43f), point(0.58f, 0.43f), strokeWidth, StrokeCap.Round)
+                        drawRoundRect(
+                            color = color,
+                            topLeft = point(0.39f, 0.55f),
+                            size = androidx.compose.ui.geometry.Size(size.width * 0.24f, size.height * 0.22f),
+                            cornerRadius = androidx.compose.ui.geometry.CornerRadius(strokeWidth, strokeWidth),
+                            style = line,
+                        )
+                        drawLine(color, point(0.47f, 0.60f), point(0.47f, 0.71f), strokeWidth, StrokeCap.Round)
+                        drawLine(color, point(0.55f, 0.60f), point(0.55f, 0.71f), strokeWidth, StrokeCap.Round)
+                    }
                 }
-                drawPath(eraser, color, style = line)
-                drawLine(color, point(0.37f, 0.48f), point(0.66f, 0.72f), strokeWidth, StrokeCap.Round)
-                drawLine(color, point(0.46f, 0.86f), point(0.88f, 0.86f), strokeWidth, StrokeCap.Round)
-            }
-            ToolbarGlyph.DELETE_PAGE -> {
-                drawLine(color, point(0.24f, 0.28f), point(0.78f, 0.28f), strokeWidth, StrokeCap.Round)
-                drawLine(color, point(0.40f, 0.16f), point(0.62f, 0.16f), strokeWidth, StrokeCap.Round)
-                drawRoundRect(
-                    color = color,
-                    topLeft = point(0.30f, 0.34f),
-                    size = androidx.compose.ui.geometry.Size(size.width * 0.42f, size.height * 0.52f),
-                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(strokeWidth, strokeWidth),
-                    style = line,
-                )
-                drawLine(color, point(0.44f, 0.46f), point(0.44f, 0.74f), strokeWidth, StrokeCap.Round)
-                drawLine(color, point(0.58f, 0.46f), point(0.58f, 0.74f), strokeWidth, StrokeCap.Round)
             }
             ToolbarGlyph.PREVIOUS_PAGE, ToolbarGlyph.NEXT_PAGE -> {
                 val next = glyph == ToolbarGlyph.NEXT_PAGE

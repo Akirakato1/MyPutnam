@@ -730,6 +730,24 @@ class NotebookViewModelTest {
         viewModel.close()
     }
 
+    @Test
+    fun deletingTheOnlyPageIsANoOp() = runBlocking {
+        val repository = FileNotebookRepository(temporaryFolder.newFolder("single-page-delete").toPath())
+        val viewModel = viewModel(repository, FakeSettingsRepository())
+        viewModel.open(key)
+        viewModel.awaitIdle()
+        val onlyPage = viewModel.uiState.value.document!!.pages.single()
+
+        viewModel.requestDeletePage(onlyPage.id)
+        viewModel.confirmDeletePage()
+        viewModel.awaitIdle()
+
+        assertNull(viewModel.uiState.value.pendingConfirmation)
+        assertEquals(listOf(onlyPage.id), viewModel.uiState.value.document!!.pages.map { it.id })
+        assertNull(viewModel.uiState.value.errorMessage)
+        viewModel.close()
+    }
+
     private fun viewModel(
         repository: NotebookRepository,
         settings: SettingsRepository,

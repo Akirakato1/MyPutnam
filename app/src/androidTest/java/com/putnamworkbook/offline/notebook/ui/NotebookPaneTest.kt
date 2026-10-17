@@ -45,7 +45,10 @@ class NotebookPaneTest {
                 state = NotebookUiState(
                     document = NotebookDocument(
                         key = ProblemKey("putnam", "2025", "A1"),
-                        pages = listOf(NotebookPage("page-1", PaperStyle.BLANK)),
+                        pages = listOf(
+                            NotebookPage("page-1", PaperStyle.BLANK),
+                            NotebookPage("page-2", PaperStyle.BLANK),
+                        ),
                     ),
                 ),
                 brush = BrushSpec(),
@@ -73,6 +76,36 @@ class NotebookPaneTest {
         composeRule.onNodeWithText("Clear").assertDoesNotExist()
 
         assertEquals(listOf("undo", "redo", "add", "clear:page-1", "delete:page-1"), calls)
+    }
+
+    @Test
+    fun singlePageNotebookDisablesDeleteWithoutInvokingIt() {
+        var deleteCalls = 0
+        composeRule.setContent {
+            NotebookPane(
+                state = NotebookUiState(
+                    document = NotebookDocument(
+                        key = ProblemKey("putnam", "2025", "A1"),
+                        pages = listOf(NotebookPage("only-page", PaperStyle.BLANK)),
+                    ),
+                ),
+                brush = BrushSpec(),
+                onStrokeFinished = {},
+                onUndo = {},
+                onRedo = {},
+                onAddPage = {},
+                onRequestDeletePage = { deleteCalls += 1 },
+                onRequestClearPage = {},
+                onConfirmDeletePage = {},
+                onConfirmClearPage = {},
+                onDismissConfirmation = {},
+                onSelectPage = {},
+            )
+        }
+
+        composeRule.onNodeWithContentDescription("Delete page")
+            .assertIsNotEnabled()
+        assertEquals(0, deleteCalls)
     }
 
     @Test

@@ -400,6 +400,7 @@ class NotebookViewModel(
 
     fun requestDeletePage(pageId: String) {
         requirePage(pageId)
+        if (requireDocument().pages.size <= 1) return
         mutableUiState.value = mutableUiState.value.copy(
             pendingConfirmation = PendingConfirmation.DeletePage(pageId),
         )

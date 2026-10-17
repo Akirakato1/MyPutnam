@@ -14,6 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import com.putnamworkbook.offline.domain.model.BrushSpec
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
+import com.putnamworkbook.offline.notebook.model.NotebookDocument
+import com.putnamworkbook.offline.notebook.model.NotebookPage
 import com.putnamworkbook.offline.notebook.edit.NotebookToolMode
 import com.putnamworkbook.offline.notebook.edit.CanvasViewport
 import com.putnamworkbook.offline.notebook.edit.NormalizedPoint
@@ -88,6 +90,7 @@ fun NotebookPane(
             onAddPage = onAddPage,
             onClearPage = { onRequestClearPage(page.id) },
             onDeletePage = { onRequestDeletePage(page.id) },
+            deletePageEnabled = canDeleteNotebookPage(document.pages.size),
             activePageIndex = state.activePageIndex,
             pageCount = document.pages.size,
             onSelectPage = onSelectPage,
@@ -107,24 +110,26 @@ fun NotebookPane(
             label = "notebook-page-turn",
             modifier = Modifier.weight(1f),
         ) { pageIndex ->
-            NotebookCanvas(
-                page = document.pages[pageIndex],
-                strokes = if (pageIndex == state.activePageIndex) state.strokes else emptyList(),
-                brush = brush,
-                onStrokeFinished = onStrokeFinished,
-                toolMode = state.toolMode,
-                selection = state.selection,
-                onSelect = onSelect,
-                onViewportChanged = onViewportChanged,
-                onPreviewMove = onPreviewMove,
-                onCommitMove = onCommitMove,
-                onPreviewScale = onPreviewScale,
-                onCommitScale = onCommitScale,
-                onPreviewRotation = onPreviewRotation,
-                onCommitRotation = onCommitRotation,
-                onCancelPreview = onCancelPreview,
-                onClearSelection = onClearSelection,
-            )
+            pageForAnimatedIndex(document, pageIndex)?.let { animatedPage ->
+                NotebookCanvas(
+                    page = animatedPage,
+                    strokes = if (pageIndex == state.activePageIndex) state.strokes else emptyList(),
+                    brush = brush,
+                    onStrokeFinished = onStrokeFinished,
+                    toolMode = state.toolMode,
+                    selection = state.selection,
+                    onSelect = onSelect,
+                    onViewportChanged = onViewportChanged,
+                    onPreviewMove = onPreviewMove,
+                    onCommitMove = onCommitMove,
+                    onPreviewScale = onPreviewScale,
+                    onCommitScale = onCommitScale,
+                    onPreviewRotation = onPreviewRotation,
+                    onCommitRotation = onCommitRotation,
+                    onCancelPreview = onCancelPreview,
+                    onClearSelection = onClearSelection,
+                )
+            }
         }
     }
 
@@ -144,6 +149,11 @@ fun NotebookPane(
         null -> Unit
     }
 }
+
+internal fun pageForAnimatedIndex(document: NotebookDocument, pageIndex: Int): NotebookPage? =
+    document.pages.getOrNull(pageIndex)
+
+internal fun canDeleteNotebookPage(pageCount: Int): Boolean = pageCount > 1
 
 @Composable
 private fun ConfirmationDialog(
