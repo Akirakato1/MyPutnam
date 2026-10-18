@@ -5,6 +5,8 @@ import { tmpdir } from 'node:os';
 import { join, relative } from 'node:path';
 import test from 'node:test';
 
+import { chromium } from 'playwright';
+
 import { buildYear } from '../src/build-year.mjs';
 import {
   auditRenderedDocument,
@@ -61,6 +63,78 @@ test('renderer supports every permitted block without allowing raw HTML', () => 
   assert.match(html, /<ul>/);
   assert.match(html, /src="assets\/figures\/unit-square.svg"/);
   assert.match(html, /alt="A &lt;unit&gt; square"/);
+});
+
+test('ordered and unordered list items keep mixed prose and multiple KaTeX roots', async () => {
+  const html = renderDocument({
+    blocks: [
+      {
+        type: 'list', ordered: true,
+        items: [
+          [
+            { type: 'text', text: 'Compare <coefficients> & "powers": ' },
+            { type: 'inlineMath', tex: 'c_{n,k}' },
+            { type: 'text', text: ' with ' },
+            { type: 'inlineMath', tex: '2^{k+1}' },
+            { type: 'text', text: '.' },
+          ],
+          [{ type: 'text', text: 'Keep the next step in its own item.' }],
+        ],
+      },
+      {
+        type: 'list', ordered: false,
+        items: [[
+          { type: 'text', text: "Check the matrices' relation " },
+          { type: 'inlineMath', tex: 'A_iA_j=A_jA_i' },
+          { type: 'text', text: ' in ' },
+          { type: 'inlineMath', tex: String.raw`\mathbb R^3` },
+          { type: 'text', text: '.' },
+        ]],
+      },
+    ],
+  });
+  assert.match(html, /Compare &lt;coefficients&gt; &amp; &quot;powers&quot;: /);
+  assert.match(html, /matrices&#39; relation /);
+
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage();
+    await page.setContent(html);
+    const lists = await page.locator('.document > ol, .document > ul').evaluateAll((elements) =>
+      elements.map((list) => ({
+        tag: list.tagName,
+        children: [...list.children].map((item) => {
+          const prose = item.cloneNode(true);
+          prose.querySelectorAll('.katex').forEach((math) => math.remove());
+          return {
+            tag: item.tagName,
+            roots: item.querySelectorAll('.katex').length,
+            formulas: [...item.querySelectorAll('.katex annotation')].map((node) => node.textContent),
+            prose: prose.textContent,
+          };
+        }),
+      })));
+    assert.deepEqual(lists, [
+      { tag: 'OL', children: [
+        { tag: 'LI', roots: 2, formulas: ['c_{n,k}', '2^{k+1}'],
+          prose: 'Compare <coefficients> & "powers":  with .' },
+        { tag: 'LI', roots: 0, formulas: [], prose: 'Keep the next step in its own item.' },
+      ] },
+      { tag: 'UL', children: [
+        { tag: 'LI', roots: 2, formulas: ['A_iA_j=A_jA_i', String.raw`\mathbb R^3`],
+          prose: "Check the matrices' relation  in ." },
+      ] },
+    ]);
+    const outsideAnnotations = await page.locator('.document').evaluate((element) => {
+      const copy = element.cloneNode(true);
+      copy.querySelectorAll('annotation').forEach((node) => node.remove());
+      return copy.textContent;
+    });
+    assert.doesNotMatch(outsideAnnotations, /c_\{n,k\}|A_iA_j=A_jA_i/);
+    assert.equal(await page.locator('.document .katex').count(), 4);
+  } finally {
+    await browser.close();
+  }
 });
 
 test('math audit covers nested runs and permits documents with no math', () => {
