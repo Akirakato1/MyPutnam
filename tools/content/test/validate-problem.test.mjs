@@ -211,6 +211,31 @@ test('nested list and figure-caption math use the same TeX validation', () => {
   );
 });
 
+test('raw math in a fourth-hint list reports the exact text run path', () => {
+  const rawMath = structuredClone(validProblem);
+  rawMath.hints[3].document.blocks[0].items[1].push({ type: 'text', text: 'c_{n,k}' });
+
+  assert.deepEqual(validateProblem(rawMath), [
+    '$.hints[3].document.blocks[0].items[1][1].text: mathematical notation in list text must use inlineMath (math-script)',
+  ]);
+});
+
+test('the same list expression is accepted as an inlineMath run', () => {
+  const inlineMath = structuredClone(validProblem);
+  inlineMath.hints[3].document.blocks[0].items[1].push({ type: 'inlineMath', tex: 'c_{n,k}' });
+
+  assert.deepEqual(validateProblem(inlineMath), []);
+});
+
+test('schema-invalid list runs produce schema errors without a raw-math diagnostic', () => {
+  const invalidMath = structuredClone(validProblem);
+  invalidMath.hints[3].document.blocks[0].items[1].push({ type: 'text', text: 42 });
+
+  const errors = validateProblem(invalidMath);
+  assert.ok(errors.some((error) => error.startsWith('$.hints[3].document.blocks[0].items[1][1].text:')));
+  assert.equal(errors.some((error) => error.includes('mathematical notation in list text')), false);
+});
+
 test('unsafe TeX is rejected from every rich-document location', () => {
   const unsafeMath = structuredClone(validProblem);
   unsafeMath.solution.blocks[0].runs[1].tex = String.raw`\href{https://example.com}{x}`;

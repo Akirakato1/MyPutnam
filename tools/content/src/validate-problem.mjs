@@ -11,6 +11,7 @@ import {
   problemDocuments,
 } from './content-types.mjs';
 import { validateLibraryCatalog } from './library-catalog.mjs';
+import { findRawMathInListText } from './list-math-audit.mjs';
 
 const schema = JSON.parse(
   readFileSync(new URL('../schema/problem.schema.json', import.meta.url), 'utf8'),
@@ -28,7 +29,8 @@ export function validateProblem(record, catalog) {
     errors.push(...validateLibraryCatalog(catalog).map((error) => `$catalog${error.slice(1)}`));
   }
 
-  if (!validateSchema(record)) {
+  const schemaValid = validateSchema(record);
+  if (!schemaValid) {
     for (const error of validateSchema.errors ?? []) {
       errors.push(`${schemaErrorPath(error)}: ${error.message}`);
     }
@@ -71,6 +73,11 @@ export function validateProblem(record, catalog) {
 
   for (const { path, document } of problemDocuments(record)) {
     validateDocument(document, path, errors);
+    if (schemaValid) {
+      for (const finding of findRawMathInListText(document, path)) {
+        errors.push(`${finding.path}: mathematical notation in list text must use inlineMath (${finding.rule})`);
+      }
+    }
   }
 
   return uniqueSorted(errors);
