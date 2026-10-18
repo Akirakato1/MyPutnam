@@ -17,6 +17,12 @@ for (const [text, rule] of [
   ["N=N'+r", 'symbolic-relation'],
   ['x < 3', 'symbolic-relation'],
   ['n > k', 'symbolic-relation'],
+  ['x=-1', 'symbolic-relation'],
+  ['n < -2', 'symbolic-relation'],
+  ['x<=3', 'symbolic-relation'],
+  ['x>=3', 'symbolic-relation'],
+  ['x=+1', 'symbolic-relation'],
+  ['n <= -2', 'symbolic-relation'],
   [String.raw`Use \binom{n}{k} and \alpha.`, 'tex-command'],
   [String.raw`Use x_2 = \alpha.`, 'tex-command'],
 ]) {

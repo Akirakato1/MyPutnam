@@ -1,7 +1,7 @@
 const rules = [
   { name: 'tex-command', pattern: /(?<!\\)\\[A-Za-z]+/ },
   { name: 'math-script', pattern: /[A-Za-z0-9})\]][_^](?:\{[^{}\n]+\}|[A-Za-z0-9])/ },
-  { name: 'symbolic-relation', pattern: /[A-Za-z0-9})\]]['’]*\s*[=<>]\s*[A-Za-z0-9({\[]/ },
+  { name: 'symbolic-relation', pattern: /[A-Za-z0-9})\]]['’]*\s*(?:[<>]=?|=)\s*[+-]?\s*[A-Za-z0-9({\[]/ },
 ];
 
 export function findRawMathInListText(document, basePath = '$') {
