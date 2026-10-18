@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "catalogId": "myputnam-content-v1",
+  "catalogRevision": "5a14b7ac583316b9705ea73d17c4ed0f82e098c6c06f89b78667a69062fc4aab",
+  "generatedAt": "2026-10-18T00:00:00.000Z",
+  "minAppVersionCode": 1,
+  "includedSets": [
+    { "collectionId": "putnam", "setId": "2020" },
+    { "collectionId": "putnam", "setId": "2021" },
+    { "collectionId": "putnam", "setId": "2022" },
+    { "collectionId": "putnam", "setId": "2023" },
+    { "collectionId": "putnam", "setId": "2024" },
+    { "collectionId": "putnam", "setId": "2025" }
+  ],
+  "includedReferenceCategories": []
+}

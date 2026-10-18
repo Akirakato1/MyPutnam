@@ -8,7 +8,9 @@
   },
   "scripts": {
     "audit-year": "node src/audit-year.mjs",
+    "audit-publication": "node src/audit-publication.mjs",
     "build": "node src/build-year.mjs",
+    "build-publication": "node src/build-publication.mjs",
     "review": "node src/render-review.mjs",
     "review-year": "node src/review-year.mjs",
     "test": "node --test test/*.test.mjs",
