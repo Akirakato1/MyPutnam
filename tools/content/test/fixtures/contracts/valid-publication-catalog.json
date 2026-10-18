@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "catalogId": "myputnam-public",
+  "catalogRevision": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "generatedAt": "2026-10-18T00:00:00.000Z",
+  "minAppVersionCode": 1,
+  "collections": [{ "id": "putnam", "title": "Putnam", "kind": "competition", "displayOrder": 1 }],
+  "topics": [{ "id": "number-theory", "label": "Number Theory", "displayOrder": 1 }],
+  "referenceCategories": [{ "id": "number-theory", "label": "Number Theory", "displayOrder": 1, "aliases": ["NT"] }],
+  "problems": [{
+    "key": "putnam/2025/A1",
+    "collectionId": "putnam",
+    "setId": "2025",
+    "problemId": "A1",
+    "label": "A1",
+    "ordinal": 1,
+    "topics": ["number-theory"],
+    "rights": {
+      "sourceUrl": "https://maa.org/math-competitions/putnam-competition/",
+      "attribution": "William Lowell Putnam Mathematical Competition, Mathematical Association of America.",
+      "copyrightHolder": "Mathematical Association of America",
+      "licenseBasis": "Redistribution permission has not yet been established.",
+      "redistributionStatus": "unresolved"
+    },
+    "package": {
+      "contentType": "problem",
+      "packageRevision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "packageSchemaVersion": 1,
+      "contentSchemaVersion": 3,
+      "richDocumentVersion": 1,
+      "path": "packages/problem/aa/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.zip",
+      "compressedBytes": 100,
+      "uncompressedBytes": 123,
+      "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "minAppVersionCode": 1
+    }
+  }],
+  "references": []
+}

@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://putnamworkbook.local/schema/reference-article.schema.json",
+  "title": "MyPutnam reference article v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion", "richDocumentVersion", "categoryId", "articleId", "title",
+    "displayOrder", "aliases", "keywords", "notation", "definitions", "results",
+    "conditions", "examples", "pitfalls", "relatedReferences", "relatedProblems",
+    "sources", "rights"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "richDocumentVersion": { "const": 2 },
+    "categoryId": { "$ref": "https://putnamworkbook.local/schema/reference-categories.schema.json#/$defs/id" },
+    "articleId": { "$ref": "https://putnamworkbook.local/schema/reference-categories.schema.json#/$defs/id" },
+    "title": { "type": "string", "minLength": 1 },
+    "displayOrder": { "type": "integer", "minimum": 1 },
+    "aliases": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "keywords": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "notation": { "$ref": "https://putnamworkbook.local/schema/rich-document-v2.schema.json" },
+    "definitions": { "$ref": "https://putnamworkbook.local/schema/rich-document-v2.schema.json" },
+    "results": { "$ref": "https://putnamworkbook.local/schema/rich-document-v2.schema.json" },
+    "conditions": { "$ref": "https://putnamworkbook.local/schema/rich-document-v2.schema.json" },
+    "examples": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "document"],
+        "properties": {
+          "title": { "type": "string", "minLength": 1 },
+          "document": { "$ref": "https://putnamworkbook.local/schema/rich-document-v2.schema.json" }
+        }
+      }
+    },
+    "pitfalls": { "$ref": "https://putnamworkbook.local/schema/rich-document-v2.schema.json" },
+    "relatedReferences": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^math-reference/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+$" }
+    },
+    "relatedProblems": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[A-Za-z0-9._-]+/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+$" }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["label", "url"],
+        "properties": {
+          "label": { "type": "string", "minLength": 1 },
+          "url": { "type": "string", "pattern": "^https://[^\\s]+$" }
+        }
+      }
+    },
+    "rights": { "$ref": "https://putnamworkbook.local/schema/library-catalog.schema.json#/$defs/rights" }
+  }
+}

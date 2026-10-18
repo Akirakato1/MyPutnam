@@ -4,12 +4,16 @@
   "title": "Offline mathematics library catalog",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "contentSchemaVersion", "collections", "topics"],
+  "required": ["schemaVersion", "contentSchemaVersion", "collections", "topics", "referenceCategories"],
   "properties": {
     "schemaVersion": { "const": 1 },
     "contentSchemaVersion": { "const": 3 },
     "collections": { "type": "array", "items": { "$ref": "#/$defs/collection" } },
-    "topics": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/topic" } }
+    "topics": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/topic" } },
+    "referenceCategories": {
+      "type": "array",
+      "items": { "$ref": "https://putnamworkbook.local/schema/reference-categories.schema.json#/$defs/category" }
+    }
   },
   "$defs": {
     "id": { "type": "string", "pattern": "^[A-Za-z0-9._-]+$" },
@@ -35,13 +39,26 @@
     "collection": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "title", "kind", "displayOrder", "sets"],
+      "required": ["id", "title", "kind", "displayOrder", "rights", "sets"],
       "properties": {
         "id": { "$ref": "#/$defs/id" },
         "title": { "type": "string", "minLength": 1 },
         "kind": { "type": "string", "minLength": 1 },
         "displayOrder": { "$ref": "#/$defs/positiveOrder" },
+        "rights": { "$ref": "#/$defs/rights" },
         "sets": { "type": "array", "items": { "$ref": "#/$defs/set" } }
+      }
+    },
+    "rights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceUrl", "attribution", "copyrightHolder", "licenseBasis", "redistributionStatus"],
+      "properties": {
+        "sourceUrl": { "type": "string", "pattern": "^https://[^\\s]+$" },
+        "attribution": { "type": "string", "minLength": 1 },
+        "copyrightHolder": { "type": ["string", "null"], "minLength": 1 },
+        "licenseBasis": { "type": "string", "minLength": 1 },
+        "redistributionStatus": { "enum": ["unresolved", "review", "cleared", "restricted"] }
       }
     },
     "topic": {

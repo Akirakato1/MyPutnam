@@ -1,0 +1,18 @@
+{
+  "packageSchemaVersion": 1,
+  "contentType": "problem",
+  "contentKey": "putnam/2025/A1",
+  "packageRevision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "contentSchemaVersion": 3,
+  "richDocumentVersion": 1,
+  "minAppVersionCode": 1,
+  "declaredUncompressedBytes": 123,
+  "members": [
+    {
+      "path": "content.json",
+      "mediaType": "application/json",
+      "bytes": 123,
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    }
+  ]
+}

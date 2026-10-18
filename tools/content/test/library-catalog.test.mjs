@@ -16,6 +16,11 @@ const catalog = () => ({
   collections: [
     {
       id: 'putnam', title: 'Putnam', kind: 'competition', displayOrder: 1,
+      rights: {
+        sourceUrl: 'https://example.test/putnam', attribution: 'Putnam test source',
+        copyrightHolder: 'Example holder', licenseBasis: 'Test fixture only',
+        redistributionStatus: 'unresolved',
+      },
       sets: [
         { id: '2025', title: '2025', displayOrder: 1, metadata: { competitionYear: 2025 } },
         { id: '2024', title: '2024', displayOrder: 2, metadata: { competitionYear: 2024 } },
@@ -23,6 +28,10 @@ const catalog = () => ({
     },
     {
       id: 'Course', title: 'Course', kind: 'course', displayOrder: 2,
+      rights: {
+        sourceUrl: 'https://example.test/course', attribution: 'Course test source',
+        copyrightHolder: null, licenseBasis: 'Test fixture only', redistributionStatus: 'cleared',
+      },
       sets: [{ id: 'chapter-1', title: 'Chapter One', displayOrder: 1 }],
     },
   ],
@@ -30,6 +39,7 @@ const catalog = () => ({
     { id: 'algebra', label: 'Algebra', displayOrder: 1 },
     { id: 'integrals', label: 'Integrals', displayOrder: 2 },
   ],
+  referenceCategories: [],
 });
 
 test('safe ids and canonical keys preserve exact case', () => {
@@ -52,7 +62,10 @@ test('catalog validation rejects duplicate ids and display orders without case f
   assert.deepEqual(validateLibraryCatalog(catalog()), []);
 
   const caseDistinct = catalog();
-  caseDistinct.collections.push({ id: 'course', title: 'Lowercase course', kind: 'course', displayOrder: 3, sets: [] });
+  caseDistinct.collections.push({
+    id: 'course', title: 'Lowercase course', kind: 'course', displayOrder: 3, sets: [],
+    rights: structuredClone(caseDistinct.collections[1].rights),
+  });
   assert.deepEqual(validateLibraryCatalog(caseDistinct), []);
 
   for (const mutate of [

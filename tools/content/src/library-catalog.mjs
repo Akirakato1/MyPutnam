@@ -1,16 +1,14 @@
 import { readFile } from 'node:fs/promises';
 
-import Ajv2020 from 'ajv/dist/2020.js';
-
 import { isPlainObject, isSafeId } from './content-types.mjs';
+import { formatSchemaErrors, getSchemaValidator, SCHEMA_IDS } from './schema-registry.mjs';
 
-const schema = JSON.parse(await readFile(new URL('../schema/library-catalog.schema.json', import.meta.url), 'utf8'));
-const validateSchema = new Ajv2020({ allErrors: true, strict: true }).compile(schema);
+const validateSchema = getSchemaValidator(SCHEMA_IDS.libraryCatalog);
 
 export function validateLibraryCatalog(value) {
   const errors = [];
   if (!validateSchema(value)) {
-    for (const error of validateSchema.errors ?? []) errors.push(`${schemaPath(error)}: ${error.message}`);
+    errors.push(...formatSchemaErrors(validateSchema.errors));
   }
   if (!isPlainObject(value)) return uniqueSorted(errors);
 
@@ -45,6 +43,15 @@ export function validateLibraryCatalog(value) {
     addUnique(topicIds, topic?.id, `${path}.id`, 'topic id', errors);
     addUnique(topicOrders, topic?.displayOrder, `${path}.displayOrder`, 'topic display order', errors);
   }
+  const categoryIds = new Map();
+  const categoryOrders = new Map();
+  for (const [categoryIndex, category] of (value.referenceCategories ?? []).entries()) {
+    const path = `$.referenceCategories[${categoryIndex}]`;
+    validateId(category?.id, `${path}.id`, errors);
+    addUnique(categoryIds, category?.id, `${path}.id`, 'reference category id', errors);
+    addUnique(categoryOrders, category?.displayOrder, `${path}.displayOrder`, 'reference category display order', errors);
+    addCaseInsensitiveUnique(category?.aliases, `${path}.aliases`, 'reference category alias', errors);
+  }
   return uniqueSorted(errors);
 }
 
@@ -78,11 +85,13 @@ function addUnique(seen, value, path, label, errors) {
   else seen.set(value, path);
 }
 
-function schemaPath(error) {
-  let path = '$' + error.instancePath.replaceAll('/', '.');
-  if (error.keyword === 'required') path += `.${error.params.missingProperty}`;
-  if (error.keyword === 'additionalProperties') path += `.${error.params.additionalProperty}`;
-  return path;
+function addCaseInsensitiveUnique(values, path, label, errors) {
+  const seen = new Set();
+  for (const [index, value] of (values ?? []).entries()) {
+    const folded = typeof value === 'string' ? value.trim().toLocaleLowerCase('en-US') : value;
+    if (seen.has(folded)) errors.push(`${path}[${index}]: duplicate ${label} ${value}`);
+    seen.add(folded);
+  }
 }
 
 function uniqueSorted(errors) {

@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "number-theory",
+  "articleId": "euler-totient",
+  "title": "Euler's totient function",
+  "displayOrder": 1,
+  "aliases": ["phi", "totient"],
+  "keywords": ["coprime", "residue classes"],
+  "notation": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "\\varphi(n)" }, { "type": "text", "text": " counts the positive integers at most n that are coprime to n." }] }] },
+  "definitions": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Two integers are coprime when their greatest common divisor is one." }] }] },
+  "results": { "blocks": [{ "type": "displayMath", "tex": "\\varphi(n)=n\\prod_{p\\mid n}(1-p^{-1})" }] },
+  "conditions": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Here n is a positive integer and the product is over distinct prime divisors." }] }] },
+  "examples": [{ "title": "Evaluate a totient", "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "\\varphi(12)=4" }, { "type": "text", "text": ", since 1, 5, 7, and 11 are coprime to 12." }] }] } }],
+  "pitfalls": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "The prime product contains each prime divisor only once." }] }] },
+  "relatedReferences": ["math-reference/number-theory/fermat-euler-theorems"],
+  "relatedProblems": ["putnam/2025/A1"],
+  "sources": [{ "label": "Euler's totient function", "url": "https://mathworld.wolfram.com/TotientFunction.html" }],
+  "rights": {
+    "sourceUrl": "https://mathworld.wolfram.com/TotientFunction.html",
+    "attribution": "Original MyPutnam exposition informed by the cited mathematical reference.",
+    "copyrightHolder": null,
+    "licenseBasis": "Mathematical facts restated in original prose; source text is not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

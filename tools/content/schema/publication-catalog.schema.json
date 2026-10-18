@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://putnamworkbook.local/schema/publication-catalog.schema.json",
+  "title": "MyPutnam public content catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion", "catalogId", "catalogRevision", "generatedAt", "minAppVersionCode",
+    "collections", "topics", "referenceCategories", "problems", "references"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "catalogId": { "type": "string", "pattern": "^[A-Za-z0-9._-]+$" },
+    "catalogRevision": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "generatedAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$" },
+    "minAppVersionCode": { "type": "integer", "minimum": 1 },
+    "collections": { "type": "array", "items": { "$ref": "#/$defs/collection" } },
+    "topics": { "type": "array", "items": { "$ref": "#/$defs/topic" } },
+    "referenceCategories": {
+      "type": "array",
+      "items": { "$ref": "https://putnamworkbook.local/schema/reference-categories.schema.json#/$defs/category" }
+    },
+    "problems": { "type": "array", "items": { "$ref": "#/$defs/problem" } },
+    "references": { "type": "array", "items": { "$ref": "#/$defs/reference" } }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9._-]+$" },
+    "collection": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "title", "kind", "displayOrder"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "title": { "type": "string", "minLength": 1 },
+        "kind": { "type": "string", "minLength": 1 },
+        "displayOrder": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "topic": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "label", "displayOrder"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "label": { "type": "string", "minLength": 1 },
+        "displayOrder": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "problem": {
+      "type": "object", "additionalProperties": false,
+      "required": ["key", "collectionId", "setId", "problemId", "label", "ordinal", "topics", "rights", "package"],
+      "properties": {
+        "key": { "type": "string", "minLength": 1 },
+        "collectionId": { "$ref": "#/$defs/id" }, "setId": { "$ref": "#/$defs/id" },
+        "problemId": { "$ref": "#/$defs/id" }, "label": { "type": "string", "minLength": 1 },
+        "ordinal": { "type": "integer", "minimum": 1 },
+        "topics": { "type": "array", "items": { "$ref": "#/$defs/id" } },
+        "rights": { "$ref": "https://putnamworkbook.local/schema/library-catalog.schema.json#/$defs/rights" },
+        "package": { "$ref": "https://putnamworkbook.local/schema/package-envelope.schema.json#/$defs/packageDescriptor" }
+      }
+    },
+    "reference": {
+      "type": "object", "additionalProperties": false,
+      "required": ["key", "categoryId", "articleId", "title", "displayOrder", "aliases", "keywords", "rights", "package"],
+      "properties": {
+        "key": { "type": "string", "minLength": 1 },
+        "categoryId": { "$ref": "#/$defs/id" }, "articleId": { "$ref": "#/$defs/id" },
+        "title": { "type": "string", "minLength": 1 },
+        "displayOrder": { "type": "integer", "minimum": 1 },
+        "aliases": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "keywords": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "rights": { "$ref": "https://putnamworkbook.local/schema/library-catalog.schema.json#/$defs/rights" },
+        "package": { "$ref": "https://putnamworkbook.local/schema/package-envelope.schema.json#/$defs/packageDescriptor" }
+      }
+    }
+  }
+}

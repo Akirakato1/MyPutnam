@@ -181,6 +181,7 @@ function projectCatalog(catalog, includedSets) {
     contentSchemaVersion: catalog.contentSchemaVersion,
     collections,
     topics: structuredClone(catalog.topics),
+    referenceCategories: structuredClone(catalog.referenceCategories),
   };
 }
 

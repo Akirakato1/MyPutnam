@@ -15,12 +15,18 @@ const catalog = {
     title: 'William Lowell Putnam Mathematical Competition',
     kind: 'competition',
     displayOrder: 1,
+    rights: {
+      sourceUrl: 'https://example.test/putnam', attribution: 'Putnam test source',
+      copyrightHolder: 'Example holder', licenseBasis: 'Test fixture only',
+      redistributionStatus: 'unresolved',
+    },
     sets: [{ id: '2025', title: '2025', displayOrder: 1, metadata: { competitionYear: 2025 } }],
   }],
   topics: [
     { id: 'algebra', label: 'Algebra', displayOrder: 1 },
     { id: 'integrals', label: 'Integrals', displayOrder: 2 },
   ],
+  referenceCategories: [],
 };
 
 function validateProblem(record) {
@@ -117,6 +123,10 @@ test('generic ids, ordinals, topics, and prerequisites follow schema v3', () => 
   const genericCatalog = structuredClone(catalog);
   genericCatalog.collections.push({
     id: 'course', title: 'Course', kind: 'course', displayOrder: 2,
+    rights: {
+      sourceUrl: 'https://example.test/course', attribution: 'Course test source',
+      copyrightHolder: null, licenseBasis: 'Test fixture only', redistributionStatus: 'cleared',
+    },
     sets: [{ id: 'chapter-1', title: 'Chapter One', displayOrder: 1 }],
   });
   const generic = structuredClone(validProblem);

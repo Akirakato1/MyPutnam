@@ -3,7 +3,13 @@ import { readFileSync } from 'node:fs';
 import Ajv2020 from 'ajv/dist/2020.js';
 
 export const SCHEMA_IDS = Object.freeze({
+  libraryCatalog: 'https://putnamworkbook.local/schema/library-catalog.schema.json',
+  packageEnvelope: 'https://putnamworkbook.local/schema/package-envelope.schema.json',
   problem: 'https://putnamworkbook.local/schema/problem.schema.json',
+  publicationCatalog: 'https://putnamworkbook.local/schema/publication-catalog.schema.json',
+  publicationManifest: 'https://putnamworkbook.local/schema/publication-manifest.schema.json',
+  referenceArticle: 'https://putnamworkbook.local/schema/reference-article.schema.json',
+  referenceCategories: 'https://putnamworkbook.local/schema/reference-categories.schema.json',
   richDocumentV1: 'https://putnamworkbook.local/schema/rich-document-v1.schema.json',
   richDocumentV2: 'https://putnamworkbook.local/schema/rich-document-v2.schema.json',
 });
@@ -11,7 +17,13 @@ export const SCHEMA_IDS = Object.freeze({
 const schemas = [
   loadSchema('../schema/rich-document-v1.schema.json'),
   loadSchema('../schema/rich-document-v2.schema.json'),
+  loadSchema('../schema/reference-categories.schema.json'),
+  loadSchema('../schema/library-catalog.schema.json'),
   loadSchema('../schema/problem.schema.json'),
+  loadSchema('../schema/reference-article.schema.json'),
+  loadSchema('../schema/package-envelope.schema.json'),
+  loadSchema('../schema/publication-manifest.schema.json'),
+  loadSchema('../schema/publication-catalog.schema.json'),
 ];
 const ajv = new Ajv2020({ allErrors: true, strict: true });
 for (const schema of schemas) {
@@ -26,6 +38,10 @@ const richDocumentValidators = new Map([
 
 export function getProblemSchemaValidator() {
   return problemValidator;
+}
+
+export function getSchemaValidator(schemaId) {
+  return requireValidator(schemaId);
 }
 
 export function getRichDocumentSchemaValidator(version) {
