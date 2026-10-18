@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://putnamworkbook.local/schema/rich-document-v2.schema.json",
+  "title": "MyPutnam rich document v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["blocks"],
+  "properties": {
+    "blocks": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/block" }
+    }
+  },
+  "$defs": {
+    "table": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "caption", "headers", "rows"],
+      "properties": {
+        "type": { "const": "table" },
+        "caption": {
+          "$ref": "https://putnamworkbook.local/schema/rich-document-v1.schema.json#/$defs/runs"
+        },
+        "headers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "https://putnamworkbook.local/schema/rich-document-v1.schema.json#/$defs/runs"
+          }
+        },
+        "rows": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "https://putnamworkbook.local/schema/rich-document-v1.schema.json"
+            }
+          }
+        }
+      }
+    },
+    "block": {
+      "oneOf": [
+        { "$ref": "https://putnamworkbook.local/schema/rich-document-v1.schema.json#/$defs/block" },
+        { "$ref": "#/$defs/table" }
+      ]
+    }
+  }
+}

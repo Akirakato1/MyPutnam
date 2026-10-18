@@ -3,6 +3,9 @@ import { readFileSync } from 'node:fs';
 import katex from 'katex';
 
 import { isSafeLocalPath } from './content-types.mjs';
+import { findDocumentMathRuns } from './rich-document.mjs';
+
+export { findDocumentMathRuns };
 
 const template = readFileSync(new URL('../templates/document.html', import.meta.url), 'utf8');
 
@@ -25,32 +28,6 @@ export function renderDocument(document, options = {}) {
   return html;
 }
 
-export function findDocumentMathRuns(document, basePath = '$') {
-  if (!document || !Array.isArray(document.blocks)) {
-    return [];
-  }
-
-  const mathRuns = [];
-  document.blocks.forEach((block, blockIndex) => {
-    const blockPath = `${basePath}.blocks[${blockIndex}]`;
-    if (block?.type === 'displayMath' && typeof block.tex === 'string') {
-      mathRuns.push({ path: `${blockPath}.tex`, tex: block.tex, displayMode: true });
-    }
-    if (block?.type === 'paragraph' || block?.type === 'heading') {
-      appendMathRuns(block.runs, `${blockPath}.runs`, mathRuns);
-    }
-    if (block?.type === 'list' && Array.isArray(block.items)) {
-      block.items.forEach((runs, itemIndex) => {
-        appendMathRuns(runs, `${blockPath}.items[${itemIndex}]`, mathRuns);
-      });
-    }
-    if (block?.type === 'figure' && block.caption !== undefined) {
-      appendMathRuns(block.caption, `${blockPath}.caption`, mathRuns);
-    }
-  });
-  return mathRuns;
-}
-
 export function auditRenderedDocument(document, html, label = '$') {
   const mathRunCount = findDocumentMathRuns(document, label).length;
   const katexRootCount = (String(html).match(/class="katex"/g) ?? []).length;
@@ -60,17 +37,6 @@ export function auditRenderedDocument(document, html, label = '$') {
     );
   }
   return { mathRunCount, katexRootCount };
-}
-
-function appendMathRuns(runs, path, output) {
-  if (!Array.isArray(runs)) {
-    return;
-  }
-  runs.forEach((run, index) => {
-    if (run?.type === 'inlineMath' && typeof run.tex === 'string') {
-      output.push({ path: `${path}[${index}].tex`, tex: run.tex, displayMode: false });
-    }
-  });
 }
 
 function renderBlock(block) {

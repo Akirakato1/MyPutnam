@@ -1,0 +1,37 @@
+{
+  "blocks": [
+    {
+      "type": "heading",
+      "level": 2,
+      "runs": [{ "type": "text", "text": "A shared document" }]
+    },
+    {
+      "type": "paragraph",
+      "runs": [
+        { "type": "text", "text": "Use " },
+        { "type": "inlineMath", "tex": "x^2+1" },
+        { "type": "text", "text": "." }
+      ]
+    },
+    { "type": "displayMath", "tex": "\\sum_{k=1}^n k=\\frac{n(n+1)}2" },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [[
+        { "type": "text", "text": "Then " },
+        { "type": "inlineMath", "tex": "n\\ge1" },
+        { "type": "text", "text": "." }
+      ]]
+    },
+    {
+      "type": "figure",
+      "path": "assets/unit-square.svg",
+      "alt": "A unit square",
+      "caption": [
+        { "type": "text", "text": "Area " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": "." }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "blocks": [
+    {
+      "type": "table",
+      "caption": [{ "type": "text", "text": "No body rows" }],
+      "headers": [[{ "type": "text", "text": "Column" }]],
+      "rows": []
+    }
+  ]
+}

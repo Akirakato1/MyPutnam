@@ -1,24 +1,18 @@
-import { readFileSync } from 'node:fs';
-
-import Ajv2020 from 'ajv/dist/2020.js';
-import katex from 'katex';
-
 import {
   HINT_STAGES,
   isPlainObject,
   isSafeId,
-  isSafeLocalPath,
   problemDocuments,
 } from './content-types.mjs';
 import { validateLibraryCatalog } from './library-catalog.mjs';
 import { findRawMathInListText } from './list-math-audit.mjs';
+import { validateRichDocument } from './rich-document.mjs';
+import {
+  formatSchemaErrors,
+  getProblemSchemaValidator,
+} from './schema-registry.mjs';
 
-const schema = JSON.parse(
-  readFileSync(new URL('../schema/problem.schema.json', import.meta.url), 'utf8'),
-);
-const ajv = new Ajv2020({ allErrors: true, strict: true });
-const validateSchema = ajv.compile(schema);
-const unsafeTexCommand = /\\(?:href|url|includegraphics|html(?:Class|Data|Id|Style)?|class|id|style)\b/;
+const validateSchema = getProblemSchemaValidator();
 
 export function validateProblem(record, catalog) {
   const errors = [];
@@ -31,9 +25,7 @@ export function validateProblem(record, catalog) {
 
   const schemaValid = validateSchema(record);
   if (!schemaValid) {
-    for (const error of validateSchema.errors ?? []) {
-      errors.push(`${schemaErrorPath(error)}: ${error.message}`);
-    }
+    errors.push(...formatSchemaErrors(validateSchema.errors));
   }
 
   if (!isPlainObject(record)) {
@@ -72,7 +64,7 @@ export function validateProblem(record, catalog) {
   }
 
   for (const { path, document } of problemDocuments(record)) {
-    validateDocument(document, path, errors);
+    errors.push(...validateRichDocument(document, { version: 1, basePath: path }));
     if (schemaValid) {
       for (const finding of findRawMathInListText(document, path)) {
         errors.push(`${finding.path}: mathematical notation in list text must use inlineMath (${finding.rule})`);
@@ -127,98 +119,6 @@ function validateOrderedItems(items, path, expectedOrders, errors) {
       errors.push(`${path}[${index}].order: expected ${expectedOrders[index]}`);
     }
   });
-}
-
-function validateDocument(document, path, errors) {
-  if (!Array.isArray(document.blocks)) {
-    return;
-  }
-
-  document.blocks.forEach((block, blockIndex) => {
-    const blockPath = `${path}.blocks[${blockIndex}]`;
-    if (!isPlainObject(block)) {
-      return;
-    }
-
-    if (block.type === 'displayMath') {
-      validateTex(block.tex, `${blockPath}.tex`, true, errors);
-    }
-
-    if (block.type === 'paragraph' || block.type === 'heading') {
-      validateRuns(block.runs, `${blockPath}.runs`, errors);
-    }
-
-    if (block.type === 'list' && Array.isArray(block.items)) {
-      block.items.forEach((runs, itemIndex) => {
-        validateRuns(runs, `${blockPath}.items[${itemIndex}]`, errors);
-      });
-    }
-
-    if (block.type === 'figure') {
-      if (!isSafeLocalPath(block.path)) {
-        errors.push(`${blockPath}.path: must be a normalized local path beneath the problem directory`);
-      }
-      if (block.caption !== undefined) {
-        validateRuns(block.caption, `${blockPath}.caption`, errors);
-      }
-    }
-  });
-}
-
-function validateRuns(runs, path, errors) {
-  if (!Array.isArray(runs)) {
-    return;
-  }
-
-  runs.forEach((run, index) => {
-    if (run?.type === 'inlineMath') {
-      validateTex(run.tex, `${path}[${index}].tex`, false, errors);
-    }
-  });
-}
-
-function validateTex(tex, path, displayMode, errors) {
-  if (typeof tex !== 'string') {
-    return;
-  }
-
-  if (unsafeTexCommand.test(tex)) {
-    errors.push(`${path}: contains a command that can reference or style external content`);
-    return;
-  }
-
-  try {
-    katex.renderToString(tex, {
-      displayMode,
-      output: 'htmlAndMathml',
-      strict: 'error',
-      throwOnError: true,
-      trust: false,
-    });
-  } catch (error) {
-    errors.push(`${path}: invalid TeX (${error.message})`);
-  }
-}
-
-function schemaErrorPath(error) {
-  let path = '$';
-  const segments = error.instancePath.split('/').slice(1).map(unescapeJsonPointer);
-  for (const segment of segments) {
-    path += /^\d+$/.test(segment) ? `[${segment}]` : `.${segment}`;
-  }
-
-  if (error.keyword === 'required') {
-    path += `.${error.params.missingProperty}`;
-  }
-  if (error.keyword === 'additionalProperties') {
-    path += `.${error.params.additionalProperty}`;
-  }
-
-  return path;
-}
-
-function unescapeJsonPointer(value) {
-  return value.replaceAll('~1', '/').replaceAll('~0', '~');
 }
 
 function uniqueSorted(errors) {

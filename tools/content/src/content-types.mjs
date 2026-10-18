@@ -50,6 +50,12 @@ export function problemKey(collectionId, setId, problemId) {
   return `${setKey(collectionId, setId)}/${problemId}`;
 }
 
+export function referenceKey(categoryId, articleId) {
+  requireSafeId(categoryId, 'categoryId');
+  requireSafeId(articleId, 'articleId');
+  return `math-reference/${categoryId}/${articleId}`;
+}
+
 export function parseSetKey(value) {
   const parts = splitCanonicalKey(value, 2, 'set');
   return { collectionId: parts[0], setId: parts[1] };
@@ -58,6 +64,14 @@ export function parseSetKey(value) {
 export function parseProblemKey(value) {
   const parts = splitCanonicalKey(value, 3, 'problem');
   return { collectionId: parts[0], setId: parts[1], problemId: parts[2] };
+}
+
+export function parseReferenceKey(value) {
+  const parts = splitCanonicalKey(value, 3, 'reference');
+  if (parts[0] !== 'math-reference') {
+    throw new TypeError(`Invalid canonical reference key: ${value}`);
+  }
+  return { namespace: 'math-reference', categoryId: parts[1], articleId: parts[2] };
 }
 
 function splitCanonicalKey(value, expectedParts, label) {

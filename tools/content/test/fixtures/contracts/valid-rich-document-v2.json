@@ -1,0 +1,27 @@
+{
+  "blocks": [
+    {
+      "type": "heading",
+      "level": 2,
+      "runs": [{ "type": "text", "text": "Transform pairs" }]
+    },
+    {
+      "type": "table",
+      "caption": [{ "type": "text", "text": "Two elementary pairs" }],
+      "headers": [
+        [{ "type": "text", "text": "Function" }],
+        [{ "type": "text", "text": "Transform " }, { "type": "inlineMath", "tex": "F(s)" }]
+      ],
+      "rows": [
+        [
+          { "blocks": [{ "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "1" }] }] },
+          { "blocks": [{ "type": "displayMath", "tex": "1/s" }] }
+        ],
+        [
+          { "blocks": [{ "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "t" }] }] },
+          { "blocks": [{ "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "1/s^2" }] }] }
+        ]
+      ]
+    }
+  ]
+}
