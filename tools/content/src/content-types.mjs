@@ -140,6 +140,31 @@ export function problemDocuments(record) {
   return documents;
 }
 
+export function problemPackageDocuments(record) {
+  if (!isPlainObject(record)) return [];
+  const documents = [];
+  if (isPlainObject(record.statement)) {
+    documents.push({ path: 'documents/statement.fragment.html', document: record.statement });
+  }
+  for (const hint of [...(record.hints ?? [])].sort((left, right) => left.order - right.order)) {
+    if (isPlainObject(hint?.document)) {
+      documents.push({ path: `documents/hint-${hint.order}.fragment.html`, document: hint.document });
+    }
+  }
+  for (const prerequisite of [...(record.prerequisites ?? [])].sort((left, right) => left.order - right.order)) {
+    if (isPlainObject(prerequisite?.document)) {
+      documents.push({
+        path: `documents/prerequisite-${prerequisite.order}.fragment.html`,
+        document: prerequisite.document,
+      });
+    }
+  }
+  if (isPlainObject(record.solution)) {
+    documents.push({ path: 'documents/solution.fragment.html', document: record.solution });
+  }
+  return documents;
+}
+
 export function documentFigurePaths(document) {
   if (!Array.isArray(document?.blocks)) {
     return [];
