@@ -12,10 +12,61 @@ import {
   auditRenderedDocument,
   findDocumentMathRuns,
   renderDocument,
+  renderDocumentFragment,
 } from '../src/render-document.mjs';
 import { renderReview } from '../src/render-review.mjs';
 
 const fixtureUrl = new URL('./fixtures/valid-problem.json', import.meta.url);
+
+test('body fragments are inert, shell-free, and preserve every math root', () => {
+  const document = {
+    blocks: [
+      { type: 'paragraph', runs: [
+        { type: 'text', text: '<script src="https://bad.test/x.js">bad</script> ' },
+        { type: 'inlineMath', tex: 'x^2' },
+      ] },
+      { type: 'displayMath', tex: 'x^2+y^2=1' },
+      { type: 'list', ordered: true, items: [[
+        { type: 'text', text: 'Use ' }, { type: 'inlineMath', tex: '\\pi' },
+      ]] },
+    ],
+  };
+  const fragment = renderDocumentFragment(document, { richDocumentVersion: 1 });
+  assert.doesNotMatch(fragment, /<(?:html|head|body|script|style|base|frame|iframe|form|object|embed)\b/i);
+  assert.doesNotMatch(fragment, /\son[a-z]+\s*=|(?:src|href)\s*=\s*["'](?:https?:|data:|\/\/)/i);
+  assert.match(fragment, /&lt;script src=&quot;https:\/\/bad\.test\/x\.js&quot;&gt;/);
+  assert.equal((fragment.match(/class="katex"/g) ?? []).length, 3);
+});
+
+test('rich-document v2 tables emit semantic scroll-local markup and cell math', () => {
+  const document = {
+    blocks: [{
+      type: 'table',
+      caption: [{ type: 'text', text: 'Transform <pairs>' }],
+      headers: [
+        [{ type: 'text', text: 'Function' }],
+        [{ type: 'text', text: 'Transform ' }, { type: 'inlineMath', tex: 'F(s)' }],
+      ],
+      rows: [[
+        { blocks: [{ type: 'paragraph', runs: [{ type: 'inlineMath', tex: '1' }] }] },
+        { blocks: [{ type: 'displayMath', tex: '1/s' }] },
+      ]],
+    }],
+  };
+  const fragment = renderDocumentFragment(document, { richDocumentVersion: 2 });
+  assert.match(fragment, /^<div class="table-scroll"><table>/);
+  assert.match(fragment, /<caption>Transform &lt;pairs&gt;<\/caption>/);
+  assert.equal((fragment.match(/<th scope="col">/g) ?? []).length, 2);
+  assert.equal((fragment.match(/class="katex"/g) ?? []).length, 3);
+  assert.doesNotMatch(fragment, /<(?:html|head|style|script)\b/i);
+});
+
+test('legacy full pages wrap the same fragment renderer', () => {
+  const document = { blocks: [{ type: 'paragraph', runs: [{ type: 'text', text: 'Shared body.' }] }] };
+  const fragment = renderDocumentFragment(document, { richDocumentVersion: 1 });
+  const page = renderDocument(document, { richDocumentVersion: 1 });
+  assert.ok(page.includes(`<main class="document">${fragment}</main>`));
+});
 
 test('renderer escapes prose and emits script-free HTML with a restrictive CSP', () => {
   const html = renderDocument({

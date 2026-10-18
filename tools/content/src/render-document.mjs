@@ -3,18 +3,15 @@ import { readFileSync } from 'node:fs';
 import katex from 'katex';
 
 import { isSafeLocalPath } from './content-types.mjs';
-import { findDocumentMathRuns } from './rich-document.mjs';
+import { findDocumentMathRuns, validateRichDocument } from './rich-document.mjs';
 
 export { findDocumentMathRuns };
 
 const template = readFileSync(new URL('../templates/document.html', import.meta.url), 'utf8');
 
 export function renderDocument(document, options = {}) {
-  if (!document || !Array.isArray(document.blocks) || document.blocks.length === 0) {
-    throw new TypeError('RichDocument.blocks must be a non-empty array');
-  }
-
-  const content = document.blocks.map(renderBlock).join('\n');
+  const richDocumentVersion = options.richDocumentVersion ?? 1;
+  const content = renderDocumentFragment(document, { richDocumentVersion });
   const sharedAssetPrefix = options.sharedAssetPrefix ?? '../../shared';
   if (!/^(?:\.\.\/)+shared$/.test(sharedAssetPrefix)) {
     throw new TypeError(`Unsafe shared asset prefix: ${sharedAssetPrefix}`);
@@ -28,6 +25,17 @@ export function renderDocument(document, options = {}) {
   return html;
 }
 
+export function renderDocumentFragment(document, { richDocumentVersion = 1 } = {}) {
+  const errors = validateRichDocument(document, { version: richDocumentVersion });
+  if (errors.length > 0) {
+    throw new TypeError(`Invalid rich-document v${richDocumentVersion}:\n${errors.map((error) => `- ${error}`).join('\n')}`);
+  }
+  const fragment = document.blocks.map((block) => renderBlock(block, richDocumentVersion)).join('\n');
+  auditRenderedDocument(document, fragment);
+  auditRenderedFragment(fragment);
+  return fragment;
+}
+
 export function auditRenderedDocument(document, html, label = '$') {
   const mathRunCount = findDocumentMathRuns(document, label).length;
   const katexRootCount = (String(html).match(/class="katex"/g) ?? []).length;
@@ -39,7 +47,7 @@ export function auditRenderedDocument(document, html, label = '$') {
   return { mathRunCount, katexRootCount };
 }
 
-function renderBlock(block) {
+function renderBlock(block, richDocumentVersion) {
   switch (block.type) {
     case 'paragraph':
       return `<p>${renderRuns(block.runs)}</p>`;
@@ -59,8 +67,32 @@ function renderBlock(block) {
       const caption = block.caption ? `<figcaption>${renderRuns(block.caption)}</figcaption>` : '';
       return `<figure><img src="${escapeAttribute(block.path)}" alt="${escapeAttribute(block.alt)}">${caption}</figure>`;
     }
+    case 'table': {
+      if (richDocumentVersion !== 2) throw new TypeError('Tables require rich-document v2');
+      const caption = `<caption>${renderRuns(block.caption)}</caption>`;
+      const headers = block.headers.map((runs) => `<th scope="col">${renderRuns(runs)}</th>`).join('');
+      const rows = block.rows.map((row) => `<tr>${row.map((cell) =>
+        `<td>${cell.blocks.map((child) => renderBlock(child, 1)).join('\n')}</td>`).join('')}</tr>`).join('');
+      return `<div class="table-scroll"><table>${caption}<thead><tr>${headers}</tr></thead><tbody>${rows}</tbody></table></div>`;
+    }
     default:
       throw new TypeError(`Unsupported rich-document block: ${block.type}`);
+  }
+}
+
+function auditRenderedFragment(fragment) {
+  const html = String(fragment);
+  if (/<\/?(?:html|head|body|script|style|base|frame|iframe|form|object|embed)\b/i.test(html)) {
+    throw new Error('Rendered fragment contains a forbidden executable or shell element');
+  }
+  if (/\son[a-z][a-z\d:_-]*\s*=/i.test(html)) {
+    throw new Error('Rendered fragment contains an inline event handler');
+  }
+  for (const match of html.matchAll(/\s(?:src|href)="([^"]*)"/gi)) {
+    const value = match[1];
+    if (!isSafeLocalPath(value) && !/^#[A-Za-z_][A-Za-z0-9_.:-]*$/.test(value)) {
+      throw new Error(`Rendered fragment contains a nonlocal URL: ${value}`);
+    }
   }
 }
 
