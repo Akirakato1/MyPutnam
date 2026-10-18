@@ -110,3 +110,62 @@ catalog plus sorted manifests.
 The archive CLI requires explicit source, output, review, catalog, and database
 paths. It has no Android-output default. Its one-time invocation is reserved
 until every target year is complete.
+
+## Source schemas versus feed schemas
+
+Tracked authoring JSON remains the editable source of truth. Problem source
+records use schema v3 and rich-document v1. Reference articles use their own
+schema v1 and rich-document v2 so structured tables can be represented without
+raw HTML. `content-src/library.json` supplies stable collection, set, topic,
+reference-category, and rights metadata.
+
+The generated feed is a different contract. `content/v1/catalog.json` is a
+complete snapshot whose descriptors name immutable, digest-addressed ZIPs.
+Each ZIP contains a strict `package.json`, canonical source JSON, inert generated
+body fragments, and only declared local assets. Package schema version, source
+schema version, rich-document version, minimum app version, canonical package
+revision, outer archive SHA-256, member SHA-256 values, and byte sizes are
+separate fields and are all checked.
+
+Problem packages use this logical layout:
+
+```text
+package.json
+source/problem.json
+documents/statement.fragment.html
+documents/hint-1.fragment.html ... documents/hint-4.fragment.html
+documents/prerequisite-<n>.fragment.html
+documents/solution.fragment.html
+assets/<referenced problem-local files only>
+```
+
+Fragments are not standalone pages. They contain no document shell, scripts,
+styles, forms, frames, objects, event handlers, or remote resources. Android
+and a future static web client provide their own fixed shell, CSP, styles, and
+KaTeX fonts around the same verified fragment bytes.
+
+## Publication validation and rights
+
+Build and independently audit the ignored local feed from the repository root:
+
+```text
+npm --prefix tools/content run build:publication
+npm --prefix tools/content run audit:publication
+```
+
+The builder refuses a nonempty output root. Delete the ignored
+`build/content-publication` directory before rebuilding. The auditor does not
+trust the builder: it reopens every ZIP, verifies hashes, sizes, revisions,
+keys, schemas, member closure, immutable filenames, local assets, and catalog
+closure, and rejects missing/orphaned packages or development provenance.
+
+Local review accepts honest `unresolved` or `review` rights states. Public
+publication must additionally pass:
+
+```text
+npm --prefix tools/content run audit:publication -- --require-cleared-rights
+```
+
+The current Putnam records do not pass that public gate. Complete attribution
+metadata is not a substitute for redistribution permission, and no public feed
+should be claimed until the tracked status is genuinely `cleared`.

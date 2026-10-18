@@ -1,0 +1,47 @@
+name: Publish content feed
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tools/content/package-lock.json
+      - name: Install content tools
+        run: npm ci --prefix tools/content
+      - name: Run complete content tests
+        run: npm --prefix tools/content test
+      - name: Build clean publication
+        run: npm --prefix tools/content run build:publication
+      - name: Enforce cleared redistribution rights
+        run: npm --prefix tools/content run audit:publication -- --require-cleared-rights
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v6
+      - name: Upload verified Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: build/content-publication
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
+

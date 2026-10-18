@@ -8,9 +8,9 @@
   },
   "scripts": {
     "audit-year": "node src/audit-year.mjs",
-    "audit-publication": "node src/audit-publication.mjs",
+    "audit:publication": "node src/audit-publication.mjs --root ../../build/content-publication",
     "build": "node src/build-year.mjs",
-    "build-publication": "node src/build-publication.mjs",
+    "build:publication": "node src/build-publication.mjs --source ../../content-src --library ../../content-src/library.json --publication ../../content-src/publications/content-v1.json --output ../../build/content-publication",
     "review": "node src/render-review.mjs",
     "review-year": "node src/review-year.mjs",
     "test": "node --test test/*.test.mjs",
