@@ -83,10 +83,10 @@
         "type": "list",
         "ordered": true,
         "items": [
-          [{ "type": "text", "text": "Rule out k=1 because all scalars commute." }],
-          [{ "type": "text", "text": "Rule out k=2 by the Jordan-form commutant argument." }],
-          [{ "type": "text", "text": "Choose 2025 unit vectors in R^3 orthogonal exactly for consecutive indices on the cycle and with no unwanted parallel pairs." }],
-          [{ "type": "text", "text": "Verify directly that A_iA_j=A_jA_i exactly for the required index differences." }]
+          [{ "type": "text", "text": "Rule out " }, { "type": "inlineMath", "tex": "k=1" }, { "type": "text", "text": " because all scalars commute." }],
+          [{ "type": "text", "text": "Rule out " }, { "type": "inlineMath", "tex": "k=2" }, { "type": "text", "text": " by the Jordan-form commutant argument." }],
+          [{ "type": "text", "text": "Choose 2025 unit vectors in " }, { "type": "inlineMath", "tex": "\\mathbb R^3" }, { "type": "text", "text": " orthogonal exactly for consecutive indices on the cycle and with no unwanted parallel pairs." }],
+          [{ "type": "text", "text": "Verify directly that " }, { "type": "inlineMath", "tex": "A_iA_j=A_jA_i" }, { "type": "text", "text": " exactly for the required index differences." }]
         ]
       }] }
     }

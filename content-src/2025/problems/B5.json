@@ -41,9 +41,9 @@
       "stage": "outline",
       "title": "Count multiplicities",
       "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
-        [{ "type": "text", "text": "Each t forces at least one downstep among four slots." }],
-        [{ "type": "text", "text": "There are p−3 choices of t." }],
-        [{ "type": "text", "text": "Any actual step I(k) to I(k+1) occurs in at most four slots, so the number of downsteps is at least (p−3)/4." }]
+        [{ "type": "text", "text": "Each " }, { "type": "inlineMath", "tex": "t" }, { "type": "text", "text": " forces at least one downstep among four slots." }],
+        [{ "type": "text", "text": "There are " }, { "type": "inlineMath", "tex": "p-3" }, { "type": "text", "text": " choices of " }, { "type": "inlineMath", "tex": "t" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Any actual step " }, { "type": "inlineMath", "tex": "I(k)" }, { "type": "text", "text": " to " }, { "type": "inlineMath", "tex": "I(k+1)" }, { "type": "text", "text": " occurs in at most four slots, so the number of downsteps is at least " }, { "type": "inlineMath", "tex": "(p-3)/4" }, { "type": "text", "text": "." }]
       ] }] }
     }
   ],

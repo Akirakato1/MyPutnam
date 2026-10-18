@@ -39,8 +39,8 @@
       "stage": "outline",
       "title": "Contradict the original inequality",
       "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
-        [{ "type": "text", "text": "For large n, exponential growth gives g(n)≥n+2, so g(g(n))≥g(n+2)." }],
-        [{ "type": "text", "text": "Use the inequality at n and n+1 to bound g(n+2) both above by a power of g(n+1) and below exponentially in g(n+1)." }],
+        [{ "type": "text", "text": "For large " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": ", exponential growth gives " }, { "type": "inlineMath", "tex": "g(n)\\ge n+2" }, { "type": "text", "text": ", so " }, { "type": "inlineMath", "tex": "g(g(n))\\ge g(n+2)" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Use the inequality at " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "n+1" }, { "type": "text", "text": " to bound " }, { "type": "inlineMath", "tex": "g(n+2)" }, { "type": "text", "text": " both above by a power of " }, { "type": "inlineMath", "tex": "g(n+1)" }, { "type": "text", "text": " and below exponentially in " }, { "type": "inlineMath", "tex": "g(n+1)" }, { "type": "text", "text": "." }],
         [{ "type": "text", "text": "A polynomial cannot dominate an exponential, yielding the contradiction." }]
       ] }] }
     }

@@ -52,7 +52,7 @@
       "stage": "outline",
       "title": "Finish by an injection",
       "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
-        [{ "type": "text", "text": "Normalize the first equal pair to (-1,-1) using value complementation." }],
+        [{ "type": "text", "text": "Normalize the first equal pair to " }, { "type": "inlineMath", "tex": "(-1,-1)" }, { "type": "text", "text": " using value complementation." }],
         [{ "type": "text", "text": "Define the new entry by its rank among the remaining tail values and reverse the later ranks." }],
         [{ "type": "text", "text": "Check the new central inequality and recover the original permutation, so the map is injective." }],
         [{ "type": "text", "text": "Exhibit a pattern in the target that is not hit; iterate until all signs alternate." }]

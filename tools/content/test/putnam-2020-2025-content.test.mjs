@@ -7,6 +7,7 @@ import test from 'node:test';
 import { auditYear, CANONICAL_PROBLEMS } from '../src/audit-year.mjs';
 import { loadArchiveCatalog } from '../src/archive-catalog.mjs';
 import { loadLibraryCatalog } from '../src/library-catalog.mjs';
+import { findRawMathInListText } from '../src/list-math-audit.mjs';
 
 const sourceRoot = fileURLToPath(new URL('../../../content-src/', import.meta.url));
 const archiveUrl = new URL('../../../content-src/archive.json', import.meta.url);
@@ -15,6 +16,42 @@ const ledgerUrl = new URL('../../../content-src/batches/2020-2025-review.md', im
 const years = [2020, 2021, 2022, 2023, 2024, 2025];
 const expectedKeys = years.flatMap((year) =>
   CANONICAL_PROBLEMS.map(({ code }) => `putnam/${year}/${code}`));
+
+test('2024 A3 fourth-hint list renders the tableaux set label as inline math', async () => {
+  const problem = JSON.parse(await readFile(
+    join(sourceRoot, '2024', 'problems', 'A3.json'), 'utf8',
+  ));
+  const runs = problem.hints[3].document.blocks[0].items[0];
+  assert.deepEqual(runs.filter(({ type }) => type === 'inlineMath').map(({ tex }) => tex),
+    ['S', '3\\times n']);
+});
+
+test('all 72 Putnam 2020-2025 records keep raw math out of every document list', async () => {
+  const findings = [];
+  let problemCount = 0;
+  for (const year of years) {
+    for (const { code } of CANONICAL_PROBLEMS) {
+      const problem = JSON.parse(await readFile(
+        join(sourceRoot, String(year), 'problems', `${code}.json`), 'utf8',
+      ));
+      problemCount += 1;
+      const documents = [
+        ['$.statement', problem.statement],
+        ...problem.hints.map(({ document }, index) => [`$.hints[${index}].document`, document]),
+        ...problem.prerequisites.map(({ document }, index) =>
+          [`$.prerequisites[${index}].document`, document]),
+        ['$.solution', problem.solution],
+      ];
+      for (const [path, document] of documents) {
+        findings.push(...findRawMathInListText(document, path).map((finding) => ({
+          problemKey: `putnam/${year}/${code}`, ...finding,
+        })));
+      }
+    }
+  }
+  assert.equal(problemCount, 72);
+  assert.deepEqual(findings, []);
+});
 
 test('the completed Putnam 2020-2025 source corpus has the exact reviewed shape', async () => {
   const archive = await loadArchiveCatalog(archiveUrl);

@@ -76,7 +76,7 @@
       "stage": "outline",
       "title": "Outline the probability calculation",
       "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
-        [{ "type": "text", "text": "Interpret S as the standard tableaux of a " }, { "type": "inlineMath", "tex": "3\\times n" }, { "type": "text", "text": " rectangle." }],
+        [{ "type": "text", "text": "Interpret " }, { "type": "inlineMath", "tex": "S" }, { "type": "text", "text": " as the standard tableaux of a " }, { "type": "inlineMath", "tex": "3\\times n" }, { "type": "text", "text": " rectangle." }],
         [{ "type": "text", "text": "Show the chosen comparison occurs exactly when " }, { "type": "inlineMath", "tex": "T(2,1)=2" }, { "type": "text", "text": "." }],
         [{ "type": "text", "text": "Express its probability as " }, { "type": "inlineMath", "tex": "f(n,n-1,n-1)/f(n,n,n)" }, { "type": "text", "text": "." }],
         [{ "type": "text", "text": "Simplify the ratio and check the bounds when " }, { "type": "inlineMath", "tex": "n=2024" }, { "type": "text", "text": "." }]

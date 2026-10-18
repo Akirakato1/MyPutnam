@@ -45,9 +45,9 @@
       "stage": "outline",
       "title": "Contradict the count",
       "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
-        [{ "type": "text", "text": "A circle centered at R contains at most two green points, so three R-circles contain at most six green intersections." }],
-        [{ "type": "text", "text": "A circle centered at G contains at most two red points, so three G-circles contain at most six red intersections." }],
-        [{ "type": "text", "text": "The 18 distinct intersections must all be red or green, but 6+6<18." }]
+        [{ "type": "text", "text": "A circle centered at " }, { "type": "inlineMath", "tex": "R" }, { "type": "text", "text": " contains at most two green points, so three " }, { "type": "inlineMath", "tex": "R" }, { "type": "text", "text": "-circles contain at most six green intersections." }],
+        [{ "type": "text", "text": "A circle centered at " }, { "type": "inlineMath", "tex": "G" }, { "type": "text", "text": " contains at most two red points, so three " }, { "type": "inlineMath", "tex": "G" }, { "type": "text", "text": "-circles contain at most six red intersections." }],
+        [{ "type": "text", "text": "The 18 distinct intersections must all be red or green, but " }, { "type": "inlineMath", "tex": "6+6<18" }, { "type": "text", "text": "." }]
       ] }] }
     }
   ],

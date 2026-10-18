@@ -41,9 +41,9 @@
       "stage": "outline",
       "title": "Close the induction",
       "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
-        [{ "type": "text", "text": "Let r be the number of ones, so N=N'+r and S=N+S'." }],
-        [{ "type": "text", "text": "Use r≥n and the induction bound for the (n−1)-matrix." }],
-        [{ "type": "text", "text": "At most n(n+1)/2 entries can be nonzero, which completes the numerical inequality." }]
+        [{ "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "r" }, { "type": "text", "text": " be the number of ones, so " }, { "type": "inlineMath", "tex": "N=N'+r" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "S=N+S'" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Use " }, { "type": "inlineMath", "tex": "r\\ge n" }, { "type": "text", "text": " and the induction bound for the " }, { "type": "inlineMath", "tex": "(n-1)" }, { "type": "text", "text": "-matrix." }],
+        [{ "type": "text", "text": "At most " }, { "type": "inlineMath", "tex": "n(n+1)/2" }, { "type": "text", "text": " entries can be nonzero, which completes the numerical inequality." }]
       ] }] }
     }
   ],

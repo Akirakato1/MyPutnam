@@ -41,10 +41,10 @@
       "stage": "outline",
       "title": "Check the size inequality",
       "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
-        [{ "type": "text", "text": "If a=b=0, use the Euler exponent k<c<=n directly." }],
-        [{ "type": "text", "text": "If a+b>0, use the exponent m=(a+b)k." }],
-        [{ "type": "text", "text": "Show m<n from a+b<3^a5^b and k<c." }],
-        [{ "type": "text", "text": "Then n divides 2025^m-15^m, so the closure property finishes the induction." }]
+        [{ "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "a=b=0" }, { "type": "text", "text": ", use the Euler exponent " }, { "type": "inlineMath", "tex": "k<c\\le n" }, { "type": "text", "text": " directly." }],
+        [{ "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "a+b>0" }, { "type": "text", "text": ", use the exponent " }, { "type": "inlineMath", "tex": "m=(a+b)k" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Show " }, { "type": "inlineMath", "tex": "m<n" }, { "type": "text", "text": " from " }, { "type": "inlineMath", "tex": "a+b<3^a5^b" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "k<c" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Then " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " divides " }, { "type": "inlineMath", "tex": "2025^m-15^m" }, { "type": "text", "text": ", so the closure property finishes the induction." }]
       ] }] }
     }
   ],

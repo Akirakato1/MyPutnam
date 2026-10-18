@@ -41,9 +41,9 @@
       "stage": "outline",
       "title": "Prove two congruence lemmas",
       "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
-        [{ "type": "text", "text": "Show c_{n,k} is congruent to 2^{k+1} modulo 2^{k+2}." }],
-        [{ "type": "text", "text": "Use the same difference identity to show d_{n,k} is congruent to 2^{2k+2} modulo 2^{2k+3}." }],
-        [{ "type": "text", "text": "Apply the second lemma at n=0." }]
+        [{ "type": "text", "text": "Show " }, { "type": "inlineMath", "tex": "c_{n,k}" }, { "type": "text", "text": " is congruent to " }, { "type": "inlineMath", "tex": "2^{k+1}" }, { "type": "text", "text": " modulo " }, { "type": "inlineMath", "tex": "2^{k+2}" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Use the same difference identity to show " }, { "type": "inlineMath", "tex": "d_{n,k}" }, { "type": "text", "text": " is congruent to " }, { "type": "inlineMath", "tex": "2^{2k+2}" }, { "type": "text", "text": " modulo " }, { "type": "inlineMath", "tex": "2^{2k+3}" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Apply the second lemma at " }, { "type": "inlineMath", "tex": "n=0" }, { "type": "text", "text": "." }]
       ] }] }
     }
   ],

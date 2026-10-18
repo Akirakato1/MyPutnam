@@ -41,8 +41,8 @@
       "stage": "outline",
       "title": "Show strict positivity",
       "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
-        [{ "type": "text", "text": "Express the numerator of x_2-x_1 as one half of a double integral." }],
-        [{ "type": "text", "text": "The factors x-y and f(x)-f(y) have the same sign." }],
+        [{ "type": "text", "text": "Express the numerator of " }, { "type": "inlineMath", "tex": "x_2-x_1" }, { "type": "text", "text": " as one half of a double integral." }],
+        [{ "type": "text", "text": "The factors " }, { "type": "inlineMath", "tex": "x-y" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "f(x)-f(y)" }, { "type": "text", "text": " have the same sign." }],
         [{ "type": "text", "text": "Strict increase makes the integrand positive on a region of positive area, while all weights are nonnegative." }]
       ] }] }
     }
