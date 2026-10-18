@@ -220,6 +220,15 @@ test('raw math in a fourth-hint list reports the exact text run path', () => {
   ]);
 });
 
+test('unicode comparison math in a list reports the exact text run path', () => {
+  const rawMath = structuredClone(validProblem);
+  rawMath.hints[3].document.blocks[0].items[1].push({ type: 'text', text: 'r≥n' });
+
+  assert.deepEqual(validateProblem(rawMath), [
+    '$.hints[3].document.blocks[0].items[1][1].text: mathematical notation in list text must use inlineMath (symbolic-relation)',
+  ]);
+});
+
 test('the same list expression is accepted as an inlineMath run', () => {
   const inlineMath = structuredClone(validProblem);
   inlineMath.hints[3].document.blocks[0].items[1].push({ type: 'inlineMath', tex: 'c_{n,k}' });
