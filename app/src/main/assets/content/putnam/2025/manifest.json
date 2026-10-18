@@ -296,7 +296,7 @@
           "stage": "outline",
           "title": "Assemble the proof",
           "assetPath": "content/putnam/2025/problems/A4/hint-4.html",
-          "sha256": "f4c0ebc3da5ae20a5e9f70c59f3b9ad5d2bf4c357c74ebd7149ee7340d98c9e7"
+          "sha256": "d1337808d5fbb56e84382565495a383267805a16851a2f18e3dabb78c489b3b0"
         }
       ],
       "prerequisites": [
@@ -378,7 +378,7 @@
           "stage": "outline",
           "title": "Finish by an injection",
           "assetPath": "content/putnam/2025/problems/A5/hint-4.html",
-          "sha256": "c663cde6141a1625c0220252e4d6f13edaffc867cc46e3654c6e934920087148"
+          "sha256": "5318e03a36ce3e9c541e5eb8f15ab99fc913fd1c11ff3f5b2c0802a714bc03c3"
         }
       ],
       "prerequisites": [
@@ -461,7 +461,7 @@
           "stage": "outline",
           "title": "Prove two congruence lemmas",
           "assetPath": "content/putnam/2025/problems/A6/hint-4.html",
-          "sha256": "e38385f3de7e0f5f83fe8907eb50f126123b9370e16287c7935d5e11cce0ab32"
+          "sha256": "2db6e9d849573750a3b07e18543dc7b8db8b1553b640b48f2a824df931acf413"
         }
       ],
       "prerequisites": [
@@ -544,7 +544,7 @@
           "stage": "outline",
           "title": "Contradict the count",
           "assetPath": "content/putnam/2025/problems/B1/hint-4.html",
-          "sha256": "999f0bffc1851530db3271b255520e5e7c85ee1033055b9810acccfcbbf4f896"
+          "sha256": "fc4795681482cf0300d6752811fdf8a35154aadc2e57eaead3c458069bc9f32d"
         }
       ],
       "prerequisites": [
@@ -629,7 +629,7 @@
           "stage": "outline",
           "title": "Show strict positivity",
           "assetPath": "content/putnam/2025/problems/B2/hint-4.html",
-          "sha256": "73cc712ff0477c3bcca7984554587b65a19d10b1f954cf2c25e0470bac783261"
+          "sha256": "470fb73c3282c07edcea67f59d3a5b86e0e168369b6b25b9e95eebe5aa60fef0"
         }
       ],
       "prerequisites": [
@@ -711,7 +711,7 @@
           "stage": "outline",
           "title": "Check the size inequality",
           "assetPath": "content/putnam/2025/problems/B3/hint-4.html",
-          "sha256": "ca99b12382c5f59367d490a505007648f4a515f89f803a4f3c5e414c885e2217"
+          "sha256": "568647c845dc2fabdb25c1e720ed16f33c099cfb42466796b9f5cfee5487082d"
         }
       ],
       "prerequisites": [
@@ -793,7 +793,7 @@
           "stage": "outline",
           "title": "Close the induction",
           "assetPath": "content/putnam/2025/problems/B4/hint-4.html",
-          "sha256": "81498d3809a57824b1cb31187d1b92139cf08e3d0089b32305bda0c7e21969ee"
+          "sha256": "0560cd885462ea8ba4c0f05f40b32c061553cf3f1f3ad53b98da2db58fcdca91"
         }
       ],
       "prerequisites": [
@@ -877,7 +877,7 @@
           "stage": "outline",
           "title": "Count multiplicities",
           "assetPath": "content/putnam/2025/problems/B5/hint-4.html",
-          "sha256": "88a75df1d2a77056957250f1810cc553286264caf09e0b1a35208a421161ae2e"
+          "sha256": "53c3a2969994677d866dc5aa6c4a5746e4a264b720a8c20008ebd2364c599b70"
         }
       ],
       "prerequisites": [
@@ -961,7 +961,7 @@
           "stage": "outline",
           "title": "Contradict the original inequality",
           "assetPath": "content/putnam/2025/problems/B6/hint-4.html",
-          "sha256": "f59268014edc3a0abe9f1be7c72819a1d360df874eeaf143e9b1a44cb991b723"
+          "sha256": "aa8b49357096409dda136513b2f49fa738bb61d5115d2f8ed051a38d06a133cd"
         }
       ],
       "prerequisites": [
@@ -1155,8 +1155,8 @@
     },
     {
       "path": "content/putnam/2025/problems/A4/hint-4.html",
-      "sha256": "f4c0ebc3da5ae20a5e9f70c59f3b9ad5d2bf4c357c74ebd7149ee7340d98c9e7",
-      "bytes": 1008
+      "sha256": "d1337808d5fbb56e84382565495a383267805a16851a2f18e3dabb78c489b3b0",
+      "bytes": 6321
     },
     {
       "path": "content/putnam/2025/problems/A4/prerequisite-1.html",
@@ -1200,8 +1200,8 @@
     },
     {
       "path": "content/putnam/2025/problems/A5/hint-4.html",
-      "sha256": "c663cde6141a1625c0220252e4d6f13edaffc867cc46e3654c6e934920087148",
-      "bytes": 1055
+      "sha256": "5318e03a36ce3e9c541e5eb8f15ab99fc913fd1c11ff3f5b2c0802a714bc03c3",
+      "bytes": 1803
     },
     {
       "path": "content/putnam/2025/problems/A5/prerequisite-1.html",
@@ -1245,8 +1245,8 @@
     },
     {
       "path": "content/putnam/2025/problems/A6/hint-4.html",
-      "sha256": "e38385f3de7e0f5f83fe8907eb50f126123b9370e16287c7935d5e11cce0ab32",
-      "bytes": 877
+      "sha256": "2db6e9d849573750a3b07e18543dc7b8db8b1553b640b48f2a824df931acf413",
+      "bytes": 7757
     },
     {
       "path": "content/putnam/2025/problems/A6/prerequisite-1.html",
@@ -1290,8 +1290,8 @@
     },
     {
       "path": "content/putnam/2025/problems/B1/hint-4.html",
-      "sha256": "999f0bffc1851530db3271b255520e5e7c85ee1033055b9810acccfcbbf4f896",
-      "bytes": 1005
+      "sha256": "fc4795681482cf0300d6752811fdf8a35154aadc2e57eaead3c458069bc9f32d",
+      "bytes": 3658
     },
     {
       "path": "content/putnam/2025/problems/B1/prerequisite-1.html",
@@ -1335,8 +1335,8 @@
     },
     {
       "path": "content/putnam/2025/problems/B2/hint-4.html",
-      "sha256": "73cc712ff0477c3bcca7984554587b65a19d10b1f954cf2c25e0470bac783261",
-      "bytes": 929
+      "sha256": "470fb73c3282c07edcea67f59d3a5b86e0e168369b6b25b9e95eebe5aa60fef0",
+      "bytes": 4649
     },
     {
       "path": "content/putnam/2025/problems/B2/prerequisite-1.html",
@@ -1380,8 +1380,8 @@
     },
     {
       "path": "content/putnam/2025/problems/B3/hint-4.html",
-      "sha256": "ca99b12382c5f59367d490a505007648f4a515f89f803a4f3c5e414c885e2217",
-      "bytes": 925
+      "sha256": "568647c845dc2fabdb25c1e720ed16f33c099cfb42466796b9f5cfee5487082d",
+      "bytes": 10477
     },
     {
       "path": "content/putnam/2025/problems/B3/prerequisite-1.html",
@@ -1425,8 +1425,8 @@
     },
     {
       "path": "content/putnam/2025/problems/B4/hint-4.html",
-      "sha256": "81498d3809a57824b1cb31187d1b92139cf08e3d0089b32305bda0c7e21969ee",
-      "bytes": 902
+      "sha256": "0560cd885462ea8ba4c0f05f40b32c061553cf3f1f3ad53b98da2db58fcdca91",
+      "bytes": 6986
     },
     {
       "path": "content/putnam/2025/problems/B4/prerequisite-1.html",
@@ -1470,8 +1470,8 @@
     },
     {
       "path": "content/putnam/2025/problems/B5/hint-4.html",
-      "sha256": "88a75df1d2a77056957250f1810cc553286264caf09e0b1a35208a421161ae2e",
-      "bytes": 897
+      "sha256": "53c3a2969994677d866dc5aa6c4a5746e4a264b720a8c20008ebd2364c599b70",
+      "bytes": 4860
     },
     {
       "path": "content/putnam/2025/problems/B5/prerequisite-1.html",
@@ -1515,8 +1515,8 @@
     },
     {
       "path": "content/putnam/2025/problems/B6/hint-4.html",
-      "sha256": "f59268014edc3a0abe9f1be7c72819a1d360df874eeaf143e9b1a44cb991b723",
-      "bytes": 961
+      "sha256": "aa8b49357096409dda136513b2f49fa738bb61d5115d2f8ed051a38d06a133cd",
+      "bytes": 7949
     },
     {
       "path": "content/putnam/2025/problems/B6/prerequisite-1.html",
@@ -1855,5 +1855,5 @@
     }
   ],
   "catalogSha256": "7909387b7112485799023cd039ffd7a4b9d0af9c769ca776d0666fb77528086f",
-  "manifestSha256": "b4f35401c504f95960023ef3bb2d5e72d333ea4263e58cf2163eb2ffceb92157"
+  "manifestSha256": "ffa1c7aace82f4a6cf11eca9db3c18b37e8f9572df3e234c628e1f482f339375"
 }

@@ -224,7 +224,7 @@
           "stage": "outline",
           "title": "Outline the probability calculation",
           "assetPath": "content/putnam/2024/problems/A3/hint-4.html",
-          "sha256": "c7c5a3f032f737212a7542ffe2472a6cc35740763576ac5d704c7a244fe993a6"
+          "sha256": "dc636df28959dd6a71c636233789b3996e4a6582a03bd32ffbcb1a707400f28b"
         }
       ],
       "prerequisites": [
@@ -1173,8 +1173,8 @@
     },
     {
       "path": "content/putnam/2024/problems/A3/hint-4.html",
-      "sha256": "c7c5a3f032f737212a7542ffe2472a6cc35740763576ac5d704c7a244fe993a6",
-      "bytes": 5516
+      "sha256": "dc636df28959dd6a71c636233789b3996e4a6582a03bd32ffbcb1a707400f28b",
+      "bytes": 5943
     },
     {
       "path": "content/putnam/2024/problems/A3/prerequisite-1.html",
@@ -1923,5 +1923,5 @@
     }
   ],
   "catalogSha256": "7909387b7112485799023cd039ffd7a4b9d0af9c769ca776d0666fb77528086f",
-  "manifestSha256": "182c2b1942b7d9ccc130eebc8daf3eead2fb86ec494e49bcd00fbd605ae9e9b1"
+  "manifestSha256": "c06798e27e59552601f2adb616d278cf0a64c0530d863f58ef9f2bfcfd823251"
 }
