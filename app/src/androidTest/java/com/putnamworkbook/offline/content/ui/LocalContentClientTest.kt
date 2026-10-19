@@ -127,4 +127,19 @@ class LocalContentClientTest {
         assertTrue(errors.single().contains("missing.html"))
         assertTrue(client.isNavigationAllowed(Uri.parse("${LocalContentClient.ASSET_BASE_URL}content/fixture/index.html")))
     }
+
+    @Test
+    fun pageReadyCallbackRunsOnlyForVerifiedLocalNavigationWithJavaScriptDisabled() {
+        var readyCount = 0
+        val client = LocalContentClient(assetContext, onPageReady = { readyCount += 1 })
+
+        instrumentation.runOnMainSync {
+            client.configure(webView)
+            client.onPageFinished(webView, "${LocalContentClient.ASSET_BASE_URL}content/fixture/index.html")
+            client.onPageFinished(webView, "https://example.com/remote.html")
+            assertFalse(webView.settings.javaScriptEnabled)
+        }
+
+        assertEquals(1, readyCount)
+    }
 }

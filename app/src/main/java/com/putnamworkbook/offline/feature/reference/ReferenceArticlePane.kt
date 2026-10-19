@@ -7,6 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.putnamworkbook.offline.content.ui.MathContentWebView
+import com.putnamworkbook.offline.content.ui.WebDocumentPositionStore
+import com.putnamworkbook.offline.content.ui.webDocumentId
 import com.putnamworkbook.offline.data.content.ReferenceArticleContent
 import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.domain.model.ReferenceKey
@@ -19,14 +21,26 @@ fun ReferenceArticlePane(
     onOpenRelatedProblem: (ProblemKey) -> Unit,
     onUnavailableContent: (String) -> Unit,
     onIntegrityError: (String) -> Unit,
+    positionStore: WebDocumentPositionStore,
     modifier: Modifier = Modifier,
-    articleBody: @Composable (ReferenceArticleContent) -> Unit = {
-        MathContentWebView(it.document, onIntegrityError, Modifier.fillMaxSize())
-    },
+    articleBody: (@Composable (ReferenceArticleContent) -> Unit)? = null,
 ) {
     Column(modifier.testTag("reference-article")) {
         Text(article.summary.title, style = MaterialTheme.typography.headlineSmall, modifier = Modifier.padding(12.dp))
-        Box(Modifier.weight(1f).fillMaxWidth().testTag("reference-article-body")) { articleBody(article) }
+        Box(Modifier.weight(1f).fillMaxWidth().testTag("reference-article-body")) {
+            if (articleBody != null) {
+                articleBody(article)
+            } else {
+                val documentId = article.document.webDocumentId()
+                MathContentWebView(
+                    resource = article.document,
+                    initialScrollY = positionStore.position(documentId),
+                    onScrollYChanged = { scrollY -> positionStore.update(documentId, scrollY) },
+                    onIntegrityError = onIntegrityError,
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
+        }
         HorizontalDivider()
         FlowRow(
             Modifier.fillMaxWidth().padding(8.dp),

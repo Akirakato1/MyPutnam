@@ -48,6 +48,8 @@ val ContentResourceResolverProvider = staticCompositionLocalOf<ContentResourceRe
 @Composable
 fun MathContentWebView(
     resource: ContentResourceRef,
+    initialScrollY: Int,
+    onScrollYChanged: (Int) -> Unit,
     onIntegrityError: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -55,25 +57,38 @@ fun MathContentWebView(
     val context = LocalContext.current
     val clientFactory = LocalContentClientFactoryProvider.current
     val latestIntegrityError = rememberUpdatedState(onIntegrityError)
+    val latestInitialScrollY = rememberUpdatedState(initialScrollY.coerceAtLeast(0))
+    val latestScrollChanged = rememberUpdatedState(onScrollYChanged)
     var renderGeneration by remember { mutableIntStateOf(0) }
     val client = remember(context.applicationContext, clientFactory, resolver) {
         clientFactory.create(
             context.applicationContext,
             { latestIntegrityError.value(it) },
             { renderGeneration += 1 },
-            {},
+            { webView -> webView.post { webView.scrollTo(0, latestInitialScrollY.value) } },
         ).also { it.attachResolver(resolver) }
     }
     key(resource, renderGeneration) {
         AndroidView(
-            factory = { WebView(it).also(client::configure) },
+            factory = {
+                WebView(it).also { webView ->
+                    client.configure(webView)
+                    webView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+                        latestScrollChanged.value(scrollY.coerceAtLeast(0))
+                    }
+                }
+            },
             update = { webView ->
                 if (webView.getTag(CONTENT_PATH_TAG) != resource) {
                     webView.setTag(CONTENT_PATH_TAG, resource)
                     client.loadResource(webView, resource)
                 }
             },
-            onRelease = { it.stopLoading(); it.destroy() },
+            onRelease = {
+                latestScrollChanged.value(it.scrollY.coerceAtLeast(0))
+                it.stopLoading()
+                it.destroy()
+            },
             modifier = modifier,
         )
     }

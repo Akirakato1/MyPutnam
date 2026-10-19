@@ -6,11 +6,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.putnamworkbook.offline.data.content.ReferenceArticleContent
+import com.putnamworkbook.offline.content.ui.WebDocumentPositionStore
 import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.domain.model.ReferenceKey
 
@@ -27,8 +29,10 @@ fun MathReferenceBrowser(
     onRetry: () -> Unit,
     onIntegrityError: (String) -> Unit,
     modifier: Modifier = Modifier,
+    positionStore: WebDocumentPositionStore? = null,
     articleBody: (@Composable (ReferenceArticleContent) -> Unit)? = null,
 ) {
+    val positions = positionStore ?: remember { WebDocumentPositionStore() }
     Column(modifier.fillMaxSize().testTag("math-reference-browser")) {
         Row(
             Modifier.fillMaxWidth().padding(8.dp),
@@ -56,8 +60,9 @@ fun MathReferenceBrowser(
                 onOpenRelatedProblem = onOpenRelatedProblem,
                 onUnavailableContent = onUnavailableContent,
                 onIntegrityError = onIntegrityError,
+                positionStore = positions,
                 modifier = Modifier.weight(1f),
-                articleBody = articleBody ?: { article -> MathContentArticleBody(article, onIntegrityError) },
+                articleBody = articleBody,
             )
             state.location is ReferenceLocation.Category -> ArticleList(
                 state.articles.filter { it.key.categoryId == state.location.id }, onOpenArticle,
@@ -68,15 +73,6 @@ fun MathReferenceBrowser(
             else -> CategoryList(state, onOpenCategory)
         }
     }
-}
-
-@Composable
-private fun MathContentArticleBody(article: ReferenceArticleContent, onIntegrityError: (String) -> Unit) {
-    com.putnamworkbook.offline.content.ui.MathContentWebView(
-        article.document,
-        onIntegrityError,
-        Modifier.fillMaxSize(),
-    )
 }
 
 @Composable
