@@ -30,7 +30,7 @@ internal fun filterLibraryEntries(
         }
         .filter {
             query.isEmpty() || listOfNotNull(
-                it.title, it.identity, it.collectionId, it.setId, it.categoryId,
+                it.key, it.title, it.identity, it.collectionId, it.setId, it.categoryId,
                 *it.topics.toTypedArray(), *it.aliases.toTypedArray(), *it.keywords.toTypedArray(),
             ).any { value -> query in value.lowercase() }
         }

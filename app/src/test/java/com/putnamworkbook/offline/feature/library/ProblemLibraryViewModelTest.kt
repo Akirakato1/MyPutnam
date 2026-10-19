@@ -93,6 +93,35 @@ class ProblemLibraryViewModelTest {
         viewModel.close()
     }
 
+    @Test
+    fun focusedMissingKeyIsTheOnlyInitialResultAndMixedBatchSkipsIneligibleRows() = runBlocking {
+        val catalog = sampleCatalog()
+        val installer = RecordingInstaller()
+        val viewModel = ProblemLibraryViewModel(
+            FakeCatalogStore(catalog),
+            FakeLibraryIndex(InstalledContentSnapshot(1, listOf(installedProblem(catalog.problems.first())))),
+            installer,
+            EmptyLibraryProgress,
+            FakeNetworkStatus(true),
+            4,
+            {},
+            focusKey = "putnam/2025/A2",
+            scope = CoroutineScope(SupervisorJob() + Dispatchers.Unconfined),
+        )
+        waitUntil { viewModel.uiState.value.allEntries.size == 3 }
+        assertEquals(listOf("putnam/2025/A2"), viewModel.uiState.value.visibleEntries.map { it.key })
+
+        viewModel.setQuery("")
+        viewModel.toggleSelection("putnam/2025/A1")
+        viewModel.toggleSelection("putnam/2025/A2")
+        viewModel.requestSelectionAction(PackageAction.UPDATE)
+        waitUntil { installer.calls.isNotEmpty() }
+
+        assertEquals(setOf("putnam/2025/A1"), installer.calls.single().first)
+        assertEquals(PackageAction.UPDATE, installer.calls.single().second)
+        viewModel.close()
+    }
+
     private suspend fun waitUntil(predicate: () -> Boolean) {
         repeat(500) { if (predicate()) return else delay(5) }
         error("Timed out")

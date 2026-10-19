@@ -20,7 +20,12 @@ class ProblemLibraryViewModel(
     focusKey: String? = null,
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate),
 ) {
-    private val mutableUiState = MutableStateFlow(ProblemLibraryUiState(focusedKey = focusKey))
+    private val mutableUiState = MutableStateFlow(
+        ProblemLibraryUiState(
+            focusedKey = focusKey,
+            filters = ProblemLibraryFilters(query = focusKey.orEmpty()),
+        ),
+    )
     val uiState: StateFlow<ProblemLibraryUiState> = mutableUiState.asStateFlow()
 
     private var catalogState = catalogStore.state.value
@@ -73,7 +78,10 @@ class ProblemLibraryViewModel(
     }
 
     fun requestSelectionAction(action: PackageAction) {
-        val keys = mutableUiState.value.selectedKeys
+        val state = mutableUiState.value
+        val keys = state.allEntries
+            .filter { row -> row.key in state.selectedKeys && row.primaryAction == action && row.actionEnabled }
+            .mapTo(linkedSetOf(), LibraryEntryRow::key)
         if (keys.isNotEmpty()) requestAction(keys, action)
     }
 

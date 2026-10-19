@@ -24,6 +24,7 @@ import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.domain.model.ProblemSetKey
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -88,7 +89,7 @@ class FileInstalledPackageReader(
                 val bundled = item.bundled ?: integrity(item, "Bundled package metadata is missing")
                 packageStore.ensureBundledExtracted(item.metadata.key, bundled.descriptor).root
             }
-            ContentSource.DOWNLOADED -> item.activeLocation?.let(Path::of)
+            ContentSource.DOWNLOADED -> item.activeLocation?.let(Paths::get)
                 ?: integrity(item, "Downloaded package location is missing")
             null -> integrity(item, "Content is unavailable")
         }.toAbsolutePath().normalize()

@@ -47,7 +47,7 @@ class FilePackageStore(
             val bytes = Files.readAllBytes(archive)
             val verified = verifier.validate(bytes, descriptor, contentKey)
             extractArchive(archive, payload)
-            Files.writeString(payload.resolve(VERIFIED_MARKER), descriptor.sha256)
+            Files.write(payload.resolve(VERIFIED_MARKER), descriptor.sha256.encodeToByteArray())
             StagedPackage(contentKey, descriptor, verified.envelope, stagingRoot, payload)
         } catch (error: Exception) {
             deleteTree(stagingRoot)
@@ -60,7 +60,7 @@ class FilePackageStore(
         val finalRoot = root.resolve(staged.descriptor.sha256).normalize()
         try {
             if (Files.exists(finalRoot)) {
-                if (!Files.isDirectory(finalRoot) || Files.readString(finalRoot.resolve(VERIFIED_MARKER)) != staged.descriptor.sha256) {
+                if (!Files.isDirectory(finalRoot) || readMarker(finalRoot) != staged.descriptor.sha256) {
                     throw IllegalStateException("Immutable package digest collides with an invalid filesystem entry")
                 }
                 deleteTree(staged.stagingRoot)
@@ -84,7 +84,7 @@ class FilePackageStore(
         descriptor: PackageDescriptor,
     ): PackageLocation = withContext(Dispatchers.IO) {
         val finalRoot = root.resolve(descriptor.sha256)
-        if (Files.isDirectory(finalRoot) && Files.readString(finalRoot.resolve(VERIFIED_MARKER)) == descriptor.sha256) {
+        if (Files.isDirectory(finalRoot) && readMarker(finalRoot) == descriptor.sha256) {
             return@withContext PackageLocation(finalRoot, descriptor.sha256)
         }
         bundledPackageOpener.open(descriptor.path).use { input -> activate(stage(contentKey, descriptor, input)) }
@@ -144,6 +144,9 @@ class FilePackageStore(
             "Staged package is outside the package root"
         }
     }
+
+    private fun readMarker(packageRoot: Path): String =
+        Files.readAllBytes(packageRoot.resolve(VERIFIED_MARKER)).decodeToString()
 
     private fun deleteTree(path: Path) {
         val normalized = path.toAbsolutePath().normalize()

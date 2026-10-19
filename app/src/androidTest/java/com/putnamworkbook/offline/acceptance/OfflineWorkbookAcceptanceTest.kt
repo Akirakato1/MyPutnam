@@ -91,6 +91,8 @@ class OfflineWorkbookAcceptanceTest {
 
     private fun openA1FromTheArchive() {
         composeRule.onNodeWithTag("home-screen").assertIsDisplayed()
+        composeRule.onNodeWithText("Browse Problems").assertIsDisplayed()
+        composeRule.onNodeWithTag("home-problem-library").assertIsDisplayed()
         composeRule.onNodeWithTag("home-select-problem").performClick()
         waitForTag("library-set-putnam/2025")
         composeRule.onNodeWithTag("library-set-putnam/2025").performClick()

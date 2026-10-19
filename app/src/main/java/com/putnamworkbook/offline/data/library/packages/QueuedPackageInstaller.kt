@@ -12,6 +12,7 @@ import com.putnamworkbook.offline.data.library.index.PackageOperationStore
 import java.io.FileInputStream
 import java.nio.file.FileSystemException
 import java.nio.file.Path
+import java.nio.file.Paths
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.CancellationException
@@ -160,7 +161,7 @@ class QueuedPackageInstaller(
     private suspend fun deleteIfUnreferenced(location: String?, digest: String?) {
         if (location == null || digest == null) return
         val referenced = contentIndex.observe().first().items.any { it.activeDigest == digest }
-        if (!referenced) packageStore.delete(PackageLocation(Path.of(location), digest))
+        if (!referenced) packageStore.delete(PackageLocation(Paths.get(location), digest))
     }
 
     private suspend fun update(id: String, transform: (PackageOperation) -> PackageOperation) {

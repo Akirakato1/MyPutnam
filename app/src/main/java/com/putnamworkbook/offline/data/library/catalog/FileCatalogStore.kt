@@ -104,7 +104,7 @@ class FileCatalogStore(
         val path = root.resolve(METADATA_FILE)
         if (!Files.isRegularFile(path)) return Metadata()
         return try {
-            val row = StrictJsonCodec.parse(Files.readString(path)).asObject("catalog metadata")
+            val row = StrictJsonCodec.parse(Files.readAllBytes(path).decodeToString()).asObject("catalog metadata")
             row.requireOnly("etag", "lastModified", "lastSuccessfulRefreshAt", "lastAttemptedRefreshAt", "lastError")
             Metadata(
                 validators = CatalogValidators(row.optionalString("etag"), row.optionalString("lastModified")).sanitized(),
