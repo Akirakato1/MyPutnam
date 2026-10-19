@@ -11,9 +11,14 @@ import com.putnamworkbook.offline.data.library.catalog.CatalogClient
 import com.putnamworkbook.offline.data.library.catalog.CatalogCodec
 import com.putnamworkbook.offline.data.library.catalog.CatalogOriginPolicy
 import com.putnamworkbook.offline.data.library.catalog.CatalogRefreshCoordinator
+import com.putnamworkbook.offline.data.library.catalog.CatalogSource
 import com.putnamworkbook.offline.data.library.catalog.CatalogStore
 import com.putnamworkbook.offline.data.library.catalog.FileCatalogStore
 import com.putnamworkbook.offline.data.library.catalog.HttpsCatalogClient
+import com.putnamworkbook.offline.data.library.index.InstalledContentIndex
+import com.putnamworkbook.offline.data.library.index.LibraryIndexDatabase
+import com.putnamworkbook.offline.data.library.index.PackageOperationStore
+import com.putnamworkbook.offline.data.library.index.RoomInstalledContentIndex
 import com.putnamworkbook.offline.data.user.ProgressRepository
 import com.putnamworkbook.offline.data.user.RoomProgressRepository
 import com.putnamworkbook.offline.data.user.RoomSettingsRepository
@@ -57,6 +62,17 @@ class AppContainer(
     )
     private val catalogClient: CatalogClient = catalogClientOverride ?: HttpsCatalogClient(CatalogOriginPolicy())
     private val catalogRefreshCoordinator = CatalogRefreshCoordinator(catalogStore, catalogClient)
+    private val libraryIndexDatabase: LibraryIndexDatabase by lazy { LibraryIndexDatabase.create(applicationContext) }
+    private val roomInstalledContentIndex: RoomInstalledContentIndex by lazy {
+        val versionCode = applicationContext.packageManager
+            .getPackageInfo(applicationContext.packageName, 0)
+            .longVersionCode
+            .coerceAtMost(Int.MAX_VALUE.toLong())
+            .toInt()
+        RoomInstalledContentIndex(libraryIndexDatabase, versionCode)
+    }
+    val installedContentIndex: InstalledContentIndex by lazy { roomInstalledContentIndex }
+    val packageOperationStore: PackageOperationStore by lazy { roomInstalledContentIndex }
     val userDatabase: UserDatabase by lazy { UserDatabase.create(applicationContext) }
     val progressRepository: ProgressRepository by lazy { RoomProgressRepository(userDatabase) }
     val settingsRepository: SettingsRepository by lazy { RoomSettingsRepository(userDatabase) }
@@ -104,5 +120,10 @@ class AppContainer(
 
 suspend fun AppContainer.initializeContent(): ContentRepository = withContext(Dispatchers.IO) {
     catalogStore.initialize()
+    val catalogState = catalogStore.state.value
+    val bundledCatalog = catalogState.embeddedCatalog
+        ?: catalogState.catalog.takeIf { catalogState.source == CatalogSource.EMBEDDED }
+    bundledCatalog?.let { installedContentIndex.reconcileBundled(it) }
+    packageOperationStore.recoverInterruptedOperations(System.currentTimeMillis())
     contentInitializer.initialize()
 }

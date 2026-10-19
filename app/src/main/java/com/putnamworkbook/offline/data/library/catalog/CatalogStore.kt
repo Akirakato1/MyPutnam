@@ -8,6 +8,7 @@ enum class CatalogSource { EMBEDDED, REMOTE_CACHE }
 
 data class CatalogState(
     val catalog: PublicationCatalog? = null,
+    val embeddedCatalog: PublicationCatalog? = null,
     val source: CatalogSource? = null,
     val validators: CatalogValidators = CatalogValidators(null, null),
     val lastSuccessfulRefreshAt: Long? = null,

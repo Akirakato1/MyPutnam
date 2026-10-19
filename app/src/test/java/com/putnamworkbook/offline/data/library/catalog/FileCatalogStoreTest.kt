@@ -39,6 +39,7 @@ class FileCatalogStoreTest {
 
         assertEquals(CatalogSource.REMOTE_CACHE, reopened.state.value.source)
         assertEquals("f".repeat(64), reopened.state.value.catalog?.catalogRevision)
+        assertEquals("e".repeat(64), reopened.state.value.embeddedCatalog?.catalogRevision)
         assertEquals(CatalogValidators("etag-r", "yesterday"), reopened.state.value.validators)
         assertEquals(42L, reopened.state.value.lastSuccessfulRefreshAt)
     }

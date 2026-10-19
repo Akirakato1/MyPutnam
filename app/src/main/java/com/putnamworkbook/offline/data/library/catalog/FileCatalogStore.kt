@@ -29,7 +29,11 @@ class FileCatalogStore(
         val embedded = codec.decode(embeddedCatalog())
         val cachePath = root.resolve(REMOTE_CATALOG_FILE)
         if (!Files.isRegularFile(cachePath)) {
-            mutableState.value = CatalogState(catalog = embedded, source = CatalogSource.EMBEDDED)
+            mutableState.value = CatalogState(
+                catalog = embedded,
+                embeddedCatalog = embedded,
+                source = CatalogSource.EMBEDDED,
+            )
             return
         }
         try {
@@ -37,6 +41,7 @@ class FileCatalogStore(
             val metadata = readMetadata()
             mutableState.value = CatalogState(
                 catalog = cached,
+                embeddedCatalog = embedded,
                 source = CatalogSource.REMOTE_CACHE,
                 validators = metadata.validators,
                 lastSuccessfulRefreshAt = metadata.lastSuccessfulRefreshAt,
@@ -46,6 +51,7 @@ class FileCatalogStore(
         } catch (error: Exception) {
             mutableState.value = CatalogState(
                 catalog = embedded,
+                embeddedCatalog = embedded,
                 source = CatalogSource.EMBEDDED,
                 lastError = "Cached catalog was invalid: ${error.safeMessage()}",
             )
@@ -57,6 +63,7 @@ class FileCatalogStore(
         bytesStore.write(root.resolve(REMOTE_CATALOG_FILE), bytes)
         val next = CatalogState(
             catalog = decoded,
+            embeddedCatalog = requireInitialized().embeddedCatalog,
             source = CatalogSource.REMOTE_CACHE,
             validators = validators.sanitized(),
             lastSuccessfulRefreshAt = refreshedAt,
