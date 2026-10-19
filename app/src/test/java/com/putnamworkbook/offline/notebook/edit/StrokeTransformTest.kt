@@ -27,6 +27,26 @@ class StrokeTransformTest {
     }
 
     @Test
+    fun movingInkThatAlreadySpansPastBothPageEdgesNeverThrows() {
+        val fullWidthStroke = stroke(
+            id = "full-width",
+            width = 12f,
+            0f to 0.4f,
+            1f to 0.6f,
+        )
+
+        val moved = StrokeTransform.move(
+            strokes = listOf(fullWidthStroke),
+            dx = 0.2f,
+            dy = 0.1f,
+            viewport = square,
+        ) { "moved" }.single()
+
+        assertEquals(fullWidthStroke.samples.map { it.x }, moved.samples.map { it.x })
+        assertTrue(moved.samples.all { it.y in 0f..1f })
+    }
+
+    @Test
     fun everyCornerScalesProportionallyAroundItsOppositeCorner() {
         val original = stroke("old", 0.3f to 0.3f, 0.5f to 0.5f)
         val originalBounds = listOf(original).selectionBounds(square)!!

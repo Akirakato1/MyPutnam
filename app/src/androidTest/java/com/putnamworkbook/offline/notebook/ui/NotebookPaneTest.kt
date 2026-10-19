@@ -109,6 +109,34 @@ class NotebookPaneTest {
     }
 
     @Test
+    fun transientStalePageIndexShowsLoadingInsteadOfCrashing() {
+        composeRule.setContent {
+            NotebookPane(
+                state = NotebookUiState(
+                    document = NotebookDocument(
+                        key = ProblemKey("putnam", "2025", "A1"),
+                        pages = listOf(NotebookPage("only-page", PaperStyle.BLANK)),
+                    ),
+                    activePageIndex = 1,
+                ),
+                brush = BrushSpec(),
+                onStrokeFinished = {},
+                onUndo = {},
+                onRedo = {},
+                onAddPage = {},
+                onRequestDeletePage = {},
+                onRequestClearPage = {},
+                onConfirmDeletePage = {},
+                onConfirmClearPage = {},
+                onDismissConfirmation = {},
+                onSelectPage = {},
+            )
+        }
+
+        composeRule.onNodeWithText("Loading notebook…").assertExists()
+    }
+
+    @Test
     fun onlyExplicitControlsTurnPagesAndHorizontalCanvasDragDoesNot() {
         val document = NotebookDocument(
             key = ProblemKey("putnam", "2025", "A1"),

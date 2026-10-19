@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.zIndex
 import com.putnamworkbook.offline.domain.model.BrushSpec
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
 import com.putnamworkbook.offline.notebook.model.NotebookDocument
@@ -74,7 +75,11 @@ fun NotebookPane(
         Text(if (state.saveState == NotebookSaveState.ERROR) state.errorMessage.orEmpty() else "Loading notebook…")
         return
     }
-    val page = document.pages[state.activePageIndex]
+    val page = document.pages.getOrNull(state.activePageIndex)
+    if (page == null) {
+        Text("Loading notebook…")
+        return
+    }
     var canvasPlacement by remember { mutableStateOf<NotebookCanvasPlacement?>(null) }
     Box(modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize()) {
@@ -163,6 +168,7 @@ fun NotebookPane(
                     onPreviewRotation = onPreviewRotation,
                     onCommitRotation = onCommitRotation,
                     onCancelPreview = onCancelPreview,
+                    modifier = Modifier.zIndex(SELECTION_HANDLE_LAYER_Z_INDEX),
                 )
             }
         }
@@ -207,3 +213,4 @@ private fun ConfirmationDialog(
 }
 
 private const val PAGE_TURN_MILLIS = 160
+private const val SELECTION_HANDLE_LAYER_Z_INDEX = 10f

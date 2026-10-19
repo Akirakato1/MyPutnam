@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.nativeCanvas
@@ -105,25 +106,45 @@ fun NotebookCanvas(
             }
             .semantics { renderedStrokeCount = renderedStrokes.size },
     ) {
-        Canvas(Modifier.fillMaxSize().clipToBounds()) {
-            drawRect(Color.White)
-            if (page.paperStyle == PaperStyle.SQUARE_GRID) {
-                val spacing = 32.dp.toPx()
-                var x = spacing
-                while (x < size.width) {
-                    drawLine(Color(0x1F64748B), start = androidx.compose.ui.geometry.Offset(x, 0f), end = androidx.compose.ui.geometry.Offset(x, size.height))
-                    x += spacing
-                }
-                var y = spacing
-                while (y < size.height) {
-                    drawLine(Color(0x1F64748B), start = androidx.compose.ui.geometry.Offset(0f, y), end = androidx.compose.ui.geometry.Offset(size.width, y))
-                    y += spacing
-                }
-            }
-            val matrix = Matrix()
-            renderedStrokes.forEach { record ->
-                renderer.draw(drawContext.canvas.nativeCanvas, record.toInkStroke(size.width, size.height), matrix)
-            }
+        Canvas(
+            Modifier
+                .fillMaxSize()
+                .clipToBounds()
+                .drawWithCache {
+                    val inkStrokes = renderedStrokes.map { record ->
+                        record.toInkStroke(size.width, size.height)
+                    }
+                    onDrawBehind {
+                        drawRect(Color.White)
+                        if (page.paperStyle == PaperStyle.SQUARE_GRID) {
+                            val spacing = 32.dp.toPx()
+                            var x = spacing
+                            while (x < size.width) {
+                                drawLine(
+                                    Color(0x1F64748B),
+                                    start = androidx.compose.ui.geometry.Offset(x, 0f),
+                                    end = androidx.compose.ui.geometry.Offset(x, size.height),
+                                )
+                                x += spacing
+                            }
+                            var y = spacing
+                            while (y < size.height) {
+                                drawLine(
+                                    Color(0x1F64748B),
+                                    start = androidx.compose.ui.geometry.Offset(0f, y),
+                                    end = androidx.compose.ui.geometry.Offset(size.width, y),
+                                )
+                                y += spacing
+                            }
+                        }
+                        val matrix = Matrix()
+                        inkStrokes.forEach { stroke ->
+                            renderer.draw(drawContext.canvas.nativeCanvas, stroke, matrix)
+                        }
+                    }
+                },
+        ) {
+            // Ink is cached by drawWithCache so unrelated redraws do not rebuild native strokes.
         }
         if (toolMode == NotebookToolMode.PEN) {
             AndroidView(

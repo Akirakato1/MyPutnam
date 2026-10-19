@@ -36,8 +36,8 @@ object StrokeTransform {
         idFactory: () -> String,
     ): List<StrokeRecord> {
         val bounds = strokes.visibleBounds(viewport) ?: return emptyList()
-        val clampedDx = dx.coerceIn(-bounds.left, 1f - bounds.right)
-        val clampedDy = dy.coerceIn(-bounds.top, 1f - bounds.bottom)
+        val clampedDx = clampTranslation(dx, -bounds.left, 1f - bounds.right)
+        val clampedDy = clampTranslation(dy, -bounds.top, 1f - bounds.bottom)
         return strokes.map { stroke ->
             stroke.copy(
                 id = idFactory(),
@@ -50,6 +50,9 @@ object StrokeTransform {
             )
         }
     }
+
+    private fun clampTranslation(requested: Float, minimum: Float, maximum: Float): Float =
+        if (minimum <= maximum) requested.coerceIn(minimum, maximum) else 0f
 
     fun rotate(
         strokes: List<StrokeRecord>,
