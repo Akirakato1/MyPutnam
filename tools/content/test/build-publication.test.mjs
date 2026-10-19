@@ -53,6 +53,35 @@ test('publication builder refuses a nonempty output root without changing it', a
   assert.equal(await readFile(join(root, 'sentinel.txt'), 'utf8'), 'preserve');
 });
 
+test('publication builder emits selected reference packages and catalog metadata', async (t) => {
+  const parent = await mkdtemp(join(tmpdir(), 'myputnam-reference-publication-'));
+  t.after(() => rm(parent, { recursive: true, force: true }));
+  const source = join(parent, 'source');
+  const articleRoot = join(source, 'reference', 'articles', 'number-theory');
+  await mkdir(articleRoot, { recursive: true });
+  const article = await readJson(new URL('./fixtures/contracts/valid-reference.json', import.meta.url));
+  article.relatedReferences = [];
+  article.relatedProblems = [];
+  await writeFile(join(articleRoot, 'euler-totient.json'), JSON.stringify(article));
+  const [libraryCatalog, publicationManifest] = await Promise.all([
+    loadLibraryCatalog(libraryUrl), readJson(publicationUrl),
+  ]);
+  publicationManifest.includedSets = [];
+  publicationManifest.includedReferenceCategories = ['number-theory'];
+
+  const result = await buildPublication({
+    sourceRoot: source, libraryCatalog, publicationManifest, outputRoot: join(parent, 'output'),
+  });
+  assert.deepEqual({ ...result, catalogPath: 'catalog' }, {
+    catalogPath: 'catalog', problemCount: 0, referenceCount: 1, packageCount: 1,
+  });
+  const catalog = await readJson(result.catalogPath);
+  assert.equal(catalog.references[0].key, 'math-reference/number-theory/euler-totient');
+  assert.match(catalog.references[0].package.path,
+    /^packages\/reference\/number-theory\/euler-totient\/[0-9a-f]{64}\.zip$/);
+  await access(join(parent, 'output', 'content', 'v1', ...catalog.references[0].package.path.split('/')));
+});
+
 async function readJson(path) {
   return JSON.parse(await readFile(path, 'utf8'));
 }

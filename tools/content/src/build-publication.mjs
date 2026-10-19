@@ -4,6 +4,7 @@ import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { buildProblemPackage } from './build-problem-package.mjs';
+import { buildReferencePackage } from './build-reference-package.mjs';
 import { validateLibraryCatalog } from './library-catalog.mjs';
 import { buildPublicationCatalog, validatePublicationManifest } from './publication-catalog.mjs';
 
@@ -12,10 +13,6 @@ export async function buildPublication({ sourceRoot, libraryCatalog, publication
   if (libraryErrors.length) throw new Error(`Invalid library catalog:\n${formatErrors(libraryErrors)}`);
   const manifestErrors = validatePublicationManifest(publicationManifest);
   if (manifestErrors.length) throw new Error(`Invalid publication manifest:\n${formatErrors(manifestErrors)}`);
-  if (publicationManifest.includedReferenceCategories.length > 0) {
-    throw new Error('Reference package publication is not available until reference content is curated');
-  }
-
   const sourcePath = resolve(toPath(sourceRoot));
   const outputPath = resolve(toPath(outputRoot));
   await assertEmptyOrAbsent(outputPath);
@@ -60,11 +57,46 @@ export async function buildPublication({ sourceRoot, libraryCatalog, publication
       }
     }
 
+    const referencePackages = [];
+    for (const categoryId of publicationManifest.includedReferenceCategories) {
+      const articlesRoot = join(sourcePath, 'reference', 'articles', categoryId);
+      const entries = (await readdir(articlesRoot, { withFileTypes: true }))
+        .filter((entry) => entry.isFile() && entry.name.endsWith('.json'))
+        .sort((left, right) => left.name.localeCompare(right.name));
+      for (const entry of entries) {
+        const record = JSON.parse(await readFile(join(articlesRoot, entry.name), 'utf8'));
+        if (record.categoryId !== categoryId || entry.name !== `${record.articleId}.json`) {
+          throw new Error(`${categoryId}/${entry.name}: source identity does not match selection`);
+        }
+        const built = await buildReferencePackage({
+          record,
+          articleAssetRoot: join(articlesRoot, record.articleId),
+          libraryCatalog,
+          minAppVersionCode: publicationManifest.minAppVersionCode,
+        });
+        const archiveSha256 = sha256(built.archiveBytes);
+        const descriptor = {
+          contentType: 'reference',
+          packageRevision: built.envelope.packageRevision,
+          packageSchemaVersion: built.envelope.packageSchemaVersion,
+          contentSchemaVersion: built.envelope.contentSchemaVersion,
+          richDocumentVersion: built.envelope.richDocumentVersion,
+          path: ['packages', 'reference', categoryId, record.articleId, `${archiveSha256}.zip`].join('/'),
+          compressedBytes: built.archiveBytes.byteLength,
+          uncompressedBytes: built.envelope.declaredUncompressedBytes,
+          sha256: archiveSha256,
+          minAppVersionCode: built.envelope.minAppVersionCode,
+        };
+        await writeOutput(stagingRoot, join('content', 'v1', ...descriptor.path.split('/')), built.archiveBytes);
+        referencePackages.push({ ...built, descriptor });
+      }
+    }
+
     const catalog = buildPublicationCatalog({
       publicationManifest,
       libraryCatalog,
       problemPackages,
-      referencePackages: [],
+      referencePackages,
     });
     const catalogRelativePath = join('content', 'v1', 'catalog.json');
     await writeOutput(stagingRoot, catalogRelativePath, `${JSON.stringify(catalog, null, 2)}\n`);
@@ -74,7 +106,7 @@ export async function buildPublication({ sourceRoot, libraryCatalog, publication
       catalogPath: join(outputPath, catalogRelativePath),
       problemCount: catalog.problems.length,
       referenceCount: catalog.references.length,
-      packageCount: problemPackages.length,
+      packageCount: problemPackages.length + referencePackages.length,
     };
   } catch (error) {
     await rm(stagingRoot, { recursive: true, force: true });

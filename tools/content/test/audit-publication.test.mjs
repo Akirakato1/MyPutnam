@@ -103,43 +103,9 @@ test('independent audit detects envelope, source, revision, member, digest, and 
   }
 });
 
-test('independent audit rejects reference entries until reference package auditing is implemented', async (t) => {
-  const root = await buildFixture(t);
-  const catalog = await readCatalog(root);
-  catalog.referenceCategories = [{
-    id: 'number-theory', label: 'Number Theory', displayOrder: 1, aliases: ['NT'],
-  }];
-  catalog.references = [{
-    key: 'math-reference/number-theory/euler-totient',
-    categoryId: 'number-theory',
-    articleId: 'euler-totient',
-    title: "Euler's totient function",
-    displayOrder: 1,
-    aliases: ['phi'],
-    keywords: ['coprime'],
-    rights: {
-      sourceUrl: 'https://example.test/reference',
-      attribution: 'Original MyPutnam exposition.',
-      copyrightHolder: null,
-      licenseBasis: 'Original prose.',
-      redistributionStatus: 'cleared',
-    },
-    package: {
-      contentType: 'reference',
-      packageRevision: 'a'.repeat(64),
-      packageSchemaVersion: 1,
-      contentSchemaVersion: 1,
-      richDocumentVersion: 2,
-      path: `packages/reference/number-theory/euler-totient/${'b'.repeat(64)}.zip`,
-      compressedBytes: 100,
-      uncompressedBytes: 100,
-      sha256: 'b'.repeat(64),
-      minAppVersionCode: catalog.minAppVersionCode,
-    },
-  }];
-  await writeCatalog(root, catalog);
-
-  assert.ok((await auditPublication(root)).some((error) => /reference package auditing is not available/i.test(error)));
+test('independent audit accepts a complete reference publication', async (t) => {
+  const root = await buildReferenceFixture(t);
+  assert.deepEqual(await auditPublication(root, { requireClearedRights: true }), []);
 });
 
 test('independent audit rejects a safe fragment that does not match its source document', async (t) => {
@@ -161,6 +127,27 @@ async function buildFixture(t) {
     loadLibraryCatalog(libraryUrl), JSON.parse(await readFile(publicationUrl, 'utf8')),
   ]);
   await buildPublication({ sourceRoot, libraryCatalog, publicationManifest, outputRoot: root });
+  return root;
+}
+
+async function buildReferenceFixture(t) {
+  const parent = await mkdtemp(join(tmpdir(), 'myputnam-audit-reference-'));
+  t.after(() => rm(parent, { recursive: true, force: true }));
+  const source = join(parent, 'source');
+  const articleRoot = join(source, 'reference', 'articles', 'number-theory');
+  await mkdir(articleRoot, { recursive: true });
+  const article = JSON.parse(await readFile(
+    new URL('./fixtures/contracts/valid-reference.json', import.meta.url), 'utf8'));
+  article.relatedReferences = [];
+  article.relatedProblems = [];
+  await writeFile(join(articleRoot, 'euler-totient.json'), JSON.stringify(article));
+  const [libraryCatalog, publicationManifest] = await Promise.all([
+    loadLibraryCatalog(libraryUrl), JSON.parse(await readFile(publicationUrl, 'utf8')),
+  ]);
+  publicationManifest.includedSets = [];
+  publicationManifest.includedReferenceCategories = ['number-theory'];
+  const root = join(parent, 'publication');
+  await buildPublication({ sourceRoot: source, libraryCatalog, publicationManifest, outputRoot: root });
   return root;
 }
 
