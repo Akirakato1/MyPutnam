@@ -9,6 +9,7 @@ import com.putnamworkbook.offline.data.content.ContentIntegrityValidator
 import com.putnamworkbook.offline.data.content.ContentRepository
 import com.putnamworkbook.offline.data.content.CatalogProblemRepository
 import com.putnamworkbook.offline.data.content.CompositeContentRepository
+import com.putnamworkbook.offline.data.content.CompositeReferenceRepository
 import com.putnamworkbook.offline.data.content.FileInstalledPackageReader
 import com.putnamworkbook.offline.data.content.RoomContentRepository
 import com.putnamworkbook.offline.data.library.catalog.CatalogClient
@@ -134,6 +135,13 @@ class AppContainer(
     }
     internal val packagedContentRepository: ContentRepository by lazy {
         CatalogProblemRepository(
+            catalog = { catalogStore.state.value.catalog },
+            snapshots = installedContentIndex.observe(),
+            packageReader = FileInstalledPackageReader(packageRoot, packageStore, installedContentIndex),
+        )
+    }
+    val referenceRepository by lazy {
+        CompositeReferenceRepository(
             catalog = { catalogStore.state.value.catalog },
             snapshots = installedContentIndex.observe(),
             packageReader = FileInstalledPackageReader(packageRoot, packageStore, installedContentIndex),
