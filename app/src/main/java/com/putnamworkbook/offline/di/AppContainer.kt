@@ -19,6 +19,14 @@ import com.putnamworkbook.offline.data.library.index.InstalledContentIndex
 import com.putnamworkbook.offline.data.library.index.LibraryIndexDatabase
 import com.putnamworkbook.offline.data.library.index.PackageOperationStore
 import com.putnamworkbook.offline.data.library.index.RoomInstalledContentIndex
+import com.putnamworkbook.offline.data.library.packages.CatalogStorePackageSource
+import com.putnamworkbook.offline.data.library.packages.FilePackageStore
+import com.putnamworkbook.offline.data.library.packages.HttpsPackageDownloader
+import com.putnamworkbook.offline.data.library.packages.PackageArchiveValidator
+import com.putnamworkbook.offline.data.library.packages.PackageDownloader
+import com.putnamworkbook.offline.data.library.packages.PackageInstaller
+import com.putnamworkbook.offline.data.library.packages.PackageStore
+import com.putnamworkbook.offline.data.library.packages.QueuedPackageInstaller
 import com.putnamworkbook.offline.data.user.ProgressRepository
 import com.putnamworkbook.offline.data.user.RoomProgressRepository
 import com.putnamworkbook.offline.data.user.RoomSettingsRepository
@@ -55,6 +63,13 @@ class AppContainer(
     }
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val catalogRefreshStarted = AtomicBoolean(false)
+    private val currentVersionCode: Int by lazy {
+        applicationContext.packageManager
+            .getPackageInfo(applicationContext.packageName, 0)
+            .longVersionCode
+            .coerceAtMost(Int.MAX_VALUE.toLong())
+            .toInt()
+    }
     val catalogStore: CatalogStore = catalogStoreOverride ?: FileCatalogStore(
         root = applicationContext.filesDir.toPath().resolve("content-library"),
         embeddedCatalog = ::readEmbeddedCatalog,
@@ -64,15 +79,33 @@ class AppContainer(
     private val catalogRefreshCoordinator = CatalogRefreshCoordinator(catalogStore, catalogClient)
     private val libraryIndexDatabase: LibraryIndexDatabase by lazy { LibraryIndexDatabase.create(applicationContext) }
     private val roomInstalledContentIndex: RoomInstalledContentIndex by lazy {
-        val versionCode = applicationContext.packageManager
-            .getPackageInfo(applicationContext.packageName, 0)
-            .longVersionCode
-            .coerceAtMost(Int.MAX_VALUE.toLong())
-            .toInt()
-        RoomInstalledContentIndex(libraryIndexDatabase, versionCode)
+        RoomInstalledContentIndex(libraryIndexDatabase, currentVersionCode)
     }
     val installedContentIndex: InstalledContentIndex by lazy { roomInstalledContentIndex }
     val packageOperationStore: PackageOperationStore by lazy { roomInstalledContentIndex }
+    internal val packageDownloader: PackageDownloader by lazy {
+        HttpsPackageDownloader(
+            root = applicationContext.cacheDir.toPath().resolve("content-library-downloads"),
+            originPolicy = CatalogOriginPolicy(),
+        )
+    }
+    val packageStore: PackageStore by lazy {
+        FilePackageStore(
+            root = applicationContext.filesDir.toPath().resolve("content-library/packages"),
+            verifier = PackageArchiveValidator(currentVersionCode),
+            bundledPackageOpener = { path -> applicationContext.assets.open("content-library/$path") },
+        )
+    }
+    val packageInstaller: PackageInstaller by lazy {
+        QueuedPackageInstaller(
+            catalogSource = CatalogStorePackageSource(catalogStore),
+            downloader = packageDownloader,
+            packageStore = packageStore,
+            contentIndex = installedContentIndex,
+            operationStore = packageOperationStore,
+            scope = applicationScope,
+        )
+    }
     val userDatabase: UserDatabase by lazy { UserDatabase.create(applicationContext) }
     val progressRepository: ProgressRepository by lazy { RoomProgressRepository(userDatabase) }
     val settingsRepository: SettingsRepository by lazy { RoomSettingsRepository(userDatabase) }
@@ -102,7 +135,10 @@ class AppContainer(
 
     fun startCatalogRefresh() {
         if (!catalogRefreshStarted.compareAndSet(false, true)) return
-        applicationScope.launch { catalogRefreshCoordinator.refresh() }
+        applicationScope.launch {
+            catalogRefreshCoordinator.refresh()
+            catalogStore.state.value.catalog?.let { installedContentIndex.reconcileCatalog(it) }
+        }
     }
 
     private fun readEmbeddedCatalog(): ByteArray = try {
@@ -124,6 +160,9 @@ suspend fun AppContainer.initializeContent(): ContentRepository = withContext(Di
     val bundledCatalog = catalogState.embeddedCatalog
         ?: catalogState.catalog.takeIf { catalogState.source == CatalogSource.EMBEDDED }
     bundledCatalog?.let { installedContentIndex.reconcileBundled(it) }
+    catalogState.catalog?.let { installedContentIndex.reconcileCatalog(it) }
+    packageDownloader.recoverInterruptedState()
+    packageStore.recoverInterruptedState()
     packageOperationStore.recoverInterruptedOperations(System.currentTimeMillis())
     contentInitializer.initialize()
 }

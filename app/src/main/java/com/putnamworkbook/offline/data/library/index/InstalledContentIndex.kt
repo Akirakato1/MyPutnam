@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface InstalledContentIndex {
     fun observe(): Flow<InstalledContentSnapshot>
+    suspend fun reconcileCatalog(catalog: PublicationCatalog)
     suspend fun reconcileBundled(catalog: PublicationCatalog)
     suspend fun activateDownloaded(entry: InstalledPackage)
     suspend fun logicallyRemove(key: String)

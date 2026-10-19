@@ -30,6 +30,29 @@ class RoomInstalledContentIndex(
         )
     }
 
+    override suspend fun reconcileCatalog(catalog: PublicationCatalog) = database.withTransaction {
+        val prior = records().associateBy { it.metadata.key }
+        dao.markAllCatalogUnlisted()
+        prior.values.forEach { record ->
+            persistRecord(record.copy(metadata = record.metadata.copy(catalogListed = false)))
+        }
+        catalog.problems.forEach { problem ->
+            val metadata = problem.toMetadata()
+            val existing = prior[problem.key]
+            persistRecord(existing?.copy(metadata = metadata) ?: ContentIndexRecord(
+                metadata, null, null, false, false, null, null, null,
+            ))
+        }
+        catalog.references.forEach { reference ->
+            val metadata = reference.toMetadata()
+            val existing = prior[reference.key]
+            persistRecord(existing?.copy(metadata = metadata) ?: ContentIndexRecord(
+                metadata, null, null, false, false, null, null, null,
+            ))
+        }
+        bumpRevision()
+    }
+
     override suspend fun reconcileBundled(catalog: PublicationCatalog) = database.withTransaction {
         val prior = records().associateBy { it.metadata.key }
         dao.markAllCatalogUnlisted()
