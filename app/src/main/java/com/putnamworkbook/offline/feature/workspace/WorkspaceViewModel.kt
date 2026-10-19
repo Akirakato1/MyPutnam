@@ -34,8 +34,19 @@ class WorkspaceViewModel(
 
     fun open(key: ProblemKey) = launchOperation {
         currentKey = key
-        mutableUiState.value = WorkspaceUiState(key = key, isLoading = true)
-        val content = requireNotNull(contentRepository.problem(key)) { "Problem ${key.canonical} is unavailable" }
+        mutableUiState.value = WorkspaceUiState(
+            key = key,
+            isLoading = true,
+            availability = WorkspaceAvailability.LOADING,
+        )
+        val content = contentRepository.problem(key)
+        if (content == null) {
+            mutableUiState.value = WorkspaceUiState(
+                key = key,
+                availability = WorkspaceAvailability.UNAVAILABLE,
+            )
+            return@launchOperation
+        }
         progressRepository.markOpened(key)
         var progress = progressRepository.observe(key).first()
         notebookPageCount = progress.notebookPageCount
@@ -59,6 +70,7 @@ class WorkspaceViewModel(
             selectedReferenceTab = restoredTab,
             activeHintIndex = if (progress.revealedHintCount > 0) progress.revealedHintCount - 1 else -1,
             activePrerequisiteIndex = if (content.prerequisites.isEmpty()) -1 else 0,
+            availability = WorkspaceAvailability.AVAILABLE,
         )
     }
 

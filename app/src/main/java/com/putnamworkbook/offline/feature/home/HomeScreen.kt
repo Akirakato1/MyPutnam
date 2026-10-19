@@ -23,6 +23,7 @@ import com.putnamworkbook.offline.domain.model.ProblemKey
 fun HomeScreen(
     state: HomeUiState,
     onContinue: (ProblemKey) -> Unit,
+    onRestoreRecent: (ProblemKey) -> Unit,
     onSelectProblem: () -> Unit,
     onFreeNotebook: () -> Unit,
     onSettings: () -> Unit,
@@ -48,15 +49,26 @@ fun HomeScreen(
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             Button(
-                onClick = { state.recentProblem?.key?.let(onContinue) },
-                enabled = state.recentProblem != null,
+                onClick = {
+                    when (val recent = state.recentProblem) {
+                        is RecentProblemState.Available -> onContinue(recent.problem.key)
+                        is RecentProblemState.Unavailable -> onRestoreRecent(recent.key)
+                        RecentProblemState.None -> Unit
+                    }
+                },
+                enabled = state.recentProblem != RecentProblemState.None,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(64.dp)
                     .testTag("home-continue"),
             ) {
-                val recent = state.recentProblem
-                Text(if (recent == null) "Continue most recent" else "Continue ${recent.setTitle} ${recent.label}")
+                Text(
+                    when (val recent = state.recentProblem) {
+                        RecentProblemState.None -> "Continue most recent"
+                        is RecentProblemState.Available -> "Continue ${recent.problem.setTitle} ${recent.problem.label}"
+                        is RecentProblemState.Unavailable -> "Restore recent problem"
+                    },
+                )
             }
             Button(
                 onClick = onSelectProblem,
@@ -65,7 +77,7 @@ fun HomeScreen(
                     .height(64.dp)
                     .testTag("home-select-problem"),
             ) {
-                Text("Select problem")
+                Text("Browse Problems")
             }
             Button(
                 onClick = onFreeNotebook,

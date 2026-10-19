@@ -133,6 +133,7 @@ fun PutnamNavHost(
             HomeScreen(
                 state = homeState,
                 onContinue = { key -> navController.navigate(AppRoute.Workspace(key).path) },
+                onRestoreRecent = { key -> navController.navigate(AppRoute.ProblemLibrary(key).path) },
                 onSelectProblem = { navController.navigate(AppRoute.Library.path) },
                 onFreeNotebook = { navController.navigate(AppRoute.FreeWorkspaces.path) },
                 onSettings = { navController.navigate(AppRoute.Settings.path) },
@@ -210,6 +211,22 @@ fun PutnamNavHost(
             )
         }
         composable(
+            route = AppRoute.PROBLEM_LIBRARY_PATTERN,
+            arguments = listOf(
+                navArgument("focus") {
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = null
+                },
+            ),
+        ) { entry ->
+            val focus = entry.arguments?.getString("focus")?.let(Uri::decode)
+            Placeholder(
+                text = focus?.let { "Restore $it from Problem Library" } ?: "Problem Library",
+                tag = "problem-library-placeholder",
+            )
+        }
+        composable(
             route = AppRoute.SET_PROBLEMS_PATTERN,
             arguments = listOf(
                 navArgument("collectionId") { type = NavType.StringType },
@@ -258,6 +275,9 @@ fun PutnamNavHost(
                         if (!navController.popBackStack(AppRoute.HOME, inclusive = false)) {
                             navController.navigate(AppRoute.HOME) { launchSingleTop = true }
                         }
+                    },
+                    onRestoreProblem = { missingKey ->
+                        navController.navigate(AppRoute.ProblemLibrary(missingKey).path)
                     },
                 )
             }
@@ -408,6 +428,7 @@ private fun WorkspaceDestination(
     viewModelStoreOwner: ViewModelStoreOwner,
     onWorkspaceActiveChanged: (Boolean) -> Unit,
     onHome: () -> Unit,
+    onRestoreProblem: (ProblemKey) -> Unit,
 ) {
     val workspaceViewModel = remember(key, contentRepository, progressRepository) {
         WorkspaceViewModel(contentRepository, progressRepository)
@@ -539,6 +560,7 @@ private fun WorkspaceDestination(
         state = workspaceState,
         onHome = returnHome,
         onSetCompleted = workspaceViewModel::setCompleted,
+        onRestoreProblem = onRestoreProblem,
         onExportPdf = { options ->
             pendingIncludeHints = options.includeRevealedHints
             pendingIncludeSolution = options.includeRevealedSolution

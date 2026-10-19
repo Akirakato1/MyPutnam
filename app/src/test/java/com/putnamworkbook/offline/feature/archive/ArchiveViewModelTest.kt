@@ -124,6 +124,24 @@ class ArchiveViewModelTest {
         viewModel.close()
     }
 
+    @Test
+    fun installedRevisionReloadsCatalogAndRetainsTheSelectedTopic() = runBlocking {
+        val repository = MutableArchiveContent(putnamA1)
+        val viewModel = ArchiveViewModel(repository, FakeArchiveProgress(), testScope())
+        waitUntil("initial catalog") { !viewModel.uiState.value.isLoadingCatalog }
+        viewModel.selectTopic("algebra")
+        waitUntil("initial topic") { viewModel.uiState.value.topicProblems.map { it.summary.key } == listOf(putnamA1.key) }
+
+        repository.install(courseA1)
+
+        waitUntil("refreshed topic") {
+            viewModel.uiState.value.selectedTopicId == "algebra" &&
+                viewModel.uiState.value.topicProblems.map { it.summary.key } == listOf(putnamA1.key, courseA1.key)
+        }
+        assertEquals(listOf("putnam", "course"), viewModel.uiState.value.collections.map { it.id })
+        viewModel.close()
+    }
+
     private suspend fun waitUntil(label: String, predicate: () -> Boolean) {
         repeat(1_000) {
             if (predicate()) return
@@ -133,6 +151,29 @@ class ArchiveViewModelTest {
     }
 
     private fun testScope() = CoroutineScope(SupervisorJob() + Dispatchers.Unconfined)
+}
+
+private class MutableArchiveContent(initial: ProblemSummary) : ContentRepository {
+    private val revision = MutableStateFlow(0L)
+    private var installed = listOf(initial)
+
+    fun install(summary: ProblemSummary) {
+        installed = installed + summary
+        revision.value += 1
+    }
+
+    override fun observeInstalledRevision(): Flow<Long> = revision
+    override suspend fun collections() = installed.map { summary ->
+        LibraryCollection(summary.key.collectionId, summary.collectionTitle, "collection", 0)
+    }.distinctBy { it.id }
+    override suspend fun sets(collectionId: String) = installed
+        .filter { it.key.collectionId == collectionId }
+        .map { summary -> ProblemSetSummary(summary.key.setKey, summary.setTitle, 0, summary.competitionYear) }
+        .distinctBy { it.key }
+    override suspend fun topics() = listOf(TopicSummary("algebra", "Algebra", 0))
+    override suspend fun problems(setKey: ProblemSetKey) = installed.filter { it.key.setKey == setKey }
+    override suspend fun problemsByTopic(topicId: String) = installed.takeIf { topicId == "algebra" }.orEmpty()
+    override suspend fun problem(key: ProblemKey): ProblemContent? = null
 }
 
 private fun summary(key: ProblemKey, label: String, collection: String, set: String) = ProblemSummary(

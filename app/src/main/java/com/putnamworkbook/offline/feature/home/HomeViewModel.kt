@@ -11,10 +11,18 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+sealed interface RecentProblemState {
+    data object None : RecentProblemState
+    data class Available(val problem: ProblemSummary) : RecentProblemState
+    data class Unavailable(val key: com.putnamworkbook.offline.domain.model.ProblemKey) : RecentProblemState
+}
+
 data class HomeUiState(
-    val recentProblem: ProblemSummary? = null,
+    val recentProblem: RecentProblemState = RecentProblemState.None,
     val errorMessage: String? = null,
 )
 
@@ -29,9 +37,18 @@ class HomeViewModel(
     init {
         scope.launch {
             try {
-                progressRepository.observeRecent().collect { recent ->
+                combine(
+                    progressRepository.observeRecent(),
+                    contentRepository.observeInstalledRevision(),
+                ) { recent, _ -> recent }.collectLatest { recent ->
+                    val recentState = when (recent) {
+                        null -> RecentProblemState.None
+                        else -> contentRepository.problem(recent.key)?.summary
+                            ?.let(RecentProblemState::Available)
+                            ?: RecentProblemState.Unavailable(recent.key)
+                    }
                     mutableUiState.value = HomeUiState(
-                        recentProblem = recent?.let { contentRepository.problem(it.key)?.summary },
+                        recentProblem = recentState,
                     )
                 }
             } catch (error: CancellationException) {

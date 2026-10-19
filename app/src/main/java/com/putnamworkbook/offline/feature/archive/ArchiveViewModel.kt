@@ -59,11 +59,16 @@ class ArchiveViewModel(
     private var topicJob: Job? = null
     private var setJob: Job? = null
     private var progressJob: Job? = null
+    private var installedRevisionJob: Job? = null
 
     val uiState: StateFlow<ArchiveUiState> = mutableUiState.asStateFlow()
 
     init {
-        loadCatalog()
+        installedRevisionJob = scope.launch {
+            contentRepository.observeInstalledRevision().collect {
+                refreshInstalledContent()
+            }
+        }
         loadProgress()
     }
 
@@ -80,6 +85,16 @@ class ArchiveViewModel(
             topicError = null,
         )
         if (selected == null) return
+        loadTopic(selected, generation)
+    }
+
+    private fun loadTopic(selected: String, generation: Int = ++topicGeneration) {
+        topicJob?.cancel()
+        mutableUiState.value = mutableUiState.value.copy(
+            selectedTopicId = selected,
+            isLoadingTopicProblems = true,
+            topicError = null,
+        )
         topicJob = scope.launch {
             try {
                 val loaded = contentRepository.problemsByTopic(selected)
@@ -103,8 +118,11 @@ class ArchiveViewModel(
         val selected = mutableUiState.value.setsByCollection[key.collectionId]
             ?.firstOrNull { it.key == key }
             ?: return
+        loadSet(selected)
+    }
+
+    private fun loadSet(selected: ProblemSetSummary, generation: Int = ++setGeneration) {
         setJob?.cancel()
-        val generation = ++setGeneration
         setSummaries = emptyList()
         mutableUiState.value = mutableUiState.value.copy(
             selectedSet = selected,
@@ -114,14 +132,14 @@ class ArchiveViewModel(
         )
         setJob = scope.launch {
             try {
-                val loaded = contentRepository.problems(key)
-                if (generation != setGeneration || mutableUiState.value.selectedSet?.key != key) return@launch
+                val loaded = contentRepository.problems(selected.key)
+                if (generation != setGeneration || mutableUiState.value.selectedSet?.key != selected.key) return@launch
                 setSummaries = loaded
                 publishSetProblems(isLoading = false)
             } catch (error: CancellationException) {
                 throw error
             } catch (error: Exception) {
-                if (generation == setGeneration && mutableUiState.value.selectedSet?.key == key) {
+                if (generation == setGeneration && mutableUiState.value.selectedSet?.key == selected.key) {
                     mutableUiState.value = mutableUiState.value.copy(
                         isLoadingSetProblems = false,
                         setError = error.message ?: "Set problems could not be loaded",
@@ -142,6 +160,14 @@ class ArchiveViewModel(
         setGeneration += 1
         progressGeneration += 1
         scope.cancel()
+    }
+
+    private fun refreshInstalledContent() {
+        val selectedTopic = mutableUiState.value.selectedTopicId
+        val selectedSet = mutableUiState.value.selectedSet
+        loadCatalog()
+        selectedTopic?.let { loadTopic(it) }
+        selectedSet?.let { loadSet(it) }
     }
 
     private fun loadCatalog() {

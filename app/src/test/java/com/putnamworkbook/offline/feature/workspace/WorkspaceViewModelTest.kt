@@ -26,6 +26,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.junit.Assert.assertNull
 import org.junit.Test
 
 class WorkspaceViewModelTest {
@@ -144,6 +145,26 @@ class WorkspaceViewModelTest {
         restored.close()
     }
 
+    @Test
+    fun missingProblemIsExplicitlyUnavailableWithoutOpeningProgress() = runBlocking {
+        val progress = RecordingWorkspaceProgressRepository()
+        val viewModel = WorkspaceViewModel(
+            contentRepository = MissingWorkspaceContentRepository,
+            progressRepository = progress,
+            scope = CoroutineScope(Dispatchers.Default),
+        )
+
+        viewModel.open(key)
+        viewModel.awaitIdle()
+
+        assertEquals(WorkspaceAvailability.UNAVAILABLE, viewModel.uiState.value.availability)
+        assertEquals(key, viewModel.uiState.value.key)
+        assertNull(viewModel.uiState.value.content)
+        assertNull(viewModel.uiState.value.progress)
+        assertEquals(0, progress.markOpenedCount)
+        viewModel.close()
+    }
+
     private fun viewModel(progress: ProgressRepository) = WorkspaceViewModel(
         contentRepository = FakeWorkspaceContentRepository(key),
         progressRepository = progress,
@@ -151,6 +172,27 @@ class WorkspaceViewModelTest {
     )
 
     private suspend fun <T> Flow<T>.value(): T = first()
+}
+
+private object MissingWorkspaceContentRepository : ContentRepository {
+    override suspend fun collections() = emptyList<LibraryCollection>()
+    override suspend fun sets(collectionId: String) = emptyList<ProblemSetSummary>()
+    override suspend fun topics() = emptyList<TopicSummary>()
+    override suspend fun problems(setKey: ProblemSetKey) = emptyList<ProblemSummary>()
+    override suspend fun problemsByTopic(topicId: String) = emptyList<ProblemSummary>()
+    override suspend fun problem(key: ProblemKey): ProblemContent? = null
+}
+
+private class RecordingWorkspaceProgressRepository : ProgressRepository {
+    var markOpenedCount = 0
+    override fun observe(key: ProblemKey): Flow<ProblemProgress> = MutableStateFlow(ProblemProgress.untouched(key))
+    override fun observeAll(): Flow<Map<ProblemKey, ProblemProgress>> = MutableStateFlow(emptyMap())
+    override fun observeRecent(): Flow<ProblemProgress?> = MutableStateFlow(null)
+    override suspend fun markOpened(key: ProblemKey) { markOpenedCount += 1 }
+    override suspend fun revealNextHint(key: ProblemKey) = 0
+    override suspend fun revealSolution(key: ProblemKey) = Unit
+    override suspend fun markCompleted(key: ProblemKey, completed: Boolean) = Unit
+    override suspend fun setNotebookState(key: ProblemKey, pageCount: Int, pageIndex: Int, referenceTab: ReferenceTab) = Unit
 }
 
 private class FakeWorkspaceContentRepository(

@@ -11,6 +11,13 @@ enum class RevealStage {
     NONE,
 }
 
+enum class WorkspaceAvailability {
+    IDLE,
+    LOADING,
+    AVAILABLE,
+    UNAVAILABLE,
+}
+
 data class WorkspaceUiState(
     val key: ProblemKey? = null,
     val content: ProblemContent? = null,
@@ -19,6 +26,7 @@ data class WorkspaceUiState(
     val activeHintIndex: Int = -1,
     val activePrerequisiteIndex: Int = 0,
     val isLoading: Boolean = false,
+    val availability: WorkspaceAvailability = WorkspaceAvailability.IDLE,
     val errorMessage: String? = null,
 ) {
     val nextReveal: RevealStage

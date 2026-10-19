@@ -35,6 +35,7 @@ fun WorkspaceScreen(
     state: WorkspaceUiState,
     onHome: () -> Unit,
     onSetCompleted: (Boolean) -> Unit,
+    onRestoreProblem: (com.putnamworkbook.offline.domain.model.ProblemKey) -> Unit = {},
     referenceContent: @Composable () -> Unit,
     notebookContent: @Composable () -> Unit,
     onExportPdf: (WorkbookExportOptions) -> Unit = {},
@@ -142,7 +143,28 @@ fun WorkspaceScreen(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp).testTag("workspace-export-status"),
             )
         }
-        BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
+        if (state.availability == WorkspaceAvailability.UNAVAILABLE) {
+            Column(
+                modifier = Modifier.weight(1f).fillMaxWidth().padding(32.dp).testTag("workspace-unavailable"),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text("This problem is not installed on this device.", style = MaterialTheme.typography.titleLarge)
+                Text("Restore or reinstall it from Problem Library to continue.\nYour notebook progress is retained.")
+                Row(
+                    modifier = Modifier.padding(top = 20.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    OutlinedButton(onClick = onHome, modifier = Modifier.testTag("workspace-unavailable-back")) {
+                        Text("Back")
+                    }
+                    Button(
+                        onClick = { state.key?.let(onRestoreProblem) },
+                        modifier = Modifier.testTag("workspace-restore-problem"),
+                    ) { Text("Restore problem") }
+                }
+            }
+        } else BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
             if (maxWidth >= WIDE_WORKSPACE_MIN_WIDTH) {
                 Row(Modifier.fillMaxSize()) {
                     PaneBox("workspace-reference-pane", Modifier.weight(0.4f), referenceContent)

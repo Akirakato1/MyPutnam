@@ -16,6 +16,12 @@ sealed interface AppRoute {
         override val path = LIBRARY
     }
 
+    data class ProblemLibrary(val focusKey: ProblemKey? = null) : AppRoute {
+        override val path = focusKey?.let { key ->
+            "$PROBLEM_LIBRARY?focus=${Uri.encode(key.canonical)}"
+        } ?: PROBLEM_LIBRARY
+    }
+
     data class SetProblems(val key: ProblemSetKey) : AppRoute {
         override val path = "$SET_PROBLEMS_PREFIX/${Uri.encode(key.collectionId)}/${Uri.encode(key.setId)}"
     }
@@ -39,6 +45,8 @@ sealed interface AppRoute {
     companion object {
         const val HOME = "home"
         const val LIBRARY = "library"
+        const val PROBLEM_LIBRARY = "problem-library"
+        const val PROBLEM_LIBRARY_PATTERN = "$PROBLEM_LIBRARY?focus={focus}"
         const val SET_PROBLEMS_PREFIX = "library/set"
         const val SET_PROBLEMS_PATTERN = "$SET_PROBLEMS_PREFIX/{collectionId}/{setId}"
         const val WORKSPACE_PREFIX = "workspace"
