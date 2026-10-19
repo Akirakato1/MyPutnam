@@ -104,6 +104,7 @@ fun PutnamApp(
                         PutnamNavHost(
                             contentRepository = state.repository,
                             progressRepository = container.progressRepository,
+                            referenceRepository = container.referenceRepository,
                             workspaceDependencies = WorkspaceDependencies(
                                 settingsRepository = container.settingsRepository,
                                 notebookRepository = container.notebookRepository,

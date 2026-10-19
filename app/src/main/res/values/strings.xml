@@ -4,4 +4,5 @@
     <string name="problem_library">Problem Library</string>
     <string name="browse_problems">Browse Problems</string>
     <string name="math_reference">Math Reference</string>
+    <string name="app_title">MyPutnam</string>
 </resources>

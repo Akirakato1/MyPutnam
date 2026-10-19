@@ -26,6 +26,7 @@ fun HomeScreen(
     onRestoreRecent: (ProblemKey) -> Unit,
     onSelectProblem: () -> Unit,
     onProblemLibrary: () -> Unit,
+    onMathReference: () -> Unit,
     onFreeNotebook: () -> Unit,
     onSettings: () -> Unit,
     modifier: Modifier = Modifier,
@@ -97,6 +98,15 @@ fun HomeScreen(
                     .testTag("home-problem-library"),
             ) {
                 Text("Problem Library")
+            }
+            Button(
+                onClick = onMathReference,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(64.dp)
+                    .testTag("home-math-reference"),
+            ) {
+                Text("Math Reference")
             }
             OutlinedButton(
                 onClick = onSettings,

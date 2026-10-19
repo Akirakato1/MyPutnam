@@ -29,6 +29,7 @@ import androidx.navigation.navArgument
 import android.net.Uri
 import com.putnamworkbook.offline.backup.BackupCoordinator
 import com.putnamworkbook.offline.data.content.ContentRepository
+import com.putnamworkbook.offline.data.content.ReferenceRepository
 import com.putnamworkbook.offline.data.user.ProgressRepository
 import com.putnamworkbook.offline.data.user.SettingsRepository
 import com.putnamworkbook.offline.data.library.catalog.CatalogStore
@@ -44,6 +45,8 @@ import com.putnamworkbook.offline.feature.home.HomeScreen
 import com.putnamworkbook.offline.feature.home.HomeViewModel
 import com.putnamworkbook.offline.feature.library.ProblemLibraryScreen
 import com.putnamworkbook.offline.feature.library.ProblemLibraryViewModel
+import com.putnamworkbook.offline.feature.reference.MathReferenceScreen
+import com.putnamworkbook.offline.feature.reference.MathReferenceViewModel
 import com.putnamworkbook.offline.feature.freenotebook.FreeWorkspaceLibraryScreen
 import com.putnamworkbook.offline.feature.freenotebook.FreeWorkspaceListViewModel
 import com.putnamworkbook.offline.feature.freenotebook.DurableSaveNotifier
@@ -116,6 +119,7 @@ private class NotebookViewModelFactory(
 fun PutnamNavHost(
     contentRepository: ContentRepository,
     progressRepository: ProgressRepository,
+    referenceRepository: ReferenceRepository? = null,
     workspaceDependencies: WorkspaceDependencies? = null,
     libraryDependencies: LibraryDependencies? = null,
     freeWorkspaceRepository: FreeWorkspaceRepository? = workspaceDependencies?.freeWorkspaceRepository,
@@ -149,12 +153,30 @@ fun PutnamNavHost(
             HomeScreen(
                 state = homeState,
                 onContinue = { key -> navController.navigate(AppRoute.Workspace(key).path) },
-                onRestoreRecent = { key -> navController.navigate(AppRoute.ProblemLibrary(key).path) },
+                onRestoreRecent = { key -> navController.navigate(AppRoute.ProblemLibrary(key.canonical).path) },
                 onSelectProblem = { navController.navigate(AppRoute.Library.path) },
                 onProblemLibrary = { navController.navigate(AppRoute.ProblemLibrary().path) },
+                onMathReference = { navController.navigate(AppRoute.MathReference.path) },
                 onFreeNotebook = { navController.navigate(AppRoute.FreeWorkspaces.path) },
                 onSettings = { navController.navigate(AppRoute.Settings.path) },
             )
+        }
+        composable(AppRoute.MATH_REFERENCE) { entry ->
+            if (referenceRepository == null) {
+                Placeholder(text = "Math Reference", tag = "math-reference-placeholder")
+            } else {
+                val viewModel = remember(entry, referenceRepository) { MathReferenceViewModel(referenceRepository) }
+                val state by viewModel.uiState.collectAsState()
+                DisposableEffect(viewModel) { onDispose { viewModel.close() } }
+                MathReferenceScreen(
+                    state = state,
+                    viewModel = viewModel,
+                    onBack = { navController.popBackStack() },
+                    onManageContent = { key -> navController.navigate(AppRoute.ProblemLibrary(key).path) },
+                    onOpenProblem = { key -> navController.navigate(AppRoute.Workspace(key).path) },
+                    onIntegrityError = {},
+                )
+            }
         }
         composable(AppRoute.FREE_WORKSPACES) { entry ->
             if (freeWorkspaceRepository == null) {
@@ -330,7 +352,7 @@ fun PutnamNavHost(
                         }
                     },
                     onRestoreProblem = { missingKey ->
-                        navController.navigate(AppRoute.ProblemLibrary(missingKey).path)
+                        navController.navigate(AppRoute.ProblemLibrary(missingKey.canonical).path)
                     },
                 )
             }
