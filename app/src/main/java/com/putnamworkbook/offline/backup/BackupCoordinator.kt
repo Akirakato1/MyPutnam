@@ -14,6 +14,7 @@ import com.putnamworkbook.offline.domain.model.PaperStyle
 import com.putnamworkbook.offline.domain.model.ProblemStatus
 import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.domain.model.ReferenceTab
+import com.putnamworkbook.offline.data.library.index.ReinstallPlan
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
@@ -35,7 +36,10 @@ sealed interface BackupResult {
 }
 
 sealed interface RestoreResult {
-    data class Success(val memberCount: Int) : RestoreResult
+    data class Success(
+        val memberCount: Int,
+        val reinstallPlan: ReinstallPlan = ReinstallPlan(emptySet(), emptySet()),
+    ) : RestoreResult
     data class Failure(val message: String) : RestoreResult
 }
 
@@ -44,6 +48,7 @@ class BackupCoordinator(
     private val notebookRoot: Path,
     private val archive: BackupArchive = BackupArchive(),
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val libraryStatePort: LibraryStateBackupPort? = null,
 ) {
     private val mutex = Mutex()
 
@@ -57,6 +62,12 @@ class BackupCoordinator(
                         ByteArrayInputStream(snapshotBytes)
                     },
                 )
+                libraryStatePort?.exportState()?.let { libraryState ->
+                    val bytes = LibraryBackupStateCodec.encode(libraryState)
+                    sources += BackupSource(BackupArchive.LIBRARY_STATE_PATH, bytes.size.toLong()) {
+                        ByteArrayInputStream(bytes)
+                    }
+                }
                 if (Files.exists(notebookRoot)) {
                     Files.walk(notebookRoot).use { paths ->
                         paths.filter(Files::isRegularFile).sorted().forEach { path ->
@@ -89,11 +100,14 @@ class BackupCoordinator(
             val rollbackRoot = operationRoot.resolve("previous-notebooks")
             var oldNotebooksMoved = false
             var newNotebooksInstalled = false
+            var reinstallPlan = ReinstallPlan(emptySet(), emptySet())
             try {
                 Files.createDirectories(extractedRoot)
                 val validated = archive.read(source, extractedRoot)
                 if (validated.memberPaths.any {
-                        it != BackupArchive.USER_DATA_PATH && !it.startsWith("notebooks/")
+                        it != BackupArchive.USER_DATA_PATH &&
+                            it != BackupArchive.LIBRARY_STATE_PATH &&
+                            !it.startsWith("notebooks/")
                     }
                 ) {
                     throw BackupFormatException("Backup contains an unsupported payload member")
@@ -101,8 +115,16 @@ class BackupCoordinator(
                 val snapshot = UserSnapshotCodec.decode(
                     Files.readAllBytes(validated.resolve(BackupArchive.USER_DATA_PATH)),
                 )
+                val libraryState = if (BackupArchive.LIBRARY_STATE_PATH in validated.memberPaths) {
+                    val port = libraryStatePort
+                        ?: throw BackupFormatException("This app build cannot restore library choices")
+                    LibraryBackupStateCodec.decode(
+                        Files.readAllBytes(validated.resolve(BackupArchive.LIBRARY_STATE_PATH)),
+                    ) to port
+                } else null
                 val stagedNotebooks = extractedRoot.resolve("notebooks")
                 Files.createDirectories(stagedNotebooks)
+                val previousSnapshot = database.withTransaction { readDatabaseSnapshot() }
 
                 withContext(NonCancellable + ioDispatcher) {
                     if (Files.exists(notebookRoot)) {
@@ -113,7 +135,11 @@ class BackupCoordinator(
                     newNotebooksInstalled = true
                     try {
                         database.withTransaction { replaceDatabaseSnapshot(snapshot) }
+                        libraryState?.let { (state, port) ->
+                            reinstallPlan = port.applyState(state)
+                        }
                     } catch (error: Exception) {
+                        runCatching { database.withTransaction { replaceDatabaseSnapshot(previousSnapshot) } }
                         rollbackNotebooks(notebookRoot, rollbackRoot, oldNotebooksMoved)
                         newNotebooksInstalled = false
                         oldNotebooksMoved = false
@@ -123,7 +149,7 @@ class BackupCoordinator(
                 newNotebooksInstalled = false
                 oldNotebooksMoved = false
                 runCatching { deleteTree(operationRoot) }
-                RestoreResult.Success(validated.memberPaths.size)
+                RestoreResult.Success(validated.memberPaths.size, reinstallPlan)
             } catch (error: Exception) {
                 if (newNotebooksInstalled || oldNotebooksMoved) {
                     runCatching { rollbackNotebooks(notebookRoot, rollbackRoot, oldNotebooksMoved) }

@@ -170,7 +170,7 @@ class BackupArchive(
         val manifest = BackupManifestCodec.decode(
             manifestBytes ?: throw BackupFormatException("Backup manifest is missing"),
         )
-        if (manifest.schemaVersion != CURRENT_SCHEMA_VERSION) {
+        if (manifest.schemaVersion !in SUPPORTED_SCHEMA_VERSIONS) {
             throw BackupFormatException("Unsupported backup schema version: ${manifest.schemaVersion}")
         }
         if (manifest.members.size > limits.maxMembers) throw BackupFormatException("Backup has too many members")
@@ -205,9 +205,11 @@ class BackupArchive(
     }
 
     companion object {
-        const val CURRENT_SCHEMA_VERSION = 2
+        const val CURRENT_SCHEMA_VERSION = 3
+        val SUPPORTED_SCHEMA_VERSIONS = setOf(2, 3)
         const val MANIFEST_PATH = "backup-manifest.json"
         const val USER_DATA_PATH = "user-data.json"
+        const val LIBRARY_STATE_PATH = "library-state.json"
     }
 }
 

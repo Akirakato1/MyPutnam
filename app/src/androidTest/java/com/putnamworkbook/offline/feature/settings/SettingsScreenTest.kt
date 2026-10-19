@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -22,10 +23,19 @@ import com.putnamworkbook.offline.domain.model.AppTheme
 import com.putnamworkbook.offline.domain.model.Handedness
 import com.putnamworkbook.offline.domain.model.PaperStyle
 import com.putnamworkbook.offline.updateKeepScreenAwake
+import com.putnamworkbook.offline.backup.*
+import com.putnamworkbook.offline.data.library.index.*
+import com.putnamworkbook.offline.data.library.network.NetworkStatusMonitor
+import com.putnamworkbook.offline.data.library.packages.PackageInstaller
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.util.UUID
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -123,4 +133,82 @@ class SettingsScreenTest {
             assertFalse(activity.window.attributes.flags and keepAwake != 0)
         }
     }
+
+    @Test
+    fun restoredRemoteLibraryChoicesRequireExplicitOnlineConfirmation() {
+        val review = BackupUiState.ReinstallReview(
+            candidates = listOf("putnam/2025/A1", "reference/number-theory/euler-totient"),
+            selected = setOf("putnam/2025/A1"),
+            isOnline = false,
+            restoredBundledCount = 2,
+        )
+        composeRule.setContent {
+            MaterialTheme {
+                SettingsScreen(
+                    settings = AppSettings(), onBack = {}, onSettingsChanged = {}, onBackup = {}, onRestore = {},
+                    appVersion = "1", contentVersion = "1", backupState = review,
+                )
+            }
+        }
+        composeRule.onNodeWithTag("settings-list").performScrollToNode(hasTestTag("settings-reinstall-review"))
+        composeRule.onNodeWithTag("settings-reinstall-putnam/2025/A1").assertExists()
+        composeRule.onNodeWithTag("settings-reinstall-reference/number-theory/euler-totient").assertExists()
+        composeRule.onNodeWithTag("settings-reinstall-confirm").assertIsNotEnabled()
+        composeRule.onNodeWithTag("settings-reinstall-offline").assertExists()
+    }
+
+    @Test
+    fun restoreQueuesOnlyExplicitlySelectedRemoteCandidates() = runBlocking {
+        val context = ApplicationProvider.getApplicationContext<android.content.Context>()
+        val database = Room.inMemoryDatabaseBuilder(context, UserDatabase::class.java).build()
+        val root = context.cacheDir.toPath().resolve("settings-restore-${UUID.randomUUID()}")
+        val keys = setOf("putnam/2025/A1", "putnam/2025/A2")
+        val port = SettingsLibraryPort(keys)
+        val coordinator = BackupCoordinator(database, root, libraryStatePort = port)
+        val archive = ByteArrayOutputStream()
+        assertTrue(coordinator.create(archive) is BackupResult.Success)
+        val installer = SettingsRecordingInstaller()
+        val viewModel = SettingsViewModel(
+            repository = RoomSettingsRepository(database),
+            scope = CoroutineScope(Dispatchers.Default),
+            backupCoordinator = coordinator,
+            packageInstaller = installer,
+            networkStatusMonitor = SettingsNetworkStatus(true),
+        )
+
+        viewModel.restoreBackup(ByteArrayInputStream(archive.toByteArray()))
+        viewModel.awaitIdle()
+        val review = viewModel.backupState.value as BackupUiState.ReinstallReview
+        viewModel.toggleReinstallCandidate("putnam/2025/A2")
+        viewModel.confirmReinstall()
+        viewModel.awaitIdle()
+
+        assertEquals(setOf("putnam/2025/A1"), installer.enqueued.single().first)
+        assertEquals(PackageAction.INSTALL, installer.enqueued.single().second)
+        assertTrue(review.isOnline)
+        viewModel.close()
+        database.close()
+    }
+}
+
+private class SettingsLibraryPort(private val candidates: Set<String>) : LibraryStateBackupPort {
+    override suspend fun exportState() = com.putnamworkbook.offline.backup.LibraryBackupState(
+        candidates,
+        emptySet(),
+        emptyMap(),
+    )
+    override suspend fun applyState(state: com.putnamworkbook.offline.backup.LibraryBackupState) =
+        ReinstallPlan(candidates, emptySet())
+}
+
+private class SettingsRecordingInstaller : PackageInstaller {
+    val enqueued = mutableListOf<Pair<Set<String>, PackageAction>>()
+    override fun observeOperations(): Flow<List<PackageOperation>> = MutableStateFlow(emptyList())
+    override suspend fun enqueue(keys: Set<String>, action: PackageAction) { enqueued += keys to action }
+    override suspend fun retry(operationId: String) = Unit
+    override suspend fun cancel(operationId: String) = Unit
+}
+
+private class SettingsNetworkStatus(online: Boolean) : NetworkStatusMonitor {
+    override val isOnline: Flow<Boolean> = MutableStateFlow(online)
 }

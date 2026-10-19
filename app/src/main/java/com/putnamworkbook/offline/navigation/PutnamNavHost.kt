@@ -341,6 +341,7 @@ fun PutnamNavHost(
             } else {
                 SettingsDestination(
                     dependencies = workspaceDependencies,
+                    libraryDependencies = libraryDependencies,
                     onBack = { navController.popBackStack() },
                 )
             }
@@ -673,13 +674,16 @@ private fun WorkspaceDestination(
 @Composable
 private fun SettingsDestination(
     dependencies: WorkspaceDependencies,
+    libraryDependencies: LibraryDependencies?,
     onBack: () -> Unit,
 ) {
     val context = LocalContext.current
-    val viewModel = remember(dependencies.settingsRepository, dependencies.backupCoordinator) {
+    val viewModel = remember(dependencies.settingsRepository, dependencies.backupCoordinator, libraryDependencies) {
         SettingsViewModel(
             repository = dependencies.settingsRepository,
             backupCoordinator = dependencies.backupCoordinator,
+            packageInstaller = libraryDependencies?.packageInstaller,
+            networkStatusMonitor = libraryDependencies?.networkStatusMonitor,
         )
     }
     val settings by viewModel.uiState.collectAsState()
@@ -712,6 +716,9 @@ private fun SettingsDestination(
         appVersion = dependencies.appVersion,
         contentVersion = dependencies.contentVersion,
         backupState = backupState,
+        onToggleReinstallCandidate = viewModel::toggleReinstallCandidate,
+        onConfirmReinstall = viewModel::confirmReinstall,
+        onDismissReinstall = viewModel::dismissReinstallReview,
     )
 }
 

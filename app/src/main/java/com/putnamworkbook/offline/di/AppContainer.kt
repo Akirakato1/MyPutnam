@@ -2,6 +2,7 @@ package com.putnamworkbook.offline.di
 
 import android.content.Context
 import com.putnamworkbook.offline.backup.BackupCoordinator
+import com.putnamworkbook.offline.backup.InstalledContentLibraryStateBackupPort
 import com.putnamworkbook.offline.data.content.ContentDatabase
 import com.putnamworkbook.offline.data.content.ContentInitializer
 import com.putnamworkbook.offline.data.content.ContentIntegrityValidator
@@ -150,7 +151,11 @@ class AppContainer(
     }
     val notebookClipboard: NotebookClipboard by lazy { NotebookClipboard() }
     val backupCoordinator: BackupCoordinator by lazy {
-        BackupCoordinator(userDatabase, notebookRoot)
+        BackupCoordinator(
+            userDatabase,
+            notebookRoot,
+            libraryStatePort = InstalledContentLibraryStateBackupPort(installedContentIndex),
+        )
     }
     fun createExportCoordinator(
         renderingContext: Context,

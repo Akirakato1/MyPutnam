@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -36,6 +37,9 @@ fun SettingsScreen(
     appVersion: String,
     contentVersion: String,
     backupState: BackupUiState = BackupUiState.Idle,
+    onToggleReinstallCandidate: (String) -> Unit = {},
+    onConfirmReinstall: () -> Unit = {},
+    onDismissReinstall: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     Column(modifier.fillMaxSize().testTag("settings-screen")) {
@@ -96,6 +100,14 @@ fun SettingsScreen(
                         ) { Text("Restore backup") }
                     }
                     BackupStatus(backupState)
+                    if (backupState is BackupUiState.ReinstallReview) {
+                        ReinstallReview(
+                            backupState,
+                            onToggleReinstallCandidate,
+                            onConfirmReinstall,
+                            onDismissReinstall,
+                        )
+                    }
                 }
             }
             item {
@@ -127,12 +139,57 @@ private fun BackupStatus(state: BackupUiState) {
         }
         is BackupUiState.Complete -> state.message
         is BackupUiState.Error -> state.message
+        is BackupUiState.ReinstallReview -> "Backup restored. Review optional library downloads."
     }
     Text(
         text = text,
         color = if (state is BackupUiState.Error) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = Modifier.testTag("settings-backup-status"),
     )
+}
+
+@Composable
+private fun ReinstallReview(
+    state: BackupUiState.ReinstallReview,
+    onToggle: (String) -> Unit,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit,
+) {
+    Column(
+        Modifier.fillMaxWidth().testTag("settings-reinstall-review"),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+    ) {
+        if (state.restoredBundledCount > 0) {
+            Text("${state.restoredBundledCount} bundled item(s) restored offline.")
+        }
+        state.candidates.forEach { key ->
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Checkbox(
+                    checked = key in state.selected,
+                    onCheckedChange = { onToggle(key) },
+                    modifier = Modifier.testTag("settings-reinstall-$key"),
+                )
+                Text(key)
+            }
+        }
+        if (!state.isOnline) {
+            Text(
+                "Connect to the internet to download the selected library items.",
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.testTag("settings-reinstall-offline"),
+            )
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            Button(
+                onClick = onConfirm,
+                enabled = state.isOnline && state.selected.isNotEmpty(),
+                modifier = Modifier.testTag("settings-reinstall-confirm"),
+            ) { Text("Download selected") }
+            OutlinedButton(onClick = onDismiss, modifier = Modifier.testTag("settings-reinstall-dismiss")) {
+                Text("Not now")
+            }
+        }
+    }
 }
 
 @Composable

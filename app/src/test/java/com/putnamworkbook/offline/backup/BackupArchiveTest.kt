@@ -3,6 +3,7 @@ package com.putnamworkbook.offline.backup
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -30,6 +31,63 @@ class BackupArchiveTest {
         assertEquals(payloads.keys, restored.memberPaths)
         payloads.forEach { (path, expected) ->
             assertArrayEquals(expected, Files.readAllBytes(restored.resolve(path)))
+        }
+    }
+
+    @Test
+    fun schemaThreeLibraryStateRoundTripsDeterministicallyWithoutPackageBytes() {
+        val state = LibraryBackupState(
+            desiredKeys = setOf("putnam/2025/A1", "reference/number-theory/euler-totient"),
+            logicallyRemovedBundledKeys = setOf("putnam/2024/B2"),
+            activeDigests = mapOf("putnam/2025/A1" to "a".repeat(64)),
+        )
+        val first = LibraryBackupStateCodec.encode(state)
+        val second = LibraryBackupStateCodec.encode(state.copy(desiredKeys = state.desiredKeys.reversed().toSet()))
+        assertArrayEquals(first, second)
+        assertEquals(state, LibraryBackupStateCodec.decode(first))
+
+        val archiveBytes = ByteArrayOutputStream().also { output ->
+            BackupArchive().write(
+                mapOf(
+                    BackupArchive.USER_DATA_PATH to "{\"schemaVersion\":2}".encodeToByteArray(),
+                    BackupArchive.LIBRARY_STATE_PATH to first,
+                ),
+                output,
+            )
+        }.toByteArray()
+        val names = java.util.zip.ZipInputStream(ByteArrayInputStream(archiveBytes)).use { zip ->
+            buildList { while (true) add((zip.nextEntry ?: break).name) }
+        }
+        assertTrue(BackupArchive.LIBRARY_STATE_PATH in names)
+        assertTrue(names.none { it.endsWith(".zip") || it.endsWith(".html") })
+    }
+
+    @Test
+    fun schemaTwoArchiveWithoutLibraryStateRemainsReadable() {
+        val userData = "{\"schemaVersion\":2}".encodeToByteArray()
+        val member = BackupMember(BackupArchive.USER_DATA_PATH, userData.size.toLong(), sha256(userData))
+        val bytes = rawZip(
+            BackupArchive.USER_DATA_PATH to userData,
+            BackupArchive.MANIFEST_PATH to BackupManifestCodec.encode(BackupManifest(2, listOf(member))),
+        )
+        val restored = BackupArchive().read(ByteArrayInputStream(bytes), temporaryFolder.newFolder("v2").toPath())
+        assertEquals(2, restored.manifest.schemaVersion)
+        assertEquals(setOf(BackupArchive.USER_DATA_PATH), restored.memberPaths)
+    }
+
+    @Test
+    fun malformedLibraryStateKeysDigestsAndUnknownFieldsAreRejected() {
+        val malformed = listOf(
+            "{\"schemaVersion\":1,\"desiredKeys\":[\"../escape\"],\"logicallyRemovedBundledKeys\":[],\"activeDigests\":{}}",
+            "{\"schemaVersion\":1,\"desiredKeys\":[\"putnam/2025/A1\",\"putnam/2025/A1\"],\"logicallyRemovedBundledKeys\":[],\"activeDigests\":{}}",
+            "{\"schemaVersion\":1,\"desiredKeys\":[],\"logicallyRemovedBundledKeys\":[],\"activeDigests\":{\"putnam/2025/A1\":\"bad\"}}",
+            "{\"schemaVersion\":1,\"desiredKeys\":[],\"logicallyRemovedBundledKeys\":[],\"activeDigests\":{},\"extra\":true}",
+            "{\"schemaVersion\":2,\"desiredKeys\":[],\"logicallyRemovedBundledKeys\":[],\"activeDigests\":{}}",
+        )
+        malformed.forEach { json ->
+            assertThrows(BackupFormatException::class.java) {
+                LibraryBackupStateCodec.decode(json.encodeToByteArray())
+            }
         }
     }
 
@@ -115,7 +173,7 @@ class BackupArchiveTest {
 
     @Test
     fun futureSchemaVersionFailsCleanly() {
-        val manifest = BackupManifest(schemaVersion = 3, members = emptyList())
+        val manifest = BackupManifest(schemaVersion = 4, members = emptyList())
         assertFormatFailure(rawZip(BackupArchive.MANIFEST_PATH to BackupManifestCodec.encode(manifest)))
     }
 

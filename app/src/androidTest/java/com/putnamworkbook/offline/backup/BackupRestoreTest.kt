@@ -21,6 +21,7 @@ import com.putnamworkbook.offline.domain.model.BrushSpec
 import com.putnamworkbook.offline.notebook.model.StrokeRecord
 import com.putnamworkbook.offline.notebook.model.StrokeSample
 import com.putnamworkbook.offline.notebook.storage.FileNotebookRepository
+import com.putnamworkbook.offline.data.library.index.ReinstallPlan
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -171,6 +172,26 @@ class BackupRestoreTest {
         assertSnapshotEquals(notebooksBeforeFailure, snapshot(notebookRoot))
     }
 
+    @Test
+    fun libraryChoicesRoundTripAndReturnReviewedRemoteCandidates() = runBlocking {
+        val state = LibraryBackupState(
+            desiredKeys = setOf("putnam/2025/A1", "reference/number-theory/euler-totient"),
+            logicallyRemovedBundledKeys = setOf("putnam/2024/B2"),
+            activeDigests = mapOf("putnam/2025/A1" to "a".repeat(64)),
+        )
+        val port = RecordingLibraryStatePort(state)
+        val coordinator = BackupCoordinator(database, notebookRoot, libraryStatePort = port)
+        val output = ByteArrayOutputStream()
+
+        assertTrue(coordinator.create(output) is BackupResult.Success)
+        val result = coordinator.validateAndRestore(ByteArrayInputStream(output.toByteArray()))
+
+        assertEquals(state, port.applied)
+        assertTrue(result is RestoreResult.Success)
+        assertEquals(setOf("reference/number-theory/euler-totient"), (result as RestoreResult.Success).reinstallPlan.remoteCandidates)
+        assertEquals(setOf("putnam/2025/A1"), result.reinstallPlan.restoredBundledKeys)
+    }
+
     private fun snapshot(root: Path): Map<String, ByteArray> {
         if (!Files.exists(root)) return emptyMap()
         return Files.walk(root).use { paths ->
@@ -189,5 +210,19 @@ class BackupRestoreTest {
     private fun deleteTree(root: Path) {
         if (!Files.exists(root)) return
         Files.walk(root).use { paths -> paths.sorted(Comparator.reverseOrder()).forEach(Files::deleteIfExists) }
+    }
+}
+
+private class RecordingLibraryStatePort(
+    private val exported: LibraryBackupState,
+) : LibraryStateBackupPort {
+    var applied: LibraryBackupState? = null
+    override suspend fun exportState(): LibraryBackupState = exported
+    override suspend fun applyState(state: LibraryBackupState): ReinstallPlan {
+        applied = state
+        return ReinstallPlan(
+            remoteCandidates = setOf("reference/number-theory/euler-totient"),
+            restoredBundledKeys = setOf("putnam/2025/A1"),
+        )
     }
 }
