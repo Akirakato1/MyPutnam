@@ -165,6 +165,37 @@ class WorkspaceViewModelTest {
         viewModel.close()
     }
 
+    @Test
+    fun mathReferenceIsEphemeralAcrossEveryProblemTab() = runBlocking {
+        ReferenceTab.visibleEntries.forEach { tab ->
+            val initial = ProblemProgress.untouched(key).copy(
+                status = ProblemStatus.IN_PROGRESS,
+                revealedHintCount = 4,
+                solutionRevealed = true,
+                activeReferenceTab = tab,
+            )
+            val progress = FakeWorkspaceProgressRepository(mapOf(key to initial))
+            val viewModel = viewModel(progress)
+            viewModel.open(key)
+            viewModel.awaitIdle()
+            val writesBeforeReference = progress.notebookStateWriteCount
+            val stateBeforeReference = viewModel.uiState.value
+
+            viewModel.openMathReference()
+            assertTrue(viewModel.uiState.value.mathReferenceOpen)
+            viewModel.closeMathReference()
+
+            val stateAfterReference = viewModel.uiState.value
+            assertFalse(stateAfterReference.mathReferenceOpen)
+            assertEquals(tab, stateAfterReference.selectedReferenceTab)
+            assertEquals(stateBeforeReference.activeHintIndex, stateAfterReference.activeHintIndex)
+            assertEquals(stateBeforeReference.activePrerequisiteIndex, stateAfterReference.activePrerequisiteIndex)
+            assertEquals(stateBeforeReference.progress, stateAfterReference.progress)
+            assertEquals(writesBeforeReference, progress.notebookStateWriteCount)
+            viewModel.close()
+        }
+    }
+
     private fun viewModel(progress: ProgressRepository) = WorkspaceViewModel(
         contentRepository = FakeWorkspaceContentRepository(key),
         progressRepository = progress,
@@ -232,6 +263,8 @@ private class FakeWorkspaceProgressRepository(
     initialRows: Map<ProblemKey, ProblemProgress> = emptyMap(),
 ) : ProgressRepository {
     private val rows = MutableStateFlow(initialRows)
+    var notebookStateWriteCount = 0
+        private set
 
     override fun observe(key: ProblemKey): Flow<ProblemProgress> =
         rows.map { it[key] ?: ProblemProgress.untouched(key) }
@@ -264,6 +297,7 @@ private class FakeWorkspaceProgressRepository(
         pageIndex: Int,
         referenceTab: ReferenceTab,
     ) = mutate(key) {
+        notebookStateWriteCount += 1
         it.copy(
             notebookPageCount = pageCount,
             activePageIndex = pageIndex,

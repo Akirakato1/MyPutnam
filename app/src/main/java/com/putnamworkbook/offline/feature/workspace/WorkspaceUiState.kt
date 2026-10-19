@@ -25,6 +25,7 @@ data class WorkspaceUiState(
     val selectedReferenceTab: ReferenceTab = ReferenceTab.PROBLEM,
     val activeHintIndex: Int = -1,
     val activePrerequisiteIndex: Int = 0,
+    val mathReferenceOpen: Boolean = false,
     val isLoading: Boolean = false,
     val availability: WorkspaceAvailability = WorkspaceAvailability.IDLE,
     val errorMessage: String? = null,

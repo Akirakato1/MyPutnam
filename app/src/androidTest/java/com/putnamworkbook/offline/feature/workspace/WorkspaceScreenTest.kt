@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -32,6 +33,7 @@ import com.putnamworkbook.offline.export.WorkbookExportOptions
 import com.putnamworkbook.offline.content.ui.LocalContentClientFactoryProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.abs
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -209,6 +211,64 @@ class WorkspaceScreenTest {
         val contentWidth = reference.width + notebook.width
         assertTrue("Reference pane should occupy 40%", abs(reference.width / contentWidth - 0.4f) < 0.02f)
         assertTrue("Notebook pane should occupy 60%", abs(notebook.width / contentWidth - 0.6f) < 0.02f)
+    }
+
+    @Test
+    fun openingMathReferenceKeepsNotebookMountedAndItsLayoutStable() {
+        var mathReferenceOpen by mutableStateOf(false)
+        val notebookMounts = AtomicInteger(0)
+        val notebookDisposals = AtomicInteger(0)
+        composeRule.setContent {
+            MaterialTheme {
+                WorkspaceScreen(
+                    state = referenceState(ReferenceTab.HELP).copy(mathReferenceOpen = mathReferenceOpen),
+                    onHome = {},
+                    onSetCompleted = {},
+                    referenceContent = {
+                        ReferencePane(
+                            state = referenceState(ReferenceTab.HELP).copy(mathReferenceOpen = mathReferenceOpen),
+                            onSelectTab = {},
+                            onRevealNextStage = {},
+                            onSelectHint = {},
+                            onSelectPrerequisite = {},
+                            onOpenMathReference = { mathReferenceOpen = true },
+                            onCloseMathReference = { mathReferenceOpen = false },
+                            onIntegrityError = {},
+                            mathReferenceContent = {
+                                Box(Modifier.fillMaxSize().testTag("embedded-math-reference"))
+                            },
+                        )
+                    },
+                    notebookContent = {
+                        DisposableEffect(Unit) {
+                            notebookMounts.incrementAndGet()
+                            onDispose { notebookDisposals.incrementAndGet() }
+                        }
+                        Box(Modifier.fillMaxSize().testTag("stable-notebook")) {
+                            Box(Modifier.width(100.dp).height(40.dp).testTag("stable-toolbar"))
+                            Box(Modifier.width(80.dp).height(80.dp).testTag("stable-selection"))
+                            Box(Modifier.width(10.dp).height(10.dp).testTag("stable-stroke"))
+                        }
+                    },
+                    modifier = Modifier.width(1000.dp).height(600.dp),
+                )
+            }
+        }
+
+        val notebookBefore = composeRule.onNodeWithTag("workspace-notebook-pane").fetchSemanticsNode().boundsInRoot
+        val toolbarBefore = composeRule.onNodeWithTag("stable-toolbar").fetchSemanticsNode().boundsInRoot
+        val selectionBefore = composeRule.onNodeWithTag("stable-selection").fetchSemanticsNode().boundsInRoot
+        val strokeBefore = composeRule.onNodeWithTag("stable-stroke").fetchSemanticsNode().boundsInRoot
+
+        composeRule.onNodeWithTag("workspace-math-reference").performClick()
+        composeRule.onNodeWithTag("embedded-math-reference").assertExists()
+
+        assertEquals(notebookBefore, composeRule.onNodeWithTag("workspace-notebook-pane").fetchSemanticsNode().boundsInRoot)
+        assertEquals(toolbarBefore, composeRule.onNodeWithTag("stable-toolbar").fetchSemanticsNode().boundsInRoot)
+        assertEquals(selectionBefore, composeRule.onNodeWithTag("stable-selection").fetchSemanticsNode().boundsInRoot)
+        assertEquals(strokeBefore, composeRule.onNodeWithTag("stable-stroke").fetchSemanticsNode().boundsInRoot)
+        assertEquals(1, notebookMounts.get())
+        assertEquals(0, notebookDisposals.get())
     }
 
     @Test

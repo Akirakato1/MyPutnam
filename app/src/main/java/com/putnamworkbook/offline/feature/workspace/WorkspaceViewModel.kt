@@ -128,6 +128,14 @@ class WorkspaceViewModel(
         refreshProgress(selectedTab = visibleTab)
     }
 
+    fun openMathReference() {
+        mutableUiState.value = mutableUiState.value.copy(mathReferenceOpen = true)
+    }
+
+    fun closeMathReference() {
+        mutableUiState.value = mutableUiState.value.copy(mathReferenceOpen = false)
+    }
+
     fun updateNotebookState(pageCount: Int, pageIndex: Int) = launchOperation {
         require(pageCount >= 1)
         require(pageIndex in 0 until pageCount)

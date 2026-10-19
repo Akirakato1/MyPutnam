@@ -343,6 +343,7 @@ fun PutnamNavHost(
                     key = key,
                     contentRepository = contentRepository,
                     progressRepository = progressRepository,
+                    referenceRepository = referenceRepository,
                     dependencies = workspaceDependencies,
                     viewModelStoreOwner = entry,
                     onWorkspaceActiveChanged = onWorkspaceActiveChanged,
@@ -353,6 +354,12 @@ fun PutnamNavHost(
                     },
                     onRestoreProblem = { missingKey ->
                         navController.navigate(AppRoute.ProblemLibrary(missingKey.canonical).path)
+                    },
+                    onManageReferenceContent = { referenceKey ->
+                        navController.navigate(AppRoute.ProblemLibrary(referenceKey).path)
+                    },
+                    onOpenRelatedProblem = { relatedKey ->
+                        navController.navigate(AppRoute.Workspace(relatedKey).path)
                     },
                 )
             }
@@ -500,14 +507,20 @@ private fun WorkspaceDestination(
     key: ProblemKey,
     contentRepository: ContentRepository,
     progressRepository: ProgressRepository,
+    referenceRepository: ReferenceRepository?,
     dependencies: WorkspaceDependencies,
     viewModelStoreOwner: ViewModelStoreOwner,
     onWorkspaceActiveChanged: (Boolean) -> Unit,
     onHome: () -> Unit,
     onRestoreProblem: (ProblemKey) -> Unit,
+    onManageReferenceContent: (String) -> Unit,
+    onOpenRelatedProblem: (ProblemKey) -> Unit,
 ) {
     val workspaceViewModel = remember(key, contentRepository, progressRepository) {
         WorkspaceViewModel(contentRepository, progressRepository)
+    }
+    val referenceViewModel = remember(viewModelStoreOwner, key, referenceRepository) {
+        referenceRepository?.let(::MathReferenceViewModel)
     }
     val notebookFactory = remember(dependencies) { NotebookViewModelFactory(dependencies) }
     val notebookViewModel = remember(viewModelStoreOwner, key, notebookFactory) {
@@ -518,6 +531,7 @@ private fun WorkspaceDestination(
     }
     val scope = rememberCoroutineScope()
     val workspaceState by workspaceViewModel.uiState.collectAsState()
+    val referenceState = referenceViewModel?.uiState?.collectAsState()?.value
     val notebookState by notebookViewModel.uiState.collectAsState()
     var notebookOpened by remember(key) { mutableStateOf(false) }
     var exportMessage by remember(key) { mutableStateOf<String?>(null) }
@@ -576,11 +590,12 @@ private fun WorkspaceDestination(
         }
     }
 
-    DisposableEffect(workspaceViewModel, notebookViewModel) {
+    DisposableEffect(workspaceViewModel, notebookViewModel, referenceViewModel) {
         onWorkspaceActiveChanged(true)
         onDispose {
             onWorkspaceActiveChanged(false)
             workspaceViewModel.close()
+            referenceViewModel?.close()
         }
     }
     DisposableEffect(lifecycleOwner, notebookViewModel) {
@@ -631,7 +646,13 @@ private fun WorkspaceDestination(
             }
         }
     }
-    BackHandler(onBack = returnHome)
+    BackHandler {
+        if (workspaceState.mathReferenceOpen) {
+            if (referenceViewModel?.back() != true) workspaceViewModel.closeMathReference()
+        } else {
+            returnHome()
+        }
+    }
     WorkspaceScreen(
         state = workspaceState,
         onHome = returnHome,
@@ -653,6 +674,20 @@ private fun WorkspaceDestination(
                 onSelectHint = workspaceViewModel::selectHint,
                 onSelectPrerequisite = workspaceViewModel::selectPrerequisite,
                 onIntegrityError = workspaceViewModel::reportIntegrityError,
+                onOpenMathReference = workspaceViewModel::openMathReference,
+                onCloseMathReference = workspaceViewModel::closeMathReference,
+                mathReferenceContent = if (referenceState != null) {
+                    {
+                        MathReferenceScreen(
+                            state = referenceState,
+                            viewModel = referenceViewModel,
+                            onBack = workspaceViewModel::closeMathReference,
+                            onManageContent = onManageReferenceContent,
+                            onOpenProblem = onOpenRelatedProblem,
+                            onIntegrityError = workspaceViewModel::reportIntegrityError,
+                        )
+                    }
+                } else null,
             )
         },
         notebookContent = {

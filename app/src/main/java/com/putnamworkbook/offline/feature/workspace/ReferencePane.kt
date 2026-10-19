@@ -24,6 +24,9 @@ fun ReferencePane(
     onSelectHint: (Int) -> Unit,
     onSelectPrerequisite: (Int) -> Unit,
     onIntegrityError: (String) -> Unit,
+    onOpenMathReference: () -> Unit = {},
+    onCloseMathReference: () -> Unit = {},
+    mathReferenceContent: (@Composable () -> Unit)? = null,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier.fillMaxSize()) {
@@ -36,7 +39,7 @@ fun ReferencePane(
         ) {
             ReferenceTab.visibleEntries.forEach { tab ->
                 val enabled = tab != ReferenceTab.SOLUTION || state.progress?.solutionRevealed == true
-                if (tab == state.selectedReferenceTab) {
+                if (tab == state.selectedReferenceTab && !state.mathReferenceOpen) {
                     Button(
                         onClick = {},
                         enabled = enabled,
@@ -44,12 +47,33 @@ fun ReferencePane(
                     ) { Text(tab.label()) }
                 } else {
                     OutlinedButton(
-                        onClick = { onSelectTab(tab) },
+                        onClick = {
+                            if (state.mathReferenceOpen) onCloseMathReference()
+                            onSelectTab(tab)
+                        },
                         enabled = enabled,
                         modifier = Modifier.testTag("reference-tab-${tab.name.lowercase()}"),
                     ) { Text(tab.label()) }
                 }
             }
+            if (state.mathReferenceOpen) {
+                Button(
+                    onClick = onCloseMathReference,
+                    modifier = Modifier.testTag("workspace-math-reference"),
+                ) { Text("Reference") }
+            } else {
+                OutlinedButton(
+                    onClick = onOpenMathReference,
+                    enabled = mathReferenceContent != null,
+                    modifier = Modifier.testTag("workspace-math-reference"),
+                ) { Text("Reference") }
+            }
+        }
+        if (state.mathReferenceOpen && mathReferenceContent != null) {
+            Column(Modifier.fillMaxWidth().weight(1f).testTag("workspace-math-reference-content")) {
+                mathReferenceContent()
+            }
+            return@Column
         }
         val content = state.content
         when (state.selectedReferenceTab.normalizedForDisplay()) {
