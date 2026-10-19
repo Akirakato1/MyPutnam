@@ -73,7 +73,7 @@ class WorkspaceScreenTest {
             activeHintIndex = 0,
             content = state.content!!.copy(
                 hints = state.content!!.hints.mapIndexed { index, hint ->
-                    if (index == 0) hint.copy(assetPath = "content/putnam/2025/problems/A1/missing-hint.html") else hint
+                    if (index == 0) hint.copy(resource = hint.resource.copy(memberPath = "content/putnam/2025/problems/A1/missing-hint.html")) else hint
                 },
             ),
         )
@@ -179,7 +179,7 @@ class WorkspaceScreenTest {
                 fixture.copy(
                     content = fixture.content!!.copy(
                         hints = fixture.content!!.hints.mapIndexed { index, hint ->
-                            if (index == 0) hint.copy(assetPath = "content/putnam/2025/problems/A1/missing.html") else hint
+                            if (index == 0) hint.copy(resource = hint.resource.copy(memberPath = "content/putnam/2025/problems/A1/missing.html")) else hint
                         },
                     ),
                 )

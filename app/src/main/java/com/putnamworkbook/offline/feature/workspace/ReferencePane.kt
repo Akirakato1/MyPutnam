@@ -55,7 +55,7 @@ fun ReferencePane(
         when (state.selectedReferenceTab.normalizedForDisplay()) {
             ReferenceTab.PROBLEM -> content?.let {
                 ReferenceDocumentBody(
-                    it.statementAssetPath,
+                    it.statement,
                     onIntegrityError,
                     Modifier.fillMaxWidth().weight(1f),
                 )
@@ -91,7 +91,7 @@ fun ReferencePane(
                     Text("No prerequisite note is needed", Modifier.padding(20.dp))
                 } else {
                     ReferenceDocumentBody(
-                        prerequisite.assetPath,
+                        prerequisite.resource,
                         onIntegrityError,
                         Modifier.fillMaxWidth().weight(1f),
                     )
@@ -99,7 +99,7 @@ fun ReferencePane(
             }
             ReferenceTab.SOLUTION -> if (state.progress?.solutionRevealed == true && content != null) {
                 ReferenceDocumentBody(
-                    content.solutionAssetPath,
+                    content.solution,
                     onIntegrityError,
                     Modifier.fillMaxWidth().weight(1f),
                 )

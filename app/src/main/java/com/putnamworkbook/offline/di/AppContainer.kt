@@ -6,6 +6,9 @@ import com.putnamworkbook.offline.data.content.ContentDatabase
 import com.putnamworkbook.offline.data.content.ContentInitializer
 import com.putnamworkbook.offline.data.content.ContentIntegrityValidator
 import com.putnamworkbook.offline.data.content.ContentRepository
+import com.putnamworkbook.offline.data.content.CatalogProblemRepository
+import com.putnamworkbook.offline.data.content.CompositeContentRepository
+import com.putnamworkbook.offline.data.content.FileInstalledPackageReader
 import com.putnamworkbook.offline.data.content.RoomContentRepository
 import com.putnamworkbook.offline.data.library.catalog.CatalogClient
 import com.putnamworkbook.offline.data.library.catalog.CatalogCodec
@@ -19,6 +22,7 @@ import com.putnamworkbook.offline.data.library.index.InstalledContentIndex
 import com.putnamworkbook.offline.data.library.index.LibraryIndexDatabase
 import com.putnamworkbook.offline.data.library.index.PackageOperationStore
 import com.putnamworkbook.offline.data.library.index.RoomInstalledContentIndex
+import com.putnamworkbook.offline.data.library.index.InstalledContentSnapshot
 import com.putnamworkbook.offline.data.library.packages.CatalogStorePackageSource
 import com.putnamworkbook.offline.data.library.packages.FilePackageStore
 import com.putnamworkbook.offline.data.library.packages.HttpsPackageDownloader
@@ -35,6 +39,7 @@ import com.putnamworkbook.offline.data.user.UserDatabase
 import com.putnamworkbook.offline.export.ExportCoordinator
 import com.putnamworkbook.offline.export.WebViewContentRasterizer
 import com.putnamworkbook.offline.export.WorkbookPdfExporter
+import com.putnamworkbook.offline.content.ui.FileContentResourceResolver
 import com.putnamworkbook.offline.freeworkspace.FileFreeWorkspaceRepository
 import com.putnamworkbook.offline.freeworkspace.FreeWorkspaceRepository
 import com.putnamworkbook.offline.notebook.storage.FileNotebookRepository
@@ -47,6 +52,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
 
 class AppContainer(
@@ -83,6 +91,9 @@ class AppContainer(
     }
     val installedContentIndex: InstalledContentIndex by lazy { roomInstalledContentIndex }
     val packageOperationStore: PackageOperationStore by lazy { roomInstalledContentIndex }
+    private val installedContentSnapshot: StateFlow<InstalledContentSnapshot> by lazy {
+        installedContentIndex.observe().stateIn(applicationScope, SharingStarted.Eagerly, InstalledContentSnapshot(0, emptyList()))
+    }
     internal val packageDownloader: PackageDownloader by lazy {
         HttpsPackageDownloader(
             root = applicationContext.cacheDir.toPath().resolve("content-library-downloads"),
@@ -104,6 +115,24 @@ class AppContainer(
             contentIndex = installedContentIndex,
             operationStore = packageOperationStore,
             scope = applicationScope,
+        )
+    }
+    private val packageRoot: Path by lazy { applicationContext.filesDir.toPath().resolve("content-library/packages") }
+    val contentResourceResolver by lazy {
+        FileContentResourceResolver(
+            context = applicationContext,
+            packagesRoot = packageRoot,
+            snapshot = { installedContentSnapshot.value },
+            onQuarantine = { key, digest, error ->
+                applicationScope.launch { installedContentIndex.quarantine(key, digest, error) }
+            },
+        )
+    }
+    internal val packagedContentRepository: ContentRepository by lazy {
+        CatalogProblemRepository(
+            catalog = { catalogStore.state.value.catalog },
+            snapshots = installedContentIndex.observe(),
+            packageReader = FileInstalledPackageReader(packageRoot, packageStore, installedContentIndex),
         )
     }
     val userDatabase: UserDatabase by lazy { UserDatabase.create(applicationContext) }
@@ -129,7 +158,10 @@ class AppContainer(
                 contentRepository = contentRepository,
                 progressRepository = progressRepository,
                 notebookRepository = notebookRepository,
-                contentRasterizer = WebViewContentRasterizer(renderingContext),
+                contentRasterizer = WebViewContentRasterizer(
+                    renderingContext,
+                    contentResourceResolver = contentResourceResolver,
+                ),
             ),
         )
 
@@ -164,5 +196,6 @@ suspend fun AppContainer.initializeContent(): ContentRepository = withContext(Di
     packageDownloader.recoverInterruptedState()
     packageStore.recoverInterruptedState()
     packageOperationStore.recoverInterruptedOperations(System.currentTimeMillis())
-    contentInitializer.initialize()
+    val legacy = contentInitializer.initialize()
+    CompositeContentRepository(packagedContentRepository, legacy)
 }

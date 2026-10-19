@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
+import com.putnamworkbook.offline.data.content.ContentResourceRef
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -40,6 +41,42 @@ private object DefaultLocalContentClientFactory : LocalContentClientFactory {
 
 val LocalContentClientFactoryProvider = staticCompositionLocalOf<LocalContentClientFactory> {
     DefaultLocalContentClientFactory
+}
+
+val ContentResourceResolverProvider = staticCompositionLocalOf<ContentResourceResolver?> { null }
+
+@Composable
+fun MathContentWebView(
+    resource: ContentResourceRef,
+    onIntegrityError: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val resolver = checkNotNull(ContentResourceResolverProvider.current) { "ContentResourceResolver is not provided" }
+    val context = LocalContext.current
+    val clientFactory = LocalContentClientFactoryProvider.current
+    val latestIntegrityError = rememberUpdatedState(onIntegrityError)
+    var renderGeneration by remember { mutableIntStateOf(0) }
+    val client = remember(context.applicationContext, clientFactory, resolver) {
+        clientFactory.create(
+            context.applicationContext,
+            { latestIntegrityError.value(it) },
+            { renderGeneration += 1 },
+            {},
+        ).also { it.attachResolver(resolver) }
+    }
+    key(resource, renderGeneration) {
+        AndroidView(
+            factory = { WebView(it).also(client::configure) },
+            update = { webView ->
+                if (webView.getTag(CONTENT_PATH_TAG) != resource) {
+                    webView.setTag(CONTENT_PATH_TAG, resource)
+                    client.loadResource(webView, resource)
+                }
+            },
+            onRelease = { it.stopLoading(); it.destroy() },
+            modifier = modifier,
+        )
+    }
 }
 
 @Composable

@@ -1,6 +1,7 @@
 package com.putnamworkbook.offline.export
 
 import com.putnamworkbook.offline.data.content.ProblemContent
+import com.putnamworkbook.offline.data.content.ContentResourceRef
 import com.putnamworkbook.offline.data.user.ProblemProgress
 import com.putnamworkbook.offline.domain.model.PaperStyle
 import com.putnamworkbook.offline.notebook.model.NotebookDocument
@@ -13,8 +14,11 @@ data class WorkbookExportOptions(
 
 data class ExportSection(
     val title: String,
-    val assetPath: String,
-)
+    val resource: ContentResourceRef,
+) {
+    constructor(title: String, assetPath: String) : this(title, ContentResourceRef.legacy(assetPath, ""))
+    val assetPath: String get() = resource.memberPath
+}
 
 data class NotebookPagePlan(
     val index: Int,
@@ -46,16 +50,16 @@ object WorkbookPdfLayout {
         progress: ProblemProgress,
         options: WorkbookExportOptions,
     ): List<ExportSection> = buildList {
-        add(ExportSection("Statement", content.statementAssetPath))
+        add(ExportSection("Statement", content.statement))
         if (options.includeRevealedHints) {
             content.hints.sortedBy { it.order }
                 .take(progress.revealedHintCount.coerceAtLeast(0))
                 .forEachIndexed { index, hint ->
-                    add(ExportSection("Hint ${index + 1}: ${hint.title}", hint.assetPath))
+                    add(ExportSection("Hint ${index + 1}: ${hint.title}", hint.resource))
                 }
         }
         if (options.includeRevealedSolution && progress.solutionRevealed) {
-            add(ExportSection("Solution", content.solutionAssetPath))
+            add(ExportSection("Solution", content.solution))
         }
     }
 

@@ -76,7 +76,7 @@ fun HelpPane(
             }
         } else {
             ReferenceDocumentBody(
-                activeHint.assetPath,
+                activeHint.resource,
                 onIntegrityError,
                 Modifier.fillMaxWidth().weight(1f),
             )

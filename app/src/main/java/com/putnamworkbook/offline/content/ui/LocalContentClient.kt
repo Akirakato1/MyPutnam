@@ -23,6 +23,7 @@ class LocalContentClient(
     private val onRendererGone: () -> Unit = {},
     private val loadDispatcher: ((() -> Unit) -> Unit) = { load -> load() },
 ) : WebViewClient() {
+    private var resourceResolver: ContentResourceResolver? = null
     private val assetLoader = WebViewAssetLoader.Builder()
         .setDomain(ASSET_HOST)
         .addPathHandler(ASSET_PATH, WebViewAssetLoader.AssetsPathHandler(assetContext))
@@ -51,6 +52,24 @@ class LocalContentClient(
         webView.isHorizontalScrollBarEnabled = false
         webView.webViewClient = this
     }
+
+    @MainThread
+    fun attachResolver(resolver: ContentResourceResolver) {
+        resourceResolver = resolver
+    }
+
+    @MainThread
+    fun loadResource(webView: WebView, resource: com.putnamworkbook.offline.data.content.ContentResourceRef): Result<Unit> = runCatching {
+        val resolver = checkNotNull(resourceResolver) { "Package content resolver is unavailable" }
+        val url = resolver.urlFor(resource).toString()
+        loadDispatcher { webView.loadUrl(url) }
+    }.onFailure { onIntegrityError(it.message ?: "Package content could not be opened") }
+
+    @MainThread
+    fun loadResourceData(webView: WebView, resource: com.putnamworkbook.offline.data.content.ContentResourceRef): Result<Unit> = runCatching {
+        val resolver = checkNotNull(resourceResolver) { "Package content resolver is unavailable" }
+        webView.loadDataWithBaseURL(resolver.urlFor(resource).toString(), resolver.readDocument(resource), "text/html", "utf-8", null)
+    }.onFailure { onIntegrityError(it.message ?: "Package content could not be opened") }
 
     @MainThread
     fun loadAsset(webView: WebView, assetPath: String): Result<Unit> = runCatching {
@@ -85,12 +104,21 @@ class LocalContentClient(
         uri.scheme == "https" &&
             uri.host == ASSET_HOST &&
             uri.port == -1 &&
-            uri.path?.startsWith(ASSET_PATH) == true &&
+            (uri.path?.startsWith(ASSET_PATH) == true || uri.path?.startsWith("/document/") == true) &&
             !containsTraversal(uri)
 
+    private fun isRequestAllowed(uri: Uri): Boolean = uri.scheme == "https" && uri.host == ASSET_HOST && uri.port == -1 &&
+        (uri.path?.startsWith(ASSET_PATH) == true || uri.path?.startsWith("/document/") == true ||
+            uri.path?.startsWith("/package/") == true || uri.path?.startsWith("/renderer-static/") == true) && !containsTraversal(uri)
+
     internal fun interceptForTest(uri: Uri): WebResourceResponse? {
-        if (!isNavigationAllowed(uri)) return errorResponse(403, "Forbidden")
-        return assetLoader.shouldInterceptRequest(uri) ?: errorResponse(404, "Not Found")
+        if (!isRequestAllowed(uri)) return errorResponse(403, "Forbidden")
+        return try {
+            resourceResolver?.intercept(uri) ?: assetLoader.shouldInterceptRequest(uri) ?: errorResponse(404, "Not Found")
+        } catch (error: Exception) {
+            onIntegrityError(error.message ?: "Package content failed its integrity check")
+            errorResponse(409, "Integrity Check Failed")
+        }
     }
 
     override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest): WebResourceResponse? =

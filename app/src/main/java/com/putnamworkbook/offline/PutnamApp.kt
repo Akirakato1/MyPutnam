@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -31,6 +32,7 @@ import com.putnamworkbook.offline.domain.model.AppSettings
 import com.putnamworkbook.offline.domain.model.AppTheme
 import com.putnamworkbook.offline.navigation.PutnamNavHost
 import com.putnamworkbook.offline.navigation.WorkspaceDependencies
+import com.putnamworkbook.offline.content.ui.ContentResourceResolverProvider
 
 @Composable
 fun PutnamApp(
@@ -97,21 +99,23 @@ fun PutnamApp(
                     val exportCoordinator = remember(container, context, state.repository) {
                         container.createExportCoordinator(context, state.repository)
                     }
-                    PutnamNavHost(
-                        contentRepository = state.repository,
-                        progressRepository = container.progressRepository,
-                        workspaceDependencies = WorkspaceDependencies(
-                            settingsRepository = container.settingsRepository,
-                            notebookRepository = container.notebookRepository,
-                            notebookClipboard = container.notebookClipboard,
-                            backupCoordinator = container.backupCoordinator,
-                            exportCoordinator = exportCoordinator,
-                            appVersion = appVersion,
-                            contentVersion = state.contentVersion,
-                            freeWorkspaceRepository = container.freeWorkspaceRepository,
-                        ),
-                        onWorkspaceActiveChanged = { workspaceActive = it },
-                    )
+                    CompositionLocalProvider(ContentResourceResolverProvider provides container.contentResourceResolver) {
+                        PutnamNavHost(
+                            contentRepository = state.repository,
+                            progressRepository = container.progressRepository,
+                            workspaceDependencies = WorkspaceDependencies(
+                                settingsRepository = container.settingsRepository,
+                                notebookRepository = container.notebookRepository,
+                                notebookClipboard = container.notebookClipboard,
+                                backupCoordinator = container.backupCoordinator,
+                                exportCoordinator = exportCoordinator,
+                                appVersion = appVersion,
+                                contentVersion = state.contentVersion,
+                                freeWorkspaceRepository = container.freeWorkspaceRepository,
+                            ),
+                            onWorkspaceActiveChanged = { workspaceActive = it },
+                        )
+                    }
                 }
             }
         }

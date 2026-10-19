@@ -17,6 +17,8 @@ import android.view.ContextThemeWrapper
 import android.webkit.WebView
 import android.util.DisplayMetrics
 import com.putnamworkbook.offline.content.ui.LocalContentClient
+import com.putnamworkbook.offline.content.ui.ContentResourceResolver
+import com.putnamworkbook.offline.data.content.ContentResourceRef
 import com.putnamworkbook.offline.data.content.ContentRepository
 import com.putnamworkbook.offline.data.content.ProblemSummary
 import com.putnamworkbook.offline.data.user.ProgressRepository
@@ -75,6 +77,14 @@ interface ContentRasterizer {
         continuationSliceHeightPixels: Int,
         consumeSlice: (Bitmap) -> Unit,
     ): Int
+
+    suspend fun render(
+        resource: ContentResourceRef,
+        widthPixels: Int,
+        firstSliceHeightPixels: Int,
+        continuationSliceHeightPixels: Int,
+        consumeSlice: (Bitmap) -> Unit,
+    ): Int = render(resource.memberPath, widthPixels, firstSliceHeightPixels, continuationSliceHeightPixels, consumeSlice)
 }
 
 class WorkbookPdfExporter(
@@ -103,7 +113,7 @@ class WorkbookPdfExporter(
                 val firstTop = if (sectionIndex == 0) STATEMENT_CONTENT_TOP else SECTION_CONTENT_TOP
                 var sectionSliceIndex = 0
                 val renderedSliceCount = contentRasterizer.render(
-                    assetPath = section.assetPath,
+                    resource = section.resource,
                     widthPixels = RASTER_WIDTH_PIXELS,
                     firstSliceHeightPixels = pointsToPixels(CONTENT_BOTTOM - firstTop),
                     continuationSliceHeightPixels = pointsToPixels(CONTENT_BOTTOM - SECTION_CONTENT_TOP),
@@ -348,6 +358,7 @@ private class FailureTrackingOutputStream(
 class WebViewContentRasterizer(
     context: Context,
     assetContext: Context = context,
+    private val contentResourceResolver: ContentResourceResolver? = null,
 ) : ContentRasterizer {
     private val activity = context.findActivity()
         ?: throw IllegalArgumentException("PDF HTML rendering requires an Activity context")
@@ -360,10 +371,31 @@ class WebViewContentRasterizer(
         continuationSliceHeightPixels: Int,
         consumeSlice: (Bitmap) -> Unit,
     ): Int = withContext(Dispatchers.Main.immediate) {
+        renderInternal(assetPath, null, widthPixels, firstSliceHeightPixels, continuationSliceHeightPixels, consumeSlice)
+    }
+
+    override suspend fun render(
+        resource: ContentResourceRef,
+        widthPixels: Int,
+        firstSliceHeightPixels: Int,
+        continuationSliceHeightPixels: Int,
+        consumeSlice: (Bitmap) -> Unit,
+    ): Int = withContext(Dispatchers.Main.immediate) {
+        renderInternal(null, resource, widthPixels, firstSliceHeightPixels, continuationSliceHeightPixels, consumeSlice)
+    }
+
+    private suspend fun renderInternal(
+        assetPath: String?,
+        resource: ContentResourceRef?,
+        widthPixels: Int,
+        firstSliceHeightPixels: Int,
+        continuationSliceHeightPixels: Int,
+        consumeSlice: (Bitmap) -> Unit,
+    ): Int {
         require(firstSliceHeightPixels > 0)
         require(continuationSliceHeightPixels > 0)
         val geometry = PrintRasterGeometry(widthPixels)
-        suspendCancellableCoroutine { continuation ->
+        return suspendCancellableCoroutine { continuation ->
             var finished = false
             var webView: WebView? = null
 
@@ -454,6 +486,7 @@ class WebViewContentRasterizer(
                     })
                 },
             )
+            contentResourceResolver?.let(client::attachResolver)
             val configuration = Configuration(activity.resources.configuration).apply {
                 densityDpi = DisplayMetrics.DENSITY_DEFAULT
             }
@@ -487,7 +520,9 @@ class WebViewContentRasterizer(
                     }
                 }
             }
-            client.loadAssetData(createdView, assetPath).onFailure(::fail)
+            val load = if (resource != null) client.loadResourceData(createdView, resource)
+            else client.loadAssetData(createdView, checkNotNull(assetPath))
+            load.onFailure(::fail)
         }
     }
 
