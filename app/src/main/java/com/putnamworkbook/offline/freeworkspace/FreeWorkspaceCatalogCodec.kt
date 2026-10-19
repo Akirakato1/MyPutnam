@@ -1,7 +1,7 @@
 package com.putnamworkbook.offline.freeworkspace
 
 import com.putnamworkbook.offline.backup.JsonCodec
-import com.putnamworkbook.offline.backup.JsonValue
+import com.putnamworkbook.offline.data.json.JsonValue
 import com.putnamworkbook.offline.backup.asObject
 import com.putnamworkbook.offline.backup.requireOnly
 import com.putnamworkbook.offline.backup.requiredArray

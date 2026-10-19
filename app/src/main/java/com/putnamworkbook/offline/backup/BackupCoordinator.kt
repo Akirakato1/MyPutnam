@@ -1,5 +1,7 @@
 package com.putnamworkbook.offline.backup
 
+import com.putnamworkbook.offline.data.json.JsonValue
+
 import androidx.room.withTransaction
 import com.putnamworkbook.offline.data.user.AppSettingEntity
 import com.putnamworkbook.offline.data.user.ProblemProgressEntity

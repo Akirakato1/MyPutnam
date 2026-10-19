@@ -13,12 +13,18 @@ import com.putnamworkbook.offline.data.content.ProblemContent
 import com.putnamworkbook.offline.data.content.ProblemSetSummary
 import com.putnamworkbook.offline.data.content.ProblemSummary
 import com.putnamworkbook.offline.data.content.TopicSummary
+import com.putnamworkbook.offline.data.library.catalog.CatalogClient
+import com.putnamworkbook.offline.data.library.catalog.CatalogState
+import com.putnamworkbook.offline.data.library.catalog.CatalogStore
+import com.putnamworkbook.offline.data.library.catalog.CatalogValidators
 import com.putnamworkbook.offline.di.AppContainer
 import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.domain.model.ProblemSetKey
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -49,6 +55,27 @@ class PutnamAppStartupTest {
     }
 
     @Test
+    fun blockedCatalogRefreshDoesNotDelayHome() {
+        val refreshStarted = CompletableDeferred<Unit>()
+        val neverCompletes = CompletableDeferred<com.putnamworkbook.offline.data.library.catalog.CatalogFetchResult>()
+        val container = AppContainer(
+            context = composeRule.activity,
+            initializer = ContentInitializer { EmptyContentRepository },
+            catalogStoreOverride = ReadyCatalogStore(),
+            catalogClientOverride = CatalogClient {
+                refreshStarted.complete(Unit)
+                neverCompletes.await()
+            },
+        )
+
+        composeRule.setContent { PutnamApp(container) }
+
+        composeRule.onNodeWithTag("home-screen").assertIsDisplayed()
+        composeRule.waitUntil(timeoutMillis = 5_000) { refreshStarted.isCompleted }
+        assertTrue(refreshStarted.isCompleted)
+    }
+
+    @Test
     fun malformedDatabaseFailureShowsTheRecoverySurface() {
         assertStartupFailure(IllegalStateException("content metadata is malformed"))
     }
@@ -72,6 +99,14 @@ class PutnamAppStartupTest {
         val container = AppContainer(composeRule.activity, initializer)
         composeRule.setContent { PutnamApp(container) }
     }
+}
+
+private class ReadyCatalogStore : CatalogStore {
+    override val state = MutableStateFlow(CatalogState())
+    override suspend fun initialize() = Unit
+    override suspend fun commitRemote(bytes: ByteArray, validators: CatalogValidators, refreshedAt: Long) = Unit
+    override suspend fun recordNotModified(validators: CatalogValidators, refreshedAt: Long) = Unit
+    override suspend fun recordFailure(message: String, attemptedAt: Long) = Unit
 }
 
 private object EmptyContentRepository : ContentRepository {

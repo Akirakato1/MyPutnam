@@ -91,6 +91,9 @@ fun PutnamApp(
                 }
 
                 is ContentStartupState.Ready -> {
+                    LaunchedEffect(container) {
+                        container.startCatalogRefresh()
+                    }
                     val exportCoordinator = remember(container, context, state.repository) {
                         container.createExportCoordinator(context, state.repository)
                     }
