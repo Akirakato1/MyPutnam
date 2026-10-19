@@ -25,6 +25,7 @@ fun HomeScreen(
     onContinue: (ProblemKey) -> Unit,
     onRestoreRecent: (ProblemKey) -> Unit,
     onSelectProblem: () -> Unit,
+    onProblemLibrary: () -> Unit,
     onFreeNotebook: () -> Unit,
     onSettings: () -> Unit,
     modifier: Modifier = Modifier,
@@ -37,7 +38,7 @@ fun HomeScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        Text("Putnam Workbook", style = MaterialTheme.typography.displaySmall)
+        Text("MyPutnam", style = MaterialTheme.typography.displaySmall)
         Text(
             "Offline problems, hints, solutions, and scratch work",
             style = MaterialTheme.typography.titleMedium,
@@ -87,6 +88,15 @@ fun HomeScreen(
                     .testTag("home-free-notebook"),
             ) {
                 Text("Free Notebook")
+            }
+            Button(
+                onClick = onProblemLibrary,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(64.dp)
+                    .testTag("home-problem-library"),
+            ) {
+                Text("Problem Library")
             }
             OutlinedButton(
                 onClick = onSettings,

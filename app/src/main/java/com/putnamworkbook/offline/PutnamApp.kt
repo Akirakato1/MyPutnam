@@ -32,6 +32,7 @@ import com.putnamworkbook.offline.domain.model.AppSettings
 import com.putnamworkbook.offline.domain.model.AppTheme
 import com.putnamworkbook.offline.navigation.PutnamNavHost
 import com.putnamworkbook.offline.navigation.WorkspaceDependencies
+import com.putnamworkbook.offline.navigation.LibraryDependencies
 import com.putnamworkbook.offline.content.ui.ContentResourceResolverProvider
 
 @Composable
@@ -112,6 +113,14 @@ fun PutnamApp(
                                 appVersion = appVersion,
                                 contentVersion = state.contentVersion,
                                 freeWorkspaceRepository = container.freeWorkspaceRepository,
+                            ),
+                            libraryDependencies = LibraryDependencies(
+                                catalogStore = container.catalogStore,
+                                installedContentIndex = container.installedContentIndex,
+                                packageInstaller = container.packageInstaller,
+                                networkStatusMonitor = container.networkStatusMonitor,
+                                currentAppVersionCode = container.currentVersionCode,
+                                refreshCatalog = container::refreshCatalog,
                             ),
                             onWorkspaceActiveChanged = { workspaceActive = it },
                         )

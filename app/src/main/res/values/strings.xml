@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Putnam Workbook</string>
+    <string name="app_name">MyPutnam</string>
+    <string name="problem_library">Problem Library</string>
+    <string name="browse_problems">Browse Problems</string>
+    <string name="math_reference">Math Reference</string>
 </resources>

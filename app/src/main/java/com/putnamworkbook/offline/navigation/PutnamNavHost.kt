@@ -31,6 +31,10 @@ import com.putnamworkbook.offline.backup.BackupCoordinator
 import com.putnamworkbook.offline.data.content.ContentRepository
 import com.putnamworkbook.offline.data.user.ProgressRepository
 import com.putnamworkbook.offline.data.user.SettingsRepository
+import com.putnamworkbook.offline.data.library.catalog.CatalogStore
+import com.putnamworkbook.offline.data.library.index.InstalledContentIndex
+import com.putnamworkbook.offline.data.library.network.NetworkStatusMonitor
+import com.putnamworkbook.offline.data.library.packages.PackageInstaller
 import com.putnamworkbook.offline.domain.model.ProblemKey
 import com.putnamworkbook.offline.domain.model.ProblemSetKey
 import com.putnamworkbook.offline.feature.archive.ArchiveScreen
@@ -38,6 +42,8 @@ import com.putnamworkbook.offline.feature.archive.ArchiveViewModel
 import com.putnamworkbook.offline.feature.archive.ProblemListScreen
 import com.putnamworkbook.offline.feature.home.HomeScreen
 import com.putnamworkbook.offline.feature.home.HomeViewModel
+import com.putnamworkbook.offline.feature.library.ProblemLibraryScreen
+import com.putnamworkbook.offline.feature.library.ProblemLibraryViewModel
 import com.putnamworkbook.offline.feature.freenotebook.FreeWorkspaceLibraryScreen
 import com.putnamworkbook.offline.feature.freenotebook.FreeWorkspaceListViewModel
 import com.putnamworkbook.offline.feature.freenotebook.DurableSaveNotifier
@@ -81,6 +87,15 @@ data class WorkspaceDependencies(
     val freeWorkspaceRepository: FreeWorkspaceRepository,
 )
 
+data class LibraryDependencies(
+    val catalogStore: CatalogStore,
+    val installedContentIndex: InstalledContentIndex,
+    val packageInstaller: PackageInstaller,
+    val networkStatusMonitor: NetworkStatusMonitor,
+    val currentAppVersionCode: Int,
+    val refreshCatalog: suspend () -> Unit,
+)
+
 private class NotebookViewModelFactory(
     private val dependencies: WorkspaceDependencies,
     private val onDurableSave: (Long) -> Unit = {},
@@ -102,6 +117,7 @@ fun PutnamNavHost(
     contentRepository: ContentRepository,
     progressRepository: ProgressRepository,
     workspaceDependencies: WorkspaceDependencies? = null,
+    libraryDependencies: LibraryDependencies? = null,
     freeWorkspaceRepository: FreeWorkspaceRepository? = workspaceDependencies?.freeWorkspaceRepository,
     startDestination: String = AppRoute.Home.path,
     onWorkspaceActiveChanged: (Boolean) -> Unit = {},
@@ -135,6 +151,7 @@ fun PutnamNavHost(
                 onContinue = { key -> navController.navigate(AppRoute.Workspace(key).path) },
                 onRestoreRecent = { key -> navController.navigate(AppRoute.ProblemLibrary(key).path) },
                 onSelectProblem = { navController.navigate(AppRoute.Library.path) },
+                onProblemLibrary = { navController.navigate(AppRoute.ProblemLibrary().path) },
                 onFreeNotebook = { navController.navigate(AppRoute.FreeWorkspaces.path) },
                 onSettings = { navController.navigate(AppRoute.Settings.path) },
             )
@@ -221,10 +238,46 @@ fun PutnamNavHost(
             ),
         ) { entry ->
             val focus = entry.arguments?.getString("focus")?.let(Uri::decode)
-            Placeholder(
-                text = focus?.let { "Restore $it from Problem Library" } ?: "Problem Library",
-                tag = "problem-library-placeholder",
-            )
+            if (libraryDependencies == null) {
+                Placeholder(
+                    text = focus?.let { "Restore $it from Problem Library" } ?: "Problem Library",
+                    tag = "problem-library-placeholder",
+                )
+            } else {
+                val viewModel = remember(entry, libraryDependencies, focus) {
+                    ProblemLibraryViewModel(
+                        catalogStore = libraryDependencies.catalogStore,
+                        installedContentIndex = libraryDependencies.installedContentIndex,
+                        packageInstaller = libraryDependencies.packageInstaller,
+                        progressRepository = progressRepository,
+                        networkStatusMonitor = libraryDependencies.networkStatusMonitor,
+                        currentAppVersionCode = libraryDependencies.currentAppVersionCode,
+                        refreshCatalog = libraryDependencies.refreshCatalog,
+                        focusKey = focus,
+                    )
+                }
+                val state by viewModel.uiState.collectAsState()
+                DisposableEffect(viewModel) { onDispose { viewModel.close() } }
+                ProblemLibraryScreen(
+                    state = state,
+                    onBack = { navController.popBackStack() },
+                    onRefresh = viewModel::refresh,
+                    onSegmentChanged = viewModel::setContentSegment,
+                    onQueryChanged = viewModel::setQuery,
+                    onCollectionChanged = viewModel::setCollection,
+                    onSetChanged = viewModel::setSet,
+                    onTopicChanged = viewModel::setTopic,
+                    onCategoryChanged = viewModel::setReferenceCategory,
+                    onInstallFilterChanged = viewModel::setInstallFilter,
+                    onToggleSelection = viewModel::toggleSelection,
+                    onSelectAll = viewModel::selectAllVisible,
+                    onClearSelection = viewModel::clearSelection,
+                    onItemAction = viewModel::requestItemAction,
+                    onSelectedAction = viewModel::requestSelectionAction,
+                    onConfirmAction = viewModel::confirmAction,
+                    onDismissAction = viewModel::dismissAction,
+                )
+            }
         }
         composable(
             route = AppRoute.SET_PROBLEMS_PATTERN,

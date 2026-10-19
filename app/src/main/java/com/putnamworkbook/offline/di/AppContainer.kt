@@ -31,6 +31,8 @@ import com.putnamworkbook.offline.data.library.packages.PackageDownloader
 import com.putnamworkbook.offline.data.library.packages.PackageInstaller
 import com.putnamworkbook.offline.data.library.packages.PackageStore
 import com.putnamworkbook.offline.data.library.packages.QueuedPackageInstaller
+import com.putnamworkbook.offline.data.library.network.AndroidNetworkStatusMonitor
+import com.putnamworkbook.offline.data.library.network.NetworkStatusMonitor
 import com.putnamworkbook.offline.data.user.ProgressRepository
 import com.putnamworkbook.offline.data.user.RoomProgressRepository
 import com.putnamworkbook.offline.data.user.RoomSettingsRepository
@@ -71,7 +73,7 @@ class AppContainer(
     }
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val catalogRefreshStarted = AtomicBoolean(false)
-    private val currentVersionCode: Int by lazy {
+    val currentVersionCode: Int by lazy {
         applicationContext.packageManager
             .getPackageInfo(applicationContext.packageName, 0)
             .longVersionCode
@@ -117,6 +119,7 @@ class AppContainer(
             scope = applicationScope,
         )
     }
+    val networkStatusMonitor: NetworkStatusMonitor by lazy { AndroidNetworkStatusMonitor(applicationContext) }
     private val packageRoot: Path by lazy { applicationContext.filesDir.toPath().resolve("content-library/packages") }
     val contentResourceResolver by lazy {
         FileContentResourceResolver(
@@ -168,9 +171,13 @@ class AppContainer(
     fun startCatalogRefresh() {
         if (!catalogRefreshStarted.compareAndSet(false, true)) return
         applicationScope.launch {
-            catalogRefreshCoordinator.refresh()
-            catalogStore.state.value.catalog?.let { installedContentIndex.reconcileCatalog(it) }
+            refreshCatalog()
         }
+    }
+
+    suspend fun refreshCatalog() {
+        catalogRefreshCoordinator.refresh()
+        catalogStore.state.value.catalog?.let { installedContentIndex.reconcileCatalog(it) }
     }
 
     private fun readEmbeddedCatalog(): ByteArray = try {
