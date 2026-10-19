@@ -99,6 +99,18 @@ test('verifier rejects descriptor drift, outer limits, malformed ZIPs, and paylo
   await assert.rejects(verifyPackageArchive(corrupted, { expectedDescriptor: null }), /hash|CRC|invalid|integrity|package/i);
 });
 
+test('verifier rejects a noncanonical package envelope representation', async () => {
+  const result = await sampleArchive();
+  const entries = await readAllEntries(result.bytes);
+  const packageEntry = entries.find(({ path }) => path === 'package.json');
+  packageEntry.bytes = Buffer.from(JSON.stringify(JSON.parse(packageEntry.bytes.toString('utf8')), null, 2), 'utf8');
+  const noncanonical = await rawZip(entries);
+  await assert.rejects(
+    verifyPackageArchive(noncanonical, { expectedDescriptor: null }),
+    /package\.json.*canonical/i,
+  );
+});
+
 test('verifier rejects undeclared files, directories, symlinks, special entries, and entry limits', async () => {
   const result = await sampleArchive();
   const original = await readAllEntries(result.bytes);

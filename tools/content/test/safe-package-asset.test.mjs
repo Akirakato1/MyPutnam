@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import { PACKAGE_LIMITS } from '../src/package-contract.mjs';
-import { auditPackageAsset } from '../src/safe-package-asset.mjs';
+import { auditPackageAsset, auditPackageFragment } from '../src/safe-package-asset.mjs';
 
 const bytes = (value) => Buffer.from(value, 'utf8');
 const safeSvg = bytes('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><path id="shape_1" d="M1 1h8v8H1z" fill="#123456"/></svg>');
@@ -56,5 +56,37 @@ test('asset audit permits local fragment references but rejects escaping and enc
   for (const href of ['../other.svg#x', '//bad.test/x', 'javascript:alert(1)', 'https&#58;//bad.test/x']) {
     const svg = bytes(`<svg xmlns="http://www.w3.org/2000/svg"><use href="${href}"/></svg>`);
     assert.ok(auditPackageAsset({ path: 'assets/unsafe.svg', mediaType: 'image/svg+xml', bytes: svg }).length > 0, href);
+  }
+});
+
+test('fragment audit accepts renderer-shaped inert HTML with local assets', () => {
+  const fragment = bytes('<p><span class="katex"><span style="height:0.8em"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><path d="M0 0h10"/></svg></span></span></p><figure><img src="assets/figure.svg" alt="Figure"></figure>');
+  assert.deepEqual(auditPackageFragment({
+    path: 'documents/statement.fragment.html',
+    mediaType: 'text/html; charset=utf-8',
+    bytes: fragment,
+  }), []);
+});
+
+test('fragment audit rejects malformed UTF-8 and executable or nonlocal HTML', () => {
+  const unsafe = [
+    Buffer.from([0xc3, 0x28]),
+    bytes('<script>alert(1)</script>'),
+    bytes('<img src=https://bad.test/image.png>'),
+    bytes('<a href="javascript&#58;alert(1)">bad</a>'),
+    bytes('<a href=" javascript:alert(1)">bad</a>'),
+    bytes('<img srcset="https://bad.test/a.png 1x">'),
+    bytes('<svg><image xlink:href="https://bad.test/a.svg"/></svg>'),
+    bytes('<p onclick="alert(1)">bad</p>'),
+    bytes('<span style="background:url(https://bad.test/x)">bad</span>'),
+    bytes('<span style=background:url(https://bad.test/x)>bad</span>'),
+  ];
+  for (const value of unsafe) {
+    const errors = auditPackageFragment({
+      path: 'documents/statement.fragment.html',
+      mediaType: 'text/html; charset=utf-8',
+      bytes: value,
+    });
+    assert.ok(errors.length > 0, Buffer.from(value).toString('hex'));
   }
 });

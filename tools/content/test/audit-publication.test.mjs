@@ -103,6 +103,56 @@ test('independent audit detects envelope, source, revision, member, digest, and 
   }
 });
 
+test('independent audit rejects reference entries until reference package auditing is implemented', async (t) => {
+  const root = await buildFixture(t);
+  const catalog = await readCatalog(root);
+  catalog.referenceCategories = [{
+    id: 'number-theory', label: 'Number Theory', displayOrder: 1, aliases: ['NT'],
+  }];
+  catalog.references = [{
+    key: 'math-reference/number-theory/euler-totient',
+    categoryId: 'number-theory',
+    articleId: 'euler-totient',
+    title: "Euler's totient function",
+    displayOrder: 1,
+    aliases: ['phi'],
+    keywords: ['coprime'],
+    rights: {
+      sourceUrl: 'https://example.test/reference',
+      attribution: 'Original MyPutnam exposition.',
+      copyrightHolder: null,
+      licenseBasis: 'Original prose.',
+      redistributionStatus: 'cleared',
+    },
+    package: {
+      contentType: 'reference',
+      packageRevision: 'a'.repeat(64),
+      packageSchemaVersion: 1,
+      contentSchemaVersion: 1,
+      richDocumentVersion: 2,
+      path: `packages/reference/number-theory/euler-totient/${'b'.repeat(64)}.zip`,
+      compressedBytes: 100,
+      uncompressedBytes: 100,
+      sha256: 'b'.repeat(64),
+      minAppVersionCode: catalog.minAppVersionCode,
+    },
+  }];
+  await writeCatalog(root, catalog);
+
+  assert.ok((await auditPublication(root)).some((error) => /reference package auditing is not available/i.test(error)));
+});
+
+test('independent audit rejects a safe fragment that does not match its source document', async (t) => {
+  const root = await buildFixture(t);
+  await replaceProblemPackage(root, ({ options, members }) => {
+    const statement = members.find(({ path }) => path === 'documents/statement.fragment.html');
+    statement.bytes = Buffer.from('<p>Substituted statement.</p>\n', 'utf8');
+    return { ...options, members };
+  });
+
+  assert.ok((await auditPublication(root)).some((error) => /rendered fragment does not match source/i.test(error)));
+});
+
 async function buildFixture(t) {
   const parent = await mkdtemp(join(tmpdir(), 'myputnam-audit-publication-'));
   t.after(() => rm(parent, { recursive: true, force: true }));

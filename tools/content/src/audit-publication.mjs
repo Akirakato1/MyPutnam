@@ -5,7 +5,8 @@ import { fileURLToPath } from 'node:url';
 import { problemPackageDocuments } from './content-types.mjs';
 import { verifyPackageArchive } from './package-archive.mjs';
 import { validatePublicationCatalog } from './publication-catalog.mjs';
-import { auditPackageAsset } from './safe-package-asset.mjs';
+import { renderDocumentFragment } from './render-document.mjs';
+import { auditPackageAsset, auditPackageFragment } from './safe-package-asset.mjs';
 import { formatSchemaErrors, getProblemSchemaValidator } from './schema-registry.mjs';
 
 const validateProblemSchema = getProblemSchemaValidator();
@@ -67,10 +68,10 @@ export async function auditPublication(root, { requireClearedRights = false } = 
     auditProblemMembers(problem, verified.members, path, errors);
   }
   for (const [index, reference] of catalog.references.entries()) {
+    errors.push(`catalog.references[${index}]: reference package auditing is not available`);
     if (requireClearedRights && reference?.rights?.redistributionStatus !== 'cleared') {
       errors.push(`catalog.references[${index}].rights.redistributionStatus: public publication requires cleared rights`);
     }
-    if (reference?.package?.path) referencedPackages.add(`content/v1/${reference.package.path}`);
   }
 
   for (const file of files) {
@@ -105,23 +106,34 @@ function auditProblemMembers(catalogProblem, members, path, errors) {
   }
   if (canonicalJson(record.topics) !== canonicalJson(catalogProblem.topics)) errors.push(`${path}.topics: source record does not match catalog`);
 
-  const expectedDocuments = new Set(problemPackageDocuments(record).map(({ path: memberPath }) => memberPath));
+  const packageDocuments = problemPackageDocuments(record);
+  const expectedDocuments = new Set(packageDocuments.map(({ path: memberPath }) => memberPath));
   const expectedAssets = new Set();
-  for (const { document } of problemPackageDocuments(record)) {
+  for (const { document } of packageDocuments) {
     for (const block of document.blocks ?? []) if (block.type === 'figure') expectedAssets.add(`assets/${block.path}`);
   }
   const expected = new Set(['source/problem.json', ...expectedDocuments, ...expectedAssets]);
   for (const memberPath of members.keys()) if (!expected.has(memberPath)) errors.push(`${path}: undeclared logical member ${memberPath}`);
   for (const memberPath of expected) if (!members.has(memberPath)) errors.push(`${path}: missing logical member ${memberPath}`);
 
-  for (const memberPath of expectedDocuments) {
+  for (const { path: memberPath, document } of packageDocuments) {
     const bytes = members.get(memberPath);
     if (!bytes) continue;
-    const fragment = new TextDecoder('utf-8', { fatal: false }).decode(bytes);
-    if (/<\/?(?:html|head|body|script|style|base|frame|iframe|form|object|embed)\b/i.test(fragment)
-        || /\son[a-z][a-z\d:_-]*\s*=/i.test(fragment)
-        || /\s(?:src|href)="(?:https?:|data:|\/\/)/i.test(fragment)) {
-      errors.push(`${path}: unsafe generated fragment ${memberPath}`);
+    for (const error of auditPackageFragment({
+      path: memberPath,
+      mediaType: 'text/html; charset=utf-8',
+      bytes,
+    })) {
+      errors.push(`${path}.${memberPath}${error.slice(1)}`);
+    }
+    const projectedDocument = structuredClone(document);
+    for (const block of projectedDocument.blocks ?? []) {
+      if (block.type === 'figure') block.path = `assets/${block.path}`;
+    }
+    const expectedFragment = `${renderDocumentFragment(projectedDocument, { richDocumentVersion: 1 })}\n`;
+    const actualFragment = new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+    if (actualFragment !== expectedFragment) {
+      errors.push(`${path}: rendered fragment does not match source ${memberPath}`);
     }
   }
   for (const memberPath of expectedAssets) {

@@ -140,9 +140,11 @@ assets/<referenced problem-local files only>
 ```
 
 Fragments are not standalone pages. They contain no document shell, scripts,
-styles, forms, frames, objects, event handlers, or remote resources. Android
-and a future static web client provide their own fixed shell, CSP, styles, and
-KaTeX fonts around the same verified fragment bytes.
+style elements or unsafe style URLs, forms, frames, objects, event handlers,
+or remote resources. KaTeX's deterministic numeric inline layout styles and
+inline path-only SVG glyphs remain permitted. Android and a future static web
+client provide their own fixed shell, CSP, styles, and KaTeX fonts around the
+same verified fragment bytes.
 
 ## Publication validation and rights
 
@@ -158,6 +160,10 @@ The builder refuses a nonempty output root. Delete the ignored
 trust the builder: it reopens every ZIP, verifies hashes, sizes, revisions,
 keys, schemas, member closure, immutable filenames, local assets, and catalog
 closure, and rejects missing/orphaned packages or development provenance.
+Problem fragments are re-rendered from their canonical source and must match
+byte-for-byte. Reference schemas are reserved now, but reference compilation
+is not implemented in this foundation; both the builder and auditor fail
+closed if a publication attempts to include reference packages.
 
 Local review accepts honest `unresolved` or `review` rights states. Public
 publication must additionally pass:

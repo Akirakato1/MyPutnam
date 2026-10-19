@@ -12,7 +12,7 @@ import {
   validatePackageMemberPath,
   validatePackagePair,
 } from './package-contract.mjs';
-import { auditPackageAsset } from './safe-package-asset.mjs';
+import { auditPackageAsset, auditPackageFragment } from './safe-package-asset.mjs';
 
 const FIXED_MTIME = new Date('1980-01-01T00:00:00.000Z');
 const FILE_MODE = 0o100644;
@@ -118,7 +118,11 @@ export async function verifyPackageArchive(bytes, { expectedDescriptor = null, l
     if (!packageEntry) throw new Error('Package is missing package.json');
     let envelope;
     try {
-      envelope = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(packageEntry.payload));
+      const envelopeSource = new TextDecoder('utf-8', { fatal: true }).decode(packageEntry.payload);
+      envelope = JSON.parse(envelopeSource);
+      if (envelopeSource !== `${canonicalJson(envelope)}\n`) {
+        throw new Error('package.json is not canonical JSON');
+      }
     } catch (error) {
       throw new Error(`Invalid package.json: ${error.message}`, { cause: error });
     }
@@ -191,7 +195,8 @@ function assertMemberMedia(member) {
     return;
   }
   if (member.path.startsWith('documents/') && member.path.endsWith('.fragment.html')) {
-    if (member.mediaType !== 'text/html; charset=utf-8') throw new Error(`${member.path}: expected text/html; charset=utf-8`);
+    const errors = auditPackageFragment(member);
+    if (errors.length) throw new Error(`${member.path}: unsafe package fragment:\n${formatErrors(errors)}`);
     return;
   }
   if (member.path.startsWith('assets/')) {

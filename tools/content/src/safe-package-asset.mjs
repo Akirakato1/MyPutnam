@@ -30,6 +30,56 @@ export function auditPackageAsset({ path, mediaType, bytes }) {
   return uniqueSorted(errors);
 }
 
+export function auditPackageFragment({ path, mediaType, bytes }) {
+  const errors = [];
+  if (!isSafeLocalPath(path) || !path.startsWith('documents/') || !path.endsWith('.fragment.html')) {
+    errors.push('$.path: fragment path must be normalized beneath documents/ and end with .fragment.html');
+  }
+  if (mediaType !== 'text/html; charset=utf-8') {
+    errors.push('$.mediaType: fragment must use text/html; charset=utf-8');
+  }
+  if (!(bytes instanceof Uint8Array)) return uniqueSorted([...errors, '$.bytes: expected byte array']);
+  if (bytes.byteLength > PACKAGE_LIMITS.maxEntryBytes) errors.push('$.bytes: fragment exceeds maximum entry bytes');
+
+  let source;
+  try {
+    source = new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+  } catch {
+    return uniqueSorted([...errors, '$.bytes: fragment must be valid UTF-8']);
+  }
+  if (/<\/?(?:html|head|body|script|style|base|link|meta|frame|iframe|form|object|embed|audio|video|foreignObject)\b/i.test(source)) {
+    errors.push('$.bytes: fragment contains a forbidden active or shell element');
+  }
+  if (/\son[a-z][a-z\d:_-]*\s*=/i.test(source)) errors.push('$.bytes: fragment event handlers are forbidden');
+  if (/\ssrcdoc\s*=/i.test(source)) errors.push('$.bytes: fragment srcdoc attributes are forbidden');
+  if (/\s(?:srcset|poster|action|formaction|data|xlink:href)\s*=/i.test(source)) {
+    errors.push('$.bytes: fragment contains an unsupported URL-bearing attribute');
+  }
+
+  const uriAttributes = [...source.matchAll(/\s(?:src|href)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+))/gi)];
+  const uriAttributeCount = (source.match(/\s(?:src|href)\s*=/gi) ?? []).length;
+  if (uriAttributes.length !== uriAttributeCount) errors.push('$.bytes: fragment contains a malformed URL attribute');
+  for (const match of uriAttributes) {
+    const value = match[1] ?? match[2] ?? match[3] ?? '';
+    if (value !== value.trim() || value.includes('&')
+        || (!isSafeLocalPath(value) && !/^#[A-Za-z_][A-Za-z0-9_.:-]*$/.test(value))) {
+      errors.push('$.bytes: fragment contains a nonlocal or encoded URL');
+    }
+  }
+  const styleAttributes = [...source.matchAll(/\sstyle\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+))/gi)];
+  const styleAttributeCount = (source.match(/\sstyle\s*=/gi) ?? []).length;
+  if (styleAttributes.length !== styleAttributeCount || styleAttributes.some((match) => match[3] !== undefined)) {
+    errors.push('$.bytes: fragment contains a malformed style attribute');
+  }
+  for (const match of styleAttributes) {
+    const value = match[1] ?? match[2] ?? match[3] ?? '';
+    if (/(?:url\s*\(|expression\s*\(|@import\b|behavior\s*:|-moz-binding\b)/i.test(value)) {
+      errors.push('$.bytes: fragment contains an unsafe style value');
+    }
+  }
+  return uniqueSorted(errors);
+}
+
 function auditSvg(bytes) {
   let source;
   try {
