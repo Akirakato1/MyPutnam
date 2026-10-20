@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "algebra-inequalities",
+  "articleId": "polynomial-roots-vieta",
+  "title": "Polynomial division, roots, and Vieta's formulas",
+  "displayOrder": 3,
+  "aliases": ["Vieta's formulas", "factor theorem", "remainder theorem", "polynomial division"],
+  "keywords": ["polynomial", "roots", "zeros", "coefficients", "elementary symmetric sums"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "P(x)=a_nx^n+a_{n-1}x^{n-1}+\\cdots+a_0" }, { "type": "text", "text": " has degree n when " }, { "type": "inlineMath", "tex": "a_n\\ne0" }, { "type": "text", "text": ". Its roots are values r for which " }, { "type": "inlineMath", "tex": "P(r)=0" }, { "type": "text", "text": "." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Division by a nonzero polynomial B writes A uniquely as a quotient times B plus a remainder of smaller degree. A root has multiplicity m when the corresponding linear factor occurs exactly m times." }] }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "displayMath", "tex": "A(x)=B(x)Q(x)+R(x),\\qquad R=0\\text{ or }\\deg R<\\deg B" },
+      { "type": "displayMath", "tex": "P(x)=(x-r)Q(x)+P(r)" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Thus r is a root exactly when " }, { "type": "inlineMath", "tex": "x-r" }, { "type": "text", "text": " divides P. If the roots " }, { "type": "inlineMath", "tex": "r_1,\\ldots,r_n" }, { "type": "text", "text": " are listed with multiplicity over a splitting field, then" }] },
+      { "type": "displayMath", "tex": "P(x)=a_n\\prod_{i=1}^{n}(x-r_i)" },
+      { "type": "displayMath", "tex": "\\sum_i r_i=-\\frac{a_{n-1}}{a_n},\\qquad \\sum_{i<j}r_ir_j=\\frac{a_{n-2}}{a_n},\\qquad \\prod_i r_i=(-1)^n\\frac{a_0}{a_n}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "More generally, the kth elementary symmetric sum of the roots equals " }, { "type": "inlineMath", "tex": "(-1)^k a_{n-k}/a_n" }, { "type": "text", "text": "." }] }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Polynomial division requires coefficients in a field, or more generally a divisor whose leading coefficient is invertible." }],
+        [{ "type": "text", "text": "Vieta's formulas use all n roots counted with multiplicity in a field where P splits; complex roots may be needed even when the coefficients are real." }],
+        [{ "type": "text", "text": "The leading coefficient must be retained unless P is monic." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Recover coefficients from roots",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "A monic cubic with roots 2, 3, and 4 has" }] },
+          { "type": "displayMath", "tex": "P(x)=(x-2)(x-3)(x-4)=x^3-9x^2+26x-24" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "The coefficients match the alternating symmetric sums: " }, { "type": "inlineMath", "tex": "2+3+4=9" }, { "type": "text", "text": ", " }, { "type": "inlineMath", "tex": "2\\cdot3+2\\cdot4+3\\cdot4=26" }, { "type": "text", "text": ", and " }, { "type": "inlineMath", "tex": "2\\cdot3\\cdot4=24" }, { "type": "text", "text": "." }] }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "A degree-n polynomial has n complex roots only when multiplicities are counted; it need not have n distinct real roots." }],
+        [{ "type": "text", "text": "Vieta's signs alternate. For a quadratic " }, { "type": "inlineMath", "tex": "ax^2+bx+c" }, { "type": "text", "text": ", the sum is " }, { "type": "inlineMath", "tex": "-b/a" }, { "type": "text", "text": " and the product is " }, { "type": "inlineMath", "tex": "c/a" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "The rational-root test supplies candidates, not a guarantee that any candidate is a root." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/algebra-inequalities/algebraic-identities", "math-reference/algebra-inequalities/binomial-multinomial-theorems", "math-reference/complex-numbers/complex-roots"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "OpenStax Algebra and Trigonometry 2e, Polynomial and Rational Functions key concepts", "url": "https://openstax.org/books/algebra-and-trigonometry-2e/pages/5-key-concepts" },
+    { "label": "MIT OpenCourseWare, Principles of Digital Communication II notes", "url": "https://ocw.mit.edu/courses/6-451-principles-of-digital-communication-ii-spring-2005/resources/mit6_451s05_fulllecnotes/" }
+  ],
+  "rights": {
+    "sourceUrl": "https://openstax.org/books/algebra-and-trigonometry-2e/pages/5-key-concepts",
+    "attribution": "Original MyPutnam exposition informed by OpenStax and MIT OpenCourseWare references.",
+    "copyrightHolder": null,
+    "licenseBasis": "Mathematical facts restated in original prose; source text is not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

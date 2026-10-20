@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "algebra-inequalities",
+  "articleId": "am-gm-and-power-means",
+  "title": "AM-GM and power means",
+  "displayOrder": 5,
+  "aliases": ["AM-GM", "arithmetic-geometric mean inequality", "power mean", "generalized mean inequality"],
+  "keywords": ["inequalities", "means", "weighted AM-GM", "RMS", "equality conditions"],
+  "notation": {
+    "blocks": [
+      { "type": "displayMath", "tex": "A=\\frac{x_1+\\cdots+x_n}{n},\\qquad G=(x_1\\cdots x_n)^{1/n}" },
+      { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "M_r" }, { "type": "text", "text": " denotes the weighted power mean of order r with nonnegative weights " }, { "type": "inlineMath", "tex": "w_i" }, { "type": "text", "text": " summing to one." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "displayMath", "tex": "M_r(x;w)=\\left(\\sum_{i=1}^{n}w_i x_i^r\\right)^{1/r}\\quad(r\\ne0),\\qquad M_0(x;w)=\\prod_{i=1}^{n}x_i^{w_i}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "The order-zero value is the continuous limiting case and equals the weighted geometric mean." }] }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "displayMath", "tex": "\\frac{x_1+\\cdots+x_n}{n}\\ge (x_1\\cdots x_n)^{1/n}" },
+      { "type": "displayMath", "tex": "\\sum_{i=1}^{n}w_i x_i\\ge\\prod_{i=1}^{n}x_i^{w_i}" },
+      { "type": "displayMath", "tex": "r<s\\implies M_r(x;w)\\le M_s(x;w)" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Useful special cases include harmonic mean at order -1, geometric mean at order 0, arithmetic mean at order 1, and root-mean-square at order 2." }] }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "AM-GM allows nonnegative inputs. If all weights are positive, equality holds exactly when all inputs are equal; zero weights simply omit their inputs." }],
+        [{ "type": "text", "text": "Power means of order zero or negative order require positive inputs. For positive orders, nonnegative inputs are allowed." }],
+        [{ "type": "text", "text": "Weights are nonnegative and sum to one. Unnormalized positive weights may be divided by their total first." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Minimize a reciprocal expression",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "x>0" }, { "type": "text", "text": ", apply two-term AM-GM to x and " }, { "type": "inlineMath", "tex": "9/x" }, { "type": "text", "text": ":" }] },
+          { "type": "displayMath", "tex": "x+\\frac{9}{x}\\ge2\\sqrt{x\\cdot\\frac{9}{x}}=6" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Equality requires " }, { "type": "inlineMath", "tex": "x=9/x" }, { "type": "text", "text": ", hence x = 3. The lower bound is therefore attained and is the minimum." }] }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "A lower bound is not automatically sharp; solve and check the equality conditions." }],
+        [{ "type": "text", "text": "AM-GM cannot be applied directly to arbitrary negative terms." }],
+        [{ "type": "text", "text": "When comparing power means, keep the inputs and normalized weights fixed while changing only the order." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/algebra-inequalities/cauchy-schwarz-holder-minkowski", "math-reference/algebra-inequalities/jensen-convexity"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "NIST Digital Library of Mathematical Functions, Inequalities", "url": "https://dlmf.nist.gov/1.7" },
+    { "label": "CMU Putnam Seminar notes, Inequalities", "url": "https://www.math.cmu.edu/~ploh/docs/math/2011-295/07-inequalities.pdf" }
+  ],
+  "rights": {
+    "sourceUrl": "https://dlmf.nist.gov/1.7",
+    "attribution": "Original MyPutnam exposition informed by NIST DLMF and CMU mathematics notes.",
+    "copyrightHolder": null,
+    "licenseBasis": "Mathematical facts restated in original prose; source text is not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "algebra-inequalities",
+  "articleId": "exponent-logarithm-laws",
+  "title": "Exponent and logarithm laws",
+  "displayOrder": 2,
+  "aliases": ["exponent laws", "log laws", "laws of logarithms", "change of base"],
+  "keywords": ["powers", "radicals", "logarithms", "exponential equations", "domain"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "a^x" }, { "type": "text", "text": " denotes exponentiation. For real logarithms, " }, { "type": "inlineMath", "tex": "\\log_b x" }, { "type": "text", "text": " is the unique y satisfying " }, { "type": "inlineMath", "tex": "b^y=x" }, { "type": "text", "text": "." }] },
+      { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "\\ln x" }, { "type": "text", "text": " means " }, { "type": "inlineMath", "tex": "\\log_e x" }, { "type": "text", "text": "." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Integer powers are repeated products, negative powers are reciprocals, and a positive real base permits real powers consistently. A logarithm is the inverse function of exponentiation with the same base." }] }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "displayMath", "tex": "a^r a^s=a^{r+s},\\qquad \\frac{a^r}{a^s}=a^{r-s},\\qquad (a^r)^s=a^{rs}" },
+      { "type": "displayMath", "tex": "(ab)^r=a^r b^r,\\qquad \\left(\\frac{a}{b}\\right)^r=\\frac{a^r}{b^r},\\qquad a^{-r}=\\frac{1}{a^r}" },
+      { "type": "displayMath", "tex": "\\log_b(xy)=\\log_b x+\\log_b y,\\qquad \\log_b\\left(\\frac{x}{y}\\right)=\\log_b x-\\log_b y" },
+      { "type": "displayMath", "tex": "\\log_b(x^r)=r\\log_b x,\\qquad \\log_b x=\\frac{\\log_c x}{\\log_c b}" },
+      { "type": "displayMath", "tex": "b^{\\log_b x}=x,\\qquad \\log_b(b^x)=x" }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "For real logarithms, " }, { "type": "inlineMath", "tex": "b>0" }, { "type": "text", "text": ", " }, { "type": "inlineMath", "tex": "b\\ne1" }, { "type": "text", "text": ", and every logarithm argument is positive." }],
+        [{ "type": "text", "text": "The change-of-base denominator must be nonzero, so the auxiliary base c also satisfies " }, { "type": "inlineMath", "tex": "c>0" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "c\\ne1" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "For arbitrary real exponents, the simple product and quotient laws are safest with positive bases. Rational exponents of negative numbers require parity checks and do not obey every real-power manipulation blindly." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Solve an exponential equation",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Solve " }, { "type": "inlineMath", "tex": "3^{2x-1}=7" }, { "type": "text", "text": " by taking logarithms:" }] },
+          { "type": "displayMath", "tex": "(2x-1)\\ln 3=\\ln 7,\\qquad x=\\frac{1}{2}\\left(1+\\frac{\\ln 7}{\\ln 3}\\right)" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Both original sides are positive, so taking the natural logarithm preserves equivalence." }] }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "inlineMath", "tex": "\\log_b(x+y)" }, { "type": "text", "text": " does not split into a sum of logarithms." }],
+        [{ "type": "text", "text": "Over the reals, " }, { "type": "inlineMath", "tex": "\\log_b(x^2)=2\\log_b|x|" }, { "type": "text", "text": " for nonzero x; writing " }, { "type": "inlineMath", "tex": "2\\log_b x" }, { "type": "text", "text": " silently excludes negative x." }],
+        [{ "type": "text", "text": "The notation " }, { "type": "inlineMath", "tex": "a^0=1" }, { "type": "text", "text": " presumes " }, { "type": "inlineMath", "tex": "a\\ne0" }, { "type": "text", "text": "; " }, { "type": "inlineMath", "tex": "0^0" }, { "type": "text", "text": " is not assigned this value by the exponent laws." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/algebra-inequalities/algebraic-identities", "math-reference/calculus/limits-continuity"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "OpenStax Algebra and Trigonometry 2e, Exponents and Scientific Notation", "url": "https://openstax.org/books/algebra-and-trigonometry-2e/pages/1-2-exponents-and-scientific-notation" },
+    { "label": "OpenStax Algebra and Trigonometry 2e, Logarithmic Properties", "url": "https://openstax.org/books/algebra-and-trigonometry-2e/pages/6-5-logarithmic-properties" }
+  ],
+  "rights": {
+    "sourceUrl": "https://openstax.org/books/algebra-and-trigonometry-2e/pages/6-5-logarithmic-properties",
+    "attribution": "Original MyPutnam exposition informed by OpenStax Algebra and Trigonometry 2e.",
+    "copyrightHolder": "OpenStax",
+    "licenseBasis": "Mathematical facts restated in original prose; source text is not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

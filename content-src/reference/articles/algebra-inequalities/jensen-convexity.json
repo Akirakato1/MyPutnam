@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "algebra-inequalities",
+  "articleId": "jensen-convexity",
+  "title": "Convexity and Jensen's inequality",
+  "displayOrder": 7,
+  "aliases": ["Jensen's inequality", "convex function", "concavity", "weighted Jensen"],
+  "keywords": ["inequalities", "convexity", "secant line", "second derivative", "equality conditions"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "I" }, { "type": "text", "text": " is an interval, f is real-valued on I, and weights " }, { "type": "inlineMath", "tex": "w_i" }, { "type": "text", "text": " are nonnegative with total one." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "A function f is convex on I when every chord lies on or above its graph:" }] },
+      { "type": "displayMath", "tex": "f(tx+(1-t)y)\\le tf(x)+(1-t)f(y)\\qquad(0\\le t\\le1)" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "It is strictly convex when the inequality is strict for distinct x and y and an interior weight. A function is concave when its negative is convex." }] }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "displayMath", "tex": "f\\left(\\sum_{i=1}^{n}w_i x_i\\right)\\le\\sum_{i=1}^{n}w_i f(x_i)" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "This is weighted Jensen. For concave f the inequality reverses. If f is twice differentiable on the interior of I, then " }, { "type": "inlineMath", "tex": "f''\\ge0" }, { "type": "text", "text": " is a sufficient condition for convexity; " }, { "type": "inlineMath", "tex": "f''>0" }, { "type": "text", "text": " gives strict convexity." }] },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "A differentiable convex function also lies above each tangent line:" }] },
+      { "type": "displayMath", "tex": "f(y)\\ge f(x)+f'(x)(y-x)" }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "All inputs and their weighted average must lie in the same interval on which f is convex or concave." }],
+        [{ "type": "text", "text": "Weights are nonnegative and sum to one; arbitrary coefficients do not define a convex combination." }],
+        [{ "type": "text", "text": "For strictly convex f and positive weights, equality holds exactly when all inputs are equal. With non-strict convexity, f may be affine on the span of the inputs." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Derive weighted AM-GM",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "The logarithm is concave on the positive reals because " }, { "type": "inlineMath", "tex": "(\\ln x)''=-1/x^2<0" }, { "type": "text", "text": ". Jensen therefore gives" }] },
+          { "type": "displayMath", "tex": "\\ln\\left(\\sum_i w_i x_i\\right)\\ge\\sum_i w_i\\ln x_i=\\ln\\left(\\prod_i x_i^{w_i}\\right)" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Exponentiation is increasing, so " }, { "type": "inlineMath", "tex": "\\sum_i w_i x_i\\ge\\prod_i x_i^{w_i}" }, { "type": "text", "text": ". Positive weights give equality only when all positive inputs are equal." }] }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Check whether f is convex or concave before choosing the direction of Jensen's inequality." }],
+        [{ "type": "text", "text": "A sign change in the second derivative may mean the chosen interval is too large for a single Jensen step." }],
+        [{ "type": "text", "text": "Strict convexity is what supports the usual all-inputs-equal equality claim; ordinary convexity alone may have additional equality cases." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/algebra-inequalities/am-gm-and-power-means", "math-reference/algebra-inequalities/cauchy-schwarz-holder-minkowski", "math-reference/calculus/extrema-convexity"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "NIST Digital Library of Mathematical Functions, Jensen's inequality", "url": "https://dlmf.nist.gov/1.7" },
+    { "label": "MIT OpenCourseWare 18.125, Convex Functions and Jensen, Holder, Minkowski", "url": "https://ocw.mit.edu/courses/18-125-measure-and-integration-fall-2003/resources/18125_lec14/" }
+  ],
+  "rights": {
+    "sourceUrl": "https://dlmf.nist.gov/1.7",
+    "attribution": "Original MyPutnam exposition informed by NIST DLMF and MIT OpenCourseWare references.",
+    "copyrightHolder": null,
+    "licenseBasis": "Mathematical facts restated in original prose; source text is not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

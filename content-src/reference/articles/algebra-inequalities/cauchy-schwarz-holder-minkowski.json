@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "algebra-inequalities",
+  "articleId": "cauchy-schwarz-holder-minkowski",
+  "title": "Cauchy-Schwarz, Holder, and Minkowski inequalities",
+  "displayOrder": 6,
+  "aliases": ["Cauchy-Schwarz", "Holder inequality", "Hölder inequality", "Minkowski inequality", "triangle inequality for p-norms"],
+  "keywords": ["inequalities", "inner product", "conjugate exponents", "p-norm", "Titu Andreescu lemma"],
+  "notation": {
+    "blocks": [
+      { "type": "displayMath", "tex": "\\|x\\|_p=\\left(\\sum_{i=1}^{n}|x_i|^p\\right)^{1/p}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Exponents p and q are conjugate when " }, { "type": "inlineMath", "tex": "1/p+1/q=1" }, { "type": "text", "text": "." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Cauchy-Schwarz bounds an inner product by the product of Euclidean lengths. Holder extends that pairing bound to conjugate p- and q-norms. Minkowski is the triangle inequality for a p-norm." }] }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "displayMath", "tex": "\\left|\\sum_{i=1}^{n}a_i b_i\\right|^2\\le\\left(\\sum_{i=1}^{n}|a_i|^2\\right)\\left(\\sum_{i=1}^{n}|b_i|^2\\right)" },
+      { "type": "displayMath", "tex": "\\sum_{i=1}^{n}|a_i b_i|\\le\\left(\\sum_{i=1}^{n}|a_i|^p\\right)^{1/p}\\left(\\sum_{i=1}^{n}|b_i|^q\\right)^{1/q}" },
+      { "type": "displayMath", "tex": "\\left(\\sum_{i=1}^{n}|a_i+b_i|^p\\right)^{1/p}\\le\\left(\\sum_{i=1}^{n}|a_i|^p\\right)^{1/p}+\\left(\\sum_{i=1}^{n}|b_i|^p\\right)^{1/p}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "The Engel form of Cauchy-Schwarz is often convenient when denominators are positive:" }] },
+      { "type": "displayMath", "tex": "\\sum_{i=1}^{n}\\frac{a_i^2}{x_i}\\ge\\frac{(a_1+\\cdots+a_n)^2}{x_1+\\cdots+x_n}" }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Holder uses " }, { "type": "inlineMath", "tex": "p,q>1" }, { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "1/p+1/q=1" }, { "type": "text", "text": ". Minkowski holds for " }, { "type": "inlineMath", "tex": "p\\ge1" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "In real Cauchy-Schwarz, equality holds when the two vectors are linearly dependent, including a zero vector. For complex sequences, use the conjugate inner product." }],
+        [{ "type": "text", "text": "The Engel form requires every " }, { "type": "inlineMath", "tex": "x_i>0" }, { "type": "text", "text": "." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "A sharp reciprocal-sum bound",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "For positive x, y, z with " }, { "type": "inlineMath", "tex": "x+y+z=6" }, { "type": "text", "text": ", Engel form gives" }] },
+          { "type": "displayMath", "tex": "\\frac{1}{x}+\\frac{4}{y}+\\frac{9}{z}\\ge\\frac{(1+2+3)^2}{x+y+z}=6" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Equality requires the vectors in the underlying Cauchy-Schwarz step to be proportional, which here gives " }, { "type": "inlineMath", "tex": "x:y:z=1:2:3" }, { "type": "text", "text": ". With sum 6 this is x = 1, y = 2, z = 3, so the bound is attained." }] }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Do not omit absolute values in Holder or Minkowski unless all terms have a known sign." }],
+        [{ "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "0<p<1" }, { "type": "text", "text": ", the displayed p-expression is not a norm and Minkowski's direction does not apply." }],
+        [{ "type": "text", "text": "After obtaining a bound, translate linear-dependence or proportionality back to the original variables before claiming equality." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/algebra-inequalities/am-gm-and-power-means", "math-reference/algebra-inequalities/jensen-convexity", "math-reference/linear-algebra/inner-products-orthogonality"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "NIST Digital Library of Mathematical Functions, Inequalities", "url": "https://dlmf.nist.gov/1.7" },
+    { "label": "MIT OpenCourseWare 18.125, Convex Functions and Jensen, Holder, Minkowski", "url": "https://ocw.mit.edu/courses/18-125-measure-and-integration-fall-2003/resources/18125_lec14/" }
+  ],
+  "rights": {
+    "sourceUrl": "https://ocw.mit.edu/courses/18-125-measure-and-integration-fall-2003/resources/18125_lec14/",
+    "attribution": "Original MyPutnam exposition informed by NIST DLMF and MIT OpenCourseWare references.",
+    "copyrightHolder": null,
+    "licenseBasis": "Mathematical facts restated in original prose; source text is not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

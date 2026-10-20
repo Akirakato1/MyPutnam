@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "algebra-inequalities",
+  "articleId": "rearrangement-chebyshev",
+  "title": "Rearrangement and Chebyshev sum inequalities",
+  "displayOrder": 8,
+  "aliases": ["rearrangement inequality", "Chebyshev sum inequality", "Chebyshev's sum inequality", "similarly sorted sequences"],
+  "keywords": ["inequalities", "permutations", "ordered sequences", "oppositely sorted", "pairing"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "a_1\\le\\cdots\\le a_n" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "b_1\\le\\cdots\\le b_n" }, { "type": "text", "text": " are real sequences in increasing order. A permutation of the second sequence is denoted by " }, { "type": "inlineMath", "tex": "b_{\\sigma(i)}" }, { "type": "text", "text": "." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Two sequences are similarly sorted when both run in the same monotone direction, and oppositely sorted when one increases while the other decreases." }] }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "The rearrangement inequality says the same-order pairing maximizes the dot product and the reverse-order pairing minimizes it:" }] },
+      { "type": "displayMath", "tex": "\\sum_{i=1}^{n}a_i b_{n+1-i}\\le\\sum_{i=1}^{n}a_i b_{\\sigma(i)}\\le\\sum_{i=1}^{n}a_i b_i" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "For similarly sorted real sequences, Chebyshev's sum inequality states" }] },
+      { "type": "displayMath", "tex": "\\frac{1}{n}\\sum_{i=1}^{n}a_i b_i\\ge\\left(\\frac{1}{n}\\sum_{i=1}^{n}a_i\\right)\\left(\\frac{1}{n}\\sum_{i=1}^{n}b_i\\right)" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "For oppositely sorted sequences, the Chebyshev inequality reverses." }] }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "The two finite sequences have the same length and must be ordered before the displayed forms are used." }],
+        [{ "type": "text", "text": "No positivity assumption is needed for the standard real rearrangement or Chebyshev sum inequalities; the ordering assumptions do the work." }],
+        [{ "type": "text", "text": "Repeated values can create several maximizing or minimizing permutations. With both sequences strictly increasing, the extremal pairings are unique." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Choose the best pairing",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Pair the increasing sequences 1, 4, 7 and 2, 3, 5. Rearrangement gives the maximum and minimum directly:" }] },
+          { "type": "displayMath", "tex": "1\\cdot2+4\\cdot3+7\\cdot5=49,\\qquad 1\\cdot5+4\\cdot3+7\\cdot2=31" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Every other pairing has sum between 31 and 49. Chebyshev also checks the same-order sum:" }] },
+          { "type": "displayMath", "tex": "\\frac{49}{3}\\ge\\left(\\frac{12}{3}\\right)\\left(\\frac{10}{3}\\right)=\\frac{40}{3}" }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Pairing the largest with the largest maximizes the sum only after both sequences are sorted in the same direction." }],
+        [{ "type": "text", "text": "Chebyshev's sum inequality is unrelated to the probability inequality with the same name." }],
+        [{ "type": "text", "text": "If one sequence is reversed, reverse the inequality direction rather than reusing the similarly sorted formula." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/algebra-inequalities/am-gm-and-power-means", "math-reference/combinatorics-generating-functions/permutations-combinations"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "CMU Putnam Seminar notes, Inequalities", "url": "https://www.math.cmu.edu/~ploh/docs/math/2011-295/07-inequalities.pdf" },
+    { "label": "CMU Olympiad inequalities solutions", "url": "https://www.math.cmu.edu/users/math/lohp/docs/math/2-inequalities-solns.pdf" }
+  ],
+  "rights": {
+    "sourceUrl": "https://www.math.cmu.edu/~ploh/docs/math/2011-295/07-inequalities.pdf",
+    "attribution": "Original MyPutnam exposition informed by CMU mathematics notes.",
+    "copyrightHolder": null,
+    "licenseBasis": "Mathematical facts restated in original prose; source text is not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

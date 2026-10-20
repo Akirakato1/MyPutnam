@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "algebra-inequalities",
+  "articleId": "algebraic-identities",
+  "title": "Algebraic identities and safe simplification",
+  "displayOrder": 1,
+  "aliases": ["difference of squares", "sum and difference of cubes", "rationalizing", "algebra identities"],
+  "keywords": ["factoring", "fractions", "radicals", "conjugate", "domain restrictions"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "a,b,x,y" }, { "type": "text", "text": " denote real or complex numbers unless a narrower domain is stated. A displayed quotient is used only where its denominator is nonzero." }] },
+      { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "\\sqrt{x}" }, { "type": "text", "text": " denotes the nonnegative principal square root when x is real and nonnegative." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "An identity is an equality valid for every value in the common domain of its two sides. Factoring reads a product expansion backward; rationalizing multiplies by a useful form of one, often a conjugate." }] },
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "The conjugate of " }, { "type": "inlineMath", "tex": "u+v" }, { "type": "text", "text": " is " }, { "type": "inlineMath", "tex": "u-v" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Cancelling means removing a common nonzero factor, not deleting equal-looking terms across addition." }]
+      ] }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "displayMath", "tex": "(x+y)^2=x^2+2xy+y^2,\\qquad (x-y)^2=x^2-2xy+y^2" },
+      { "type": "displayMath", "tex": "x^2-y^2=(x-y)(x+y)" },
+      { "type": "displayMath", "tex": "x^3-y^3=(x-y)(x^2+xy+y^2),\\qquad x^3+y^3=(x+y)(x^2-xy+y^2)" },
+      { "type": "displayMath", "tex": "\\frac{A}{B}+\\frac{C}{D}=\\frac{AD+BC}{BD},\\qquad \\frac{A/B}{C/D}=\\frac{AD}{BC}" },
+      { "type": "displayMath", "tex": "(\\sqrt{u}+\\sqrt{v})(\\sqrt{u}-\\sqrt{v})=u-v" }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "The fraction identities require " }, { "type": "inlineMath", "tex": "B\\ne0" }, { "type": "text", "text": ", " }, { "type": "inlineMath", "tex": "D\\ne0" }, { "type": "text", "text": ", and for the complex fraction also " }, { "type": "inlineMath", "tex": "C\\ne0" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Over the reals, every square-root radicand must be nonnegative. Also, " }, { "type": "inlineMath", "tex": "\\sqrt{x^2}=|x|" }, { "type": "text", "text": ", not x without a sign assumption." }],
+        [{ "type": "text", "text": "An equation obtained after multiplying by an expression that might be zero must be checked against the original domain." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Rationalize without changing the domain",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "x>0" }, { "type": "text", "text": ", multiply numerator and denominator by the conjugate:" }] },
+          { "type": "displayMath", "tex": "\\frac{1}{\\sqrt{x}+1}=\\frac{\\sqrt{x}-1}{(\\sqrt{x}+1)(\\sqrt{x}-1)}=\\frac{\\sqrt{x}-1}{x-1}" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "The last form is valid only when " }, { "type": "inlineMath", "tex": "x\\ne1" }, { "type": "text", "text": ". At x = 1 the original expression equals one half, while the final displayed quotient is undefined; rationalization did not license losing that case." }] }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "inlineMath", "tex": "\\sqrt{u+v}" }, { "type": "text", "text": " is generally not " }, { "type": "inlineMath", "tex": "\\sqrt{u}+\\sqrt{v}" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "From " }, { "type": "inlineMath", "tex": "ab=ac" }, { "type": "text", "text": " one may conclude " }, { "type": "inlineMath", "tex": "b=c" }, { "type": "text", "text": " only if " }, { "type": "inlineMath", "tex": "a\\ne0" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Cancelling across a sum, such as treating " }, { "type": "inlineMath", "tex": "(x+1)/x" }, { "type": "text", "text": " as 1, is invalid because x is not a factor of the numerator." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/algebra-inequalities/exponent-logarithm-laws", "math-reference/algebra-inequalities/polynomial-roots-vieta"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "OpenStax Algebra and Trigonometry 2e, Chapter 1 key concepts", "url": "https://openstax.org/books/algebra-and-trigonometry-2e/pages/1-key-concepts" }
+  ],
+  "rights": {
+    "sourceUrl": "https://openstax.org/books/algebra-and-trigonometry-2e/pages/1-key-concepts",
+    "attribution": "Original MyPutnam exposition informed by OpenStax Algebra and Trigonometry 2e.",
+    "copyrightHolder": "OpenStax",
+    "licenseBasis": "Mathematical facts restated in original prose; source text is not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "algebra-inequalities",
+  "articleId": "binomial-multinomial-theorems",
+  "title": "Binomial and multinomial theorems",
+  "displayOrder": 4,
+  "aliases": ["binomial theorem", "multinomial theorem", "binomial expansion", "multinomial coefficients"],
+  "keywords": ["coefficients", "factorials", "expansion", "Pascal identity", "combinations"],
+  "notation": {
+    "blocks": [
+      { "type": "displayMath", "tex": "\\binom{n}{k}=\\frac{n!}{k!(n-k)!},\\qquad \\binom{n}{k_1,\\ldots,k_m}=\\frac{n!}{k_1!\\cdots k_m!}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "The multinomial coefficient is indexed by nonnegative integers whose sum is n." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "A binomial coefficient counts k-element selections from n labeled objects. A multinomial coefficient counts assignments of n labeled objects to ordered groups of prescribed sizes." }] }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "displayMath", "tex": "(x+y)^n=\\sum_{k=0}^{n}\\binom{n}{k}x^{n-k}y^k" },
+      { "type": "displayMath", "tex": "(x_1+\\cdots+x_m)^n=\\sum_{k_1+\\cdots+k_m=n}\\binom{n}{k_1,\\ldots,k_m}x_1^{k_1}\\cdots x_m^{k_m}" },
+      { "type": "displayMath", "tex": "\\binom{n}{k}=\\binom{n}{n-k},\\qquad \\binom{n}{k}=\\binom{n-1}{k-1}+\\binom{n-1}{k}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Coefficient extraction turns expansions into a compact method: the coefficient of " }, { "type": "inlineMath", "tex": "x_1^{k_1}\\cdots x_m^{k_m}" }, { "type": "text", "text": " is the corresponding multinomial coefficient when the exponents sum to n, and zero otherwise." }] }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " is a nonnegative integer, and every index is a nonnegative integer." }],
+        [{ "type": "text", "text": "The variables must commute. The familiar expansion is not generally valid for noncommuting matrices or operators." }],
+        [{ "type": "text", "text": "A requested term number is one more than its summation index when the k = 0 term is first." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Extract one multinomial coefficient",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "In " }, { "type": "inlineMath", "tex": "(x+y+z)^4" }, { "type": "text", "text": ", the coefficient of " }, { "type": "inlineMath", "tex": "x^2yz" }, { "type": "text", "text": " is" }] },
+          { "type": "displayMath", "tex": "\\binom{4}{2,1,1}=\\frac{4!}{2!1!1!}=12" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "The exponents 2, 1, and 1 sum to 4, so this monomial occurs in the expansion." }] }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "In the kth summand of the displayed binomial formula, the exponent of x is " }, { "type": "inlineMath", "tex": "n-k" }, { "type": "text", "text": ", not k." }],
+        [{ "type": "text", "text": "The factorial expression for a multinomial coefficient is used only when the indices sum to n." }],
+        [{ "type": "text", "text": "A minus sign belongs inside the powered term: substitute " }, { "type": "inlineMath", "tex": "y=-b" }, { "type": "text", "text": " when expanding " }, { "type": "inlineMath", "tex": "(a-b)^n" }, { "type": "text", "text": "." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/algebra-inequalities/polynomial-roots-vieta", "math-reference/combinatorics-generating-functions/permutations-combinations", "math-reference/combinatorics-generating-functions/binomial-identities"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "OpenStax Algebra and Trigonometry 2e, Binomial Theorem", "url": "https://openstax.org/books/algebra-and-trigonometry-2e/pages/13-6-binomial-theorem" },
+    { "label": "MIT OpenCourseWare 18.200, lecture notes on multinomial coefficients", "url": "https://ocw.mit.edu/courses/18-200-principles-of-discrete-applied-mathematics-spring-2024/resources/mit18_200_s24_lec05-06/" }
+  ],
+  "rights": {
+    "sourceUrl": "https://openstax.org/books/algebra-and-trigonometry-2e/pages/13-6-binomial-theorem",
+    "attribution": "Original MyPutnam exposition informed by OpenStax and MIT OpenCourseWare references.",
+    "copyrightHolder": null,
+    "licenseBasis": "Mathematical facts restated in original prose; source text is not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}
