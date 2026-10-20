@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "trigonometry", "articleId": "product-sum-power-reduction", "title": "Product-sum and power-reduction identities", "displayOrder": 3,
+  "aliases": ["product-to-sum", "sum-to-product", "power-reduction", "product sum identities"],
+  "keywords": ["trigonometric identities", "harmonics", "integration", "sine products", "cosine products"],
+  "notation": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "u,v" }, { "type": "text", "text": " are real angles. Every displayed identity follows from angle addition and subtraction." }] }] },
+  "definitions": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Product-to-sum changes a product of two trigonometric functions into a sum of harmonics. Sum-to-product performs the reverse change. Power reduction lowers even powers using double angles." }] }] },
+  "results": { "blocks": [
+    { "type": "displayMath", "tex": "2\\sin u\\sin v=\\cos(u-v)-\\cos(u+v)" },
+    { "type": "displayMath", "tex": "2\\cos u\\cos v=\\cos(u-v)+\\cos(u+v)" },
+    { "type": "displayMath", "tex": "2\\sin u\\cos v=\\sin(u+v)+\\sin(u-v)" },
+    { "type": "displayMath", "tex": "\\sin u+\\sin v=2\\sin\\frac{u+v}{2}\\cos\\frac{u-v}{2}" },
+    { "type": "displayMath", "tex": "\\cos u+\\cos v=2\\cos\\frac{u+v}{2}\\cos\\frac{u-v}{2}" },
+    { "type": "displayMath", "tex": "\\sin^2u=\\frac{1-\\cos2u}{2},\\qquad \\cos^2u=\\frac{1+\\cos2u}{2}" }
+  ] },
+  "conditions": { "blocks": [{ "type": "list", "ordered": false, "items": [
+    [{ "type": "text", "text": "The identities hold for all real angles." }],
+    [{ "type": "text", "text": "For difference versions of sum-to-product, derive the sign carefully rather than changing plus to minus mechanically." }],
+    [{ "type": "text", "text": "Repeated power reduction may introduce several harmonic frequencies; retain every term." }]
+  ] }] },
+  "examples": [{ "title": "Reduce a fourth power", "document": { "blocks": [
+    { "type": "displayMath", "tex": "\\sin^4x=\\left(\\frac{1-\\cos2x}{2}\\right)^2=\\frac{3}{8}-\\frac12\\cos2x+\\frac18\\cos4x" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "The second reduction uses " }, { "type": "inlineMath", "tex": "\\cos^22x=(1+\\cos4x)/2" }, { "type": "text", "text": "." }] }
+  ] } }],
+  "pitfalls": { "blocks": [{ "type": "list", "ordered": false, "items": [
+    [{ "type": "text", "text": "The product-to-sum identities carry a factor of one half when solved for the original product." }],
+    [{ "type": "text", "text": "Sine-sine uses a difference of cosines; cosine-cosine uses a sum." }],
+    [{ "type": "text", "text": "Power reduction changes both the power and the angle, so the new frequency must be tracked." }]
+  ] }] },
+  "relatedReferences": ["math-reference/trigonometry/angle-addition-identities", "math-reference/trigonometry/double-half-multiple-angle", "math-reference/calculus/trig-integrals-substitutions"], "relatedProblems": [],
+  "sources": [{ "label": "Lamar University trigonometry formula sheet", "url": "https://tutorial.math.lamar.edu/pdf/trig_cheat_sheet.pdf" }],
+  "rights": { "sourceUrl": "https://tutorial.math.lamar.edu/pdf/trig_cheat_sheet.pdf", "attribution": "Original MyPutnam exposition informed by Lamar University mathematics notes.", "copyrightHolder": "Paul Dawkins", "licenseBasis": "Mathematical facts restated in original prose; source text is not redistributed.", "redistributionStatus": "cleared" }
+}

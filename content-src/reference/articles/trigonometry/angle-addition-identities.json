@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "trigonometry", "articleId": "angle-addition-identities", "title": "Angle addition and subtraction identities", "displayOrder": 1,
+  "aliases": ["angle addition", "angle subtraction", "sum and difference formulas", "compound angle formulas"],
+  "keywords": ["sine", "cosine", "tangent", "unit circle", "trigonometric identities"],
+  "notation": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "\\alpha,\\beta" }, { "type": "text", "text": " are real angles measured in radians unless another unit is stated." }] }] },
+  "definitions": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "The compound-angle identities express a trigonometric function of a sum or difference using values at the two component angles." }] }] },
+  "results": { "blocks": [
+    { "type": "displayMath", "tex": "\\sin(\\alpha\\pm\\beta)=\\sin\\alpha\\cos\\beta\\pm\\cos\\alpha\\sin\\beta" },
+    { "type": "displayMath", "tex": "\\cos(\\alpha\\pm\\beta)=\\cos\\alpha\\cos\\beta\\mp\\sin\\alpha\\sin\\beta" },
+    { "type": "displayMath", "tex": "\\tan(\\alpha\\pm\\beta)=\\frac{\\tan\\alpha\\pm\\tan\\beta}{1\\mp\\tan\\alpha\\tan\\beta}" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "Setting one angle to a familiar value produces cofunction and reference-angle identities; setting the angles equal produces double-angle formulas." }] }
+  ] },
+  "conditions": { "blocks": [{ "type": "list", "ordered": false, "items": [
+    [{ "type": "text", "text": "The sine and cosine identities hold for all real angles." }],
+    [{ "type": "text", "text": "The tangent identity requires every tangent shown and the quotient denominator to be defined; verify the original tangent at the compound angle as well." }],
+    [{ "type": "text", "text": "The upper signs form the addition formula and the lower signs form the subtraction formula." }]
+  ] }] },
+  "examples": [{ "title": "Evaluate an exact compound angle", "document": { "blocks": [
+    { "type": "displayMath", "tex": "\\sin\\frac{5\\pi}{12}=\\sin\\left(\\frac{\\pi}{4}+\\frac{\\pi}{6}\\right)=\\frac{\\sqrt6+\\sqrt2}{4}" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "The result follows by substituting the exact sine and cosine values for 45 and 30 degrees into the addition formula." }] }
+  ] } }],
+  "pitfalls": { "blocks": [{ "type": "list", "ordered": false, "items": [
+    [{ "type": "text", "text": "Cosine uses the opposite sign in its cross term; sine uses the same sign as the compound angle." }],
+    [{ "type": "text", "text": "There is no identity that distributes sine or cosine over addition." }],
+    [{ "type": "text", "text": "A simplified tangent quotient may hide angles where an intermediate tangent is undefined." }]
+  ] }] },
+  "relatedReferences": ["math-reference/trigonometry/double-half-multiple-angle", "math-reference/trigonometry/product-sum-power-reduction"], "relatedProblems": [],
+  "sources": [{ "label": "OpenStax Algebra and Trigonometry 2e, Chapter 9 key equations", "url": "https://openstax.org/books/algebra-and-trigonometry-2e/pages/9-key-equations" }],
+  "rights": { "sourceUrl": "https://openstax.org/books/algebra-and-trigonometry-2e/pages/9-key-equations", "attribution": "Original MyPutnam exposition informed by OpenStax Algebra and Trigonometry 2e.", "copyrightHolder": "OpenStax", "licenseBasis": "Mathematical facts restated in original prose; source text is not redistributed.", "redistributionStatus": "cleared" }
+}

@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "trigonometry", "articleId": "double-half-multiple-angle", "title": "Double-, half-, and multiple-angle formulas", "displayOrder": 2,
+  "aliases": ["double-angle formulas", "half-angle formulas", "multiple-angle formulas", "triple-angle formulas"],
+  "keywords": ["sine", "cosine", "tangent", "sign choice", "Chebyshev polynomials"],
+  "notation": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "\\theta" }, { "type": "text", "text": " is a real angle. A square root denotes its nonnegative principal value; an explicit sign is therefore needed in half-angle formulas." }] }] },
+  "definitions": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Double- and multiple-angle formulas specialize angle addition. Half-angle formulas solve the double-angle identities for functions of half an angle." }] }] },
+  "results": { "blocks": [
+    { "type": "displayMath", "tex": "\\sin2\\theta=2\\sin\\theta\\cos\\theta" },
+    { "type": "displayMath", "tex": "\\cos2\\theta=\\cos^2\\theta-\\sin^2\\theta=1-2\\sin^2\\theta=2\\cos^2\\theta-1" },
+    { "type": "displayMath", "tex": "\\tan2\\theta=\\frac{2\\tan\\theta}{1-\\tan^2\\theta}" },
+    { "type": "displayMath", "tex": "\\sin\\frac{\\theta}{2}=\\pm\\sqrt{\\frac{1-\\cos\\theta}{2}},\\qquad \\cos\\frac{\\theta}{2}=\\pm\\sqrt{\\frac{1+\\cos\\theta}{2}}" },
+    { "type": "displayMath", "tex": "\\sin3\\theta=3\\sin\\theta-4\\sin^3\\theta,\\qquad \\cos3\\theta=4\\cos^3\\theta-3\\cos\\theta" }
+  ] },
+  "conditions": { "blocks": [{ "type": "list", "ordered": false, "items": [
+    [{ "type": "text", "text": "Choose each half-angle sign from the quadrant of theta over two; it is not determined by cosine theta alone." }],
+    [{ "type": "text", "text": "Tangent formulas require all displayed denominators and tangents to be defined." }],
+    [{ "type": "text", "text": "Multiple-angle identities can be built recursively or read from the real and imaginary parts of de Moivre's formula." }]
+  ] }] },
+  "examples": [{ "title": "Resolve the half-angle sign", "document": { "blocks": [
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "\\theta=3\\pi/2" }, { "type": "text", "text": ", then theta over two lies in quadrant II, so its cosine is negative:" }] },
+    { "type": "displayMath", "tex": "\\cos\\frac{3\\pi}{4}=-\\sqrt{\\frac{1+\\cos(3\\pi/2)}{2}}=-\\frac{\\sqrt2}{2}" }
+  ] } }],
+  "pitfalls": { "blocks": [{ "type": "list", "ordered": false, "items": [
+    [{ "type": "text", "text": "The plus-or-minus sign is a quadrant decision, not an optional choice." }],
+    [{ "type": "text", "text": "The three cosine double-angle forms are equivalent; choose the one that eliminates the unwanted function." }],
+    [{ "type": "text", "text": "Do not cancel tangent factors at points where the cancelled expression vanishes or is undefined without checking the original identity." }]
+  ] }] },
+  "relatedReferences": ["math-reference/trigonometry/angle-addition-identities", "math-reference/trigonometry/product-sum-power-reduction", "math-reference/complex-numbers/polar-form-de-moivre"], "relatedProblems": [],
+  "sources": [{ "label": "OpenStax Algebra and Trigonometry 2e, Chapter 9 key equations", "url": "https://openstax.org/books/algebra-and-trigonometry-2e/pages/9-key-equations" }],
+  "rights": { "sourceUrl": "https://openstax.org/books/algebra-and-trigonometry-2e/pages/9-key-equations", "attribution": "Original MyPutnam exposition informed by OpenStax Algebra and Trigonometry 2e.", "copyrightHolder": "OpenStax", "licenseBasis": "Mathematical facts restated in original prose; source text is not redistributed.", "redistributionStatus": "cleared" }
+}

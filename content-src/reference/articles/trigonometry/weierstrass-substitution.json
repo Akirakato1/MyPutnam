@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "trigonometry", "articleId": "weierstrass-substitution", "title": "Weierstrass tangent half-angle substitution", "displayOrder": 7,
+  "aliases": ["Weierstrass substitution", "tangent half-angle substitution", "universal trigonometric substitution", "t equals tan x over 2"],
+  "keywords": ["integration", "rationalizing substitution", "sine", "cosine", "improper integral"],
+  "notation": { "blocks": [{ "type": "displayMath", "tex": "t=\\tan\\frac{x}{2}" }, { "type": "paragraph", "runs": [{ "type": "text", "text": "On any interval that does not cross an odd multiple of pi, this gives a one-to-one local change of variable after a branch of x is chosen." }] }] },
+  "definitions": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "The Weierstrass substitution parametrizes the unit circle rationally, converting every rational expression in sine and cosine into a rational expression in t." }] }] },
+  "results": { "blocks": [
+    { "type": "displayMath", "tex": "\\sin x=\\frac{2t}{1+t^2},\\qquad \\cos x=\\frac{1-t^2}{1+t^2}" },
+    { "type": "displayMath", "tex": "dx=\\frac{2\\,dt}{1+t^2},\\qquad x=2\\arctan t+2k\\pi" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "Substitute all three formulas at once, simplify the resulting rational function, integrate in t, and then replace t by tangent of x over two." }] }
+  ] },
+  "conditions": { "blocks": [{ "type": "list", "ordered": false, "items": [
+    [{ "type": "text", "text": "The map misses x congruent to pi modulo 2pi, which corresponds to an infinite t. Split definite integrals at any such point rather than passing through it as an ordinary finite substitution." }],
+    [{ "type": "text", "text": "Transform endpoints using the same continuous branch. Reversing or crossing a tangent branch without splitting can give wrong limits." }],
+    [{ "type": "text", "text": "If the original integrand has a singularity, convergence must be checked as an improper integral; rationalization does not remove the need for that limit." }]
+  ] }] },
+  "examples": [{ "title": "Rationalize a trigonometric integral", "document": { "blocks": [
+    { "type": "displayMath", "tex": "\\int\\frac{dx}{1+\\cos x}=\\int\\frac{2\\,dt/(1+t^2)}{1+(1-t^2)/(1+t^2)}=\\int dt=t+C" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "Thus the antiderivative is " }, { "type": "inlineMath", "tex": "\\tan(x/2)+C" }, { "type": "text", "text": " on each interval avoiding odd multiples of pi, where the original integrand is singular." }] }
+  ] } }],
+  "pitfalls": { "blocks": [{ "type": "list", "ordered": false, "items": [
+    [{ "type": "text", "text": "Do not forget the differential factor 2/(1+t squared)." }],
+    [{ "type": "text", "text": "For definite integrals, an endpoint at x = pi maps to an infinite limit and must be treated accordingly." }],
+    [{ "type": "text", "text": "A single arctangent branch does not cover the whole real x-axis; keep the computation interval-local." }]
+  ] }] },
+  "relatedReferences": ["math-reference/trigonometry/double-half-multiple-angle", "math-reference/calculus/substitution", "math-reference/calculus/improper-integrals", "math-reference/calculus/partial-fractions"], "relatedProblems": [],
+  "sources": [
+    { "label": "Lamar University trigonometry formula sheet", "url": "https://tutorial.math.lamar.edu/pdf/trig_cheat_sheet.pdf" },
+    { "label": "Mathematics LibreTexts, complex integration and Weierstrass substitution", "url": "https://math.libretexts.org/Bookshelves/Differential_Equations/Introduction_to_Partial_Differential_Equations_(Herman)/08%3A_Complex_Representations_of_Functions/8.05%3A_Complex_Integration" }
+  ],
+  "rights": { "sourceUrl": "https://math.libretexts.org/Bookshelves/Differential_Equations/Introduction_to_Partial_Differential_Equations_(Herman)/08%3A_Complex_Representations_of_Functions/8.05%3A_Complex_Integration", "attribution": "Original MyPutnam exposition informed by cited university mathematics references.", "copyrightHolder": null, "licenseBasis": "Mathematical facts restated in original prose; source text is not redistributed.", "redistributionStatus": "cleared" }
+}

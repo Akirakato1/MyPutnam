@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "trigonometry", "articleId": "harmonic-linear-combination", "title": "Combining a sine and cosine", "displayOrder": 6,
+  "aliases": ["auxiliary angle method", "amplitude-phase form", "a sin x plus b cos x", "harmonic linear combination"],
+  "keywords": ["phase shift", "amplitude", "sinusoid", "maximum", "minimum"],
+  "notation": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "a,b" }, { "type": "text", "text": " are real constants and " }, { "type": "inlineMath", "tex": "R=\\sqrt{a^2+b^2}" }, { "type": "text", "text": "." }] }] },
+  "definitions": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Amplitude-phase form represents a linear combination at one frequency as a single shifted sinusoid." }] }] },
+  "results": { "blocks": [
+    { "type": "displayMath", "tex": "a\\sin x+b\\cos x=R\\sin(x+\\phi)" },
+    { "type": "displayMath", "tex": "R=\\sqrt{a^2+b^2},\\qquad \\cos\\phi=\\frac{a}{R},\\qquad \\sin\\phi=\\frac{b}{R}" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "Equivalently use " }, { "type": "inlineMath", "tex": "\\phi=\\operatorname{atan2}(b,a)" }, { "type": "text", "text": " to select the correct quadrant. Therefore the expression ranges from -R to R." }] }
+  ] },
+  "conditions": { "blocks": [{ "type": "list", "ordered": false, "items": [
+    [{ "type": "text", "text": "If a = b = 0, then R = 0 and the expression is identically zero; the phase is arbitrary." }],
+    [{ "type": "text", "text": "For nonzero coefficients, the phase is determined modulo 2pi. Using ordinary arctangent of b/a alone can choose the wrong quadrant." }],
+    [{ "type": "text", "text": "Both terms must have the same angular frequency before they can be combined this way." }]
+  ] }] },
+  "examples": [{ "title": "Find the exact range", "document": { "blocks": [
+    { "type": "displayMath", "tex": "3\\sin x+4\\cos x=5\\sin(x+\\phi),\\qquad \\cos\\phi=3/5,\\quad\\sin\\phi=4/5" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "Hence the maximum is 5 and the minimum is -5; both occur because sine attains every value in [-1,1]." }] }
+  ] } }],
+  "pitfalls": { "blocks": [{ "type": "list", "ordered": false, "items": [
+    [{ "type": "text", "text": "Match coefficients after expanding the proposed shifted form; swapping sine and cosine changes the phase equations." }],
+    [{ "type": "text", "text": "Amplitude is nonnegative. Put any sign into the phase instead of taking a negative square root." }],
+    [{ "type": "text", "text": "The bound " }, { "type": "inlineMath", "tex": "|a\\sin x+b\\cos x|\\le R" }, { "type": "text", "text": " is sharp for unrestricted real x." }]
+  ] }] },
+  "relatedReferences": ["math-reference/trigonometry/angle-addition-identities", "math-reference/complex-numbers/modulus-argument"], "relatedProblems": [],
+  "sources": [{ "label": "OpenStax Algebra and Trigonometry 2e, Chapter 9 key equations", "url": "https://openstax.org/books/algebra-and-trigonometry-2e/pages/9-key-equations" }],
+  "rights": { "sourceUrl": "https://openstax.org/books/algebra-and-trigonometry-2e/pages/9-key-equations", "attribution": "Original MyPutnam exposition informed by OpenStax Algebra and Trigonometry 2e.", "copyrightHolder": "OpenStax", "licenseBasis": "Mathematical facts restated in original prose; source text is not redistributed.", "redistributionStatus": "cleared" }
+}

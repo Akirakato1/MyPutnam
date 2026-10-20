@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "trigonometry", "articleId": "inverse-trig-conventions", "title": "Inverse trigonometric conventions", "displayOrder": 5,
+  "aliases": ["inverse trigonometric functions", "principal values", "arcsine", "arccosine", "arctangent"],
+  "keywords": ["restricted domain", "range", "composition", "branches", "ambiguous angles"],
+  "notation": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "\\arcsin x,\\arccos x,\\arctan x" }, { "type": "text", "text": " denote principal-valued inverse functions, not reciprocals." }] }] },
+  "definitions": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "Periodic trigonometric functions become invertible only after restricting their domains. The chosen restricted ranges define the principal inverse values." }] }] },
+  "results": { "blocks": [
+    { "type": "displayMath", "tex": "\\arcsin:[-1,1]\\to[-\\pi/2,\\pi/2]" },
+    { "type": "displayMath", "tex": "\\arccos:[-1,1]\\to[0,\\pi]" },
+    { "type": "displayMath", "tex": "\\arctan:\\mathbb R\\to(-\\pi/2,\\pi/2)" },
+    { "type": "displayMath", "tex": "\\sin(\\arcsin x)=x,\\quad \\cos(\\arccos x)=x,\\quad \\tan(\\arctan x)=x" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "The reverse compositions return the original angle only when it lies in the relevant principal range." }] }
+  ] },
+  "conditions": { "blocks": [{ "type": "list", "ordered": false, "items": [
+    [{ "type": "text", "text": "Real arcsine and arccosine inputs lie in [-1,1]; real arctangent accepts every real input." }],
+    [{ "type": "text", "text": "The notation " }, { "type": "inlineMath", "tex": "\\sin^{-1}x" }, { "type": "text", "text": " usually means arcsine, whereas " }, { "type": "inlineMath", "tex": "(\\sin x)^{-1}" }, { "type": "text", "text": " means cosecant; parentheses prevent ambiguity." }],
+    [{ "type": "text", "text": "Solving a trigonometric equation requires adding periodic families after finding principal reference values." }]
+  ] }] },
+  "examples": [{ "title": "Simplify a reverse composition", "document": { "blocks": [
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "Because 3pi/4 is outside the principal arcsine range," }] },
+    { "type": "displayMath", "tex": "\\arcsin(\\sin(3\\pi/4))=\\arcsin(\\sqrt2/2)=\\pi/4" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "The inverse returns the angle in [-pi/2, pi/2] having the same sine." }] }
+  ] } }],
+  "pitfalls": { "blocks": [{ "type": "list", "ordered": false, "items": [
+    [{ "type": "text", "text": "Inverse notation does not mean reciprocal notation." }],
+    [{ "type": "text", "text": "Do not cancel a trigonometric function with its inverse in the reverse order without checking the principal range." }],
+    [{ "type": "text", "text": "A principal inverse value is one representative, not the complete solution set of a periodic equation." }]
+  ] }] },
+  "relatedReferences": ["math-reference/trigonometry/triangle-trigonometry", "math-reference/calculus/antiderivative-table"], "relatedProblems": [],
+  "sources": [{ "label": "OpenStax Algebra and Trigonometry, Chapter 8 key concepts", "url": "https://openstax.org/books/algebra-and-trigonometry/pages/8-key-concepts" }],
+  "rights": { "sourceUrl": "https://openstax.org/books/algebra-and-trigonometry/pages/8-key-concepts", "attribution": "Original MyPutnam exposition informed by OpenStax Algebra and Trigonometry.", "copyrightHolder": "OpenStax", "licenseBasis": "Mathematical facts restated in original prose; source text is not redistributed.", "redistributionStatus": "cleared" }
+}

@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "trigonometry", "articleId": "triangle-trigonometry", "title": "Triangle trigonometry", "displayOrder": 4,
+  "aliases": ["law of sines", "law of cosines", "sine rule", "cosine rule", "triangle area formula"],
+  "keywords": ["triangles", "circumradius", "area", "Heron formula", "SSA ambiguous case"],
+  "notation": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "In a nondegenerate triangle, sides a, b, c lie opposite angles A, B, C, and R is the circumradius." }] }] },
+  "definitions": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "The law of sines relates side-angle pairs. The law of cosines is the Pythagorean theorem with an included-angle correction." }] }] },
+  "results": { "blocks": [
+    { "type": "displayMath", "tex": "\\frac{a}{\\sin A}=\\frac{b}{\\sin B}=\\frac{c}{\\sin C}=2R" },
+    { "type": "displayMath", "tex": "c^2=a^2+b^2-2ab\\cos C" },
+    { "type": "displayMath", "tex": "K=\\frac12ab\\sin C=\\sqrt{s(s-a)(s-b)(s-c)},\\qquad s=\\frac{a+b+c}{2}" },
+    { "type": "displayMath", "tex": "K=\\frac{abc}{4R}" }
+  ] },
+  "conditions": { "blocks": [{ "type": "list", "ordered": false, "items": [
+    [{ "type": "text", "text": "Side lengths are positive, satisfy the strict triangle inequalities, and angles lie between zero and pi with sum pi." }],
+    [{ "type": "text", "text": "The SSA data pattern can give zero, one, or two triangles because sine takes the same value at supplementary angles." }],
+    [{ "type": "text", "text": "Use the law of cosines for SSS or SAS data, and the law of sines when a known side-angle opposite pair is available." }]
+  ] }] },
+  "examples": [{ "title": "Find a side from SAS data", "document": { "blocks": [
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "If a = 3, b = 5, and the included angle C is 60 degrees, then" }] },
+    { "type": "displayMath", "tex": "c^2=3^2+5^2-2(3)(5)\\cos\\frac{\\pi}{3}=19,\\qquad c=\\sqrt{19}" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "The positive square root is selected because c is a side length." }] }
+  ] } }],
+  "pitfalls": { "blocks": [{ "type": "list", "ordered": false, "items": [
+    [{ "type": "text", "text": "Match each side with its opposite angle before forming a sine-law ratio." }],
+    [{ "type": "text", "text": "An inverse-sine calculator output gives only its principal angle and may miss the supplementary SSA solution." }],
+    [{ "type": "text", "text": "The area formula uses the angle included between the two displayed sides." }]
+  ] }] },
+  "relatedReferences": ["math-reference/trigonometry/inverse-trig-conventions", "math-reference/geometry-vectors/triangle-area-centers", "math-reference/geometry-vectors/circle-power-radical-axis"], "relatedProblems": [],
+  "sources": [{ "label": "OpenStax Algebra and Trigonometry 2e, index to laws of sines and cosines", "url": "https://openstax.org/books/algebra-and-trigonometry-2e/pages/index" }],
+  "rights": { "sourceUrl": "https://openstax.org/books/algebra-and-trigonometry-2e/pages/index", "attribution": "Original MyPutnam exposition informed by OpenStax Algebra and Trigonometry 2e.", "copyrightHolder": "OpenStax", "licenseBasis": "Mathematical facts restated in original prose; source text is not redistributed.", "redistributionStatus": "cleared" }
+}
