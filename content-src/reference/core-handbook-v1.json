@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 1,
+  "inventoryId": "core-handbook-v1",
+  "categories": [
+    {
+      "id": "algebra-inequalities",
+      "label": "Algebra & Inequalities",
+      "displayOrder": 1,
+      "articles": [
+        { "id": "algebraic-identities", "displayOrder": 1, "requiredAliases": [] },
+        { "id": "exponent-logarithm-laws", "displayOrder": 2, "requiredAliases": [] },
+        { "id": "polynomial-roots-vieta", "displayOrder": 3, "requiredAliases": [] },
+        { "id": "binomial-multinomial-theorems", "displayOrder": 4, "requiredAliases": [] },
+        { "id": "am-gm-and-power-means", "displayOrder": 5, "requiredAliases": [] },
+        { "id": "cauchy-schwarz-holder-minkowski", "displayOrder": 6, "requiredAliases": [] },
+        { "id": "jensen-convexity", "displayOrder": 7, "requiredAliases": [] },
+        { "id": "rearrangement-chebyshev", "displayOrder": 8, "requiredAliases": [] }
+      ]
+    },
+    {
+      "id": "sequences-series-recurrences",
+      "label": "Sequences, Series & Recurrences",
+      "displayOrder": 2,
+      "articles": [
+        { "id": "arithmetic-geometric-sequences", "displayOrder": 1, "requiredAliases": [] },
+        { "id": "finite-sums-and-telescoping", "displayOrder": 2, "requiredAliases": [] },
+        { "id": "power-sums", "displayOrder": 3, "requiredAliases": [] },
+        { "id": "infinite-series-tests", "displayOrder": 4, "requiredAliases": [] },
+        { "id": "linear-recurrences-homogeneous", "displayOrder": 5, "requiredAliases": ["linear recurrence", "homogeneous linear recurrence"] },
+        { "id": "linear-recurrences-nonhomogeneous", "displayOrder": 6, "requiredAliases": ["nonhomogeneous linear recurrence"] },
+        { "id": "ordinary-generating-functions", "displayOrder": 7, "requiredAliases": ["OGF"] }
+      ]
+    },
+    {
+      "id": "trigonometry",
+      "label": "Trigonometry",
+      "displayOrder": 3,
+      "articles": [
+        { "id": "angle-addition-identities", "displayOrder": 1, "requiredAliases": [] },
+        { "id": "double-half-multiple-angle", "displayOrder": 2, "requiredAliases": [] },
+        { "id": "product-sum-power-reduction", "displayOrder": 3, "requiredAliases": [] },
+        { "id": "triangle-trigonometry", "displayOrder": 4, "requiredAliases": [] },
+        { "id": "inverse-trig-conventions", "displayOrder": 5, "requiredAliases": [] },
+        { "id": "harmonic-linear-combination", "displayOrder": 6, "requiredAliases": [] },
+        { "id": "weierstrass-substitution", "displayOrder": 7, "requiredAliases": ["Weierstrass substitution", "tangent half-angle substitution"] }
+      ]
+    },
+    {
+      "id": "geometry-vectors",
+      "label": "Geometry & Vectors",
+      "displayOrder": 4,
+      "articles": [
+        { "id": "coordinate-geometry", "displayOrder": 1, "requiredAliases": [] },
+        { "id": "lines-circles-conics", "displayOrder": 2, "requiredAliases": [] },
+        { "id": "triangle-area-centers", "displayOrder": 3, "requiredAliases": [] },
+        { "id": "circle-power-radical-axis", "displayOrder": 4, "requiredAliases": [] },
+        { "id": "dot-product-projections", "displayOrder": 5, "requiredAliases": [] },
+        { "id": "cross-product-area-volume", "displayOrder": 6, "requiredAliases": [] },
+        { "id": "vector-lines-planes", "displayOrder": 7, "requiredAliases": [] }
+      ]
+    },
+    {
+      "id": "complex-numbers",
+      "label": "Complex Numbers",
+      "displayOrder": 5,
+      "articles": [
+        { "id": "complex-algebra", "displayOrder": 1, "requiredAliases": [] },
+        { "id": "modulus-argument", "displayOrder": 2, "requiredAliases": [] },
+        { "id": "polar-form-de-moivre", "displayOrder": 3, "requiredAliases": [] },
+        { "id": "complex-roots", "displayOrder": 4, "requiredAliases": [] },
+        { "id": "roots-of-unity", "displayOrder": 5, "requiredAliases": [] },
+        { "id": "complex-plane-geometry", "displayOrder": 6, "requiredAliases": [] }
+      ]
+    },
+    {
+      "id": "number-theory",
+      "label": "Number Theory",
+      "displayOrder": 6,
+      "articles": [
+        { "id": "divisibility-gcd-bezout", "displayOrder": 1, "requiredAliases": [] },
+        { "id": "primes-factorization", "displayOrder": 2, "requiredAliases": [] },
+        { "id": "modular-arithmetic", "displayOrder": 3, "requiredAliases": [] },
+        { "id": "fermat-euler-theorems", "displayOrder": 4, "requiredAliases": [] },
+        { "id": "euler-totient", "displayOrder": 5, "requiredAliases": ["phi", "Euler phi", "totient"] },
+        { "id": "chinese-remainder-theorem", "displayOrder": 6, "requiredAliases": ["CRT"] },
+        { "id": "multiplicative-order", "displayOrder": 7, "requiredAliases": [] },
+        { "id": "p-adic-valuations-legendre", "displayOrder": 8, "requiredAliases": [] },
+        { "id": "divisor-functions-diophantine", "displayOrder": 9, "requiredAliases": [] }
+      ]
+    },
+    {
+      "id": "combinatorics-generating-functions",
+      "label": "Combinatorics & Generating Functions",
+      "displayOrder": 7,
+      "articles": [
+        { "id": "permutations-combinations", "displayOrder": 1, "requiredAliases": [] },
+        { "id": "binomial-identities", "displayOrder": 2, "requiredAliases": [] },
+        { "id": "inclusion-exclusion", "displayOrder": 3, "requiredAliases": [] },
+        { "id": "pigeonhole-extremal", "displayOrder": 4, "requiredAliases": [] },
+        { "id": "double-counting", "displayOrder": 5, "requiredAliases": [] },
+        { "id": "recurrence-counting", "displayOrder": 6, "requiredAliases": [] },
+        { "id": "ordinary-generating-functions-combinatorics", "displayOrder": 7, "requiredAliases": ["ordinary generating function"] },
+        { "id": "exponential-generating-functions", "displayOrder": 8, "requiredAliases": ["EGF"] },
+        { "id": "catalan-numbers", "displayOrder": 9, "requiredAliases": [] }
+      ]
+    },
+    {
+      "id": "calculus",
+      "label": "Calculus",
+      "displayOrder": 8,
+      "articles": [
+        { "id": "limits-continuity", "displayOrder": 1, "requiredAliases": [] },
+        { "id": "derivative-rules-table", "displayOrder": 2, "requiredAliases": ["derivative table"] },
+        { "id": "taylor-maclaurin", "displayOrder": 3, "requiredAliases": [] },
+        { "id": "extrema-convexity", "displayOrder": 4, "requiredAliases": [] },
+        { "id": "fundamental-theorem-calculus", "displayOrder": 5, "requiredAliases": ["FTC"] },
+        { "id": "antiderivative-table", "displayOrder": 6, "requiredAliases": ["integral table"] },
+        { "id": "substitution", "displayOrder": 7, "requiredAliases": ["u-substitution"] },
+        { "id": "integration-by-parts", "displayOrder": 8, "requiredAliases": ["integration by parts"] },
+        { "id": "partial-fractions", "displayOrder": 9, "requiredAliases": [] },
+        { "id": "trig-integrals-substitutions", "displayOrder": 10, "requiredAliases": [] },
+        { "id": "reduction-formulas", "displayOrder": 11, "requiredAliases": ["integration reduction formula"] },
+        { "id": "improper-integrals", "displayOrder": 12, "requiredAliases": [] }
+      ]
+    },
+    {
+      "id": "linear-algebra",
+      "label": "Linear Algebra",
+      "displayOrder": 9,
+      "articles": [
+        { "id": "matrices-linear-systems", "displayOrder": 1, "requiredAliases": [] },
+        { "id": "determinants", "displayOrder": 2, "requiredAliases": [] },
+        { "id": "vector-spaces-basis", "displayOrder": 3, "requiredAliases": [] },
+        { "id": "rank-nullity", "displayOrder": 4, "requiredAliases": [] },
+        { "id": "eigenvalues-diagonalization", "displayOrder": 5, "requiredAliases": [] },
+        { "id": "inner-products-orthogonality", "displayOrder": 6, "requiredAliases": [] },
+        { "id": "quadratic-forms", "displayOrder": 7, "requiredAliases": [] }
+      ]
+    },
+    {
+      "id": "probability",
+      "label": "Probability",
+      "displayOrder": 10,
+      "articles": [
+        { "id": "probability-counting", "displayOrder": 1, "requiredAliases": [] },
+        { "id": "conditional-probability-bayes", "displayOrder": 2, "requiredAliases": ["Bayes theorem"] },
+        { "id": "discrete-distributions", "displayOrder": 3, "requiredAliases": [] },
+        { "id": "continuous-distributions", "displayOrder": 4, "requiredAliases": [] },
+        { "id": "expectation", "displayOrder": 5, "requiredAliases": ["expected value"] },
+        { "id": "variance-covariance", "displayOrder": 6, "requiredAliases": [] },
+        { "id": "generating-functions-probability", "displayOrder": 7, "requiredAliases": ["probability generating function", "moment generating function"] },
+        { "id": "probability-inequalities", "displayOrder": 8, "requiredAliases": [] }
+      ]
+    },
+    {
+      "id": "differential-equations",
+      "label": "Differential Equations",
+      "displayOrder": 11,
+      "articles": [
+        { "id": "separable-equations", "displayOrder": 1, "requiredAliases": [] },
+        { "id": "first-order-linear", "displayOrder": 2, "requiredAliases": [] },
+        { "id": "exact-and-bernoulli", "displayOrder": 3, "requiredAliases": [] },
+        { "id": "second-order-homogeneous", "displayOrder": 4, "requiredAliases": [] },
+        { "id": "forced-second-order", "displayOrder": 5, "requiredAliases": [] },
+        { "id": "variation-of-parameters", "displayOrder": 6, "requiredAliases": [] },
+        { "id": "linear-systems", "displayOrder": 7, "requiredAliases": [] }
+      ]
+    },
+    {
+      "id": "laplace-fourier-transforms",
+      "label": "Laplace & Fourier Transforms",
+      "displayOrder": 12,
+      "articles": [
+        { "id": "laplace-definition-convergence", "displayOrder": 1, "requiredAliases": [] },
+        { "id": "laplace-properties", "displayOrder": 2, "requiredAliases": [] },
+        { "id": "laplace-transform-table", "displayOrder": 3, "requiredAliases": ["Laplace table", "Laplace transform table"] },
+        { "id": "inverse-laplace", "displayOrder": 4, "requiredAliases": [] },
+        { "id": "convolution-and-ode", "displayOrder": 5, "requiredAliases": [] },
+        { "id": "fourier-series", "displayOrder": 6, "requiredAliases": [] },
+        { "id": "fourier-transform-conventions", "displayOrder": 7, "requiredAliases": ["Fourier transform"] },
+        { "id": "fourier-transform-properties", "displayOrder": 8, "requiredAliases": [] },
+        { "id": "fourier-transform-table", "displayOrder": 9, "requiredAliases": ["Fourier table"] },
+        { "id": "convolution-parseval-distributions", "displayOrder": 10, "requiredAliases": [] }
+      ]
+    }
+  ]
+}

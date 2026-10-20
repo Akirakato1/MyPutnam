@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "categories": [
+    { "id": "algebra-inequalities", "label": "Algebra & Inequalities", "displayOrder": 1, "aliases": ["Algebra", "Inequalities"] },
+    { "id": "sequences-series-recurrences", "label": "Sequences, Series & Recurrences", "displayOrder": 2, "aliases": ["Sequences", "Series", "Recurrences"] },
+    { "id": "trigonometry", "label": "Trigonometry", "displayOrder": 3, "aliases": ["Trig"] },
+    { "id": "geometry-vectors", "label": "Geometry & Vectors", "displayOrder": 4, "aliases": ["Geometry", "Vectors"] },
+    { "id": "complex-numbers", "label": "Complex Numbers", "displayOrder": 5, "aliases": ["Complex Analysis Basics"] },
+    { "id": "number-theory", "label": "Number Theory", "displayOrder": 6, "aliases": ["NT"] },
+    { "id": "combinatorics-generating-functions", "label": "Combinatorics & Generating Functions", "displayOrder": 7, "aliases": ["Combinatorics", "Generating Functions"] },
+    { "id": "calculus", "label": "Calculus", "displayOrder": 8, "aliases": ["Differentiation and Integration"] },
+    { "id": "linear-algebra", "label": "Linear Algebra", "displayOrder": 9, "aliases": ["Matrices and Vector Spaces"] },
+    { "id": "probability", "label": "Probability", "displayOrder": 10, "aliases": ["Probability Theory"] },
+    { "id": "differential-equations", "label": "Differential Equations", "displayOrder": 11, "aliases": ["ODEs"] },
+    { "id": "laplace-fourier-transforms", "label": "Laplace & Fourier Transforms", "displayOrder": 12, "aliases": ["Integral Transforms", "Laplace Transform", "Fourier Transform"] }
+  ]
+}
