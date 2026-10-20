@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "combinatorics-generating-functions",
+  "articleId": "recurrence-counting",
+  "title": "Modeling counting problems with recurrences",
+  "displayOrder": 6,
+  "aliases": ["combinatorial recurrence", "initial conditions", "counting recurrence", "recursive counting"],
+  "keywords": ["case decomposition", "state definition", "Fibonacci tilings", "boundary values", "nonoverlapping cases"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "a_n" }, { "type": "text", "text": " denotes the number of objects of size n. A recurrence is meaningful only after the size parameter and any auxiliary state are defined." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Partition every size-n object by a first, last, or distinguished feature. If the cases are exhaustive and disjoint, their counts add to a recurrence." }] },
+      { "type": "displayMath", "tex": "a_n=\\sum_j\\#\\{\\text{size-}n\\text{ objects in case }j\\}" }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "A reliable modeling workflow is: define the state, choose a reversible case split, translate each case to a smaller state, and supply enough initial values to start the recurrence." }] },
+      { "type": "displayMath", "tex": "a_n=a_{n-1}+a_{n-2},\\qquad a_0=1,\\ a_1=1" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "This recurrence counts length-n boards tiled by squares and dominoes: classify by the final tile." }] }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "The cases must be mutually exclusive and cover every object exactly once." }],
+        [{ "type": "text", "text": "Each reduction must be reversible; otherwise smaller objects may have the wrong multiplicity." }],
+        [{ "type": "text", "text": "Initial conditions include empty objects when they make concatenation or recurrence boundaries uniform." }],
+        [{ "type": "text", "text": "If the last choice depends on earlier choices, enlarge the state rather than pretending independence." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Count square-domino tilings",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Let a_n count tilings of a 1 by n board. A final square leaves a size n-1 tiling; a final domino leaves a size n-2 tiling. Thus" }] },
+          { "type": "displayMath", "tex": "a_n=a_{n-1}+a_{n-2},\\quad a_0=a_1=1" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Hence a_2=2, a_3=3, and a_4=5." }] }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Overlapping cases overcount; missing cases undercount." }],
+        [{ "type": "text", "text": "A recurrence without enough boundary values does not determine a unique sequence." }],
+        [{ "type": "text", "text": "A convenient algebraic recurrence is not valid unless its terms correspond to an actual decomposition." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/sequences-series-recurrences/linear-recurrences-homogeneous", "math-reference/combinatorics-generating-functions/ordinary-generating-functions-combinatorics", "math-reference/combinatorics-generating-functions/catalan-numbers"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "MIT 18.314 Combinatorial Analysis", "url": "https://math.mit.edu/~apost/courses/18.314-2007/" },
+    { "label": "MIT 18.310 Generating Function Notes", "url": "https://math.mit.edu/~djk/18.310/Lecture-Notes/generating_function_notes.pdf" }
+  ],
+  "rights": {
+    "sourceUrl": "https://math.mit.edu/~apost/courses/18.314-2007/",
+    "attribution": "Original MyPutnam exposition informed by MIT combinatorics and generating-function notes.",
+    "copyrightHolder": "MIT course authors",
+    "licenseBasis": "The modeling workflow and example are presented in original prose; source text is not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "combinatorics-generating-functions",
+  "articleId": "binomial-identities",
+  "title": "Binomial identities",
+  "displayOrder": 2,
+  "aliases": ["binomial theorem", "Vandermonde's identity", "Pascal identity", "binomial coefficient identities"],
+  "keywords": ["binomial coefficients", "symmetry identity", "hockey-stick identity", "alternating binomial sum", "coefficient comparison"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "For integers n>=0, this handbook sets " }, { "type": "inlineMath", "tex": "\\binom nk=0" }, { "type": "text", "text": " when k<0 or k>n. This makes boundary identities uniform." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "displayMath", "tex": "(x+y)^n=\\sum_{k=0}^n\\binom nkx^ky^{n-k}" },
+      { "type": "displayMath", "tex": "\\binom nk=\\binom n{n-k},\\qquad\\binom nk=\\binom{n-1}k+\\binom{n-1}{k-1}" }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "displayMath", "tex": "\\sum_{k=0}^n\\binom nk=2^n,\\qquad\\sum_{k=0}^n(-1)^k\\binom nk=0\\quad(n\\ge1)" },
+      { "type": "displayMath", "tex": "\\sum_k\\binom rk\\binom s{n-k}=\\binom{r+s}n" },
+      { "type": "displayMath", "tex": "\\sum_{k=m}^n\\binom km=\\binom{n+1}{m+1}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "These follow either by counting the same set in two ways or by comparing coefficients in products of binomial expansions." }] }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "The displayed finite identities assume nonnegative integer upper indices." }],
+        [{ "type": "text", "text": "In Vandermonde's identity, the zero-outside-range convention handles the effective limits." }],
+        [{ "type": "text", "text": "The alternating sum is 1, not 0, when n=0." }],
+        [{ "type": "text", "text": "Match the exponent whose coefficient is extracted; reversed exponents can silently change the index." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Apply Vandermonde's identity",
+      "document": {
+        "blocks": [
+          { "type": "displayMath", "tex": "\\sum_k\\binom4k\\binom6{4-k}=\\binom{10}4=210" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Both sides count four-person committees chosen from groups of sizes four and six, classified on the left by how many come from the first group." }] }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Do not omit terms merely because their written lower index looks inconvenient; use the stated zero convention." }],
+        [{ "type": "text", "text": "Pascal's identity splits by whether one fixed element is selected, not by arbitrary algebraic cancellation." }],
+        [{ "type": "text", "text": "The hockey-stick upper limit and top index both shift by one on the right." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/combinatorics-generating-functions/permutations-combinations", "math-reference/combinatorics-generating-functions/double-counting", "math-reference/combinatorics-generating-functions/ordinary-generating-functions-combinatorics"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "NIST DLMF, 26.3 Lattice Paths and Binomial Coefficients", "url": "https://dlmf.nist.gov/26.3" },
+    { "label": "MIT 18.314 Combinatorial Analysis", "url": "https://math.mit.edu/~apost/courses/18.314-2007/" }
+  ],
+  "rights": {
+    "sourceUrl": "https://dlmf.nist.gov/26.3",
+    "attribution": "Original MyPutnam exposition informed by NIST DLMF and MIT course references.",
+    "copyrightHolder": "National Institute of Standards and Technology and MIT course authors",
+    "licenseBasis": "Standard identities are presented in original prose with an original double-counting example; source text is not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

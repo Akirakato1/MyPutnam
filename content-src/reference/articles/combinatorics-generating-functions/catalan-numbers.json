@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "combinatorics-generating-functions",
+  "articleId": "catalan-numbers",
+  "title": "Catalan numbers",
+  "displayOrder": 9,
+  "aliases": ["Catalan numbers", "Catalan generating function", "Catalan recurrence", "Dyck paths"],
+  "keywords": ["balanced parentheses", "binary trees", "polygon triangulations", "noncrossing structures", "central binomial coefficient"],
+  "notation": {
+    "blocks": [
+      { "type": "displayMath", "tex": "C_0=1,\\ C_1=1,\\ C_2=2,\\ C_3=5,\\ C_4=14" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Indexing begins at n=0 so the empty path, empty parenthesis word, and empty tree contribute C_0=1." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "displayMath", "tex": "C_n=\\frac1{n+1}\\binom{2n}n=\\binom{2n}n-\\binom{2n}{n-1}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "C_n counts, among many equivalent families, Dyck paths of semilength n, balanced parenthesis words with n pairs, full binary tree shapes with n internal nodes, and triangulations of a convex (n+2)-gon." }] }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "displayMath", "tex": "C_{n+1}=\\sum_{k=0}^nC_kC_{n-k}" },
+      { "type": "displayMath", "tex": "C(x)=\\sum_{n\\ge0}C_nx^n=1+xC(x)^2" },
+      { "type": "displayMath", "tex": "C(x)=\\frac{1-\\sqrt{1-4x}}{2x}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "The minus-square-root branch is selected because it expands as a formal power series with constant term 1." }] }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Match the indexing to the modeled family; polygon triangulations of an m-gon use C_(m-2)." }],
+        [{ "type": "text", "text": "The convolution recurrence splits at a distinguished root or first return and depends on C_0=1." }],
+        [{ "type": "text", "text": "The quadratic equation has two algebraic roots, but only one is a formal power series at x=0." }],
+        [{ "type": "text", "text": "Catalan interpretations require noncrossing or prefix-balance constraints, not merely equal totals." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Count triangulations of a hexagon",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "A convex m-gon has C_(m-2) triangulations. For m=6 this is" }] },
+          { "type": "displayMath", "tex": "C_4=\\frac15\\binom84=14" }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Do not use C_m instead of C_(m-2) for triangulations of an m-gon." }],
+        [{ "type": "text", "text": "Balanced total counts do not guarantee every prefix stays nonnegative." }],
+        [{ "type": "text", "text": "Choosing the plus square-root branch produces a pole rather than the intended formal series." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/combinatorics-generating-functions/recurrence-counting", "math-reference/combinatorics-generating-functions/ordinary-generating-functions-combinatorics", "math-reference/combinatorics-generating-functions/binomial-identities"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "NIST DLMF, 26.5 Lattice Paths and Catalan Numbers", "url": "https://dlmf.nist.gov/26.5" },
+    { "label": "MIT 18.212 Algebraic Combinatorics", "url": "https://math.mit.edu/~apost/courses/18.212_2024/" }
+  ],
+  "rights": {
+    "sourceUrl": "https://dlmf.nist.gov/26.5",
+    "attribution": "Original MyPutnam exposition informed by NIST DLMF and MIT algebraic-combinatorics references.",
+    "copyrightHolder": "National Institute of Standards and Technology and MIT course authors",
+    "licenseBasis": "Standard Catalan formulas and interpretations are presented in original prose with an original example; source text is not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "combinatorics-generating-functions",
+  "articleId": "double-counting",
+  "title": "Double counting",
+  "displayOrder": 5,
+  "aliases": ["double counting", "handshake lemma", "counting pairs two ways", "combinatorial proof"],
+  "keywords": ["incidence counting", "degree sum formula", "marked objects", "binomial identity proof", "bijection-free identity"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Define one finite set of structured objects, then partition or enumerate that same set in two different ways." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "displayMath", "tex": "\\sum_{a\\in A}\\#\\{b:(a,b)\\in S\\}=|S|=\\sum_{b\\in B}\\#\\{a:(a,b)\\in S\\}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Equating the two totals yields an identity without requiring an explicit bijection between two separately defined sets." }] }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "displayMath", "tex": "\\sum_{v\\in V}\\deg(v)=2|E|" },
+      { "type": "displayMath", "tex": "k\\binom nk=n\\binom{n-1}{k-1}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "The first counts vertex-edge incidences in a finite undirected graph. The second counts a k-subset with one selected member, either choosing the subset first or the marked member first." }] }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Both computations must count exactly the same structured objects, including multiplicity." }],
+        [{ "type": "text", "text": "In a simple undirected graph every edge contributes two incidences; loops require an explicit degree convention." }],
+        [{ "type": "text", "text": "Marking an object changes the counted set and must be included on both sides." }],
+        [{ "type": "text", "text": "For infinite sets, cardinal sums need extra justification; the handbook formulas here are finite." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Count handshakes two ways",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "If ten people each shake every other person's hand once, the graph has " }, { "type": "inlineMath", "tex": "\\binom{10}2=45" }, { "type": "text", "text": " edges. Counting incident hands gives" }] },
+          { "type": "displayMath", "tex": "\\sum_v\\deg(v)=10\\cdot9=90=2\\cdot45" }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Do not equate two counts until the underlying object set is stated." }],
+        [{ "type": "text", "text": "Ordered pairs and unordered pairs differ by a factor of two away from the diagonal." }],
+        [{ "type": "text", "text": "An incidence can carry multiplicity even when the underlying vertices or sets are distinct." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/combinatorics-generating-functions/binomial-identities", "math-reference/combinatorics-generating-functions/pigeonhole-extremal"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "NIST DLMF, 26.18 Counting Techniques", "url": "https://dlmf.nist.gov/26.18" },
+    { "label": "MIT 18.314 Combinatorial Analysis", "url": "https://math.mit.edu/~apost/courses/18.314-2007/" }
+  ],
+  "rights": {
+    "sourceUrl": "https://dlmf.nist.gov/26.18",
+    "attribution": "Original MyPutnam exposition informed by NIST DLMF and MIT combinatorics references.",
+    "copyrightHolder": "National Institute of Standards and Technology and MIT course authors",
+    "licenseBasis": "Standard double-counting identities are explained in original prose with an original example; source text is not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

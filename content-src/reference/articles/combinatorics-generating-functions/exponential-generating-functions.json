@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "combinatorics-generating-functions",
+  "articleId": "exponential-generating-functions",
+  "title": "Exponential generating functions",
+  "displayOrder": 8,
+  "aliases": ["EGF", "exponential generating function", "labeled generating function", "factorial generating function"],
+  "keywords": ["factorial normalization", "labeled product", "binomial convolution", "EGF derivative", "exponential formula"],
+  "notation": {
+    "blocks": [
+      { "type": "displayMath", "tex": "A(x)=\\sum_{n\\ge0}a_n\\frac{x^n}{n!},\\qquad a_n=n![x^n]A(x)" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "The factorial is part of the EGF convention; [x^n] alone returns a_n/n!." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "EGFs are suited to structures on labeled n-element sets. Their product automatically records the choice of which labels go to each component." }] },
+      { "type": "displayMath", "tex": "n![x^n](A(x)B(x))=\\sum_{k=0}^n\\binom nka_kb_{n-k}" }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "displayMath", "tex": "A'(x)=\\sum_{n\\ge0}a_{n+1}\\frac{x^n}{n!},\\qquad e^x=\\sum_{n\\ge0}\\frac{x^n}{n!}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Addition encodes disjoint alternatives. Multiplication combines labeled components; the binomial coefficient chooses the labels assigned to the first component." }] },
+      { "type": "displayMath", "tex": "\\sum_{n\\ge0}D_n\\frac{x^n}{n!}=\\frac{e^{-x}}{1-x}" }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Do not read the coefficient of x^n as a_n; multiply it by n!." }],
+        [{ "type": "text", "text": "The labeled-product interpretation requires disjoint label sets whose union is the full set." }],
+        [{ "type": "text", "text": "Differentiation shifts the indexed sequence by one without an extra n factor because of factorial normalization." }],
+        [{ "type": "text", "text": "Formal power-series reasoning and analytic convergence are separate issues here as with OGFs." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Color a labeled set with two colors",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "A set of red labels and a set of blue labels each have EGF e^x. Their labeled product is" }] },
+          { "type": "displayMath", "tex": "e^xe^x=e^{2x}=\\sum_{n\\ge0}2^n\\frac{x^n}{n!}" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "so an n-element labeled set has 2^n two-colorings." }] }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Using an OGF product for labeled components omits the binomial choice of labels." }],
+        [{ "type": "text", "text": "Using an EGF does not itself prove a construction is labeled or disjoint; the combinatorial model still matters." }],
+        [{ "type": "text", "text": "Do not lose the constant term when differentiating, integrating, or imposing initial values." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/combinatorics-generating-functions/ordinary-generating-functions-combinatorics", "math-reference/combinatorics-generating-functions/inclusion-exclusion", "math-reference/combinatorics-generating-functions/recurrence-counting"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "Richard Stanley, Enumerative Combinatorics Volume 1", "url": "https://math.mit.edu/~rstan/ec/ec1.pdf" },
+    { "label": "MIT 18.212 Lecture 6", "url": "https://math.mit.edu/~apost/courses/18.212_2021/lectures/18212_lecture06.pdf" }
+  ],
+  "rights": {
+    "sourceUrl": "https://math.mit.edu/~rstan/ec/ec1.pdf",
+    "attribution": "Original MyPutnam exposition informed by MIT-hosted enumerative-combinatorics references.",
+    "copyrightHolder": "Richard P. Stanley and MIT course authors",
+    "licenseBasis": "Standard EGF conventions and identities are stated in original prose with an original example; source text is not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

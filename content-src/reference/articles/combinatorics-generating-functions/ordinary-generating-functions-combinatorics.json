@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "combinatorics-generating-functions",
+  "articleId": "ordinary-generating-functions-combinatorics",
+  "title": "Ordinary generating functions in combinatorics",
+  "displayOrder": 7,
+  "aliases": ["ordinary generating function", "coefficient extraction", "OGF combinatorics", "combinatorial generating function"],
+  "keywords": ["formal power series", "Cauchy product", "weighted choices", "unlabeled construction", "geometric series"],
+  "notation": {
+    "blocks": [
+      { "type": "displayMath", "tex": "A(x)=\\sum_{n\\ge0}a_nx^n,\\qquad [x^n]A(x)=a_n" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "This is the same OGF and coefficient-extraction convention used in the Sequences, Series & Recurrences section." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "An OGF records the number or weight a_n of size-n objects as the coefficient of x^n. It may be manipulated as a formal power series without choosing a numerical value of x." }] },
+      { "type": "displayMath", "tex": "[x^n](A(x)B(x))=\\sum_{k=0}^na_kb_{n-k}" }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "displayMath", "tex": "1+x+x^2+\\cdots=\\frac1{1-x},\\qquad (1-x)^{-r}=\\sum_{n\\ge0}\\binom{n+r-1}{r-1}x^n\\quad(r\\ge1)" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Addition represents a disjoint choice of classes. Multiplication combines independently chosen components while adding their sizes, producing the Cauchy convolution." }] },
+      { "type": "displayMath", "tex": "[x^m]\\prod_{j=1}^r(1+x+x^2+\\cdots)=\\binom{m+r-1}{r-1}" }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "State whether size begins at 0 and include the empty object when its coefficient is intended to be 1." }],
+        [{ "type": "text", "text": "A product adds component sizes; it does not multiply matching coefficients term by term." }],
+        [{ "type": "text", "text": "Formal identities are coefficientwise; numerical convergence matters only after substituting a value for x." }],
+        [{ "type": "text", "text": "Use an EGF rather than an OGF when factorial normalization is required for labeled products." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Recover stars and bars by coefficient extraction",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "For three nonnegative variables summing to seven, each variable contributes " }, { "type": "inlineMath", "tex": "(1-x)^{-1}" }, { "type": "text", "text": ". Therefore" }] },
+          { "type": "displayMath", "tex": "[x^7](1-x)^{-3}=\\binom{7+3-1}{3-1}=36" }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Do not switch between [x^n]A=a_n and EGF normalization without writing the factorial." }],
+        [{ "type": "text", "text": "A factor must encode every allowed contribution and exclude every forbidden one." }],
+        [{ "type": "text", "text": "Bounds such as at most q replace an infinite geometric factor by a finite polynomial." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/sequences-series-recurrences/ordinary-generating-functions", "math-reference/combinatorics-generating-functions/exponential-generating-functions", "math-reference/combinatorics-generating-functions/permutations-combinations"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "Richard Stanley, Enumerative Combinatorics Volume 1", "url": "https://math.mit.edu/~rstan/ec/ec1.pdf" },
+    { "label": "MIT 18.310 Generating Function Notes", "url": "https://math.mit.edu/~djk/18.310/Lecture-Notes/generating_function_notes.pdf" }
+  ],
+  "rights": {
+    "sourceUrl": "https://math.mit.edu/~rstan/ec/ec1.pdf",
+    "attribution": "Original MyPutnam exposition informed by MIT-hosted generating-function references.",
+    "copyrightHolder": "Richard P. Stanley and MIT note authors",
+    "licenseBasis": "Standard formal-series identities are presented in original prose with an original example; source text is not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

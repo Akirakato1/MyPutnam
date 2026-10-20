@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "combinatorics-generating-functions",
+  "articleId": "inclusion-exclusion",
+  "title": "Inclusion-exclusion",
+  "displayOrder": 3,
+  "aliases": ["inclusion-exclusion principle", "derangements", "principle of inclusion and exclusion", "PIE counting"],
+  "keywords": ["union cardinality", "forbidden properties", "overcount correction", "onto functions", "fixed-point-free permutations"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "[r]=\\{1,\\ldots,r\\}" }, { "type": "text", "text": " index finitely many sets or forbidden properties." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "displayMath", "tex": "|A\\cup B|=|A|+|B|-|A\\cap B|" },
+      { "type": "displayMath", "tex": "\\left|\\bigcup_{i=1}^rA_i\\right|=\\sum_{\\varnothing\\ne S\\subseteq[r]}(-1)^{|S|+1}\\left|\\bigcap_{i\\in S}A_i\\right|" }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "To count objects avoiding every bad property, include the empty intersection and reverse the signs:" }] },
+      { "type": "displayMath", "tex": "\\#\\text{ avoiding all }A_i=\\sum_{S\\subseteq[r]}(-1)^{|S|}\\left|\\bigcap_{i\\in S}A_i\\right|" },
+      { "type": "displayMath", "tex": "D_n=n!\\sum_{k=0}^n\\frac{(-1)^k}{k!}" },
+      { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "D_n" }, { "type": "text", "text": " counts derangements: permutations with no fixed points." }] }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Every intersection uses the same universe and the same indexed bad properties." }],
+        [{ "type": "text", "text": "Signs alternate by the number of properties imposed, beginning with plus for single sets in a union." }],
+        [{ "type": "text", "text": "For avoidance counts, the empty subset contributes the size of the whole universe." }],
+        [{ "type": "text", "text": "When upper bounds are converted into bad events, shift each violating variable before counting its intersection." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Count integers divisible by 2 or 3",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Among 1 through 100 there are 50 multiples of 2, 33 multiples of 3, and 16 multiples of 6. Therefore" }] },
+          { "type": "displayMath", "tex": "50+33-16=67" }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Subtracting pairwise overlaps is not enough when three or more properties can occur together." }],
+        [{ "type": "text", "text": "Do not interchange a union count with an avoidance count without changing the starting term and signs." }],
+        [{ "type": "text", "text": "The derangement sum stops at n; it is exact, not an infinite approximation." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/combinatorics-generating-functions/permutations-combinations", "math-reference/combinatorics-generating-functions/exponential-generating-functions"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "MIT 18.314 Combinatorial Analysis", "url": "https://math.mit.edu/~apost/courses/18.314-2007/" },
+    { "label": "NIST DLMF, 26.18 Counting Techniques", "url": "https://dlmf.nist.gov/26.18" }
+  ],
+  "rights": {
+    "sourceUrl": "https://math.mit.edu/~apost/courses/18.314-2007/",
+    "attribution": "Original MyPutnam exposition informed by MIT course material and NIST DLMF.",
+    "copyrightHolder": "MIT course authors and National Institute of Standards and Technology",
+    "licenseBasis": "Standard counting principles are expressed in original prose with an original example; source text is not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

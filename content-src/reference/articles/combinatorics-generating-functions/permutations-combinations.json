@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "combinatorics-generating-functions",
+  "articleId": "permutations-combinations",
+  "title": "Permutations and combinations",
+  "displayOrder": 1,
+  "aliases": ["permutations", "combinations with repetition", "combinations", "stars and bars", "multiset permutations"],
+  "keywords": ["factorial", "ordered selections", "unordered selections", "sampling without replacement", "sampling with replacement"],
+  "notation": {
+    "blocks": [
+      { "type": "displayMath", "tex": "n!=n(n-1)\\cdots1,\\qquad 0!=1" },
+      { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "\\binom nk" }, { "type": "text", "text": " counts k-element subsets of an n-element set." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "displayMath", "tex": "P(n,k)=\\frac{n!}{(n-k)!},\\qquad \\binom nk=\\frac{n!}{k!(n-k)!}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Use permutations when order matters and combinations when only the chosen set matters." }] }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "displayMath", "tex": "\\#\\text{ arrangements of a multiset}=\\frac{n!}{n_1!\\cdots n_r!}" },
+      { "type": "displayMath", "tex": "x_1+\\cdots+x_r=m,\\ x_i\\ge0\\quad\\Longrightarrow\\quad\\binom{m+r-1}{r-1}\\text{ solutions}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "The second formula is the combinations-with-repetition or stars-and-bars count. Requiring every x_i to be positive reduces first to y_i=x_i-1." }] }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "The formulas P(n,k) and choose(n,k) assume 0<=k<=n and distinct source objects." }],
+        [{ "type": "text", "text": "Stars and bars counts identical objects placed in labeled boxes; changing either assumption changes the model." }],
+        [{ "type": "text", "text": "For positive solutions, require m>=r after subtracting 1 from each variable." }],
+        [{ "type": "text", "text": "Multiset division uses the multiplicity of every repeated symbol." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Distribute identical objects",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Distribute seven identical balls among three labeled boxes, allowing empty boxes. The counts satisfy " }, { "type": "inlineMath", "tex": "x_1+x_2+x_3=7" }, { "type": "text", "text": " with nonnegative entries, so" }] },
+          { "type": "displayMath", "tex": "\\binom{7+3-1}{3-1}=\\binom92=36" }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Do not divide by k! when different orders are intended to be distinct." }],
+        [{ "type": "text", "text": "Do not use stars and bars when upper bounds couple the boxes; inclusion-exclusion may be needed." }],
+        [{ "type": "text", "text": "Sampling with replacement and combinations with repetition are different from ordinary subsets." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/combinatorics-generating-functions/binomial-identities", "math-reference/combinatorics-generating-functions/ordinary-generating-functions-combinatorics"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "NIST DLMF, Chapter 26 Combinatorial Analysis", "url": "https://dlmf.nist.gov/26" },
+    { "label": "MIT 18.314 Combinatorial Analysis", "url": "https://math.mit.edu/~apost/courses/18.314-2007/" }
+  ],
+  "rights": {
+    "sourceUrl": "https://dlmf.nist.gov/26",
+    "attribution": "Original MyPutnam exposition informed by NIST DLMF and MIT course references.",
+    "copyrightHolder": "National Institute of Standards and Technology and MIT course authors",
+    "licenseBasis": "Standard counting formulas are presented in original prose with an original example; source text is not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

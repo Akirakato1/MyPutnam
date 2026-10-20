@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "combinatorics-generating-functions",
+  "articleId": "pigeonhole-extremal",
+  "title": "Pigeonhole and extremal principles",
+  "displayOrder": 4,
+  "aliases": ["pigeonhole principle", "extremal principle", "Dirichlet box principle", "generalized pigeonhole principle"],
+  "keywords": ["ceil average", "boxes and objects", "extreme element", "maximum-minimum argument", "existence proof"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "A “box” can be any class in a partition: a remainder, interval, color, or other category. Empty boxes are allowed." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "displayMath", "tex": "N\\text{ objects in }k\\text{ boxes}\\quad\\Longrightarrow\\quad\\text{some box has at least }\\left\\lceil\\frac Nk\\right\\rceil,\\quad N\\ge0,\\ k\\ge1" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "The extremal principle begins by choosing an object with a largest or smallest relevant parameter and exploiting what extremality forces." }] }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "A useful contrapositive is: if every box has at most q objects, then there are at most kq objects total." }] },
+      { "type": "displayMath", "tex": "N>kq\\quad\\Longrightarrow\\quad\\text{some box contains at least }q+1\\text{ objects}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Extremal choices often turn local inequalities into contradictions: choose the shortest distance, largest degree, earliest time, or smallest counterexample." }] }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "The boxes must cover every object and be mutually exclusive for the direct averaging statement." }],
+        [{ "type": "text", "text": "Compute the ceiling only after identifying the correct number of boxes." }],
+        [{ "type": "text", "text": "An extremal object exists automatically only in a finite nonempty set, or when a separate existence argument is supplied." }],
+        [{ "type": "text", "text": "State what equality would mean; many sharp problems live exactly at the threshold." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Force a shared birth month",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Assign 13 people to the 12 boxes given by their birth months. Since" }] },
+          { "type": "displayMath", "tex": "\\left\\lceil\\frac{13}{12}\\right\\rceil=2" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "at least two people share a birth month." }] }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Pigeonhole proves existence but usually does not identify which box is crowded." }],
+        [{ "type": "text", "text": "Overlapping categories are not boxes until each object is assigned unambiguously." }],
+        [{ "type": "text", "text": "Choosing an extreme object is a starting point, not a proof; explicitly derive the forced property." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/combinatorics-generating-functions/double-counting", "math-reference/combinatorics-generating-functions/recurrence-counting"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "MIT 18.314 Combinatorial Analysis", "url": "https://math.mit.edu/~apost/courses/18.314-2007/" }
+  ],
+  "rights": {
+    "sourceUrl": "https://math.mit.edu/~apost/courses/18.314-2007/",
+    "attribution": "Original MyPutnam exposition informed by MIT combinatorial-analysis course material.",
+    "copyrightHolder": "MIT course authors",
+    "licenseBasis": "Standard proof principles are presented in original prose with an original elementary example; source text is not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}
