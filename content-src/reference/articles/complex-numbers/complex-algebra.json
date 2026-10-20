@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "complex-numbers",
+  "articleId": "complex-algebra",
+  "title": "Complex algebra, conjugation, and division",
+  "displayOrder": 1,
+  "aliases": ["complex conjugate", "complex division", "complex arithmetic", "imaginary unit"],
+  "keywords": ["real part", "imaginary part", "conjugation", "rationalize denominator", "complex field"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "z=a+bi" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "w=c+di" }, { "type": "text", "text": " have real coefficients and " }, { "type": "inlineMath", "tex": "i^2=-1" }, { "type": "text", "text": ". Write " }, { "type": "inlineMath", "tex": "\\overline z=a-bi" }, { "type": "text", "text": " for conjugation." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "displayMath", "tex": "\\operatorname{Re}z=a,\\qquad \\operatorname{Im}z=b,\\qquad |z|^2=z\\overline z=a^2+b^2" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Equality is componentwise: two complex numbers are equal exactly when their real parts agree and their imaginary parts agree." }] }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "displayMath", "tex": "z+w=(a+c)+(b+d)i,\\qquad zw=(ac-bd)+(ad+bc)i" },
+      { "type": "displayMath", "tex": "\\overline{z+w}=\\overline z+\\overline w,\\qquad \\overline{zw}=\\overline z\\,\\overline w,\\qquad \\overline{\\overline z}=z" },
+      { "type": "displayMath", "tex": "\\frac zw=\\frac{z\\overline w}{w\\overline w}=\\frac{(a+bi)(c-di)}{c^2+d^2}\\quad(w\\ne0)" },
+      { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "z+\\overline z=2\\operatorname{Re}z" }, { "type": "text", "text": " is real, while " }, { "type": "inlineMath", "tex": "z-\\overline z=2i\\operatorname{Im}z" }, { "type": "text", "text": " is purely imaginary." }] }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Division requires a nonzero denominator; then " }, { "type": "inlineMath", "tex": "c^2+d^2>0" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Conjugation distributes over sums and products but is not a complex-linear operation: generally " }, { "type": "inlineMath", "tex": "\\overline{\\lambda z}=\\overline\\lambda\\,\\overline z" }, { "type": "text", "text": ", not " }, { "type": "inlineMath", "tex": "\\lambda\\overline z" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "For real-coefficient polynomials, nonreal zeros occur in conjugate pairs with the same multiplicity." }],
+        [{ "type": "text", "text": "Radical rules learned for nonnegative real numbers do not transfer unchanged to arbitrary principal complex square roots." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Divide using the conjugate",
+      "document": {
+        "blocks": [
+          { "type": "displayMath", "tex": "\\frac{3+4i}{1-2i}=\\frac{(3+4i)(1+2i)}{(1-2i)(1+2i)}=\\frac{-5+10i}{5}=-1+2i" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "The conjugate product makes the denominator the positive real number " }, { "type": "inlineMath", "tex": "|1-2i|^2=5" }, { "type": "text", "text": "." }] }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "The imaginary part of " }, { "type": "inlineMath", "tex": "a+bi" }, { "type": "text", "text": " is the real number " }, { "type": "inlineMath", "tex": "b" }, { "type": "text", "text": ", not " }, { "type": "inlineMath", "tex": "bi" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Conjugate the entire denominator, including every term." }],
+        [{ "type": "text", "text": "Reducing powers of " }, { "type": "inlineMath", "tex": "i" }, { "type": "text", "text": " uses period four; do not treat " }, { "type": "inlineMath", "tex": "i" }, { "type": "text", "text": " as an ordinary real variable." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/complex-numbers/modulus-argument", "math-reference/complex-numbers/polar-form-de-moivre", "math-reference/algebra-inequalities/polynomial-roots-vieta"],
+  "relatedProblems": [],
+  "sources": [{ "label": "OpenStax Precalculus 2e, 3.1 Complex Numbers", "url": "https://openstax.org/books/precalculus-2e/pages/3-1-complex-numbers" }],
+  "rights": {
+    "sourceUrl": "https://openstax.org/books/precalculus-2e/pages/3-1-complex-numbers",
+    "attribution": "Original MyPutnam exposition informed by OpenStax Precalculus 2e.",
+    "copyrightHolder": "OpenStax",
+    "licenseBasis": "Mathematical facts restated in original prose; source text and diagrams are not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

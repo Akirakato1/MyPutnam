@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "complex-numbers",
+  "articleId": "modulus-argument",
+  "title": "Modulus and argument conventions",
+  "displayOrder": 2,
+  "aliases": ["complex modulus", "complex argument", "principal argument", "phase of a complex number", "absolute value of a complex number"],
+  "keywords": ["Arg", "phase", "branch convention", "atan2", "triangle inequality"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "For this handbook, " }, { "type": "inlineMath", "tex": "\\arg z" }, { "type": "text", "text": " denotes the full set of arguments, while " }, { "type": "inlineMath", "tex": "\\operatorname{Arg}z" }, { "type": "text", "text": " denotes the principal argument in " }, { "type": "inlineMath", "tex": "(-\\pi,\\pi]" }, { "type": "text", "text": ". Some references instead include the negative endpoint and exclude the positive one." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "displayMath", "tex": "|x+iy|=\\sqrt{x^2+y^2}" },
+      { "type": "displayMath", "tex": "\\arg z=\\{\\theta+2\\pi k:k\\in\\mathbb Z\\},\\qquad \\theta=\\operatorname{Arg}z" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "An argument is an oriented angle from the positive real axis to the ray from the origin through the nonzero number." }] }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "displayMath", "tex": "|zw|=|z|\\,|w|,\\qquad \\left|\\frac zw\\right|=\\frac{|z|}{|w|}\\quad(w\\ne0)" },
+      { "type": "displayMath", "tex": "|z+w|\\le |z|+|w|,\\qquad ||z|-|w||\\le |z-w|" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "For nonzero factors, arguments add modulo " }, { "type": "inlineMath", "tex": "2\\pi" }, { "type": "text", "text": ". A quadrant-aware two-argument arctangent determines the principal argument from Cartesian coordinates." }] }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "inlineMath", "tex": "|0|=0" }, { "type": "text", "text": ", but zero has no argument because it determines no direction." }],
+        [{ "type": "text", "text": "A one-argument inverse tangent cannot identify the quadrant and fails on the imaginary axis." }],
+        [{ "type": "text", "text": "Principal arguments do not always add as ordinary real numbers; reduce the sum back into the chosen principal interval." }],
+        [{ "type": "text", "text": "With the interval " }, { "type": "inlineMath", "tex": "(-\\pi,\\pi]" }, { "type": "text", "text": ", the principal-argument function jumps across the negative real axis." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Choose a principal argument by quadrant",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "z=-\\sqrt3-i" }, { "type": "text", "text": ", the modulus is " }, { "type": "inlineMath", "tex": "2" }, { "type": "text", "text": " and the point lies in the third quadrant." }] },
+          { "type": "displayMath", "tex": "\\operatorname{Arg}z=-\\frac{5\\pi}{6},\\qquad \\arg z=\\left\\{-\\frac{5\\pi}{6}+2\\pi k:k\\in\\mathbb Z\\right\\}" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "The coterminal angle " }, { "type": "inlineMath", "tex": "7\\pi/6" }, { "type": "text", "text": " is also an argument but is outside this handbook's principal interval." }] }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Do not assign an argument to zero." }],
+        [{ "type": "text", "text": "Do not confuse the multivalued argument set with one selected principal value." }],
+        [{ "type": "text", "text": "Endpoint conventions differ across books; state the selected interval before evaluating negative real numbers." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/complex-numbers/complex-algebra", "math-reference/complex-numbers/polar-form-de-moivre", "math-reference/complex-numbers/complex-roots"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "NIST Digital Library of Mathematical Functions, 1.9 Modulus and Phase", "url": "https://dlmf.nist.gov/1.9" },
+    { "label": "OpenStax Precalculus 2e, 8.5 Polar Form of Complex Numbers", "url": "https://openstax.org/books/precalculus-2e/pages/8-5-polar-form-of-complex-numbers" }
+  ],
+  "rights": {
+    "sourceUrl": "https://dlmf.nist.gov/1.9",
+    "attribution": "Original MyPutnam exposition informed by NIST DLMF and OpenStax references.",
+    "copyrightHolder": "National Institute of Standards and Technology and OpenStax",
+    "licenseBasis": "Mathematical facts and an explicitly stated endpoint convention are presented in original prose; source text and diagrams are not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

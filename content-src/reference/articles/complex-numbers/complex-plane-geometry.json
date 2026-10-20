@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "complex-numbers",
+  "articleId": "complex-plane-geometry",
+  "title": "Geometry in the complex plane",
+  "displayOrder": 6,
+  "aliases": ["Argand plane", "complex rotation", "complex distance", "complex plane geometry", "rotation by complex multiplication"],
+  "keywords": ["translation", "reflection", "similarity", "oriented area", "circle equation"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Identify " }, { "type": "inlineMath", "tex": "z=x+iy" }, { "type": "text", "text": " with the point " }, { "type": "inlineMath", "tex": "(x,y)" }, { "type": "text", "text": " in the Argand plane. Complex subtraction gives displacement and modulus gives Euclidean length." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "displayMath", "tex": "d(z,w)=|z-w|,\\qquad m=\\frac{z+w}{2}" },
+      { "type": "displayMath", "tex": "|z-c|=r\\quad\\text{describes a circle centered at }c" }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "displayMath", "tex": "z\\mapsto z+b\\quad\\text{translates by }b" },
+      { "type": "displayMath", "tex": "z\\mapsto e^{i\\phi}z\\quad\\text{rotates about the origin by }\\phi" },
+      { "type": "displayMath", "tex": "z\\mapsto c+e^{i\\phi}(z-c)\\quad\\text{rotates about }c" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Multiplication by a nonzero complex number " }, { "type": "inlineMath", "tex": "a" }, { "type": "text", "text": " scales lengths by " }, { "type": "inlineMath", "tex": "|a|" }, { "type": "text", "text": " and rotates by an argument of " }, { "type": "inlineMath", "tex": "a" }, { "type": "text", "text": ". Conjugation reflects across the real axis." }] },
+      { "type": "displayMath", "tex": "2K_{\\mathrm{signed}}=\\operatorname{Im}\\left(\\overline{(z_2-z_1)}(z_3-z_1)\\right)" }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "The rotation formulas use counterclockwise-positive angles in the standard orientation." }],
+        [{ "type": "text", "text": "Multiplication by zero collapses the plane and is not a similarity transformation." }],
+        [{ "type": "text", "text": "Conjugation reverses orientation even though it preserves distances." }],
+        [{ "type": "text", "text": "The signed-area expression changes sign when two vertices are exchanged and vanishes for collinear points." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Rotate about a nonzero center",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Rotate " }, { "type": "inlineMath", "tex": "z=3+i" }, { "type": "text", "text": " counterclockwise by " }, { "type": "inlineMath", "tex": "\\pi/2" }, { "type": "text", "text": " about " }, { "type": "inlineMath", "tex": "c=1-i" }, { "type": "text", "text": ". Since " }, { "type": "inlineMath", "tex": "e^{i\\pi/2}=i" }, { "type": "text", "text": "," }] },
+          { "type": "displayMath", "tex": "c+i(z-c)=(1-i)+i(2+2i)=-1+i" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Both the original and rotated points lie at distance " }, { "type": "inlineMath", "tex": "|2+2i|=2\\sqrt2" }, { "type": "text", "text": " from the center." }] }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "To rotate about " }, { "type": "inlineMath", "tex": "c" }, { "type": "text", "text": ", translate by " }, { "type": "inlineMath", "tex": "-c" }, { "type": "text", "text": ", rotate, then translate back." }],
+        [{ "type": "text", "text": "Using " }, { "type": "inlineMath", "tex": "e^{-i\\phi}" }, { "type": "text", "text": " gives the opposite rotation direction." }],
+        [{ "type": "text", "text": "Distance is the modulus of a difference, not the difference of moduli." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/complex-numbers/modulus-argument", "math-reference/complex-numbers/polar-form-de-moivre", "math-reference/geometry-vectors/coordinate-geometry"],
+  "relatedProblems": [],
+  "sources": [{ "label": "OpenStax Precalculus 2e, 8.5 Polar Form of Complex Numbers", "url": "https://openstax.org/books/precalculus-2e/pages/8-5-polar-form-of-complex-numbers" }],
+  "rights": {
+    "sourceUrl": "https://openstax.org/books/precalculus-2e/pages/8-5-polar-form-of-complex-numbers",
+    "attribution": "Original MyPutnam exposition informed by OpenStax Precalculus 2e.",
+    "copyrightHolder": "OpenStax",
+    "licenseBasis": "Mathematical facts and the worked example are expressed in original prose; source text and diagrams are not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

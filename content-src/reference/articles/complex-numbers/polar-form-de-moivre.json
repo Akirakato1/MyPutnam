@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "complex-numbers",
+  "articleId": "polar-form-de-moivre",
+  "title": "Polar form, Euler form, and De Moivre's theorem",
+  "displayOrder": 3,
+  "aliases": ["polar form", "exponential form", "De Moivre's theorem", "Euler form", "cis notation"],
+  "keywords": ["complex exponential", "multiply moduli", "add arguments", "complex powers", "trigonometric form"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "\\operatorname{cis}\\theta" }, { "type": "text", "text": " abbreviates " }, { "type": "inlineMath", "tex": "\\cos\\theta+i\\sin\\theta" }, { "type": "text", "text": ". A nonzero number has modulus " }, { "type": "inlineMath", "tex": "r>0" }, { "type": "text", "text": " and arguments differing by integer multiples of " }, { "type": "inlineMath", "tex": "2\\pi" }, { "type": "text", "text": "." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "displayMath", "tex": "z=r(\\cos\\theta+i\\sin\\theta)=r\\operatorname{cis}\\theta=re^{i\\theta}" },
+      { "type": "displayMath", "tex": "e^{i\\theta}=\\cos\\theta+i\\sin\\theta" }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "displayMath", "tex": "r\\operatorname{cis}\\alpha\\;s\\operatorname{cis}\\beta=rs\\operatorname{cis}(\\alpha+\\beta)" },
+      { "type": "displayMath", "tex": "\\frac{r\\operatorname{cis}\\alpha}{s\\operatorname{cis}\\beta}=\\frac rs\\operatorname{cis}(\\alpha-\\beta)\\quad(s>0)" },
+      { "type": "displayMath", "tex": "(r\\operatorname{cis}\\theta)^n=r^n\\operatorname{cis}(n\\theta),\\qquad n\\in\\mathbb Z" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "The last identity is De Moivre's theorem. For positive powers it also holds at zero; negative powers require a nonzero base." }] }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Polar representation is not unique because replacing " }, { "type": "inlineMath", "tex": "\\theta" }, { "type": "text", "text": " by " }, { "type": "inlineMath", "tex": "\\theta+2\\pi k" }, { "type": "text", "text": " gives the same nonzero number." }],
+        [{ "type": "text", "text": "Zero can be written with modulus zero and any angle, but it has no meaningful argument." }],
+        [{ "type": "text", "text": "De Moivre's theorem with an integer exponent gives one unambiguous power. Fractional powers are multivalued unless a branch is selected." }],
+        [{ "type": "text", "text": "When converting back to rectangular form, evaluate both trigonometric components and multiply by the modulus." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Raise a complex number by De Moivre",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "1+i=\\sqrt2\\operatorname{cis}(\\pi/4)" }, { "type": "text", "text": ", so" }] },
+          { "type": "displayMath", "tex": "(1+i)^8=(\\sqrt2)^8\\operatorname{cis}(2\\pi)=16" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Using a coterminal starting argument changes the final angle by a multiple of " }, { "type": "inlineMath", "tex": "2\\pi" }, { "type": "text", "text": " and therefore gives the same power." }] }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "When multiplying, multiply moduli and add arguments; do not add moduli." }],
+        [{ "type": "text", "text": "An integer power multiplies the angle as well as powering the modulus." }],
+        [{ "type": "text", "text": "Writing one fractional-power value does not list all algebraic roots." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/complex-numbers/modulus-argument", "math-reference/complex-numbers/complex-roots", "math-reference/trigonometry/angle-addition-identities"],
+  "relatedProblems": [],
+  "sources": [{ "label": "OpenStax Precalculus 2e, 8.5 Polar Form of Complex Numbers", "url": "https://openstax.org/books/precalculus-2e/pages/8-5-polar-form-of-complex-numbers" }],
+  "rights": {
+    "sourceUrl": "https://openstax.org/books/precalculus-2e/pages/8-5-polar-form-of-complex-numbers",
+    "attribution": "Original MyPutnam exposition informed by OpenStax Precalculus 2e.",
+    "copyrightHolder": "OpenStax",
+    "licenseBasis": "Mathematical facts restated in original prose; source text and diagrams are not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

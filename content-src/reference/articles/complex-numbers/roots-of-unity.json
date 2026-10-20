@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "complex-numbers",
+  "articleId": "roots-of-unity",
+  "title": "Roots of unity, sums, products, and filtering",
+  "displayOrder": 5,
+  "aliases": ["roots of unity", "root-of-unity filter", "roots of unity filter", "unity roots", "discrete Fourier filter"],
+  "keywords": ["geometric sum", "cyclic symmetry", "coefficient extraction", "residue classes", "regular polygon"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "For a positive integer " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": ", let " }, { "type": "inlineMath", "tex": "\\zeta_n=e^{2\\pi i/n}" }, { "type": "text", "text": ". Its powers are indexed modulo " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": "." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "displayMath", "tex": "z^n=1\\iff z=\\zeta_n^k,\\qquad k=0,1,\\ldots,n-1" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "These roots are the vertices of a regular " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": "-gon on the unit circle, beginning at " }, { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": "." }] }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "displayMath", "tex": "\\sum_{k=0}^{n-1}\\zeta_n^{km}=\\begin{cases}n,&n\\mid m,\\\\0,&n\\nmid m,\\end{cases}" },
+      { "type": "displayMath", "tex": "\\sum_{k=0}^{n-1}\\zeta_n^k=0\\quad(n>1),\\qquad \\prod_{k=0}^{n-1}\\zeta_n^k=(-1)^{n+1}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "For a polynomial " }, { "type": "inlineMath", "tex": "A(x)=\\sum_j a_jx^j" }, { "type": "text", "text": ", the root-of-unity filter selects coefficients in one residue class:" }] },
+      { "type": "displayMath", "tex": "\\sum_{j\\equiv r\\; (\\mathrm{mod}\\;n)}a_j=\\frac1n\\sum_{k=0}^{n-1}\\zeta_n^{-rk}A(\\zeta_n^k)" }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "The zero-sum identity needs " }, { "type": "inlineMath", "tex": "n>1" }, { "type": "text", "text": "; for " }, { "type": "inlineMath", "tex": "n=1" }, { "type": "text", "text": " the only root is " }, { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "The filter uses all " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " powers of a primitive root and the negative sign in the weighting exponent." }],
+        [{ "type": "text", "text": "The displayed filter is automatically valid for polynomials. Infinite series need convergence or a formal-power-series interpretation." }],
+        [{ "type": "text", "text": "The product formula includes the root " }, { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": " and follows from the constant term of " }, { "type": "inlineMath", "tex": "x^n-1" }, { "type": "text", "text": "." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Filter even binomial coefficients",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "A(x)=(1+x)^6" }, { "type": "text", "text": ", choose " }, { "type": "inlineMath", "tex": "n=2" }, { "type": "text", "text": " and residue " }, { "type": "inlineMath", "tex": "r=0" }, { "type": "text", "text": ". Since the roots are " }, { "type": "inlineMath", "tex": "1,-1" }, { "type": "text", "text": "," }] },
+          { "type": "displayMath", "tex": "\\sum_{j\\text{ even}}\\binom6j=\\frac12\\bigl(A(1)+A(-1)\\bigr)=\\frac12(64+0)=32" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "The same total follows from the symmetry between even and odd subsets of a six-element set." }] }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Do not replace a primitive " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": "th root by a nonprimitive one in the filter; its powers may not visit all roots." }],
+        [{ "type": "text", "text": "The geometric sum vanishes only when the ratio is not " }, { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "The filter exponent sign and the target residue must be paired consistently." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/complex-numbers/complex-roots", "math-reference/complex-numbers/polar-form-de-moivre", "math-reference/sequences-series-recurrences/ordinary-generating-functions"],
+  "relatedProblems": [],
+  "sources": [{ "label": "NIST Digital Library of Mathematical Functions, 1.11(iv) Roots of Unity and of Other Constants", "url": "https://dlmf.nist.gov/1.11.iv" }],
+  "rights": {
+    "sourceUrl": "https://dlmf.nist.gov/1.11.iv",
+    "attribution": "Original MyPutnam exposition informed by the NIST Digital Library of Mathematical Functions.",
+    "copyrightHolder": "National Institute of Standards and Technology",
+    "licenseBasis": "Mathematical facts and the worked filter example are expressed in original prose; source text is not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

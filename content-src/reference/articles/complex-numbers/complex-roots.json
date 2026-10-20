@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "complex-numbers",
+  "articleId": "complex-roots",
+  "title": "Roots of complex numbers and multiplicity",
+  "displayOrder": 4,
+  "aliases": ["nth roots", "roots of complex numbers", "complex roots", "principal complex root", "root multiplicity"],
+  "keywords": ["De Moivre roots", "equally spaced roots", "polynomial multiplicity", "fractional power", "branch choice"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " be a positive integer and let a nonzero target be " }, { "type": "inlineMath", "tex": "z=\\rho e^{i\\theta}" }, { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "\\rho>0" }, { "type": "text", "text": ". The equation to solve is " }, { "type": "inlineMath", "tex": "w^n=z" }, { "type": "text", "text": "." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "An algebraic root is a solution of the stated equation. Its multiplicity as a polynomial zero is the number of repeated linear factors, not the number of different polar descriptions of the same point." }] }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "displayMath", "tex": "w_k=\\rho^{1/n}\\exp\\left(i\\frac{\\theta+2\\pi k}{n}\\right),\\qquad k=0,1,\\ldots,n-1" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "For nonzero " }, { "type": "inlineMath", "tex": "z" }, { "type": "text", "text": ", these are " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " distinct points on the circle of radius " }, { "type": "inlineMath", "tex": "\\rho^{1/n}" }, { "type": "text", "text": ", equally spaced by angle " }, { "type": "inlineMath", "tex": "2\\pi/n" }, { "type": "text", "text": "." }] },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Changing " }, { "type": "inlineMath", "tex": "\\theta" }, { "type": "text", "text": " by a full turn only permutes this set. A principal fractional power chooses the root obtained from the selected principal argument; it does not replace the full set of roots." }] },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "The equation " }, { "type": "inlineMath", "tex": "w^n=0" }, { "type": "text", "text": " has the single distinct solution " }, { "type": "inlineMath", "tex": "w=0" }, { "type": "text", "text": " with polynomial multiplicity " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": "." }] }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "List exactly one complete residue set of indices, such as " }, { "type": "inlineMath", "tex": "0\\le k<n" }, { "type": "text", "text": "; further indices repeat the same roots." }],
+        [{ "type": "text", "text": "The nonzero-root formula assumes " }, { "type": "inlineMath", "tex": "\\rho>0" }, { "type": "text", "text": ". Handle a zero target separately." }],
+        [{ "type": "text", "text": "A polynomial of degree " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " has " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " complex zeros counting multiplicity, but it can have fewer distinct zeros." }],
+        [{ "type": "text", "text": "For branch-dependent analytic functions, a principal root is discontinuous across the chosen branch cut." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Find all cube roots of a negative real number",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "-8=8e^{i\\pi}" }, { "type": "text", "text": ", so its cube roots are" }] },
+          { "type": "displayMath", "tex": "2e^{i(\\pi+2\\pi k)/3},\\qquad k=0,1,2" },
+          { "type": "displayMath", "tex": "1+i\\sqrt3,\\qquad -2,\\qquad 1-i\\sqrt3" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Cubing each value returns " }, { "type": "inlineMath", "tex": "-8" }, { "type": "text", "text": ", and the three arguments differ by " }, { "type": "inlineMath", "tex": "2\\pi/3" }, { "type": "text", "text": "." }] }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Dividing only the principal angle by " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " finds one root, not all roots." }],
+        [{ "type": "text", "text": "Counting repeated polar angles as new roots overcounts the solution set." }],
+        [{ "type": "text", "text": "Distinct-root count and algebraic multiplicity are different notions." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/complex-numbers/modulus-argument", "math-reference/complex-numbers/polar-form-de-moivre", "math-reference/complex-numbers/roots-of-unity"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "NIST Digital Library of Mathematical Functions, 1.11 Roots of Unity and Other Constants", "url": "https://dlmf.nist.gov/1.11" },
+    { "label": "OpenStax Precalculus 2e, 8.5 Polar Form of Complex Numbers", "url": "https://openstax.org/books/precalculus-2e/pages/8-5-polar-form-of-complex-numbers" }
+  ],
+  "rights": {
+    "sourceUrl": "https://dlmf.nist.gov/1.11",
+    "attribution": "Original MyPutnam exposition informed by NIST DLMF and OpenStax references.",
+    "copyrightHolder": "National Institute of Standards and Technology and OpenStax",
+    "licenseBasis": "Mathematical facts restated in original prose; source text and diagrams are not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}
