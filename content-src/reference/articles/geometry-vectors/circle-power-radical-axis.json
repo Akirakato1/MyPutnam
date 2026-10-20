@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "geometry-vectors",
+  "articleId": "circle-power-radical-axis",
+  "title": "Power of a point and the radical axis",
+  "displayOrder": 4,
+  "aliases": ["power of a point", "radical axis", "circle power", "secant power theorem", "tangent-secant theorem"],
+  "keywords": ["radical line", "equal power locus", "secant product", "tangent length", "coaxal circles"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "For a circle " }, { "type": "inlineMath", "tex": "\\Gamma" }, { "type": "text", "text": " with center " }, { "type": "inlineMath", "tex": "O" }, { "type": "text", "text": " and radius " }, { "type": "inlineMath", "tex": "r>0" }, { "type": "text", "text": ", write " }, { "type": "inlineMath", "tex": "\\operatorname{Pow}_{\\Gamma}(P)" }, { "type": "text", "text": " for the power of " }, { "type": "inlineMath", "tex": "P" }, { "type": "text", "text": "." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "displayMath", "tex": "\\operatorname{Pow}_{\\Gamma}(P)=|P-O|^2-r^2" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "The radical axis of two circles is the locus of points having equal power with respect to them." }] }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "If a line through " }, { "type": "inlineMath", "tex": "P" }, { "type": "text", "text": " meets a circle at " }, { "type": "inlineMath", "tex": "A" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "B" }, { "type": "text", "text": ", directed lengths give" }] },
+      { "type": "displayMath", "tex": "\\operatorname{Pow}_{\\Gamma}(P)=\\overline{PA}\\,\\overline{PB}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "P" }, { "type": "text", "text": " is outside and " }, { "type": "inlineMath", "tex": "PT" }, { "type": "text", "text": " is tangent, then" }] },
+      { "type": "displayMath", "tex": "PT^2=\\operatorname{Pow}_{\\Gamma}(P)" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "For centers represented by vectors " }, { "type": "inlineMath", "tex": "O_1,O_2" }, { "type": "text", "text": " and radii " }, { "type": "inlineMath", "tex": "r_1,r_2" }, { "type": "text", "text": ", subtracting the two power equations gives the radical axis" }] },
+      { "type": "displayMath", "tex": "2(O_2-O_1)\\cdot X=|O_2|^2-r_2^2-|O_1|^2+r_1^2" }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "The tangent-length formula applies only when a real tangent from the point exists, so the point must lie on or outside the circle." }],
+        [{ "type": "text", "text": "Unsigned secant lengths work directly for an exterior point; directed lengths preserve the formula for interior points." }],
+        [{ "type": "text", "text": "Two nonconcentric circles have a radical axis perpendicular to their line of centers, whether or not the circles intersect." }],
+        [{ "type": "text", "text": "Distinct concentric circles have no finite equal-power points. Coincident circles have equal power everywhere, so there is no unique radical axis." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Find a radical axis by subtraction",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Compare " }, { "type": "inlineMath", "tex": "x^2+y^2=25" }, { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "(x-4)^2+y^2=9" }, { "type": "text", "text": ". Equal powers mean" }] },
+          { "type": "displayMath", "tex": "x^2+y^2-25=(x-4)^2+y^2-9" },
+          { "type": "displayMath", "tex": "-25=-8x+7\\iff x=4" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Thus the radical axis is " }, { "type": "inlineMath", "tex": "x=4" }, { "type": "text", "text": ", perpendicular to the horizontal line of centers. Here it also passes through the two circle-intersection points." }] }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Power is a signed scalar and is negative inside a circle; it is not a distance." }],
+        [{ "type": "text", "text": "The radical axis need not cross either circle." }],
+        [{ "type": "text", "text": "Do not multiply two ordinary positive segment lengths for an interior point and expect the signed power without a directed-length convention." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/geometry-vectors/lines-circles-conics", "math-reference/geometry-vectors/coordinate-geometry", "math-reference/trigonometry/triangle-trigonometry"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "Wolfram MathWorld, Circle Power", "url": "https://mathworld.wolfram.com/CirclePower.html" },
+    { "label": "Wolfram MathWorld, Radical Line", "url": "https://mathworld.wolfram.com/RadicalLine.html" }
+  ],
+  "rights": {
+    "sourceUrl": "https://mathworld.wolfram.com/CirclePower.html",
+    "attribution": "Original MyPutnam exposition informed by the MathWorld circle-power and radical-line references.",
+    "copyrightHolder": "Wolfram Research, Inc.",
+    "licenseBasis": "Mathematical facts restated in original prose; source text and diagrams are not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

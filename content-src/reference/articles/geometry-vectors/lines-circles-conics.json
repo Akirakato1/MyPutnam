@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "geometry-vectors",
+  "articleId": "lines-circles-conics",
+  "title": "Lines, circles, and basic conic forms",
+  "displayOrder": 2,
+  "aliases": ["line equations", "circle equation", "conic sections", "ellipse equation", "hyperbola equation", "parabola equation"],
+  "keywords": ["analytic geometry", "standard form", "general conic", "discriminant", "completing the square"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "(h,k)" }, { "type": "text", "text": " denotes a center or vertex. Parameters called radii or semiaxis lengths are positive. A line normal " }, { "type": "inlineMath", "tex": "(A,B)" }, { "type": "text", "text": " is nonzero." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "A line is determined by a point and a nonzero direction, or equivalently by a point and a nonzero normal. A nondegenerate conic is a circle, ellipse, parabola, or hyperbola obtained from a quadratic equation after translation and, when needed, rotation of axes." }] }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "displayMath", "tex": "A(x-x_0)+B(y-y_0)=0,\\qquad y-y_0=m(x-x_0)" },
+      { "type": "displayMath", "tex": "(x-h)^2+(y-k)^2=r^2" },
+      { "type": "displayMath", "tex": "\\frac{(x-h)^2}{a^2}+\\frac{(y-k)^2}{b^2}=1\\quad\\text{(ellipse)}" },
+      { "type": "displayMath", "tex": "\\frac{(x-h)^2}{a^2}-\\frac{(y-k)^2}{b^2}=1\\quad\\text{(horizontal hyperbola)}" },
+      { "type": "displayMath", "tex": "(y-k)^2=4p(x-h)\\quad\\text{or}\\quad(x-h)^2=4p(y-k)" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "For the real quadratic " }, { "type": "inlineMath", "tex": "Ax^2+Bxy+Cy^2+Dx+Ey+F=0" }, { "type": "text", "text": ", the sign of " }, { "type": "inlineMath", "tex": "B^2-4AC" }, { "type": "text", "text": " distinguishes ellipse-type, parabola-type, and hyperbola-type quadratic parts when it is respectively negative, zero, or positive." }] }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "The slope form omits vertical lines; the normal form includes them." }],
+        [{ "type": "text", "text": "A circle requires " }, { "type": "inlineMath", "tex": "r>0" }, { "type": "text", "text": " for a nondegenerate circle. At " }, { "type": "inlineMath", "tex": "r=0" }, { "type": "text", "text": " it is a point." }],
+        [{ "type": "text", "text": "The displayed conic forms are axis-aligned. A nonzero mixed term may require rotating axes before standard-form parameters are read." }],
+        [{ "type": "text", "text": "The quadratic-part discriminant classifies type, not existence: coefficients can still produce an empty set, a point, one line, or two lines." }],
+        [{ "type": "text", "text": "For a parabola, the sign of " }, { "type": "inlineMath", "tex": "p" }, { "type": "text", "text": " determines the opening direction; " }, { "type": "inlineMath", "tex": "p\\ne0" }, { "type": "text", "text": "." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Recover a circle by completing squares",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Rewrite " }, { "type": "inlineMath", "tex": "x^2+y^2-6x+4y-12=0" }, { "type": "text", "text": " by grouping the coordinate terms:" }] },
+          { "type": "displayMath", "tex": "(x-3)^2-9+(y+2)^2-4-12=0" },
+          { "type": "displayMath", "tex": "(x-3)^2+(y+2)^2=25" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "The circle has center " }, { "type": "inlineMath", "tex": "(3,-2)" }, { "type": "text", "text": " and radius " }, { "type": "inlineMath", "tex": "5" }, { "type": "text", "text": "." }] }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Do not classify a general conic from the signs of two visible square terms until mixed terms and degeneracy are considered." }],
+        [{ "type": "text", "text": "A hyperbola has a minus sign between its normalized squared terms; changing which term is positive changes its transverse direction." }],
+        [{ "type": "text", "text": "When completing a square, add the same constant to both sides or compensate within the same equation." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/geometry-vectors/coordinate-geometry", "math-reference/geometry-vectors/circle-power-radical-axis", "math-reference/geometry-vectors/vector-lines-planes"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "OpenStax Precalculus 2e, Chapter 10 Analytic Geometry", "url": "https://openstax.org/books/precalculus-2e/pages/10-introduction-to-analytic-geometry" },
+    { "label": "OpenStax Precalculus 2e, Chapter 10 Key Equations", "url": "https://openstax.org/books/precalculus-2e/pages/10-key-equations" }
+  ],
+  "rights": {
+    "sourceUrl": "https://openstax.org/books/precalculus-2e/pages/10-introduction-to-analytic-geometry",
+    "attribution": "Original MyPutnam exposition informed by OpenStax Precalculus 2e.",
+    "copyrightHolder": "OpenStax",
+    "licenseBasis": "Mathematical facts restated in original prose; source text and diagrams are not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

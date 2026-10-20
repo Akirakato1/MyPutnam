@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "geometry-vectors",
+  "articleId": "triangle-area-centers",
+  "title": "Triangle area and classical centers",
+  "displayOrder": 3,
+  "aliases": ["triangle area", "centroid", "circumcenter", "incenter", "orthocenter", "triangle centers"],
+  "keywords": ["signed area", "determinant area", "median", "perpendicular bisector", "angle bisector", "altitude"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "A=(x_A,y_A), B=(x_B,y_B), C=(x_C,y_C)" }, { "type": "text", "text": ". Side lengths " }, { "type": "inlineMath", "tex": "a,b,c" }, { "type": "text", "text": " lie opposite " }, { "type": "inlineMath", "tex": "A,B,C" }, { "type": "text", "text": " respectively." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "The centroid is the common point of the medians." }],
+        [{ "type": "text", "text": "The circumcenter is the common point of the perpendicular bisectors and is equidistant from the vertices." }],
+        [{ "type": "text", "text": "The incenter is the common point of the internal angle bisectors and is equidistant from the three side lines." }],
+        [{ "type": "text", "text": "The orthocenter is the common point of the altitudes." }]
+      ] }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "displayMath", "tex": "2K_{\\mathrm{signed}}=\\det\\begin{pmatrix}x_B-x_A&y_B-y_A\\\\x_C-x_A&y_C-y_A\\end{pmatrix},\\qquad K=|K_{\\mathrm{signed}}|" },
+      { "type": "displayMath", "tex": "G=\\frac{A+B+C}{3}" },
+      { "type": "displayMath", "tex": "I=\\frac{aA+bB+cC}{a+b+c}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "The sign of " }, { "type": "inlineMath", "tex": "K_{\\mathrm{signed}}" }, { "type": "text", "text": " records orientation: it is positive for counterclockwise vertex order in the usual right-handed coordinate plane." }] },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "The circumcenter can be found by solving two equal-distance equations; the orthocenter can be found by intersecting two altitude equations. For a right triangle they are especially simple: the circumcenter is the midpoint of the hypotenuse and the orthocenter is the right-angle vertex." }] }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "A unique ordinary triangle and unique circumcenter, incenter, and orthocenter require three noncollinear vertices." }],
+        [{ "type": "text", "text": "The signed determinant may be zero; then the points are collinear, area is zero, and the usual center constructions are degenerate." }],
+        [{ "type": "text", "text": "The incenter coordinate formula uses positive side lengths opposite the correspondingly named vertices." }],
+        [{ "type": "text", "text": "A center may lie outside the triangle: the circumcenter and orthocenter do so for an obtuse triangle." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Centers of a right coordinate triangle",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Take " }, { "type": "inlineMath", "tex": "A=(0,0), B=(6,0), C=(0,3)" }, { "type": "text", "text": ". The determinant gives" }] },
+          { "type": "displayMath", "tex": "K=\\frac12|6\\cdot3-0\\cdot0|=9,\\qquad G=\\left(2,1\\right)" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "The right angle is at " }, { "type": "inlineMath", "tex": "A" }, { "type": "text", "text": ", so " }, { "type": "inlineMath", "tex": "H=A=(0,0)" }, { "type": "text", "text": ". The hypotenuse midpoint is " }, { "type": "inlineMath", "tex": "O=(3,3/2)" }, { "type": "text", "text": ", the circumcenter." }] }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Absolute value gives geometric area but erases orientation; keep the signed determinant when an orientation test is needed." }],
+        [{ "type": "text", "text": "The centroid is not generally the circumcenter, incenter, or orthocenter; all four coincide only in an equilateral triangle." }],
+        [{ "type": "text", "text": "Using side weights on the wrong vertices gives the wrong incenter." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/trigonometry/triangle-trigonometry", "math-reference/geometry-vectors/coordinate-geometry", "math-reference/geometry-vectors/cross-product-area-volume"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "Wolfram MathWorld, Triangle Center", "url": "https://mathworld.wolfram.com/TriangleCenter.html" },
+    { "label": "Wolfram MathWorld, Barycentric Coordinates", "url": "https://mathworld.wolfram.com/BarycentricCoordinates.html" }
+  ],
+  "rights": {
+    "sourceUrl": "https://mathworld.wolfram.com/TriangleCenter.html",
+    "attribution": "Original MyPutnam exposition informed by the MathWorld triangle-center reference.",
+    "copyrightHolder": "Wolfram Research, Inc.",
+    "licenseBasis": "Mathematical facts restated in original prose; source text, tables, and diagrams are not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

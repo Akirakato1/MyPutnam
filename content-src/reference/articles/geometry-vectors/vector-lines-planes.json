@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "geometry-vectors",
+  "articleId": "vector-lines-planes",
+  "title": "Vector equations of lines and planes",
+  "displayOrder": 7,
+  "aliases": ["vector equation of a line", "plane equation", "line-plane intersection", "parametric line", "normal equation of a plane"],
+  "keywords": ["parallel lines", "parallel planes", "skew lines", "intersection test", "point-plane distance"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "r,p,q,d,n" }, { "type": "text", "text": " denote vectors in " }, { "type": "inlineMath", "tex": "\\mathbb R^3" }, { "type": "text", "text": ". A line direction " }, { "type": "inlineMath", "tex": "d" }, { "type": "text", "text": " and a plane normal " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " are nonzero." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "A line through " }, { "type": "inlineMath", "tex": "p" }, { "type": "text", "text": " in direction " }, { "type": "inlineMath", "tex": "d" }, { "type": "text", "text": " and a plane through " }, { "type": "inlineMath", "tex": "q" }, { "type": "text", "text": " with normal " }, { "type": "inlineMath", "tex": "n" }, { "type": "text", "text": " are described by" }] },
+      { "type": "displayMath", "tex": "r=p+td,\\quad t\\in\\mathbb R;\\qquad n\\cdot(r-q)=0" }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "For a line " }, { "type": "inlineMath", "tex": "r=p+td" }, { "type": "text", "text": " and plane " }, { "type": "inlineMath", "tex": "n\\cdot(r-q)=0" }, { "type": "text", "text": ", if " }, { "type": "inlineMath", "tex": "n\\cdot d\\ne0" }, { "type": "text", "text": " then their unique intersection parameter is" }] },
+      { "type": "displayMath", "tex": "t=\\frac{n\\cdot(q-p)}{n\\cdot d}" },
+      { "type": "displayMath", "tex": "d(x_0,\\;n\\cdot(r-q)=0)=\\frac{|n\\cdot(x_0-q)|}{\\|n\\|}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Two planes are parallel exactly when their normals are linearly dependent; otherwise they intersect in a line directed by " }, { "type": "inlineMath", "tex": "n_1\\times n_2" }, { "type": "text", "text": ". Two lines with dependent directions are parallel or coincident. In three dimensions, nonparallel lines can still be skew." }] }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "A zero direction does not define a line, and a zero normal does not define a plane." }],
+        [{ "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "n\\cdot d=0" }, { "type": "text", "text": ", the line is parallel to the plane. Substitution of one line point decides whether it lies in the plane or is disjoint." }],
+        [{ "type": "text", "text": "Parallel normals do not by themselves prove two planes are distinct; compare their constants or test a point." }],
+        [{ "type": "text", "text": "To test two spatial lines for intersection, solve all three coordinate equations with one parameter for each line. Agreement in only two coordinates is insufficient." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Intersect a line with a plane",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Intersect " }, { "type": "inlineMath", "tex": "r=(1,0,-1)+t(2,1,3)" }, { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "x-y+z=4" }, { "type": "text", "text": ". Substitution gives" }] },
+          { "type": "displayMath", "tex": "(1+2t)-t+(-1+3t)=4t=4" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Hence " }, { "type": "inlineMath", "tex": "t=1" }, { "type": "text", "text": " and the intersection point is " }, { "type": "inlineMath", "tex": "(3,1,2)" }, { "type": "text", "text": ". The nonzero coefficient of " }, { "type": "inlineMath", "tex": "t" }, { "type": "text", "text": " confirms uniqueness." }] }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Do not confuse a line's direction vector with a plane's normal vector." }],
+        [{ "type": "text", "text": "Nonparallel lines in a plane intersect, but nonparallel lines in three-dimensional space may be skew." }],
+        [{ "type": "text", "text": "Dividing by " }, { "type": "inlineMath", "tex": "n\\cdot d" }, { "type": "text", "text": " before checking whether it is zero discards the parallel and contained cases." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/geometry-vectors/dot-product-projections", "math-reference/geometry-vectors/cross-product-area-volume", "math-reference/geometry-vectors/lines-circles-conics"],
+  "relatedProblems": [],
+  "sources": [{ "label": "OpenStax Calculus Volume 3, 2.5 Equations of Lines and Planes in Space", "url": "https://openstax.org/books/calculus-volume-3/pages/2-5-equations-of-lines-and-planes-in-space" }],
+  "rights": {
+    "sourceUrl": "https://openstax.org/books/calculus-volume-3/pages/2-5-equations-of-lines-and-planes-in-space",
+    "attribution": "Original MyPutnam exposition informed by OpenStax Calculus Volume 3.",
+    "copyrightHolder": "OpenStax",
+    "licenseBasis": "Mathematical facts restated in original prose; source text and diagrams are not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "geometry-vectors",
+  "articleId": "dot-product-projections",
+  "title": "Dot products, angles, and projections",
+  "displayOrder": 5,
+  "aliases": ["dot product", "orthogonal projection", "angle between vectors", "scalar product", "vector projection"],
+  "keywords": ["inner product", "orthogonality", "norm", "cosine formula", "component"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "u=(u_1,\\ldots,u_n)" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "v=(v_1,\\ldots,v_n)" }, { "type": "text", "text": " be real Euclidean vectors. Their norm is written " }, { "type": "inlineMath", "tex": "\\|u\\|" }, { "type": "text", "text": "." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "displayMath", "tex": "u\\cdot v=\\sum_{i=1}^{n}u_iv_i,\\qquad \\|u\\|=\\sqrt{u\\cdot u}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Vectors are orthogonal when their dot product is zero. Projection separates a vector into a component parallel to a chosen nonzero direction and a perpendicular residual." }] }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "displayMath", "tex": "u\\cdot v=\\|u\\|\\,\\|v\\|\\cos\\theta" },
+      { "type": "displayMath", "tex": "\\operatorname{proj}_{u}v=\\frac{u\\cdot v}{u\\cdot u}u,\\qquad \\operatorname{comp}_{u}v=\\frac{u\\cdot v}{\\|u\\|}" },
+      { "type": "displayMath", "tex": "v=\\operatorname{proj}_{u}v+\\left(v-\\operatorname{proj}_{u}v\\right),\\qquad u\\cdot\\left(v-\\operatorname{proj}_{u}v\\right)=0" },
+      { "type": "displayMath", "tex": "|u\\cdot v|\\le \\|u\\|\\,\\|v\\|" }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "The angle formula requires both vectors to be nonzero and returns the principal angle in " }, { "type": "inlineMath", "tex": "[0,\\pi]" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Projection onto " }, { "type": "inlineMath", "tex": "u" }, { "type": "text", "text": " requires " }, { "type": "inlineMath", "tex": "u\\ne0" }, { "type": "text", "text": ". The scalar component can be negative; the length of the vector projection is its absolute value." }],
+        [{ "type": "text", "text": "These formulas use the standard real Euclidean inner product. Complex inner products conjugate one argument and are not represented by this component sum." }],
+        [{ "type": "text", "text": "In floating-point work, roundoff can move a computed cosine slightly outside its mathematical interval; clamp only after checking the inputs and formula." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Compute an angle and projection",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "u=(2,-1,2)" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "v=(1,2,2)" }, { "type": "text", "text": "," }] },
+          { "type": "displayMath", "tex": "u\\cdot v=4,\\qquad \\|u\\|=\\|v\\|=3,\\qquad \\cos\\theta=\\frac49" },
+          { "type": "displayMath", "tex": "\\operatorname{proj}_{u}v=\\frac49u=\\left(\\frac89,-\\frac49,\\frac89\\right)" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Subtracting this projection from " }, { "type": "inlineMath", "tex": "v" }, { "type": "text", "text": " gives a residual whose dot product with " }, { "type": "inlineMath", "tex": "u" }, { "type": "text", "text": " is zero." }] }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "The denominator of the vector projection is the squared norm, not the norm." }],
+        [{ "type": "text", "text": "A zero dot product implies perpendicularity only when both vectors are being interpreted in an inner-product space; the zero vector has no direction or angle." }],
+        [{ "type": "text", "text": "Projection is directional: projecting " }, { "type": "inlineMath", "tex": "v" }, { "type": "text", "text": " onto " }, { "type": "inlineMath", "tex": "u" }, { "type": "text", "text": " is generally different from projecting " }, { "type": "inlineMath", "tex": "u" }, { "type": "text", "text": " onto " }, { "type": "inlineMath", "tex": "v" }, { "type": "text", "text": "." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/algebra-inequalities/cauchy-schwarz-holder-minkowski", "math-reference/geometry-vectors/coordinate-geometry", "math-reference/geometry-vectors/vector-lines-planes"],
+  "relatedProblems": [],
+  "sources": [{ "label": "OpenStax Calculus Volume 3, 2.3 The Dot Product", "url": "https://openstax.org/books/calculus-volume-3/pages/2-3-the-dot-product" }],
+  "rights": {
+    "sourceUrl": "https://openstax.org/books/calculus-volume-3/pages/2-3-the-dot-product",
+    "attribution": "Original MyPutnam exposition informed by OpenStax Calculus Volume 3.",
+    "copyrightHolder": "OpenStax",
+    "licenseBasis": "Mathematical facts restated in original prose; source text and diagrams are not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

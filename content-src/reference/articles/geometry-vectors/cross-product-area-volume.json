@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "geometry-vectors",
+  "articleId": "cross-product-area-volume",
+  "title": "Cross products, area, and volume",
+  "displayOrder": 6,
+  "aliases": ["cross product", "scalar triple product", "vector area", "triple product", "parallelepiped volume"],
+  "keywords": ["right-hand rule", "oriented area", "determinant", "coplanarity", "normal vector"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Vectors are in an oriented right-handed copy of " }, { "type": "inlineMath", "tex": "\\mathbb R^3" }, { "type": "text", "text": ". The ordered cross product is written " }, { "type": "inlineMath", "tex": "u\\times v" }, { "type": "text", "text": "." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "displayMath", "tex": "u\\times v=(u_2v_3-u_3v_2,\\;u_3v_1-u_1v_3,\\;u_1v_2-u_2v_1)" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "The cross product is perpendicular to both inputs, with direction fixed by the right-hand rule. Reversing the inputs reverses the result." }] }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "displayMath", "tex": "\\|u\\times v\\|=\\|u\\|\\,\\|v\\|\\sin\\theta" },
+      { "type": "displayMath", "tex": "A_{\\mathrm{parallelogram}}=\\|u\\times v\\|,\\qquad A_{\\mathrm{triangle}}=\\frac12\\|u\\times v\\|" },
+      { "type": "displayMath", "tex": "[u,v,w]=u\\cdot(v\\times w)=\\det\\begin{pmatrix}u_1&u_2&u_3\\\\v_1&v_2&v_3\\\\w_1&w_2&w_3\\end{pmatrix}" },
+      { "type": "displayMath", "tex": "V_{\\mathrm{parallelepiped}}=|[u,v,w]|" },
+      { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "u\\times v=0" }, { "type": "text", "text": " exactly when the two vectors are linearly dependent. The scalar triple product is zero exactly when the three vectors are coplanar." }] }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "The vector-valued cross product here is specific to three-dimensional oriented Euclidean space." }],
+        [{ "type": "text", "text": "Magnitude gives geometric area or volume; the sign of the scalar triple product records orientation and changes under an odd swap of inputs." }],
+        [{ "type": "text", "text": "In two dimensions, the determinant " }, { "type": "inlineMath", "tex": "u_1v_2-u_2v_1" }, { "type": "text", "text": " is the signed-area analogue, not a two-dimensional vector cross product." }],
+        [{ "type": "text", "text": "Zero area or volume is a valid degeneracy signal and does not by itself indicate an arithmetic error." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Area and an oriented volume",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "u=(1,2,0)" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "v=(3,-1,2)" }, { "type": "text", "text": "," }] },
+          { "type": "displayMath", "tex": "u\\times v=(4,-2,-7),\\qquad \\|u\\times v\\|=\\sqrt{69}" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Their parallelogram has area " }, { "type": "inlineMath", "tex": "\\sqrt{69}" }, { "type": "text", "text": ". With " }, { "type": "inlineMath", "tex": "w=(0,1,1)" }, { "type": "text", "text": "," }] },
+          { "type": "displayMath", "tex": "(u\\times v)\\cdot w=-9" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "so the oriented volume is negative in this ordering and the geometric volume is " }, { "type": "inlineMath", "tex": "9" }, { "type": "text", "text": "." }] }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "The cross product is not commutative; swapping the factors changes the sign." }],
+        [{ "type": "text", "text": "A triangle uses half the parallelogram area." }],
+        [{ "type": "text", "text": "Taking an absolute value too early discards orientation information needed by later tests." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/geometry-vectors/triangle-area-centers", "math-reference/geometry-vectors/dot-product-projections", "math-reference/geometry-vectors/vector-lines-planes"],
+  "relatedProblems": [],
+  "sources": [{ "label": "OpenStax Calculus Volume 3, 2.4 The Cross Product", "url": "https://openstax.org/books/calculus-volume-3/pages/2-4-the-cross-product" }],
+  "rights": {
+    "sourceUrl": "https://openstax.org/books/calculus-volume-3/pages/2-4-the-cross-product",
+    "attribution": "Original MyPutnam exposition informed by OpenStax Calculus Volume 3.",
+    "copyrightHolder": "OpenStax",
+    "licenseBasis": "Mathematical facts restated in original prose; source text and diagrams are not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

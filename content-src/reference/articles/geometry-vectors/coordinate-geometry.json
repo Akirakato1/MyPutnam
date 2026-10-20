@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "geometry-vectors",
+  "articleId": "coordinate-geometry",
+  "title": "Coordinate geometry: distance, slope, and loci",
+  "displayOrder": 1,
+  "aliases": ["distance formula", "midpoint formula", "locus", "coordinate distance", "slope formula"],
+  "keywords": ["Cartesian coordinates", "perpendicular bisector", "point-line distance", "equidistant points", "analytic geometry"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Work in a Euclidean coordinate plane with perpendicular axes at the same scale. Let " }, { "type": "inlineMath", "tex": "P=(x_1,y_1)" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "Q=(x_2,y_2)" }, { "type": "text", "text": "." }] },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "A locus is the full set of points satisfying a stated geometric or algebraic condition." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Coordinate formulas translate Euclidean length, direction, and incidence into equations. A useful locus argument proves both directions: every geometric point satisfies the equation, and every point satisfying the equation has the required geometry." }] }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "displayMath", "tex": "d(P,Q)=\\sqrt{(x_2-x_1)^2+(y_2-y_1)^2},\\qquad M=\\left(\\frac{x_1+x_2}{2},\\frac{y_1+y_2}{2}\\right)" },
+      { "type": "displayMath", "tex": "m_{PQ}=\\frac{y_2-y_1}{x_2-x_1}\\quad (x_2\\ne x_1)" },
+      { "type": "displayMath", "tex": "d\\bigl((x_0,y_0),Ax+By+C=0\\bigr)=\\frac{|Ax_0+By_0+C|}{\\sqrt{A^2+B^2}}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "The locus at distance " }, { "type": "inlineMath", "tex": "r" }, { "type": "text", "text": " from " }, { "type": "inlineMath", "tex": "C=(h,k)" }, { "type": "text", "text": " is the circle " }, { "type": "inlineMath", "tex": "(x-h)^2+(y-k)^2=r^2" }, { "type": "text", "text": ". The locus equidistant from two distinct points is their perpendicular bisector." }] }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "The slope quotient requires " }, { "type": "inlineMath", "tex": "x_2\\ne x_1" }, { "type": "text", "text": "; a vertical line has undefined slope rather than infinite slope." }],
+        [{ "type": "text", "text": "The point-line distance formula requires " }, { "type": "inlineMath", "tex": "(A,B)\\ne(0,0)" }, { "type": "text", "text": ". Multiplying the line equation by a nonzero constant does not change the distance." }],
+        [{ "type": "text", "text": "Squaring a distance condition removes square roots, but any later algebraic manipulation that is not reversible can add extraneous points." }],
+        [{ "type": "text", "text": "These length and angle formulas assume orthonormal coordinates; oblique axes require a different metric." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Find an equidistance locus",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "A=(-2,0)" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "B=(4,0)" }, { "type": "text", "text": ". For " }, { "type": "inlineMath", "tex": "X=(x,y)" }, { "type": "text", "text": ", equate squared distances:" }] },
+          { "type": "displayMath", "tex": "(x+2)^2+y^2=(x-4)^2+y^2\\iff 12x=12\\iff x=1" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Thus the locus is the vertical perpendicular bisector " }, { "type": "inlineMath", "tex": "x=1" }, { "type": "text", "text": ". Every point on that line satisfies the original distance equality, so no converse is missing." }] }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Do not use a negative square root for distance; distance is nonnegative." }],
+        [{ "type": "text", "text": "The product of slopes test for perpendicular lines does not cover vertical lines. Direction vectors or dot products handle every orientation." }],
+        [{ "type": "text", "text": "An equation derived as a necessary condition is not yet a locus proof until the reverse implication is checked." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/geometry-vectors/lines-circles-conics", "math-reference/geometry-vectors/triangle-area-centers", "math-reference/geometry-vectors/dot-product-projections"],
+  "relatedProblems": [],
+  "sources": [{ "label": "OpenStax Intermediate Algebra 2e, 11.1 Distance and Midpoint Formulas; Circles", "url": "https://openstax.org/books/intermediate-algebra-2e/pages/11-1-distance-and-midpoint-formulas-circles" }],
+  "rights": {
+    "sourceUrl": "https://openstax.org/books/intermediate-algebra-2e/pages/11-1-distance-and-midpoint-formulas-circles",
+    "attribution": "Original MyPutnam exposition informed by OpenStax Intermediate Algebra 2e.",
+    "copyrightHolder": "OpenStax",
+    "licenseBasis": "Mathematical facts restated in original prose; source text and diagrams are not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}
