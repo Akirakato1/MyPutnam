@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "sequences-series-recurrences",
+  "articleId": "infinite-series-tests",
+  "title": "Tests for infinite series",
+  "displayOrder": 4,
+  "aliases": ["convergence tests", "ratio test", "root test", "comparison test", "alternating series test"],
+  "keywords": ["infinite series", "absolute convergence", "conditional convergence", "p-series", "integral test"],
+  "notation": { "blocks": [
+    { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "S_N=\\sum_{n=1}^{N}a_n" }, { "type": "text", "text": " is a partial sum. The series " }, { "type": "inlineMath", "tex": "\\sum_{n=1}^{\\infty}a_n" }, { "type": "text", "text": " converges when the sequence of partial sums has a finite limit." }] }
+  ] },
+  "definitions": { "blocks": [
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "Absolute convergence means that the series of absolute values converges. Conditional convergence means that the original series converges but its absolute-value series does not." }] }
+  ] },
+  "results": { "blocks": [
+    { "type": "list", "ordered": false, "items": [
+      [{ "type": "text", "text": "Term test: if " }, { "type": "inlineMath", "tex": "a_n" }, { "type": "text", "text": " does not tend to zero, the series diverges." }],
+      [{ "type": "text", "text": "Benchmarks: a geometric series converges for " }, { "type": "inlineMath", "tex": "|r|<1" }, { "type": "text", "text": "; the p-series " }, { "type": "inlineMath", "tex": "\\sum n^{-p}" }, { "type": "text", "text": " converges exactly when " }, { "type": "inlineMath", "tex": "p>1" }, { "type": "text", "text": "." }],
+      [{ "type": "text", "text": "For nonnegative terms, direct and limit comparison transfer convergence behavior from a known benchmark under their stated inequalities or a finite positive ratio limit." }],
+      [{ "type": "text", "text": "An alternating series " }, { "type": "inlineMath", "tex": "\\sum(-1)^n b_n" }, { "type": "text", "text": " converges if b is eventually nonincreasing and tends to zero." }]
+    ] },
+    { "type": "displayMath", "tex": "L=\\lim_{n\\to\\infty}\\left|\\frac{a_{n+1}}{a_n}\\right|\\quad\\text{or}\\quad L=\\lim_{n\\to\\infty}\\sqrt[n]{|a_n|}" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "For either ratio or root test, L less than one gives absolute convergence, L greater than one gives divergence, and L equal to one is inconclusive." }] }
+  ] },
+  "conditions": { "blocks": [
+    { "type": "list", "ordered": false, "items": [
+      [{ "type": "text", "text": "The term test can prove divergence but never proves convergence from " }, { "type": "inlineMath", "tex": "a_n\\to0" }, { "type": "text", "text": " alone." }],
+      [{ "type": "text", "text": "The integral test requires a positive, continuous, decreasing extension on a tail. Direct comparison requires nonnegative terms on a tail." }],
+      [{ "type": "text", "text": "If a ratio or root limit does not exist, limsup versions can sometimes be used, but the elementary displayed test does not apply as written." }]
+    ] }
+  ] },
+  "examples": [{ "title": "Choose the ratio test", "document": { "blocks": [
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "a_n=n/3^n" }, { "type": "text", "text": ", the ratio simplifies:" }] },
+    { "type": "displayMath", "tex": "\\lim_{n\\to\\infty}\\frac{|a_{n+1}|}{|a_n|}=\\lim_{n\\to\\infty}\\frac{n+1}{3n}=\\frac13<1" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "Therefore " }, { "type": "inlineMath", "tex": "\\sum_{n=1}^{\\infty}n/3^n" }, { "type": "text", "text": " converges absolutely." }] }
+  ] } }],
+  "pitfalls": { "blocks": [
+    { "type": "list", "ordered": false, "items": [
+      [{ "type": "text", "text": "A ratio-test value of one is no conclusion: both the harmonic series and the sum of reciprocal squares have ratio limit one." }],
+      [{ "type": "text", "text": "Alternating signs do not suffice; verify eventual monotonicity and convergence of term magnitudes to zero." }],
+      [{ "type": "text", "text": "Conditional convergence does not permit arbitrary rearrangement without potentially changing the sum." }]
+    ] }
+  ] },
+  "relatedReferences": ["math-reference/sequences-series-recurrences/arithmetic-geometric-sequences", "math-reference/calculus/improper-integrals", "math-reference/calculus/limits-continuity"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "OpenStax Calculus Volume 2, Comparison Tests", "url": "https://openstax.org/books/calculus-volume-2/pages/5-4-comparison-tests" },
+    { "label": "OpenStax Calculus Volume 2, Ratio and Root Tests", "url": "https://openstax.org/books/calculus-volume-2/pages/5-6-ratio-and-root-tests" }
+  ],
+  "rights": { "sourceUrl": "https://openstax.org/books/calculus-volume-2/pages/5-6-ratio-and-root-tests", "attribution": "Original MyPutnam exposition informed by OpenStax Calculus Volume 2.", "copyrightHolder": "OpenStax", "licenseBasis": "Mathematical facts restated in original prose; source text is not redistributed.", "redistributionStatus": "cleared" }
+}

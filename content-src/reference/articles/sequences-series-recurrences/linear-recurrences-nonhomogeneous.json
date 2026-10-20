@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "sequences-series-recurrences",
+  "articleId": "linear-recurrences-nonhomogeneous",
+  "title": "Nonhomogeneous linear recurrences",
+  "displayOrder": 6,
+  "aliases": ["nonhomogeneous linear recurrence", "method of undetermined coefficients", "forced recurrence", "particular solution"],
+  "keywords": ["recurrence relation", "forcing term", "resonance", "characteristic root", "superposition"],
+  "notation": { "blocks": [
+    { "type": "displayMath", "tex": "a_n-c_1a_{n-1}-\\cdots-c_ka_{n-k}=f_n" },
+    { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "f_n" }, { "type": "text", "text": " is the forcing sequence, and the left side is a constant-coefficient linear recurrence operator." }] }
+  ] },
+  "definitions": { "blocks": [
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "A particular solution satisfies the full forced recurrence. The difference of any two particular solutions satisfies the associated homogeneous recurrence." }] }
+  ] },
+  "results": { "blocks": [
+    { "type": "displayMath", "tex": "a_n=a_n^{(h)}+a_n^{(p)}" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "For a forcing term equal to a degree-d polynomial times " }, { "type": "inlineMath", "tex": "\\alpha^n" }, { "type": "text", "text": ", try a degree-d polynomial times " }, { "type": "inlineMath", "tex": "\\alpha^n" }, { "type": "text", "text": ". If alpha is a characteristic root of multiplicity s, multiply the entire trial by " }, { "type": "inlineMath", "tex": "n^s" }, { "type": "text", "text": " to handle resonance." }] },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "Sines and cosines can be treated together using complex exponentials, then converted back to a real expression. A sum of forcing types may be handled by superposition." }] }
+  ] },
+  "conditions": { "blocks": [
+    { "type": "list", "ordered": false, "items": [
+      [{ "type": "text", "text": "Undetermined coefficients applies to constant-coefficient recurrences and forcing terms stable under shifts, such as polynomial-exponential and trigonometric forms." }],
+      [{ "type": "text", "text": "The resonance multiplier uses the multiplicity of alpha in the characteristic polynomial, not just whether alpha appears once." }],
+      [{ "type": "text", "text": "After finding a particular solution, apply initial conditions to the combined homogeneous-plus-particular expression." }]
+    ] }
+  ] },
+  "examples": [{ "title": "Correct a resonant trial", "document": { "blocks": [
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "Solve " }, { "type": "inlineMath", "tex": "a_n-2a_{n-1}=3\\cdot2^n" }, { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "a_0=1" }, { "type": "text", "text": ". Since 2 is the homogeneous characteristic root, a trial " }, { "type": "inlineMath", "tex": "C2^n" }, { "type": "text", "text": " resonates; use " }, { "type": "inlineMath", "tex": "Cn2^n" }, { "type": "text", "text": " instead." }] },
+    { "type": "displayMath", "tex": "Cn2^n-2C(n-1)2^{n-1}=C2^n=3\\cdot2^n" },
+    { "type": "displayMath", "tex": "a_n=A2^n+3n2^n=(1+3n)2^n" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "The initial value gives A = 1." }] }
+  ] } }],
+  "pitfalls": { "blocks": [
+    { "type": "list", "ordered": false, "items": [
+      [{ "type": "text", "text": "If substitution makes every trial coefficient cancel, check for resonance before enlarging the polynomial degree." }],
+      [{ "type": "text", "text": "A particular solution is not the general solution; homogeneous terms must still be added." }],
+      [{ "type": "text", "text": "The trial polynomial must include every degree down to the constant term unless symmetry proves otherwise." }]
+    ] }
+  ] },
+  "relatedReferences": ["math-reference/sequences-series-recurrences/linear-recurrences-homogeneous", "math-reference/sequences-series-recurrences/ordinary-generating-functions", "math-reference/differential-equations/forced-second-order"],
+  "relatedProblems": [],
+  "sources": [{ "label": "MIT OpenCourseWare 18.781, Generating Functions lecture notes", "url": "https://ocw.mit.edu/courses/18-781-theory-of-numbers-spring-2012/resources/mit18_781s12_lec16/" }],
+  "rights": { "sourceUrl": "https://ocw.mit.edu/courses/18-781-theory-of-numbers-spring-2012/resources/mit18_781s12_lec16/", "attribution": "Original MyPutnam exposition informed by MIT OpenCourseWare lecture notes.", "copyrightHolder": null, "licenseBasis": "Mathematical facts restated in original prose; source text is not redistributed.", "redistributionStatus": "cleared" }
+}

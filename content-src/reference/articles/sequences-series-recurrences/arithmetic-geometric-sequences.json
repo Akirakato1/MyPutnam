@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "sequences-series-recurrences",
+  "articleId": "arithmetic-geometric-sequences",
+  "title": "Arithmetic and geometric sequences",
+  "displayOrder": 1,
+  "aliases": ["arithmetic sequence", "geometric sequence", "arithmetic progression", "geometric progression"],
+  "keywords": ["common difference", "common ratio", "finite geometric sum", "infinite geometric series", "partial sum"],
+  "notation": { "blocks": [
+    { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "a_n" }, { "type": "text", "text": " is the nth term, indexed from n = 1, and " }, { "type": "inlineMath", "tex": "S_n=\\sum_{k=1}^{n}a_k" }, { "type": "text", "text": " is the nth partial sum." }] }
+  ] },
+  "definitions": { "blocks": [
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "An arithmetic sequence has constant difference d between consecutive terms. A geometric sequence has constant ratio r between consecutive terms whenever that ratio is defined." }] }
+  ] },
+  "results": { "blocks": [
+    { "type": "displayMath", "tex": "a_n=a_1+(n-1)d,\\qquad S_n=\\frac{n}{2}(a_1+a_n)=\\frac{n}{2}(2a_1+(n-1)d)" },
+    { "type": "displayMath", "tex": "a_n=a_1r^{n-1},\\qquad S_n=a_1\\frac{1-r^n}{1-r}\\quad(r\\ne1)" },
+    { "type": "displayMath", "tex": "\\sum_{k=0}^{\\infty}a_1r^k=\\frac{a_1}{1-r}\\quad(|r|<1)" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "For r = 1, the finite geometric sum is simply " }, { "type": "inlineMath", "tex": "S_n=na_1" }, { "type": "text", "text": "." }] }
+  ] },
+  "conditions": { "blocks": [
+    { "type": "list", "ordered": false, "items": [
+      [{ "type": "text", "text": "The finite formulas hold for every positive integer n; the displayed geometric quotient separates the r = 1 case to avoid division by zero." }],
+      [{ "type": "text", "text": "The infinite geometric sum converges only when " }, { "type": "inlineMath", "tex": "|r|<1" }, { "type": "text", "text": ". If " }, { "type": "inlineMath", "tex": "|r|\\ge1" }, { "type": "text", "text": " and the first term is nonzero, its terms do not produce a convergent series." }],
+      [{ "type": "text", "text": "If a geometric sequence contains zero terms, define it from a first term and ratio rather than by dividing consecutive terms." }]
+    ] }
+  ] },
+  "examples": [{ "title": "Sum a finite geometric progression", "document": { "blocks": [
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "The eight terms " }, { "type": "inlineMath", "tex": "3,6,12,\\ldots,3\\cdot2^7" }, { "type": "text", "text": " have first term 3 and ratio 2." }] },
+    { "type": "displayMath", "tex": "S_8=3\\frac{1-2^8}{1-2}=3(255)=765" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "No infinite-series condition is needed because only eight terms are being added." }] }
+  ] } }],
+  "pitfalls": { "blocks": [
+    { "type": "list", "ordered": false, "items": [
+      [{ "type": "text", "text": "With indexing from one, a geometric nth term uses " }, { "type": "inlineMath", "tex": "r^{n-1}" }, { "type": "text", "text": ", not " }, { "type": "inlineMath", "tex": "r^n" }, { "type": "text", "text": "." }],
+      [{ "type": "text", "text": "A sequence approaching zero is necessary but not sufficient for its infinite series to converge." }],
+      [{ "type": "text", "text": "Do not use the infinite-sum formula when the ratio has absolute value at least one." }]
+    ] }
+  ] },
+  "relatedReferences": ["math-reference/sequences-series-recurrences/finite-sums-and-telescoping", "math-reference/sequences-series-recurrences/infinite-series-tests"],
+  "relatedProblems": [],
+  "sources": [{ "label": "OpenStax Algebra and Trigonometry 2e, Series and Their Notations", "url": "https://openstax.org/books/algebra-and-trigonometry-2e/pages/13-4-series-and-their-notations" }],
+  "rights": { "sourceUrl": "https://openstax.org/books/algebra-and-trigonometry-2e/pages/13-4-series-and-their-notations", "attribution": "Original MyPutnam exposition informed by OpenStax Algebra and Trigonometry 2e.", "copyrightHolder": "OpenStax", "licenseBasis": "Mathematical facts restated in original prose; source text is not redistributed.", "redistributionStatus": "cleared" }
+}

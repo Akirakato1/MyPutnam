@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "sequences-series-recurrences",
+  "articleId": "finite-sums-and-telescoping",
+  "title": "Finite sums and telescoping",
+  "displayOrder": 2,
+  "aliases": ["telescoping sum", "finite sum", "sigma notation", "summation by cancellation"],
+  "keywords": ["summation", "index shift", "linearity", "partial fractions", "finite difference"],
+  "notation": { "blocks": [
+    { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "\\sum_{k=m}^{n}a_k" }, { "type": "text", "text": " adds the terms with integer indices m through n. The forward difference of b is " }, { "type": "inlineMath", "tex": "\\Delta b_k=b_{k+1}-b_k" }, { "type": "text", "text": "." }] }
+  ] },
+  "definitions": { "blocks": [
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "A sum telescopes when consecutive terms cancel after the summand is rewritten as a difference. The uncancelled boundary terms determine the value." }] }
+  ] },
+  "results": { "blocks": [
+    { "type": "displayMath", "tex": "\\sum_{k=m}^{n}(\\alpha a_k+\\beta c_k)=\\alpha\\sum_{k=m}^{n}a_k+\\beta\\sum_{k=m}^{n}c_k" },
+    { "type": "displayMath", "tex": "\\sum_{k=m}^{n}(b_{k+1}-b_k)=b_{n+1}-b_m" },
+    { "type": "displayMath", "tex": "\\sum_{k=m}^{n}a_{k+s}=\\sum_{j=m+s}^{n+s}a_j" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "Partial fractions often expose a telescoping difference, while an index shift aligns sums before coefficients are compared." }] }
+  ] },
+  "conditions": { "blocks": [
+    { "type": "list", "ordered": false, "items": [
+      [{ "type": "text", "text": "These are finite sums, so no convergence hypothesis is needed." }],
+      [{ "type": "text", "text": "When shifting an index, shift both bounds and the summand; the number of terms must stay unchanged." }],
+      [{ "type": "text", "text": "Any partial-fraction decomposition inherits the original denominator restrictions." }]
+    ] }
+  ] },
+  "examples": [{ "title": "Telescope a rational sum", "document": { "blocks": [
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "For positive integer n, decompose the summand:" }] },
+    { "type": "displayMath", "tex": "\\frac{1}{k(k+1)}=\\frac{1}{k}-\\frac{1}{k+1}" },
+    { "type": "displayMath", "tex": "\\sum_{k=1}^{n}\\frac{1}{k(k+1)}=\\left(1-\\frac12\\right)+\\cdots+\\left(\\frac1n-\\frac1{n+1}\\right)=\\frac{n}{n+1}" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "Every interior reciprocal occurs once with each sign, leaving only the two boundary terms." }] }
+  ] } }],
+  "pitfalls": { "blocks": [
+    { "type": "list", "ordered": false, "items": [
+      [{ "type": "text", "text": "Write several terms before cancelling; otherwise an off-by-one boundary error is easy to miss." }],
+      [{ "type": "text", "text": "Telescoping describes cancellation in partial sums, not a license to discard all middle terms without showing their pairing." }],
+      [{ "type": "text", "text": "A finite identity may hold even when the corresponding infinite limit does not exist." }]
+    ] }
+  ] },
+  "relatedReferences": ["math-reference/sequences-series-recurrences/arithmetic-geometric-sequences", "math-reference/sequences-series-recurrences/power-sums", "math-reference/sequences-series-recurrences/ordinary-generating-functions"],
+  "relatedProblems": [],
+  "sources": [{ "label": "OpenStax Algebra and Trigonometry 2e, Series and Their Notations", "url": "https://openstax.org/books/algebra-and-trigonometry-2e/pages/13-4-series-and-their-notations" }],
+  "rights": { "sourceUrl": "https://openstax.org/books/algebra-and-trigonometry-2e/pages/13-4-series-and-their-notations", "attribution": "Original MyPutnam exposition informed by OpenStax Algebra and Trigonometry 2e.", "copyrightHolder": "OpenStax", "licenseBasis": "Mathematical facts restated in original prose; source text is not redistributed.", "redistributionStatus": "cleared" }
+}

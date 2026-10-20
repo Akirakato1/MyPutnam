@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "sequences-series-recurrences",
+  "articleId": "linear-recurrences-homogeneous",
+  "title": "Homogeneous linear recurrences",
+  "displayOrder": 5,
+  "aliases": ["linear recurrence", "homogeneous linear recurrence", "characteristic polynomial", "recurrence closed form"],
+  "keywords": ["recurrence relation", "characteristic roots", "repeated roots", "complex roots", "initial conditions"],
+  "notation": { "blocks": [
+    { "type": "displayMath", "tex": "a_n=c_1a_{n-1}+c_2a_{n-2}+\\cdots+c_ka_{n-k}" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "The coefficients are constant, and k initial values determine the sequence once the recurrence applies." }] }
+  ] },
+  "definitions": { "blocks": [
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "The recurrence is linear because it combines preceding terms linearly, and homogeneous because no independent forcing term appears. Its characteristic polynomial is" }] },
+    { "type": "displayMath", "tex": "P(r)=r^k-c_1r^{k-1}-c_2r^{k-2}-\\cdots-c_k" }
+  ] },
+  "results": { "blocks": [
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "A characteristic root " }, { "type": "inlineMath", "tex": "\\lambda" }, { "type": "text", "text": " of multiplicity m contributes the m independent solutions" }] },
+    { "type": "displayMath", "tex": "\\lambda^n,\\ n\\lambda^n,\\ n^2\\lambda^n,\\ldots,n^{m-1}\\lambda^n" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "A linear combination of all such solutions gives the general complex solution. For real coefficients, a conjugate pair " }, { "type": "inlineMath", "tex": "\\rho e^{\\pm i\\theta}" }, { "type": "text", "text": " can instead be written in real form" }] },
+    { "type": "displayMath", "tex": "\\rho^n(A\\cos n\\theta+B\\sin n\\theta)" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "The initial conditions determine the remaining constants through a linear system." }] }
+  ] },
+  "conditions": { "blocks": [
+    { "type": "list", "ordered": false, "items": [
+      [{ "type": "text", "text": "This characteristic-root method assumes a finite-order recurrence with constant coefficients and a nonzero leading coefficient." }],
+      [{ "type": "text", "text": "Repeated roots require the polynomial factors in n; merely repeating the same exponential does not create independent solutions." }],
+      [{ "type": "text", "text": "Complex roots occur in conjugate pairs only when the recurrence coefficients are real." }]
+    ] }
+  ] },
+  "examples": [{ "title": "Recover Binet's formula", "document": { "blocks": [
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "F_n=F_{n-1}+F_{n-2}" }, { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "F_0=0,F_1=1" }, { "type": "text", "text": ", the characteristic roots are " }, { "type": "inlineMath", "tex": "\\phi=(1+\\sqrt5)/2" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "\\psi=(1-\\sqrt5)/2" }, { "type": "text", "text": "." }] },
+    { "type": "displayMath", "tex": "F_n=A\\phi^n+B\\psi^n=\\frac{\\phi^n-\\psi^n}{\\sqrt5}" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "The last equality is the unique choice of A and B satisfying the two initial values." }] }
+  ] } }],
+  "pitfalls": { "blocks": [
+    { "type": "list", "ordered": false, "items": [
+      [{ "type": "text", "text": "Build the characteristic polynomial using a consistent recurrence arrangement; moving terms changes signs." }],
+      [{ "type": "text", "text": "The number of independent constants must equal the recurrence order, counting root multiplicities." }],
+      [{ "type": "text", "text": "A closed form derived from roots still needs the initial conditions; characteristic roots alone do not select one sequence." }]
+    ] }
+  ] },
+  "relatedReferences": ["math-reference/sequences-series-recurrences/linear-recurrences-nonhomogeneous", "math-reference/sequences-series-recurrences/ordinary-generating-functions", "math-reference/complex-numbers/polar-form-de-moivre"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "MIT OpenCourseWare 18.781, Generating Functions lecture notes", "url": "https://ocw.mit.edu/courses/18-781-theory-of-numbers-spring-2012/resources/mit18_781s12_lec16/" },
+    { "label": "MIT Mathematics for Computer Science notes", "url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/resources/mit6_042jf10_notes/" }
+  ],
+  "rights": { "sourceUrl": "https://ocw.mit.edu/courses/18-781-theory-of-numbers-spring-2012/resources/mit18_781s12_lec16/", "attribution": "Original MyPutnam exposition informed by MIT OpenCourseWare lecture notes.", "copyrightHolder": null, "licenseBasis": "Mathematical facts restated in original prose; source text is not redistributed.", "redistributionStatus": "cleared" }
+}

@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "sequences-series-recurrences",
+  "articleId": "ordinary-generating-functions",
+  "title": "Ordinary generating functions",
+  "displayOrder": 7,
+  "aliases": ["OGF", "ordinary generating function", "coefficient extraction", "formal power series"],
+  "keywords": ["generating functions", "recurrences", "Cauchy product", "index shift", "coefficients"],
+  "notation": { "blocks": [
+    { "type": "displayMath", "tex": "A(x)=\\sum_{n\\ge0}a_nx^n,\\qquad [x^n]A(x)=a_n" },
+    { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "[x^n]" }, { "type": "text", "text": " is the coefficient-extraction operator." }] }
+  ] },
+  "definitions": { "blocks": [
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "The ordinary generating function of a sequence stores its nth term as the coefficient of x to the n. In formal-power-series work, x is an indeterminate and algebra is justified coefficient by coefficient without evaluating an infinite sum." }] }
+  ] },
+  "results": { "blocks": [
+    { "type": "displayMath", "tex": "\\sum_{n\\ge1}a_{n-1}x^n=xA(x),\\qquad \\sum_{n\\ge0}a_{n+1}x^n=\\frac{A(x)-a_0}{x}" },
+    { "type": "displayMath", "tex": "[x^n](A(x)B(x))=\\sum_{k=0}^{n}a_kb_{n-k}" },
+    { "type": "displayMath", "tex": "\\frac{1}{1-x}=\\sum_{n\\ge0}x^n,\\qquad \\frac{1}{(1-x)^{m+1}}=\\sum_{n\\ge0}\\binom{n+m}{m}x^n" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "Multiplying a recurrence by x to the n and summing over its valid range converts shifts into powers of x. Initial terms become boundary corrections, often leaving a rational expression for A." }] }
+  ] },
+  "conditions": { "blocks": [
+    { "type": "list", "ordered": false, "items": [
+      [{ "type": "text", "text": "State the starting index. An OGF beginning at n = 0 differs from one beginning at n = 1 by its constant term and every shift correction." }],
+      [{ "type": "text", "text": "Formal identities require the denominator's constant term to be invertible. If x is evaluated numerically, analytic convergence conditions must be checked separately." }],
+      [{ "type": "text", "text": "When summing a recurrence, begin at the first index where it is valid and retain all omitted initial terms." }]
+    ] }
+  ] },
+  "examples": [{ "title": "Generate the Fibonacci sequence", "document": { "blocks": [
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "F_0=0,F_1=1" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "F_n=F_{n-1}+F_{n-2}" }, { "type": "text", "text": " for n at least 2. Summing the recurrence gives" }] },
+    { "type": "displayMath", "tex": "F(x)-x=xF(x)+x^2F(x)" },
+    { "type": "displayMath", "tex": "F(x)=\\frac{x}{1-x-x^2}" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "Expanding this rational formal series recovers the Fibonacci coefficients. Partial fractions also recover the characteristic-root closed form." }] }
+  ] } }],
+  "pitfalls": { "blocks": [
+    { "type": "list", "ordered": false, "items": [
+      [{ "type": "text", "text": "Dropping initial-condition corrections is the most common source of a wrong numerator." }],
+      [{ "type": "text", "text": "The Cauchy product gives a convolution, not termwise multiplication of coefficients." }],
+      [{ "type": "text", "text": "Do not impose a radius-of-convergence restriction during purely formal coefficient extraction; do impose it when treating the series as a numerical function." }]
+    ] }
+  ] },
+  "relatedReferences": ["math-reference/sequences-series-recurrences/linear-recurrences-homogeneous", "math-reference/sequences-series-recurrences/linear-recurrences-nonhomogeneous", "math-reference/combinatorics-generating-functions/ordinary-generating-functions-combinatorics"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "MIT OpenCourseWare 18.781, Generating Functions lecture notes", "url": "https://ocw.mit.edu/courses/18-781-theory-of-numbers-spring-2012/resources/mit18_781s12_lec16/" },
+    { "label": "MIT 18.310 lecture notes on generating functions", "url": "https://ocw.mit.edu/courses/18-310-principles-of-discrete-applied-mathematics-fall-2013/resources/mit18_310f13_ch7/" }
+  ],
+  "rights": { "sourceUrl": "https://ocw.mit.edu/courses/18-781-theory-of-numbers-spring-2012/resources/mit18_781s12_lec16/", "attribution": "Original MyPutnam exposition informed by MIT OpenCourseWare lecture notes.", "copyrightHolder": null, "licenseBasis": "Mathematical facts restated in original prose; source text is not redistributed.", "redistributionStatus": "cleared" }
+}

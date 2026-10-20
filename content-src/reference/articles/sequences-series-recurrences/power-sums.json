@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "sequences-series-recurrences",
+  "articleId": "power-sums",
+  "title": "Power sums",
+  "displayOrder": 3,
+  "aliases": ["sum of squares", "sum of cubes", "Faulhaber formula", "sums of powers"],
+  "keywords": ["power sums", "finite differences", "polynomial in n", "Bernoulli numbers", "summation formulas"],
+  "notation": { "blocks": [
+    { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "S_p(n)=\\sum_{k=1}^{n}k^p" }, { "type": "text", "text": " for a nonnegative integer p and positive integer n." }] }
+  ] },
+  "definitions": { "blocks": [
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "A power sum adds a fixed nonnegative integer power over consecutive integers. Faulhaber's theorem says this is a polynomial in n of degree p + 1 with leading coefficient 1/(p + 1)." }] }
+  ] },
+  "results": { "blocks": [
+    { "type": "displayMath", "tex": "\\sum_{k=1}^{n}k=\\frac{n(n+1)}{2}" },
+    { "type": "displayMath", "tex": "\\sum_{k=1}^{n}k^2=\\frac{n(n+1)(2n+1)}{6}" },
+    { "type": "displayMath", "tex": "\\sum_{k=1}^{n}k^3=\\left(\\frac{n(n+1)}{2}\\right)^2" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "The binomial finite-difference identity provides a recurrence for higher powers:" }] },
+    { "type": "displayMath", "tex": "S_p(n)=\\frac{(n+1)^{p+1}-1-\\sum_{j=0}^{p-1}\\binom{p+1}{j}S_j(n)}{p+1}" }
+  ] },
+  "conditions": { "blocks": [
+    { "type": "list", "ordered": false, "items": [
+      [{ "type": "text", "text": "The displayed closed forms use integer n at least one; empty-sum conventions extend them to n = 0." }],
+      [{ "type": "text", "text": "The recurrence isolates " }, { "type": "inlineMath", "tex": "S_p(n)" }, { "type": "text", "text": " after summing " }, { "type": "inlineMath", "tex": "(k+1)^{p+1}-k^{p+1}" }, { "type": "text", "text": "." }],
+      [{ "type": "text", "text": "Bernoulli-number versions depend on a sign convention for the first Bernoulli number, so check the convention before importing a memorized formula." }]
+    ] }
+  ] },
+  "examples": [{ "title": "Sum a quadratic polynomial", "document": { "blocks": [
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "Split by linearity and use the first two formulas:" }] },
+    { "type": "displayMath", "tex": "\\sum_{k=1}^{n}k(k+1)=\\sum_{k=1}^{n}k^2+\\sum_{k=1}^{n}k=\\frac{n(n+1)(n+2)}{3}" },
+    { "type": "paragraph", "runs": [{ "type": "text", "text": "For n = 2 this gives 8, matching " }, { "type": "inlineMath", "tex": "1\\cdot2+2\\cdot3" }, { "type": "text", "text": "." }] }
+  ] } }],
+  "pitfalls": { "blocks": [
+    { "type": "list", "ordered": false, "items": [
+      [{ "type": "text", "text": "The sum-of-cubes formula is the square of the sum from 1 through n, not the sum-of-squares formula squared." }],
+      [{ "type": "text", "text": "Changing the starting index changes lower-order terms; subtract the missing initial values explicitly." }],
+      [{ "type": "text", "text": "Polynomial degree and leading coefficient are useful checks but do not determine the whole power-sum polynomial." }]
+    ] }
+  ] },
+  "relatedReferences": ["math-reference/sequences-series-recurrences/finite-sums-and-telescoping", "math-reference/algebra-inequalities/binomial-multinomial-theorems"],
+  "relatedProblems": [],
+  "sources": [{ "label": "MIT Mathematics for Computer Science notes, Power Sums", "url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/resources/mit6_042jf10_notes/" }],
+  "rights": { "sourceUrl": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/resources/mit6_042jf10_notes/", "attribution": "Original MyPutnam exposition informed by MIT OpenCourseWare Mathematics for Computer Science notes.", "copyrightHolder": null, "licenseBasis": "Mathematical facts restated in original prose; source text is not redistributed.", "redistributionStatus": "cleared" }
+}
