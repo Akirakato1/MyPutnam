@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "number-theory",
+  "articleId": "p-adic-valuations-legendre",
+  "title": "p-adic valuations and Legendre's factorial formula",
+  "displayOrder": 8,
+  "aliases": ["p-adic valuation", "Legendre's formula", "prime exponent", "valuation of a factorial"],
+  "keywords": ["v_p", "nu_p", "factorial divisibility", "ultrametric inequality", "trailing prime powers"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Fix a prime p. This handbook writes " }, { "type": "inlineMath", "tex": "v_p(n)" }, { "type": "text", "text": " for the p-adic valuation of a nonzero integer n and sets " }, { "type": "inlineMath", "tex": "v_p(0)=\\infty" }, { "type": "text", "text": "." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "displayMath", "tex": "v_p(n)=\\max\\{e\\ge0:p^e\\mid n\\}\\qquad(n\\ne0)" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Thus " }, { "type": "inlineMath", "tex": "v_p(n)=e" }, { "type": "text", "text": " means p^e divides n but p^(e+1) does not." }] }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "displayMath", "tex": "v_p(ab)=v_p(a)+v_p(b)" },
+      { "type": "displayMath", "tex": "v_p(a+b)\\ge\\min(v_p(a),v_p(b))" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "If the two valuations in the minimum are unequal, equality holds. Legendre's formula counts multiples of p, p^2, and so on inside a factorial:" }] },
+      { "type": "displayMath", "tex": "v_p(n!)=\\sum_{k\\ge1}\\left\\lfloor\\frac{n}{p^k}\\right\\rfloor" }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "The valuation base p must be prime for these divisibility laws in this form." }],
+        [{ "type": "text", "text": "The factorial sum is finite because all later floor terms are zero." }],
+        [{ "type": "text", "text": "For a quotient of integers, subtract denominator valuations only when the quotient is interpreted as a nonzero rational number." }],
+        [{ "type": "text", "text": "The valuation of a sum can exceed the minimum when the lowest-power terms cancel." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Find the power of 2 dividing a factorial",
+      "document": {
+        "blocks": [
+          { "type": "displayMath", "tex": "v_2(10!)=\\left\\lfloor\\frac{10}{2}\\right\\rfloor+\\left\\lfloor\\frac{10}{4}\\right\\rfloor+\\left\\lfloor\\frac{10}{8}\\right\\rfloor=5+2+1=8" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Therefore 2^8 divides 10!, while 2^9 does not." }] }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Do not stop Legendre's sum after floor(n/p); multiples of p^2 contribute extra copies." }],
+        [{ "type": "text", "text": "Do not replace the valuation-of-a-sum inequality by equality without checking for cancellation." }],
+        [{ "type": "text", "text": "The infinity convention for zero is useful algebraically but must not be treated as an ordinary integer exponent." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/number-theory/primes-factorization", "math-reference/number-theory/divisor-functions-diophantine"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "Encyclopedia of Mathematics, p-adic valuation", "url": "https://encyclopediaofmath.org/wiki/P-adic_valuation" },
+    { "label": "Legendre's formula and p-adic analysis", "url": "https://arxiv.org/abs/1907.11902" }
+  ],
+  "rights": {
+    "sourceUrl": "https://encyclopediaofmath.org/wiki/P-adic_valuation",
+    "attribution": "Original MyPutnam exposition informed by Encyclopedia of Mathematics and the cited Legendre-formula paper.",
+    "copyrightHolder": "Encyclopedia of Mathematics contributors and the cited paper authors",
+    "licenseBasis": "Definitions and standard formulas are presented in original prose with an original example; source text is not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

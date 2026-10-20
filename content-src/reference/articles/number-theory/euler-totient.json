@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "number-theory",
+  "articleId": "euler-totient",
+  "title": "Euler's totient function",
+  "displayOrder": 5,
+  "aliases": ["phi", "Euler phi", "totient", "Euler's phi function", "Euler totient function"],
+  "keywords": ["reduced residue system", "coprime count", "multiplicative function", "prime-power totient", "product formula"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "\\varphi(n)" }, { "type": "text", "text": " is read “phi of n.” The input n is a positive integer, and this handbook uses " }, { "type": "inlineMath", "tex": "\\varphi(1)=1" }, { "type": "text", "text": "." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "displayMath", "tex": "\\varphi(n)=\\#\\{1\\le k\\le n:\\gcd(k,n)=1\\}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Equivalently, phi(n) is the number of invertible residue classes modulo n." }] }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "displayMath", "tex": "\\varphi(p^a)=p^a-p^{a-1}=p^a\\left(1-\\frac1p\\right)" },
+      { "type": "displayMath", "tex": "\\varphi(n)=n\\prod_{p\\mid n}\\left(1-\\frac1p\\right)" },
+      { "type": "displayMath", "tex": "\\gcd(m,n)=1\\quad\\Longrightarrow\\quad\\varphi(mn)=\\varphi(m)\\varphi(n)" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "The product is over the distinct prime divisors of n. Multiplicativity plus the prime-power formula gives the product formula immediately." }] }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Multiplicative does not mean phi(mn)=phi(m)phi(n) for arbitrary m and n; coprimality is required." }],
+        [{ "type": "text", "text": "In the defining count, n itself is counted only when n=1." }],
+        [{ "type": "text", "text": "The product formula uses each distinct prime once, regardless of its exponent in n." }],
+        [{ "type": "text", "text": "For n>2, phi(n) is even; pairing a unit with its negative is one quick explanation." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Evaluate phi from a factorization",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Since " }, { "type": "inlineMath", "tex": "360=2^3\\cdot3^2\\cdot5" }, { "type": "text", "text": ", use the three distinct prime divisors:" }] },
+          { "type": "displayMath", "tex": "\\varphi(360)=360\\left(1-\\frac12\\right)\\left(1-\\frac13\\right)\\left(1-\\frac15\\right)=96" }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Do not multiply by one factor for every repeated prime occurrence." }],
+        [{ "type": "text", "text": "Do not confuse phi(n) with the number of prime factors of n." }],
+        [{ "type": "text", "text": "Factoring n incorrectly propagates directly into the product formula." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/number-theory/primes-factorization", "math-reference/number-theory/fermat-euler-theorems", "math-reference/number-theory/multiplicative-order"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "NIST DLMF, 27.2 Functions of Number Theory", "url": "https://dlmf.nist.gov/27.2" },
+    { "label": "NIST DLMF, 27.3 Multiplicative Properties", "url": "https://dlmf.nist.gov/27.3" }
+  ],
+  "rights": {
+    "sourceUrl": "https://dlmf.nist.gov/27.3",
+    "attribution": "Original MyPutnam exposition informed by the NIST Digital Library of Mathematical Functions.",
+    "copyrightHolder": "National Institute of Standards and Technology",
+    "licenseBasis": "Standard formulas are presented in original prose with an original computation; source text and tables are not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

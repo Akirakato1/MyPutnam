@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "number-theory",
+  "articleId": "chinese-remainder-theorem",
+  "title": "Chinese remainder theorem",
+  "displayOrder": 6,
+  "aliases": ["CRT", "Chinese remainder theorem", "simultaneous congruences", "generalized CRT"],
+  "keywords": ["pairwise coprime moduli", "compatible congruences", "CRT construction", "unique modulo product", "unique modulo lcm"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "All moduli are positive. For pairwise coprime moduli " }, { "type": "inlineMath", "tex": "m_1,\\ldots,m_r" }, { "type": "text", "text": ", set " }, { "type": "inlineMath", "tex": "M=m_1\\cdots m_r" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "M_i=M/m_i" }, { "type": "text", "text": "." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "The CRT combines compatible residue information into one residue class. With pairwise coprime moduli, every choice of target residues is compatible." }] },
+      { "type": "displayMath", "tex": "x\\equiv a_i\\pmod{m_i}\\quad(1\\le i\\le r)" }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "For pairwise coprime moduli, choose " }, { "type": "inlineMath", "tex": "y_i\\equiv M_i^{-1}\\pmod{m_i}" }, { "type": "text", "text": ". Then" }] },
+      { "type": "displayMath", "tex": "x\\equiv\\sum_{i=1}^r a_iM_iy_i\\pmod M" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "This solution is unique modulo M. For two moduli that need not be coprime, the system has a solution exactly when" }] },
+      { "type": "displayMath", "tex": "a_1\\equiv a_2\\pmod{\\gcd(m_1,m_2)}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "and then the solution is unique modulo " }, { "type": "inlineMath", "tex": "\\operatorname{lcm}(m_1,m_2)" }, { "type": "text", "text": "." }] }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Pairwise coprime is stronger than having overall gcd 1; every pair must be checked." }],
+        [{ "type": "text", "text": "For noncoprime moduli, compare residues modulo the gcd before attempting a construction." }],
+        [{ "type": "text", "text": "The answer is a residue class, so state the final modulus as well as one representative." }],
+        [{ "type": "text", "text": "Each inverse in the constructive formula exists because gcd(M_i,m_i)=1." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Combine three pairwise-coprime congruences",
+      "document": {
+        "blocks": [
+          { "type": "displayMath", "tex": "x\\equiv2\\pmod3,\\qquad x\\equiv3\\pmod5,\\qquad x\\equiv2\\pmod7" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "The number 23 satisfies all three, and uniqueness holds modulo " }, { "type": "inlineMath", "tex": "3\\cdot5\\cdot7=105" }, { "type": "text", "text": ". Hence" }] },
+          { "type": "displayMath", "tex": "x\\equiv23\\pmod{105}" }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Do not declare a noncoprime system impossible without testing compatibility." }],
+        [{ "type": "text", "text": "Do not claim uniqueness as an integer; uniqueness is modulo the product or lcm." }],
+        [{ "type": "text", "text": "Reducing an intermediate negative representative is optional, but all congruences must use the correct modulus." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/number-theory/modular-arithmetic", "math-reference/number-theory/divisibility-gcd-bezout"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "NIST DLMF, 27.15 Chinese Remainder Theorem", "url": "https://dlmf.nist.gov/27.15" },
+    { "label": "UCL MATH2201 lecture notes", "url": "https://www.ucl.ac.uk/~ucahaya/2201notesNew.pdf" }
+  ],
+  "rights": {
+    "sourceUrl": "https://dlmf.nist.gov/27.15",
+    "attribution": "Original MyPutnam exposition informed by NIST DLMF and UCL number-theory notes.",
+    "copyrightHolder": "National Institute of Standards and Technology and University College London",
+    "licenseBasis": "The theorem, compatibility condition, construction, and example are expressed in original prose; source text is not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

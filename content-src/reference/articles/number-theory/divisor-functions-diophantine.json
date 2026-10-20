@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "number-theory",
+  "articleId": "divisor-functions-diophantine",
+  "title": "Divisor functions and linear Diophantine equations",
+  "displayOrder": 9,
+  "aliases": ["divisor function", "linear Diophantine equation", "number of divisors", "sum of divisors", "integer linear equation"],
+  "keywords": ["tau function", "sigma function", "positive divisors", "Diophantine solvability", "general integer solution"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "\\tau(n)" }, { "type": "text", "text": " counts positive divisors and " }, { "type": "inlineMath", "tex": "\\sigma(n)" }, { "type": "text", "text": " sums them. Some references write d(n) for tau(n)." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "displayMath", "tex": "\\tau(n)=\\sum_{d\\mid n}1,\\qquad\\sigma(n)=\\sum_{d\\mid n}d" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "A linear Diophantine equation " }, { "type": "inlineMath", "tex": "ax+by=c" }, { "type": "text", "text": " asks for integer, not merely real, values of x and y." }] }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "n=\\prod_{j=1}^r p_j^{a_j}" }, { "type": "text", "text": ", then" }] },
+      { "type": "displayMath", "tex": "\\tau(n)=\\prod_{j=1}^r(a_j+1),\\qquad\\sigma(n)=\\prod_{j=1}^r\\frac{p_j^{a_j+1}-1}{p_j-1}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "d=\\gcd(a,b)" }, { "type": "text", "text": ". The equation ax+by=c has an integer solution exactly when d divides c. If (x_0,y_0) is one solution, all solutions are" }] },
+      { "type": "displayMath", "tex": "x=x_0+\\frac bd\\,t,\\qquad y=y_0-\\frac ad\\,t,\\qquad t\\in\\mathbb Z" }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "The divisor formulas here count positive divisors of a positive integer n." }],
+        [{ "type": "text", "text": "For the displayed general Diophantine solution, a and b are not both zero." }],
+        [{ "type": "text", "text": "A particular solution must be found before applying the parameter formula." }],
+        [{ "type": "text", "text": "Additional restrictions such as x,y>0 require intersecting the integer parameter family with inequalities." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Use factorization and parameterize an integer equation",
+      "document": {
+        "blocks": [
+          { "type": "displayMath", "tex": "84=2^2\\cdot3\\cdot7,\\quad\\tau(84)=3\\cdot2\\cdot2=12,\\quad\\sigma(84)=7\\cdot4\\cdot8=224" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "For " }, { "type": "inlineMath", "tex": "14x+21y=35" }, { "type": "text", "text": ", d=7 and (1,1) is one solution. Hence" }] },
+          { "type": "displayMath", "tex": "x=1+3t,\\qquad y=1-2t,\\qquad t\\in\\mathbb Z" }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Do not use the number-of-divisors formula before completing the prime factorization." }],
+        [{ "type": "text", "text": "The sigma formula is a product of finite geometric sums, not a product of exponents." }],
+        [{ "type": "text", "text": "If gcd(a,b) does not divide c, searching longer cannot produce an integer solution." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/number-theory/primes-factorization", "math-reference/number-theory/divisibility-gcd-bezout", "math-reference/number-theory/p-adic-valuations-legendre"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "NIST DLMF, 27.2 Functions of Number Theory", "url": "https://dlmf.nist.gov/27.2" },
+    { "label": "NIST DLMF, 27.3 Multiplicative Properties", "url": "https://dlmf.nist.gov/27.3" },
+    { "label": "University of Houston, Linear Diophantine Equations", "url": "https://www.math.uh.edu/~minru/web/euclid5.html" }
+  ],
+  "rights": {
+    "sourceUrl": "https://dlmf.nist.gov/27.3",
+    "attribution": "Original MyPutnam exposition informed by NIST DLMF and University of Houston references.",
+    "copyrightHolder": "National Institute of Standards and Technology and University of Houston note author",
+    "licenseBasis": "Standard divisor and Diophantine formulas are expressed in original prose with an original example; source text is not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

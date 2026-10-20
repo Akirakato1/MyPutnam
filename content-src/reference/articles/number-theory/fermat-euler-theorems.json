@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "number-theory",
+  "articleId": "fermat-euler-theorems",
+  "title": "Fermat's little theorem and Euler's theorem",
+  "displayOrder": 4,
+  "aliases": ["Fermat's little theorem", "Euler's theorem", "Euler-Fermat theorem", "modular exponent reduction"],
+  "keywords": ["FLT", "coprime base", "prime modulus", "Euler totient exponent", "power modulo n"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Let p be prime and let " }, { "type": "inlineMath", "tex": "\\varphi(n)" }, { "type": "text", "text": " count the residue classes modulo n that are coprime to n." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "displayMath", "tex": "\\gcd(a,n)=1\\quad\\Longrightarrow\\quad a^{\\varphi(n)}\\equiv1\\pmod n" },
+      { "type": "displayMath", "tex": "p\\nmid a\\quad\\Longrightarrow\\quad a^{p-1}\\equiv1\\pmod p" }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Fermat's little theorem is the prime-modulus case of Euler's theorem because " }, { "type": "inlineMath", "tex": "\\varphi(p)=p-1" }, { "type": "text", "text": ". Its equivalent all-integer form is" }] },
+      { "type": "displayMath", "tex": "a^p\\equiv a\\pmod p" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "For a base coprime to n, exponents may be reduced modulo " }, { "type": "inlineMath", "tex": "\\varphi(n)" }, { "type": "text", "text": ". The smaller multiplicative order, when known, gives a sharper period." }] }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Euler's theorem requires gcd(a,n)=1; do not reduce exponents by phi(n) when that hypothesis fails." }],
+        [{ "type": "text", "text": "The form a^(p-1) congruent to 1 requires p not to divide a; the form a^p congruent to a does not." }],
+        [{ "type": "text", "text": "These theorems give sufficient exponent periods, not necessarily the smallest period." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Reduce a large exponent",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Find " }, { "type": "inlineMath", "tex": "7^{222}\\pmod{40}" }, { "type": "text", "text": ". Here gcd(7,40)=1 and phi(40)=16, so reduce 222 to 14 modulo 16." }] },
+          { "type": "displayMath", "tex": "7^4\\equiv1\\pmod{40},\\qquad7^{222}\\equiv7^{14}\\equiv7^2\\equiv9\\pmod{40}" }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Do not use Fermat's theorem with a composite modulus merely because the exponent resembles n-1." }],
+        [{ "type": "text", "text": "Do not infer primality from a single successful Fermat congruence; composite pseudoprimes exist." }],
+        [{ "type": "text", "text": "A zero reduced exponent represents a full period, not necessarily the literal exponent zero in an uncoprime setting." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/number-theory/euler-totient", "math-reference/number-theory/modular-arithmetic", "math-reference/number-theory/multiplicative-order"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "NIST DLMF, 27.2 Functions of Number Theory", "url": "https://dlmf.nist.gov/27.2" },
+    { "label": "Encyclopedia of Mathematics, Congruence", "url": "https://encyclopediaofmath.org/wiki/Congruence" }
+  ],
+  "rights": {
+    "sourceUrl": "https://dlmf.nist.gov/27.2",
+    "attribution": "Original MyPutnam exposition informed by NIST DLMF and Encyclopedia of Mathematics references.",
+    "copyrightHolder": "National Institute of Standards and Technology and Encyclopedia of Mathematics contributors",
+    "licenseBasis": "Standard theorem statements and conditions are presented in original prose with an original example; source text is not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

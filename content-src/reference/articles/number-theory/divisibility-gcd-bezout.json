@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "number-theory",
+  "articleId": "divisibility-gcd-bezout",
+  "title": "Divisibility, gcd, lcm, and Bézout",
+  "displayOrder": 1,
+  "aliases": ["greatest common divisor", "Bézout identity", "Euclidean algorithm", "least common multiple"],
+  "keywords": ["divisibility", "gcd", "lcm", "extended Euclidean algorithm", "coprime"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "inlineMath", "tex": "a\\mid b" }, { "type": "text", "text": " means that " }, { "type": "inlineMath", "tex": "b=ak" }, { "type": "text", "text": " for some integer k. The gcd is taken nonnegative, and positive inputs are assumed in the lcm formulas below." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "The greatest common divisor " }, { "type": "inlineMath", "tex": "\\gcd(a,b)" }, { "type": "text", "text": " is the largest positive integer dividing both nonzero integers; equivalently it is the positive generator of all integer combinations ax+by." }] },
+      { "type": "displayMath", "tex": "\\operatorname{lcm}(a,b)=\\frac{|ab|}{\\gcd(a,b)}\\qquad(a,b\\ne0)" }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "displayMath", "tex": "a=bq+r,\\ 0\\le r<|b|\\quad\\Longrightarrow\\quad \\gcd(a,b)=\\gcd(b,r)" },
+      { "type": "displayMath", "tex": "\\gcd(a,b)=ax+by\\quad\\text{for some }x,y\\in\\mathbb Z" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Repeated Euclidean division finds the gcd; reversing the divisions finds Bézout coefficients. In particular, a and b are coprime exactly when some integer combination of them equals 1." }] }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Divisibility is an integer statement; division in the rational or real numbers is not the same relation." }],
+        [{ "type": "text", "text": "Any common divisor divides every integer combination ax+by." }],
+        [{ "type": "text", "text": "The coefficients in Bézout's identity are generally not unique." }],
+        [{ "type": "text", "text": "This handbook uses gcd(a,0)=|a| and gcd(0,0)=0." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Find a gcd and Bézout coefficients",
+      "document": {
+        "blocks": [
+          { "type": "displayMath", "tex": "252=198+54,\\quad198=3\\cdot54+36,\\quad54=36+18" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Thus " }, { "type": "inlineMath", "tex": "\\gcd(252,198)=18" }, { "type": "text", "text": ". Reversing the steps gives" }] },
+          { "type": "displayMath", "tex": "18=54-36=4\\cdot54-198=4\\cdot252-5\\cdot198" }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Do not confuse gcd(a,b)=1 with a and b both being prime." }],
+        [{ "type": "text", "text": "Keep the remainder nonnegative and strictly smaller than the divisor's absolute value." }],
+        [{ "type": "text", "text": "The product formula for lcm needs the absolute value when signed integers are allowed." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/number-theory/modular-arithmetic", "math-reference/number-theory/divisor-functions-diophantine"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "UCL MATH2201 lecture notes", "url": "https://www.ucl.ac.uk/~ucahaya/2201notesNew.pdf" }
+  ],
+  "rights": {
+    "sourceUrl": "https://www.ucl.ac.uk/~ucahaya/2201notesNew.pdf",
+    "attribution": "Original MyPutnam exposition informed by UCL number-theory lecture notes.",
+    "copyrightHolder": "University College London and the lecture-note author",
+    "licenseBasis": "Standard mathematical facts are presented in original prose with an original worked example; source text is not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

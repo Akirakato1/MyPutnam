@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "number-theory",
+  "articleId": "primes-factorization",
+  "title": "Primes and unique factorization",
+  "displayOrder": 2,
+  "aliases": ["prime factorization", "fundamental theorem of arithmetic", "unique prime factorization", "prime powers"],
+  "keywords": ["prime", "composite", "factorization", "trial division", "coprime factors"],
+  "notation": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Here p always denotes a positive prime. For an integer " }, { "type": "inlineMath", "tex": "n>1" }, { "type": "text", "text": ", write its distinct prime factors in increasing order." }] }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "A prime has exactly two positive divisors, 1 and itself. An integer greater than 1 that is not prime is composite." }] },
+      { "type": "displayMath", "tex": "n=p_1^{a_1}p_2^{a_2}\\cdots p_r^{a_r},\\qquad a_j\\ge1" }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "The fundamental theorem of arithmetic says this factorization exists and is unique apart from the order of the factors." }] },
+      { "type": "displayMath", "tex": "\\gcd(m,n)=\\prod_p p^{\\min(v_p(m),v_p(n))},\\qquad \\operatorname{lcm}(m,n)=\\prod_p p^{\\max(v_p(m),v_p(n))}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "To test n for primality by trial division, it is enough to test primes not exceeding " }, { "type": "inlineMath", "tex": "\\sqrt n" }, { "type": "text", "text": ": a composite n has a factor at most that large." }] }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "The number 1 is neither prime nor composite; its prime factorization is the empty product." }],
+        [{ "type": "text", "text": "For negative integers, factor the absolute value and record a separate factor -1." }],
+        [{ "type": "text", "text": "Uniqueness concerns prime factors with multiplicity, not arbitrary factorizations into composite numbers." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Factor an integer completely",
+      "document": {
+        "blocks": [
+          { "type": "displayMath", "tex": "756=2\\cdot378=2^2\\cdot189=2^2\\cdot3^3\\cdot7" },
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "The exponents show, for example, that the greatest power of 3 dividing 756 is " }, { "type": "inlineMath", "tex": "3^3" }, { "type": "text", "text": "." }] }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Stopping after finding one factor does not give a prime factorization." }],
+        [{ "type": "text", "text": "A failed divisibility test by a few small primes does not by itself prove primality." }],
+        [{ "type": "text", "text": "Distinct prime factors and prime factors counted with multiplicity are different counts." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/number-theory/divisibility-gcd-bezout", "math-reference/number-theory/p-adic-valuations-legendre", "math-reference/number-theory/divisor-functions-diophantine"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "NIST DLMF, 27.2 Functions of Number Theory", "url": "https://dlmf.nist.gov/27.2" },
+    { "label": "OpenStax Contemporary Mathematics, 3.1 Prime and Composite Numbers", "url": "https://openstax.org/books/contemporary-mathematics/pages/3-1-prime-and-composite-numbers" }
+  ],
+  "rights": {
+    "sourceUrl": "https://dlmf.nist.gov/27.2",
+    "attribution": "Original MyPutnam exposition informed by NIST DLMF and OpenStax references.",
+    "copyrightHolder": "National Institute of Standards and Technology and OpenStax",
+    "licenseBasis": "Standard factorization facts are stated in original prose with an original example; source text and diagrams are not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}

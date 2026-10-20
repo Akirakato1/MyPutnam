@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "number-theory",
+  "articleId": "modular-arithmetic",
+  "title": "Congruences and modular inverses",
+  "displayOrder": 3,
+  "aliases": ["congruence", "modular inverse", "modular arithmetic", "linear congruence"],
+  "keywords": ["residue class", "modulus", "cancellation modulo n", "inverse modulo n", "congruence equation"],
+  "notation": {
+    "blocks": [
+      { "type": "displayMath", "tex": "a\\equiv b\\pmod n\\quad\\Longleftrightarrow\\quad n\\mid(a-b),\\qquad n\\ge2" }
+    ]
+  },
+  "definitions": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "An inverse of a modulo n is a residue u satisfying " }, { "type": "inlineMath", "tex": "au\\equiv1\\pmod n" }, { "type": "text", "text": ". It exists exactly when " }, { "type": "inlineMath", "tex": "\\gcd(a,n)=1" }, { "type": "text", "text": "." }] },
+      { "type": "displayMath", "tex": "ax\\equiv b\\pmod n\\quad\\text{is solvable}\\quad\\Longleftrightarrow\\quad \\gcd(a,n)\\mid b" }
+    ]
+  },
+  "results": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Congruences with the same modulus may be added, subtracted, and multiplied. Powers therefore respect congruence as well." }] },
+      { "type": "displayMath", "tex": "ac\\equiv bc\\pmod n,\\ \\gcd(c,n)=1\\quad\\Longrightarrow\\quad a\\equiv b\\pmod n" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "d=\\gcd(a,n)" }, { "type": "text", "text": " divides b, the linear congruence has exactly d incongruent solutions modulo n. Divide a, b, and n by d to reduce to an invertible coefficient." }] }
+    ]
+  },
+  "conditions": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "The modulus is positive and greater than 1 in this article." }],
+        [{ "type": "text", "text": "Cancellation is unsafe unless the cancelled factor is coprime to the modulus; otherwise the modulus must also be reduced." }],
+        [{ "type": "text", "text": "An inverse is a residue class, so any two integer representatives differ by a multiple of n." }],
+        [{ "type": "text", "text": "Reduce negative residues consistently; -1 and n-1 name the same class modulo n." }]
+      ] }
+    ]
+  },
+  "examples": [
+    {
+      "title": "Solve a linear congruence using an inverse",
+      "document": {
+        "blocks": [
+          { "type": "paragraph", "runs": [{ "type": "text", "text": "Solve " }, { "type": "inlineMath", "tex": "7x\\equiv5\\pmod{12}" }, { "type": "text", "text": ". Since " }, { "type": "inlineMath", "tex": "7\\cdot7\\equiv1\\pmod{12}" }, { "type": "text", "text": ", multiply by 7:" }] },
+          { "type": "displayMath", "tex": "x\\equiv35\\equiv11\\pmod{12}" }
+        ]
+      }
+    }
+  ],
+  "pitfalls": {
+    "blocks": [
+      { "type": "list", "ordered": false, "items": [
+        [{ "type": "text", "text": "Do not divide both sides of a congruence as if working in a field." }],
+        [{ "type": "text", "text": "Checking gcd(a,n)=1 is part of every modular-inverse calculation." }],
+        [{ "type": "text", "text": "Equality of remainders is sufficient but not necessary for congruence; representatives can differ by any multiple of n." }]
+      ] }
+    ]
+  },
+  "relatedReferences": ["math-reference/number-theory/divisibility-gcd-bezout", "math-reference/number-theory/fermat-euler-theorems", "math-reference/number-theory/chinese-remainder-theorem"],
+  "relatedProblems": [],
+  "sources": [
+    { "label": "Encyclopedia of Mathematics, Congruence", "url": "https://encyclopediaofmath.org/wiki/Congruence" },
+    { "label": "UCL MATH2201 lecture notes", "url": "https://www.ucl.ac.uk/~ucahaya/2201notesNew.pdf" }
+  ],
+  "rights": {
+    "sourceUrl": "https://encyclopediaofmath.org/wiki/Congruence",
+    "attribution": "Original MyPutnam exposition informed by Encyclopedia of Mathematics and UCL references.",
+    "copyrightHolder": "Encyclopedia of Mathematics contributors and University College London",
+    "licenseBasis": "Definitions and standard theorems are expressed in original prose with an original computation; source text is not redistributed.",
+    "redistributionStatus": "cleared"
+  }
+}
