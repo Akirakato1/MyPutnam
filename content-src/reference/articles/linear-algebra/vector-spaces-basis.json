@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "linear-algebra", "articleId": "vector-spaces-basis", "title": "Vector spaces, subspaces, and bases", "displayOrder": 3,
+  "aliases": ["vector space", "basis", "subspace test", "linear independence"],
+  "keywords": ["span", "dimension", "coordinates", "generating set", "basis extension"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "\\operatorname{span}(v_1,\\ldots,v_k)"}, {"type": "text", "text": " is the set of all field-linear combinations of the listed vectors."}]}]},
+  "definitions": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "A subspace W of a vector space V contains zero and is closed under addition and scalar multiplication. A basis is a linearly independent spanning list."}]},
+    {"type": "displayMath", "tex": "c_1v_1+\\cdots+c_kv_k=0\\Longrightarrow c_1=\\cdots=c_k=0"}
+  ]},
+  "results": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Every vector has unique coordinates relative to a basis. In a finite-dimensional vector space, every independent list extends to a basis and every spanning list can be reduced to a basis."}]},
+    {"type": "displayMath", "tex": "\\dim\\mathbb F^n=n,\\qquad\\dim P_d(\\mathbb F)=d+1"},
+    {"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "P_d(\\mathbb F)"}, {"type": "text", "text": " denotes polynomials over F of degree at most d."}]}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "The scalars come from a fixed field F; independence can change if the scalar field changes."}],
+    [{"type": "text", "text": "A set defined by homogeneous linear equations is a subspace; a nonhomogeneous translate generally is not."}],
+    [{"type": "text", "text": "Dimension is the size of a basis only in the finite-dimensional setting used here."}]
+  ]}]},
+  "examples": [{"title": "Find a basis of a plane", "document": {"blocks": [
+    {"type": "displayMath", "tex": "W=\\{(x,y,z)\\in\\mathbb R^3:x+y+z=0\\}"},
+    {"type": "displayMath", "tex": "(x,y,z)=x(1,0,-1)+y(0,1,-1)"},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "The two displayed generators are independent, hence form a basis and dim W=2."}]}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "A spanning set may be redundant; an independent set may fail to span."}],
+    [{"type": "text", "text": "The zero vector can never appear in a linearly independent list."}]
+  ]}]},
+  "relatedReferences": ["math-reference/linear-algebra/rank-nullity", "math-reference/linear-algebra/matrices-linear-systems"],
+  "relatedProblems": [],
+  "sources": [{"label": "MIT Introduction to Linear Algebra, Vector Spaces and Subspaces", "url": "https://math.mit.edu/~gs/linearalgebra/ila5/index.html"}],
+  "rights": {"sourceUrl": "https://math.mit.edu/~gs/linearalgebra/ila5/index.html", "attribution": "Original MyPutnam exposition informed by MIT linear algebra materials.", "copyrightHolder": "Gilbert Strang and Massachusetts Institute of Technology", "licenseBasis": "Standard vector-space results are presented in original prose with an original example.", "redistributionStatus": "cleared"}
+}

@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "linear-algebra", "articleId": "inner-products-orthogonality", "title": "Inner products, orthogonality, and least squares", "displayOrder": 6,
+  "aliases": ["Gram-Schmidt", "least squares", "orthogonal projection", "inner product"],
+  "keywords": ["orthonormal basis", "normal equations", "Cauchy-Schwarz", "QR factorization", "projection matrix"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "\\langle u,v\\rangle"}, {"type": "text", "text": " denotes an inner product and "}, {"type": "inlineMath", "tex": "\\|v\\|=\\sqrt{\\langle v,v\\rangle}"}, {"type": "text", "text": ". Over C, this article uses the convention linear in the first argument and conjugate-linear in the second."}]}]},
+  "definitions": {"blocks": [
+    {"type": "displayMath", "tex": "u\\perp v\\iff\\langle u,v\\rangle=0"},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Gram-Schmidt replaces an independent list by an orthonormal list with the same successive spans."}]}
+  ]},
+  "results": {"blocks": [
+    {"type": "displayMath", "tex": "\\operatorname{proj}_W b=\\sum_{j=1}^k\\langle b,q_j\\rangle q_j"},
+    {"type": "displayMath", "tex": "A^TA\\widehat x=A^Tb"},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "The normal equations make the residual b-Axhat orthogonal to the column space. If A has independent columns, the least-squares solution is unique."}]}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Projection and orthogonality require a specified inner product; the displayed coordinate formulas use the standard Euclidean real inner product."}],
+    [{"type": "text", "text": "For complex matrices, replace transposes in the normal equations by conjugate transposes."}],
+    [{"type": "text", "text": "Gram-Schmidt requires the input list to be linearly independent; discard zero residuals only when processing a redundant spanning list."}]
+  ]}]},
+  "examples": [{"title": "Project onto a line", "document": {"blocks": [
+    {"type": "displayMath", "tex": "q=\\frac1{\\sqrt2}(1,1),\\quad b=(2,0),\\quad\\operatorname{proj}_{\\operatorname{span}(q)}b=\\langle b,q\\rangle q=(1,1)"}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "The normal equations can have many solutions when A has dependent columns, although the projected vector is unique."}],
+    [{"type": "text", "text": "Normalize after subtracting all earlier projections in Gram-Schmidt."}]
+  ]}]},
+  "relatedReferences": ["math-reference/geometry-vectors/dot-product-projections", "math-reference/linear-algebra/vector-spaces-basis", "math-reference/linear-algebra/matrices-linear-systems"],
+  "relatedProblems": [],
+  "sources": [{"label": "MIT Introduction to Linear Algebra, Orthogonality", "url": "https://math.mit.edu/~gs/linearalgebra/ila5/index.html"}],
+  "rights": {"sourceUrl": "https://math.mit.edu/~gs/linearalgebra/ila5/index.html", "attribution": "Original MyPutnam exposition informed by MIT linear algebra materials.", "copyrightHolder": "Gilbert Strang and Massachusetts Institute of Technology", "licenseBasis": "Standard projection and least-squares results are presented in original prose with an original example.", "redistributionStatus": "cleared"}
+}

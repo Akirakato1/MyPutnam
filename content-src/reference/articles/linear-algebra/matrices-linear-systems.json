@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "linear-algebra", "articleId": "matrices-linear-systems", "title": "Matrices and linear systems", "displayOrder": 1,
+  "aliases": ["Gaussian elimination", "row reduction", "linear systems", "reduced row echelon form"],
+  "keywords": ["matrix multiplication", "elementary row operations", "RREF", "consistent system", "inverse matrix"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "A\\in\\mathbb F^{m\\times n}"}, {"type": "text", "text": " has m rows and n columns over a field F; "}, {"type": "inlineMath", "tex": "Ax=b"}, {"type": "text", "text": " represents m linear equations in n unknowns."}]}]},
+  "definitions": {"blocks": [{"type": "paragraph", "runs": [{"type": "text", "text": "Swapping two rows, scaling a row by a nonzero scalar, and adding a multiple of one row to another preserve the solution set of an augmented system."}]}]},
+  "results": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Gaussian elimination reduces [A|b] to echelon form; continuing to the unique reduced row echelon form exposes pivot and free variables."}]},
+    {"type": "displayMath", "tex": "Ax=b\\text{ is consistent}\\iff \\operatorname{rank}A=\\operatorname{rank}[A\\mid b]"},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "For square A, the following are equivalent: A is invertible, every column is a pivot column, Ax=0 has only the zero solution, and Ax=b has exactly one solution for every b."}]}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "All entries and row operations are taken over one fixed field F; a row may be scaled only by a nonzero field element."}],
+    [{"type": "text", "text": "The product AB is defined only when the number of columns of A equals the number of rows of B."}],
+    [{"type": "text", "text": "A left or right inverse need not imply a two-sided inverse for arbitrary rectangular matrices; the equivalence above is for square matrices."}]
+  ]}]},
+  "examples": [{"title": "Read a solution from row reduction", "document": {"blocks": [
+    {"type": "displayMath", "tex": "\\left[\\begin{array}{cc|c}1&2&5\\\\2&4&10\\end{array}\\right]\\sim\\left[\\begin{array}{cc|c}1&2&5\\\\0&0&0\\end{array}\\right]"},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Let x2=t be free. Then x1=5-2t, so the system has infinitely many solutions."}]}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Row operations preserve the solution set but generally change eigenvalues and determinants."}],
+    [{"type": "text", "text": "Matrix multiplication is associative but usually not commutative."}]
+  ]}]},
+  "relatedReferences": ["math-reference/linear-algebra/rank-nullity", "math-reference/linear-algebra/determinants"],
+  "relatedProblems": [],
+  "sources": [{"label": "MIT 18.06 Linear Algebra, course materials", "url": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/"}, {"label": "MIT Introduction to Linear Algebra, table of contents", "url": "https://math.mit.edu/~gs/linearalgebra/ila5/index.html"}],
+  "rights": {"sourceUrl": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/", "attribution": "Original MyPutnam exposition informed by MIT 18.06 materials.", "copyrightHolder": "Massachusetts Institute of Technology and course authors", "licenseBasis": "Standard definitions and equivalences are presented in original prose with an original example.", "redistributionStatus": "cleared"}
+}

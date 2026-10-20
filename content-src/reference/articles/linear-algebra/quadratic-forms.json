@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "linear-algebra", "articleId": "quadratic-forms", "title": "Quadratic forms and definiteness", "displayOrder": 7,
+  "aliases": ["positive definite", "Sylvester criterion", "quadratic form", "positive semidefinite"],
+  "keywords": ["leading principal minors", "symmetric matrix", "eigenvalue test", "completing the square", "signature"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "q(x)=x^TAx"}, {"type": "text", "text": " is a real quadratic form. Only the symmetric part of A affects q."}]}]},
+  "definitions": {"blocks": [
+    {"type": "displayMath", "tex": "A\\succ0\\iff x^TAx>0\\text{ for every }x\\ne0"},
+    {"type": "displayMath", "tex": "A\\succeq0\\iff x^TAx\\ge0\\text{ for every }x"}
+  ]},
+  "results": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "For a real symmetric matrix A, positive definiteness is equivalent to every eigenvalue being positive."}]},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Sylvester's criterion: a real symmetric A is positive definite exactly when every leading principal minor is positive."}]},
+    {"type": "displayMath", "tex": "\\begin{pmatrix}a&b\\\\b&c\\end{pmatrix}\\succ0\\iff a>0\\text{ and }ac-b^2>0"}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "The eigenvalue and Sylvester criteria stated here require a real symmetric matrix."}],
+    [{"type": "text", "text": "All principal minors nonnegative characterize positive semidefiniteness, but leading principal minors alone do not."}],
+    [{"type": "text", "text": "For a nonsymmetric real A, replace it by (A+A^T)/2 before studying x^TAx."}]
+  ]}]},
+  "examples": [{"title": "Apply Sylvester's criterion", "document": {"blocks": [
+    {"type": "displayMath", "tex": "A=\\begin{pmatrix}2&1\\\\1&3\\end{pmatrix},\\qquad\\Delta_1=2>0,\\quad\\Delta_2=5>0"},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Therefore A is positive definite."}]}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "A positive determinant alone does not imply positive definiteness."}],
+    [{"type": "text", "text": "Do not apply the leading-minor test for semidefiniteness."}]
+  ]}]},
+  "relatedReferences": ["math-reference/linear-algebra/eigenvalues-diagonalization", "math-reference/linear-algebra/determinants", "math-reference/algebra-inequalities/jensen-convexity"],
+  "relatedProblems": [],
+  "sources": [{"label": "MIT Linear Algebra lecture notes, Symmetric Positive Definite Matrices", "url": "https://math.mit.edu/~gs/LectureNotes/"}, {"label": "MIT Introduction to Linear Algebra, Positive Definite Matrices", "url": "https://math.mit.edu/~gs/linearalgebra/ila5/index.html"}],
+  "rights": {"sourceUrl": "https://math.mit.edu/~gs/LectureNotes/", "attribution": "Original MyPutnam exposition informed by MIT linear algebra materials.", "copyrightHolder": "Gilbert Strang and Massachusetts Institute of Technology", "licenseBasis": "Standard definiteness criteria are presented in original prose with an original example.", "redistributionStatus": "cleared"}
+}

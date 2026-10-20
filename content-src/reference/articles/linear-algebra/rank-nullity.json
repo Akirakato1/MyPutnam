@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "linear-algebra", "articleId": "rank-nullity", "title": "Rank and nullity", "displayOrder": 4,
+  "aliases": ["rank-nullity theorem", "null space", "dimension theorem", "kernel and image"],
+  "keywords": ["matrix rank", "column space", "row space", "nullity", "linear transformation"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "\\ker T"}, {"type": "text", "text": " is the null space and "}, {"type": "inlineMath", "tex": "\\operatorname{im}T"}, {"type": "text", "text": " the image. Rank is the dimension of the image; nullity is the dimension of the kernel."}]}]},
+  "definitions": {"blocks": [
+    {"type": "displayMath", "tex": "\\ker T=\\{v:T(v)=0\\},\\qquad\\operatorname{im}T=\\{T(v):v\\in V\\}"}
+  ]},
+  "results": {"blocks": [
+    {"type": "displayMath", "tex": "\\dim V=\\operatorname{rank}T+\\operatorname{nullity}T"},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "For an m by n matrix, rank is the number of pivots, nullity is n minus rank, and row rank equals column rank."}]},
+    {"type": "displayMath", "tex": "T\\text{ injective}\\iff\\ker T=\\{0\\}"}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "The displayed rank-nullity formula assumes a linear map with finite-dimensional domain V."}],
+    [{"type": "text", "text": "Matrix rank is unchanged by elementary row operations, but the actual column space in the original ambient coordinates is not."}],
+    [{"type": "text", "text": "For A in F^(m by n), nullity counts free variables in Ax=0 and is n-rank(A)."}]
+  ]}]},
+  "examples": [{"title": "Use pivots to find nullity", "document": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "If a 3 by 5 matrix has three pivots, then rank A=3 and rank-nullity gives"}]},
+    {"type": "displayMath", "tex": "\\operatorname{nullity}A=5-3=2"}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Rank is bounded by min(m,n), not always by the number of columns alone."}],
+    [{"type": "text", "text": "Use pivot columns from the original matrix, not the reduced matrix, as a basis for the original column space."}]
+  ]}]},
+  "relatedReferences": ["math-reference/linear-algebra/vector-spaces-basis", "math-reference/linear-algebra/matrices-linear-systems"],
+  "relatedProblems": [],
+  "sources": [{"label": "MIT Introduction to Linear Algebra, Dimensions of the Four Subspaces", "url": "https://math.mit.edu/~gs/linearalgebra/ila5/index.html"}],
+  "rights": {"sourceUrl": "https://math.mit.edu/~gs/linearalgebra/ila5/index.html", "attribution": "Original MyPutnam exposition informed by MIT linear algebra materials.", "copyrightHolder": "Gilbert Strang and Massachusetts Institute of Technology", "licenseBasis": "Standard dimension results are presented in original prose with an original example.", "redistributionStatus": "cleared"}
+}

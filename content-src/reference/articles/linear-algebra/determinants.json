@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "linear-algebra", "articleId": "determinants", "title": "Determinants", "displayOrder": 2,
+  "aliases": ["cofactor expansion", "determinant properties", "Laplace expansion", "matrix determinant"],
+  "keywords": ["multilinearity", "alternating determinant", "row operations", "invertibility test", "Cramer's rule"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "\\det A"}, {"type": "text", "text": " is defined for a square matrix A. The minor M_ij deletes row i and column j; its cofactor is "}, {"type": "inlineMath", "tex": "C_{ij}=(-1)^{i+j}\\det M_{ij}"}, {"type": "text", "text": "."}]}]},
+  "definitions": {"blocks": [{"type": "displayMath", "tex": "\\det A=\\sum_{j=1}^n a_{rj}C_{rj}=\\sum_{i=1}^n a_{ic}C_{ic}"}]},
+  "results": {"blocks": [
+    {"type": "displayMath", "tex": "\\det(AB)=\\det A\\det B,\\qquad\\det(A^T)=\\det A"},
+    {"type": "list", "ordered": false, "items": [
+      [{"type": "text", "text": "Swapping two rows changes the determinant's sign."}],
+      [{"type": "text", "text": "Scaling one row by c scales the determinant by c."}],
+      [{"type": "text", "text": "Adding a multiple of another row leaves the determinant unchanged."}]
+    ]},
+    {"type": "displayMath", "tex": "A\\text{ invertible}\\iff\\det A\\ne0"}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Determinants apply to square matrices over a commutative field."}],
+    [{"type": "text", "text": "A triangular matrix has determinant equal to the product of its diagonal entries."}],
+    [{"type": "text", "text": "Cofactor expansion may use any fixed row r or fixed column c, but its signs alternate according to (-1)^(i+j)."}]
+  ]}]},
+  "examples": [{"title": "Expand along a sparse row", "document": {"blocks": [
+    {"type": "displayMath", "tex": "\\det\\begin{pmatrix}1&2&0\\\\0&3&0\\\\4&5&6\\end{pmatrix}=3\\det\\begin{pmatrix}1&0\\\\4&6\\end{pmatrix}=18"}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "The determinant is not the product of all matrix entries."}],
+    [{"type": "text", "text": "When elimination uses a row swap or row scaling, account for its effect before reading the diagonal product."}]
+  ]}]},
+  "relatedReferences": ["math-reference/linear-algebra/matrices-linear-systems", "math-reference/linear-algebra/eigenvalues-diagonalization", "math-reference/linear-algebra/quadratic-forms"],
+  "relatedProblems": [],
+  "sources": [{"label": "MIT Introduction to Linear Algebra, Determinants", "url": "https://math.mit.edu/~gs/linearalgebra/ila5/index.html"}],
+  "rights": {"sourceUrl": "https://math.mit.edu/~gs/linearalgebra/ila5/index.html", "attribution": "Original MyPutnam exposition informed by MIT linear algebra materials.", "copyrightHolder": "Gilbert Strang and Massachusetts Institute of Technology", "licenseBasis": "Standard determinant laws are presented in original prose with an original computation.", "redistributionStatus": "cleared"}
+}

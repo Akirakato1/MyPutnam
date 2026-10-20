@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "linear-algebra", "articleId": "eigenvalues-diagonalization", "title": "Eigenvalues, eigenvectors, and diagonalization", "displayOrder": 5,
+  "aliases": ["eigenvalues", "diagonalization", "eigenvectors", "characteristic polynomial"],
+  "keywords": ["algebraic multiplicity", "geometric multiplicity", "similar matrices", "spectral theorem", "matrix powers"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "Av=\\lambda v"}, {"type": "text", "text": " defines an eigenvector v not equal to zero and its eigenvalue lambda."}]}]},
+  "definitions": {"blocks": [
+    {"type": "displayMath", "tex": "p_A(\\lambda)=\\det(A-\\lambda I),\\qquad E_\\lambda=\\ker(A-\\lambda I)"}
+  ]},
+  "results": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "An n by n matrix A is diagonalizable over F exactly when F^n has a basis of eigenvectors of A."}]},
+    {"type": "displayMath", "tex": "A=PDP^{-1}\\quad\\Longrightarrow\\quad A^k=PD^kP^{-1}"},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Distinct eigenvalues have independent eigenvectors. A real symmetric matrix has an orthonormal real eigenbasis and is orthogonally diagonalizable."}]}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Diagonalizable means diagonalizable over a specified field: a real matrix can fail over R but succeed over C."}],
+    [{"type": "text", "text": "For each eigenvalue, geometric multiplicity is at most algebraic multiplicity; equality for every eigenvalue is equivalent to diagonalizability when the characteristic polynomial splits."}],
+    [{"type": "text", "text": "Repeated eigenvalues do not by themselves prevent diagonalization; too few independent eigenvectors do."}]
+  ]}]},
+  "examples": [{"title": "Diagonalize a symmetric matrix", "document": {"blocks": [
+    {"type": "displayMath", "tex": "A=\\begin{pmatrix}2&1\\\\1&2\\end{pmatrix}"},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Its eigenvalues are 3 and 1 with eigenvectors (1,1) and (1,-1). After normalization these columns form an orthogonal matrix Q and "}, {"type": "inlineMath", "tex": "A=Q\\operatorname{diag}(3,1)Q^T"}, {"type": "text", "text": "."}]}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "The zero vector is never an eigenvector."}],
+    [{"type": "text", "text": "Eigenvalues alone do not guarantee diagonalizability."}]
+  ]}]},
+  "relatedReferences": ["math-reference/linear-algebra/determinants", "math-reference/linear-algebra/vector-spaces-basis", "math-reference/linear-algebra/quadratic-forms"],
+  "relatedProblems": [],
+  "sources": [{"label": "MIT Introduction to Linear Algebra, Eigenvalues and Eigenvectors", "url": "https://math.mit.edu/~gs/linearalgebra/ila5/linearalgebra5_6-1.pdf"}, {"label": "MIT Linear Algebra lecture notes", "url": "https://math.mit.edu/~gs/LectureNotes/"}],
+  "rights": {"sourceUrl": "https://math.mit.edu/~gs/linearalgebra/ila5/linearalgebra5_6-1.pdf", "attribution": "Original MyPutnam exposition informed by MIT linear algebra materials.", "copyrightHolder": "Gilbert Strang and Massachusetts Institute of Technology", "licenseBasis": "Standard eigenvalue criteria are presented in original prose with an original example.", "redistributionStatus": "cleared"}
+}
