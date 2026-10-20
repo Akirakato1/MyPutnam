@@ -11,10 +11,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.putnamworkbook.offline.domain.model.ReferenceTab
+import com.putnamworkbook.offline.content.ui.WebDocumentPositionStore
 
 @Composable
 fun ReferencePane(
@@ -29,6 +31,7 @@ fun ReferencePane(
     mathReferenceContent: (@Composable () -> Unit)? = null,
     modifier: Modifier = Modifier,
 ) {
+    val documentPositions = remember(state.key) { WebDocumentPositionStore() }
     Column(modifier.fillMaxSize()) {
         Row(
             modifier = Modifier
@@ -82,6 +85,7 @@ fun ReferencePane(
                     it.statement,
                     onIntegrityError,
                     Modifier.fillMaxWidth().weight(1f),
+                    documentPositions,
                 )
             } ?: LoadingReference()
             ReferenceTab.HELP -> HelpPane(
@@ -90,6 +94,7 @@ fun ReferencePane(
                 onSelectHint,
                 onIntegrityError,
                 Modifier.fillMaxWidth().weight(1f),
+                positionStore = documentPositions,
             )
             ReferenceTab.PREREQUISITES -> {
                 val prerequisites = content?.prerequisites.orEmpty()
@@ -118,6 +123,7 @@ fun ReferencePane(
                         prerequisite.resource,
                         onIntegrityError,
                         Modifier.fillMaxWidth().weight(1f),
+                        documentPositions,
                     )
                 }
             }
@@ -126,6 +132,7 @@ fun ReferencePane(
                     content.solution,
                     onIntegrityError,
                     Modifier.fillMaxWidth().weight(1f),
+                    documentPositions,
                 )
             } else {
                 Text("Reveal the four hints before opening the solution", Modifier.padding(20.dp))

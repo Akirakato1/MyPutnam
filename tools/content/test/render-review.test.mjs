@@ -6,7 +6,7 @@ import test from 'node:test';
 
 import { renderReview } from '../src/render-review.mjs';
 
-test('render review produces a deterministic document-by-width screenshot matrix and index', async (t) => {
+test('render review produces the 336/512/1280 document-by-width matrix and index by default', async (t) => {
   const root = await mkdtemp(join(tmpdir(), 'putnam-render-review-'));
   t.after(() => rm(root, { recursive: true, force: true }));
   const content = join(root, 'content-root');
@@ -15,17 +15,85 @@ test('render review produces a deterministic document-by-width screenshot matrix
   await mkdir(documentRoot, { recursive: true });
   await writeFile(join(documentRoot, 'statement.html'), '<!doctype html><meta charset="utf-8"><p>Rendered statement</p>', 'utf8');
 
-  const result = await renderReview(content, screenshots, { widths: [480, 720] });
+  const result = await renderReview(content, screenshots);
 
   assert.deepEqual(result.files, ['content/putnam/2024/problems/A1/statement.html']);
-  assert.deepEqual(result.widths, [480, 720]);
-  assert.equal(result.screenshots.length, 2);
+  assert.deepEqual(result.widths, [336, 512, 1280]);
+  assert.equal(result.screenshots.length, 3);
   for (const screenshot of result.screenshots) await access(join(screenshots, screenshot));
   const index = JSON.parse(await readFile(join(screenshots, 'review-index.json'), 'utf8'));
   assert.deepEqual(index.entries.map(({ problemKey, width }) => [problemKey, width]), [
-    ['putnam/2024/A1', 480],
-    ['putnam/2024/A1', 720],
+    ['putnam/2024/A1', 336],
+    ['putnam/2024/A1', 512],
+    ['putnam/2024/A1', 1280],
   ]);
+});
+
+test('render review accepts accessible independently scrollable tables at all review widths', async (t) => {
+  const root = await mkdtemp(join(tmpdir(), 'putnam-render-table-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const content = join(root, 'content-root');
+  await mkdir(content, { recursive: true });
+  await writeFile(
+    join(content, 'reference.html'),
+    '<!doctype html><style>body{margin:0}.table-scroll{width:100%;max-width:100%;overflow-x:auto}.table-scroll table{width:max-content;min-width:100%}th,td{min-width:220px}</style><h1>Transform table</h1><div class="table-scroll"><table><caption>Laplace transforms</caption><thead><tr><th scope="col">Function</th><th scope="col">Transform</th><th scope="col">Conditions</th></tr></thead><tbody><tr><td>f(t)</td><td>F(s)</td><td>Re(s) &gt; 0</td></tr></tbody></table></div>',
+    'utf8',
+  );
+
+  const result = await renderReview(content, join(root, 'screenshots'));
+
+  assert.deepEqual(result.widths, [336, 512, 1280]);
+});
+
+test('render review rejects inaccessible table headers', async (t) => {
+  const root = await mkdtemp(join(tmpdir(), 'putnam-render-table-headers-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const content = join(root, 'content-root');
+  await mkdir(content, { recursive: true });
+  await writeFile(
+    join(content, 'table.html'),
+    '<!doctype html><style>.table-scroll{overflow-x:auto}</style><div class="table-scroll"><table><caption>Values</caption><tr><td>Name</td><td>Value</td></tr></table></div>',
+    'utf8',
+  );
+
+  await assert.rejects(
+    renderReview(content, join(root, 'screenshots'), { widths: [336] }),
+    /accessible column headers/i,
+  );
+});
+
+test('render review rejects a table wrapper that cannot scroll independently', async (t) => {
+  const root = await mkdtemp(join(tmpdir(), 'putnam-render-table-scroll-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const content = join(root, 'content-root');
+  await mkdir(content, { recursive: true });
+  await writeFile(
+    join(content, 'table.html'),
+    '<!doctype html><style>.table-scroll{overflow-x:hidden;width:100%}table{width:1000px}</style><div class="table-scroll"><table><caption>Values</caption><thead><tr><th scope="col">Name</th><th scope="col">Value</th></tr></thead><tbody><tr><td>x</td><td>1</td></tr></tbody></table></div>',
+    'utf8',
+  );
+
+  await assert.rejects(
+    renderReview(content, join(root, 'screenshots'), { widths: [336] }),
+    /table wrapper cannot scroll independently/i,
+  );
+});
+
+test('render review reports clipped KaTeX explicitly', async (t) => {
+  const root = await mkdtemp(join(tmpdir(), 'putnam-render-katex-clipped-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const content = join(root, 'content-root');
+  await mkdir(content, { recursive: true });
+  await writeFile(
+    join(content, 'formula.html'),
+    '<!doctype html><style>.math-display{width:100%;overflow:hidden}.katex{display:block;width:1200px}</style><div class="math-display"><span class="katex">Long formula</span></div>',
+    'utf8',
+  );
+
+  await assert.rejects(
+    renderReview(content, join(root, 'screenshots'), { widths: [336] }),
+    /KaTeX is clipped/i,
+  );
 });
 
 test('render review rejects external requests', async (t) => {

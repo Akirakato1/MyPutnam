@@ -8,7 +8,7 @@ export async function renderReview(contentDir, screenshotDir, options = {}) {
   const contentRoot = resolve(contentDir);
   const screenshotRoot = resolve(screenshotDir);
   assertDisposableDirectory(screenshotRoot);
-  const widths = validateWidths(options.widths ?? [480, 720]);
+  const widths = validateWidths(options.widths ?? [336, 512, 1280]);
 
   const htmlFiles = await findHtmlFiles(contentRoot);
   if (htmlFiles.length === 0) {
@@ -54,7 +54,45 @@ export async function renderReview(contentDir, screenshotDir, options = {}) {
         try {
           await page.emulateMedia({ reducedMotion: 'reduce' });
           await page.goto(pathToFileURL(htmlFile).href, { waitUntil: 'load' });
-          const inspection = await page.evaluate(() => ({
+          const inspection = await page.evaluate(() => {
+            const horizontallyScrollable = (element) => {
+              const overflow = getComputedStyle(element).overflowX;
+              return overflow === 'auto' || overflow === 'scroll';
+            };
+            const insideValidScroller = (element) => {
+              const wrapper = element.closest('.table-scroll, .math-display');
+              return wrapper !== null && horizontallyScrollable(wrapper);
+            };
+            const clippedKatex = [...document.querySelectorAll('.katex')]
+              .filter((element) => {
+                const rect = element.getBoundingClientRect();
+                for (let ancestor = element.parentElement; ancestor && ancestor !== document.body; ancestor = ancestor.parentElement) {
+                  const style = getComputedStyle(ancestor);
+                  if (style.overflowX !== 'hidden' && style.overflowX !== 'clip') continue;
+                  const ancestorRect = ancestor.getBoundingClientRect();
+                  if (rect.left < ancestorRect.left - 1 || rect.right > ancestorRect.right + 1) return true;
+                }
+                return false;
+              })
+              .map((element) => element.textContent?.trim().slice(0, 80) || 'unnamed formula');
+            const tableIssues = [...document.querySelectorAll('table')].flatMap((table, index) => {
+              const issues = [];
+              const label = `table ${index + 1}`;
+              const headers = [...table.querySelectorAll('thead th')];
+              if (headers.length === 0 || headers.some((header) => header.getAttribute('scope') !== 'col')) {
+                issues.push(`${label} has no accessible column headers`);
+              }
+              const caption = table.querySelector('caption');
+              if (!caption || caption.textContent.trim().length === 0) {
+                issues.push(`${label} has no accessible caption`);
+              }
+              const wrapper = table.closest('.table-scroll');
+              if (!wrapper || !horizontallyScrollable(wrapper)) {
+                issues.push(`table wrapper cannot scroll independently (${label})`);
+              }
+              return issues;
+            });
+            return ({
           blank: document.body.innerText.trim().length === 0,
           horizontalOverflow:
             document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
@@ -67,6 +105,8 @@ export async function renderReview(contentDir, screenshotDir, options = {}) {
           katexErrors: [...document.querySelectorAll('.katex-error')]
             .map((element) => element.textContent?.trim() || 'unknown KaTeX error'),
           containsReplacementGlyph: document.body.innerText.includes('\uFFFD'),
+          clippedKatex,
+          tableIssues,
           overflowingElements: [...document.querySelectorAll('body *')]
             .filter((element) => {
               if (element.closest('.katex-mathml')) return false;
@@ -77,6 +117,7 @@ export async function renderReview(contentDir, screenshotDir, options = {}) {
               const radicalTail = element.closest('.hide-tail');
               if (element.namespaceURI === 'http://www.w3.org/2000/svg'
                   && radicalTail?.closest('.katex-html')) return false;
+              if (insideValidScroller(element)) return false;
               const style = getComputedStyle(element);
               if (style.display === 'none' || style.visibility === 'hidden') return false;
               const rect = element.getBoundingClientRect();
@@ -92,7 +133,8 @@ export async function renderReview(contentDir, screenshotDir, options = {}) {
                   + [...element.classList].slice(0, 2).map((name) => '.' + name).join('');
               return label + ' [' + Math.round(rect.left) + ', ' + Math.round(rect.right) + ']';
             }),
-          }));
+          });
+          });
 
           if (inspection.blank) pageFailures.push('document body is blank');
           if (inspection.horizontalOverflow) pageFailures.push('document has horizontal overflow');
@@ -102,6 +144,10 @@ export async function renderReview(contentDir, screenshotDir, options = {}) {
           if (inspection.containsReplacementGlyph) {
             pageFailures.push('document contains a missing-glyph replacement character');
           }
+          for (const formula of inspection.clippedKatex) {
+            pageFailures.push(`KaTeX is clipped: ${formula}`);
+          }
+          for (const issue of inspection.tableIssues) pageFailures.push(issue);
           for (const element of inspection.overflowingElements) {
             pageFailures.push('element exceeds viewport: ' + element);
           }

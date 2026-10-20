@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import com.putnamworkbook.offline.content.ui.WebDocumentPositionStore
 
 @Composable
 fun HelpPane(
@@ -30,6 +31,7 @@ fun HelpPane(
     onSelectHint: (Int) -> Unit,
     onIntegrityError: (String) -> Unit,
     modifier: Modifier = Modifier,
+    positionStore: WebDocumentPositionStore? = null,
 ) {
     val content = state.content
     val progress = state.progress
@@ -79,6 +81,7 @@ fun HelpPane(
                 activeHint.resource,
                 onIntegrityError,
                 Modifier.fillMaxWidth().weight(1f),
+                positionStore,
             )
         }
     }

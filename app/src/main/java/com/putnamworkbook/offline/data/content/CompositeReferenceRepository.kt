@@ -50,39 +50,42 @@ class CompositeReferenceRepository(
         val declarations = envelope.members.associateBy(PackageMemberDeclaration::path)
         val sourceDeclaration = declarations["source/reference.json"] ?: reject("Reference source is missing")
         val documentDeclaration = declarations[ARTICLE_MEMBER] ?: reject("Reference document is missing")
-        val root = try {
-            StrictJsonCodec.parse(packageReader.read(item, sourceDeclaration).decodeToString()).asObject("reference")
+        val source = try {
+            val root = StrictJsonCodec.parse(
+                packageReader.read(item, sourceDeclaration).decodeToString(),
+            ).asObject("reference")
+            require(
+                root.requiredInt("schemaVersion") == 1 &&
+                    root.requiredInt("richDocumentVersion") == 2 &&
+                    root.requiredString("categoryId") == key.categoryId &&
+                    root.requiredString("articleId") == key.articleId,
+            ) { "Reference source identity does not match its package" }
+            DecodedReferenceSource(
+                relatedReferences = root.requiredArray("relatedReferences").mapIndexed { index, value ->
+                    ReferenceKey.parse(value.asString("relatedReferences[$index]"))
+                },
+                relatedProblems = root.requiredArray("relatedProblems").mapIndexed { index, value ->
+                    ProblemKey.parse(value.asString("relatedProblems[$index]"))
+                },
+                attribution = root.requiredArray("sources").mapIndexed { index, value ->
+                    val row = value.asObject("sources[$index]")
+                    Attribution("reference", row.requiredString("label"), row.requiredString("url"))
+                },
+            )
         } catch (error: Exception) {
             reject("Reference source is invalid: ${error.message?.take(160)}")
         }
-        if (root.requiredInt("schemaVersion") != 1 || root.requiredInt("richDocumentVersion") != 2 ||
-            root.requiredString("categoryId") != key.categoryId || root.requiredString("articleId") != key.articleId
-        ) reject("Reference source identity does not match its package")
-
-        val relatedReferences = root.requiredArray("relatedReferences").mapIndexed { index, value ->
-            try {
-                ReferenceKey.parse(value.asString("relatedReferences[$index]"))
-            } catch (error: IllegalArgumentException) {
-                reject("Reference relation is invalid")
-            }
-        }
-        val relatedProblems = root.requiredArray("relatedProblems").mapIndexed { index, value ->
-            try {
-                ProblemKey.parse(value.asString("relatedProblems[$index]"))
-            } catch (error: IllegalArgumentException) {
-                reject("Problem relation is invalid")
-            }
-        }
-        val attribution = root.requiredArray("sources").map { value ->
-            val row = value.asObject("source")
-            Attribution("reference", row.requiredString("label"), row.requiredString("url"))
-        }
         return ReferenceArticleContent(
             summary(item),
-            ContentResourceRef(item.metadata.key, item.activeDigest!!, ARTICLE_MEMBER, documentDeclaration.sha256),
-            relatedReferences,
-            relatedProblems,
-            attribution,
+            ContentResourceRef(
+                item.metadata.key,
+                item.activeDigest ?: reject("Reference package has no active digest"),
+                ARTICLE_MEMBER,
+                documentDeclaration.sha256,
+            ),
+            source.relatedReferences,
+            source.relatedProblems,
+            source.attribution,
         )
     }
 
@@ -115,4 +118,10 @@ class CompositeReferenceRepository(
             ReferenceArticleSummary::title,
         ).thenBy { it.key.canonical }
     }
+
+    private data class DecodedReferenceSource(
+        val relatedReferences: List<ReferenceKey>,
+        val relatedProblems: List<ProblemKey>,
+        val attribution: List<Attribution>,
+    )
 }

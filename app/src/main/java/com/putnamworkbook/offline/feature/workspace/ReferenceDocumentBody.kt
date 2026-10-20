@@ -23,7 +23,13 @@ fun ReferenceDocumentBody(
     Box(modifier.testTag("reference-document-body")) {
         key(resource) {
             if (resource.contentKey == "legacy/asset/path") {
-                MathContentWebView(resource.memberPath, onIntegrityError, Modifier.fillMaxSize())
+                MathContentWebView(
+                    assetPath = resource.memberPath,
+                    onIntegrityError = onIntegrityError,
+                    modifier = Modifier.fillMaxSize(),
+                    initialScrollY = positions.position(documentId),
+                    onScrollYChanged = { positions.update(documentId, it) },
+                )
             } else {
                 MathContentWebView(
                     resource = resource,

@@ -99,10 +99,14 @@ fun MathContentWebView(
     assetPath: String,
     onIntegrityError: (String) -> Unit,
     modifier: Modifier = Modifier,
+    initialScrollY: Int = 0,
+    onScrollYChanged: (Int) -> Unit = {},
 ) {
     val context = LocalContext.current
     val clientFactory = LocalContentClientFactoryProvider.current
     val latestIntegrityError = rememberUpdatedState(onIntegrityError)
+    val latestInitialScrollY = rememberUpdatedState(initialScrollY.coerceAtLeast(0))
+    val latestScrollChanged = rememberUpdatedState(onScrollYChanged)
     var readyAssetPath by remember { mutableStateOf<String?>(null) }
     var renderGeneration by remember { mutableIntStateOf(0) }
     val client = remember(context.applicationContext, clientFactory) {
@@ -120,6 +124,7 @@ fun MathContentWebView(
                 }
                 if (loadedPath != null && webView.url == expectedUrl) {
                     readyAssetPath = loadedPath
+                    webView.post { webView.scrollTo(0, latestInitialScrollY.value) }
                 }
             },
         )
@@ -130,6 +135,9 @@ fun MathContentWebView(
             factory = { context ->
                 WebView(context).also { webView ->
                     client.configure(webView)
+                    webView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+                        latestScrollChanged.value(scrollY.coerceAtLeast(0))
+                    }
                 }
             },
             update = { webView ->
@@ -140,6 +148,7 @@ fun MathContentWebView(
                 }
             },
             onRelease = { webView ->
+                latestScrollChanged.value(webView.scrollY.coerceAtLeast(0))
                 webView.stopLoading()
                 webView.destroy()
             },

@@ -192,6 +192,47 @@ class WorkspaceScreenTest {
     }
 
     @Test
+    fun problemDocumentScrollSurvivesOpeningAndClosingMathReference() {
+        val clientFactory = ControlledLocalContentClientFactory()
+        var state by mutableStateOf(ReferenceRendererFixture.state(ReferenceTab.PROBLEM))
+        composeRule.setContent {
+            CompositionLocalProvider(LocalContentClientFactoryProvider provides clientFactory) {
+                MaterialTheme {
+                    ReferencePane(
+                        state = state,
+                        onSelectTab = {},
+                        onRevealNextStage = {},
+                        onSelectHint = {},
+                        onSelectPrerequisite = {},
+                        onOpenMathReference = { state = state.copy(mathReferenceOpen = true) },
+                        onCloseMathReference = { state = state.copy(mathReferenceOpen = false) },
+                        onIntegrityError = {},
+                        mathReferenceContent = {
+                            Box(Modifier.fillMaxSize().testTag("embedded-math-reference"))
+                        },
+                        modifier = Modifier.width(650.dp).height(500.dp),
+                    )
+                }
+            }
+        }
+        composeRule.runOnIdle(clientFactory::releaseLoads)
+        composeRule.waitUntil(timeoutMillis = 5_000) {
+            composeRule.onAllNodesWithTag("math-content-ready").fetchSemanticsNodes().isNotEmpty()
+        }
+        composeRule.runOnIdle { clientFactory.scrollReadyViewTo(240) }
+
+        composeRule.onNodeWithTag("workspace-math-reference").performClick()
+        composeRule.onNodeWithTag("embedded-math-reference").assertExists()
+        composeRule.onNodeWithTag("workspace-math-reference").performClick()
+        composeRule.waitUntil(timeoutMillis = 5_000) {
+            clientFactory.readyViewCount() >= 2 &&
+                runCatching { clientFactory.readyViewScrollY() == 240 }.getOrDefault(false)
+        }
+
+        assertEquals(240, clientFactory.readyViewScrollY())
+    }
+
+    @Test
     fun wideWorkspaceUsesFixedFortySixtySplit() {
         composeRule.setContent {
             MaterialTheme {

@@ -70,6 +70,8 @@ internal class ControlledLocalContentClientFactory : LocalContentClientFactory {
     private val pendingLoads = ArrayDeque<() -> Unit>()
     private val clients = mutableListOf<LocalContentClient>()
     private var holdLoads = true
+    private var lastReadyView: WebView? = null
+    private var readyCount = 0
 
     override fun create(
         assetContext: Context,
@@ -80,7 +82,11 @@ internal class ControlledLocalContentClientFactory : LocalContentClientFactory {
         assetContext = assetContext,
         onIntegrityError = onIntegrityError,
         onRendererGone = onRendererGone,
-        onPageReady = onPageReady,
+        onPageReady = { webView ->
+            lastReadyView = webView
+            readyCount += 1
+            onPageReady(webView)
+        },
         loadDispatcher = { load ->
             if (holdLoads) pendingLoads += load else load()
         },
@@ -99,4 +105,12 @@ internal class ControlledLocalContentClientFactory : LocalContentClientFactory {
         check(clients.isNotEmpty())
         clients.last().onRenderProcessGone(null, null)
     }
+
+    fun scrollReadyViewTo(y: Int) {
+        checkNotNull(lastReadyView).scrollTo(0, y)
+    }
+
+    fun readyViewScrollY(): Int = checkNotNull(lastReadyView).scrollY
+
+    fun readyViewCount(): Int = readyCount
 }

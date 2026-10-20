@@ -11,6 +11,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertThrows
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class CompositeReferenceRepositoryTest {
@@ -59,10 +60,30 @@ class CompositeReferenceRepositoryTest {
         }
     }
 
+    @Test
+    fun quarantinesMalformedSourceStructureInsteadOfLeakingJsonExceptions() {
+        val state = MutableStateFlow(InstalledContentSnapshot(1, listOf(item(ContentAvailability.INSTALLED, ContentSource.DOWNLOADED, "d"))))
+        val malformed = FakeReader(source = SOURCE.replace(
+            "\"relatedProblems\":[\"putnam/2025/A1\"]",
+            "\"relatedProblems\":\"putnam/2025/A1\"",
+        ))
+
+        assertThrows(ContentIntegrityException::class.java) {
+            runBlocking {
+                CompositeReferenceRepository({ catalog("Euler totient") }, state, malformed)
+                    .article(ReferenceKey("number-theory", "euler-totient"))
+            }
+        }
+
+        assertEquals(1, malformed.quarantineMessages.size)
+        assertTrue(malformed.quarantineMessages.single().contains("invalid"))
+    }
+
     private class FakeReader(
         private val source: String = SOURCE,
         private val envelopeKey: String? = null,
     ) : InstalledPackageReader {
+        val quarantineMessages = mutableListOf<String>()
         override suspend fun envelope(item: ResolvedInstalledContent): PackageEnvelope = PackageEnvelope(
             1, CatalogContentType.REFERENCE, envelopeKey ?: item.metadata.key, 1, 2, 1, 2,
             listOf(
@@ -72,7 +93,9 @@ class CompositeReferenceRepositoryTest {
         )
         override suspend fun read(item: ResolvedInstalledContent, declaration: PackageMemberDeclaration): ByteArray =
             if (declaration.path == "source/reference.json") source.encodeToByteArray() else byteArrayOf()
-        override suspend fun quarantine(item: ResolvedInstalledContent, message: String) = Unit
+        override suspend fun quarantine(item: ResolvedInstalledContent, message: String) {
+            quarantineMessages += message
+        }
     }
 
     companion object {
