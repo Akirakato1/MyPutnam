@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "calculus",
+  "articleId": "integration-by-parts",
+  "title": "Integration by parts",
+  "displayOrder": 8,
+  "aliases": ["integration by parts", "tabular integration", "IBP", "repeated integration by parts"],
+  "keywords": ["product rule integral", "LIATE", "definite integration by parts", "cyclic integral"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "text", "text": "Choose u to differentiate and dv to integrate; then compute du and one antiderivative v."}]}]},
+  "definitions": {"blocks": [{"type": "displayMath", "tex": "\\int u\\,dv=uv-\\int v\\,du"}]},
+  "results": {"blocks": [
+    {"type": "displayMath", "tex": "\\int_a^b u(x)v'(x)\\,dx=[u(x)v(x)]_a^b-\\int_a^b u'(x)v(x)\\,dx"},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Repeated use is effective when differentiation simplifies a polynomial or eventually cycles. A tabular layout is bookkeeping for repeated applications, not a separate theorem."}]}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "For the definite formula, u and v should satisfy the standard differentiability and integrability conditions on [a,b]."}],
+    [{"type": "text", "text": "Choose dv only when it has a usable antiderivative."}],
+    [{"type": "text", "text": "LIATE is a heuristic for choosing u, not a validity condition."}]
+  ]}]},
+  "examples": [{"title": "Integrate a polynomial times an exponential", "document": {"blocks": [
+    {"type": "displayMath", "tex": "\\int xe^x\\,dx=xe^x-\\int e^x\\,dx=e^x(x-1)+C"}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Keep the minus sign before the remaining integral."}],
+    [{"type": "text", "text": "For definite integrals, evaluate the boundary product as well as the remaining integral."}]
+  ]}]},
+  "relatedReferences": ["math-reference/calculus/reduction-formulas", "math-reference/calculus/antiderivative-table"],
+  "relatedProblems": [],
+  "sources": [{"label": "OpenStax Calculus Volume 2, Integration by Parts", "url": "https://openstax.org/books/calculus-volume-2/pages/3-1-integration-by-parts"}, {"label": "MIT 18.01, Integration by Parts and Reduction Formulae", "url": "https://math.mit.edu/~djk/18_01/chapter24/contents.html"}],
+  "rights": {"sourceUrl": "https://openstax.org/books/calculus-volume-2/pages/3-1-integration-by-parts", "attribution": "Original MyPutnam exposition informed by OpenStax and MIT calculus notes.", "copyrightHolder": "OpenStax and MIT course authors", "licenseBasis": "The standard product-rule consequence is presented in original prose with an original example.", "redistributionStatus": "cleared"}
+}

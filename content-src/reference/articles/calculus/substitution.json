@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "calculus",
+  "articleId": "substitution",
+  "title": "Substitution and change of variables",
+  "displayOrder": 7,
+  "aliases": ["u-substitution", "change of variables", "integration substitution", "reverse chain rule"],
+  "keywords": ["definite integral substitution", "Jacobian in one variable", "inner derivative", "variable bounds"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "text", "text": "Set "}, {"type": "inlineMath", "tex": "u=g(x)"}, {"type": "text", "text": ", so "}, {"type": "inlineMath", "tex": "du=g'(x)\\,dx"}, {"type": "text", "text": ". This notation records the chain-rule factor."}]}]},
+  "definitions": {"blocks": [{"type": "displayMath", "tex": "\\int f(g(x))g'(x)\\,dx=F(g(x))+C\\qquad(F'=f)"}]},
+  "results": {"blocks": [
+    {"type": "displayMath", "tex": "\\int_a^b f(g(x))g'(x)\\,dx=\\int_{g(a)}^{g(b)}f(u)\\,du"},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "For definite integrals, either change the bounds immediately or substitute back before evaluating; do not mix x-bounds with a u-integrand."}]}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "The displayed definite formula assumes the usual continuity and differentiability conditions that make the change of variables valid."}],
+    [{"type": "text", "text": "A missing constant factor may be supplied algebraically; a genuinely missing variable factor may require another method."}],
+    [{"type": "text", "text": "A non-one-to-one substitution can still work in one dimension under suitable hypotheses, but signs and interval splitting require care."}]
+  ]}]},
+  "examples": [{"title": "Change the bounds", "document": {"blocks": [
+    {"type": "displayMath", "tex": "\\int_0^1 2x e^{x^2}\\,dx=\\int_0^1 e^u\\,du=e-1\\qquad(u=x^2)"}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Do not leave both u and x in the transformed integrand."}],
+    [{"type": "text", "text": "When solving for dx, carry every factor and sign."}]
+  ]}]},
+  "relatedReferences": ["math-reference/calculus/antiderivative-table", "math-reference/calculus/trig-integrals-substitutions"],
+  "relatedProblems": [],
+  "sources": [{"label": "OpenStax Calculus Volume 1, Substitution", "url": "https://openstax.org/books/calculus-volume-1/pages/5-5-substitution"}],
+  "rights": {"sourceUrl": "https://openstax.org/books/calculus-volume-1/pages/5-5-substitution", "attribution": "Original MyPutnam exposition informed by OpenStax Calculus Volume 1.", "copyrightHolder": "OpenStax", "licenseBasis": "Standard change-of-variables formulas are presented in original prose with an original example.", "redistributionStatus": "cleared"}
+}

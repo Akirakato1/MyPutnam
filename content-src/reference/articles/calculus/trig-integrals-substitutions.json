@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "calculus",
+  "articleId": "trig-integrals-substitutions",
+  "title": "Trigonometric integrals and substitutions",
+  "displayOrder": 10,
+  "aliases": ["trigonometric integrals", "trigonometric substitution", "trig integrals", "trig substitution"],
+  "keywords": ["powers of sine cosine", "powers of secant tangent", "radical substitution", "Weierstrass substitution"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "text", "text": "The power strategies below use the identities "}, {"type": "inlineMath", "tex": "\\sin^2x+\\cos^2x=1"}, {"type": "text", "text": " and "}, {"type": "inlineMath", "tex": "1+\\tan^2x=\\sec^2x"}, {"type": "text", "text": "."}]}]},
+  "definitions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "For sine-cosine powers, save one factor when one exponent is odd; when both are even, use half-angle identities."}],
+    [{"type": "text", "text": "For secant-tangent powers, save sec^2 when the tangent exponent is odd, or save sec tan when the secant exponent is even."}]
+  ]}]},
+  "results": {"blocks": [
+    {"type": "displayMath", "tex": "\\sqrt{a^2-x^2}:\\quad x=a\\sin\\theta"},
+    {"type": "displayMath", "tex": "\\sqrt{a^2+x^2}:\\quad x=a\\tan\\theta"},
+    {"type": "displayMath", "tex": "\\sqrt{x^2-a^2}:\\quad x=a\\sec\\theta"},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Choose a theta interval that fixes signs, simplify the radical geometrically or algebraically, and convert the final answer back to x. For a rational expression in sine and cosine, the linked Weierstrass substitution gives a systematic rationalization."}]}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Assume a>0 in the displayed radical substitutions."}],
+    [{"type": "text", "text": "Absolute values such as sqrt(sec^2 theta)=|sec theta| disappear only after the theta interval is chosen."}],
+    [{"type": "text", "text": "The parity rules guide algebra; they do not replace checking the transformed differential."}]
+  ]}]},
+  "examples": [{"title": "Use an odd sine power", "document": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Save one sine factor, use "}, {"type": "inlineMath", "tex": "\\sin^2x=1-\\cos^2x"}, {"type": "text", "text": ", and set "}, {"type": "inlineMath", "tex": "u=\\cos x"}, {"type": "text", "text": "."}]},
+    {"type": "displayMath", "tex": "-\\int(u^2-u^4)\\,du=-\\frac{\\cos^3x}{3}+\\frac{\\cos^5x}{5}+C"}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Do not apply a remembered trig substitution without transforming dx."}],
+    [{"type": "text", "text": "Back-substitution must respect the signs fixed by the chosen interval."}]
+  ]}]},
+  "relatedReferences": ["math-reference/trigonometry/weierstrass-substitution", "math-reference/trigonometry/product-sum-power-reduction", "math-reference/calculus/substitution"],
+  "relatedProblems": [],
+  "sources": [{"label": "OpenStax Calculus Volume 2, Trigonometric Integrals", "url": "https://openstax.org/books/calculus-volume-2/pages/3-2-trigonometric-integrals"}, {"label": "OpenStax Calculus Volume 2, Trigonometric Substitution", "url": "https://openstax.org/books/calculus-volume-2/pages/3-3-trigonometric-substitution"}],
+  "rights": {"sourceUrl": "https://openstax.org/books/calculus-volume-2/pages/3-2-trigonometric-integrals", "attribution": "Original MyPutnam exposition informed by OpenStax Calculus Volume 2.", "copyrightHolder": "OpenStax", "licenseBasis": "Standard strategies and substitutions are presented in original prose with an original example.", "redistributionStatus": "cleared"}
+}

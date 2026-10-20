@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "calculus",
+  "articleId": "limits-continuity",
+  "title": "Limits and continuity",
+  "displayOrder": 1,
+  "aliases": ["limit laws", "continuity", "one-sided limits", "squeeze theorem"],
+  "keywords": ["indeterminate forms", "infinite limits", "continuous function", "limit algebra"],
+  "notation": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "\\lim_{x\\to a}f(x)=L"}, {"type": "text", "text": " means that f(x) approaches L as x approaches a; the value f(a) need not be involved."}]}
+  ]},
+  "definitions": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "A function f is continuous at a when f(a) is defined, the limit at a exists, and "}, {"type": "inlineMath", "tex": "\\lim_{x\\to a}f(x)=f(a)"}, {"type": "text", "text": "."}]},
+    {"type": "displayMath", "tex": "\\lim_{x\\to a}f(x)=L\\iff\\lim_{x\\to a^-}f(x)=\\lim_{x\\to a^+}f(x)=L"}
+  ]},
+  "results": {"blocks": [
+    {"type": "displayMath", "tex": "\\lim(f+g)=L+M,\\quad\\lim(fg)=LM,\\quad\\lim\\frac fg=\\frac LM\\ (M\\ne0)"},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Composition passes through a limit when the outer function is continuous at the inner limit. The squeeze theorem gives the same limit to a trapped function when both bounds share a limit."}]}
+  ]},
+  "conditions": {"blocks": [
+    {"type": "list", "ordered": false, "items": [
+      [{"type": "text", "text": "Limit laws apply only after the component limits exist; the quotient law also requires a nonzero denominator limit."}],
+      [{"type": "text", "text": "Forms 0/0, infinity/infinity, 0 times infinity, infinity minus infinity, 1^infinity, 0^0, and infinity^0 are indeterminate, not answers."}],
+      [{"type": "text", "text": "An infinite limit describes unbounded behavior; it is not a finite real limit."}]
+    ]}
+  ]},
+  "examples": [{"title": "Remove a removable singularity", "document": {"blocks": [
+    {"type": "displayMath", "tex": "\\lim_{x\\to2}\\frac{x^2-4}{x-2}=\\lim_{x\\to2}(x+2)=4"},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "The cancellation is valid for x not equal to 2, which is exactly the punctured neighborhood relevant to the limit."}]}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Do not substitute into 0/0 and stop; simplify, estimate, or apply a justified theorem."}],
+    [{"type": "text", "text": "Continuity at a requires both one-sided limits and the actual function value to agree."}]
+  ]}]},
+  "relatedReferences": ["math-reference/calculus/derivative-rules-table", "math-reference/calculus/fundamental-theorem-calculus"],
+  "relatedProblems": [],
+  "sources": [{"label": "OpenStax Calculus Volume 1, Limits", "url": "https://openstax.org/books/calculus-volume-1/pages/2-introduction"}, {"label": "OpenStax Calculus Volume 1, Continuity", "url": "https://openstax.org/books/calculus-volume-1/pages/2-4-continuity"}],
+  "rights": {"sourceUrl": "https://openstax.org/books/calculus-volume-1/pages/2-4-continuity", "attribution": "Original MyPutnam exposition informed by OpenStax Calculus Volume 1.", "copyrightHolder": "OpenStax", "licenseBasis": "Standard definitions and laws are restated in original prose with an original example.", "redistributionStatus": "cleared"}
+}

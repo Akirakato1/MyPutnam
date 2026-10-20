@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "calculus",
+  "articleId": "extrema-convexity",
+  "title": "Extrema, monotonicity, and convexity",
+  "displayOrder": 4,
+  "aliases": ["second derivative test", "convexity", "first derivative test", "critical points"],
+  "keywords": ["local extrema", "global extrema", "concavity", "inflection point", "optimization"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "text", "text": "A critical number is an interior point where f' is zero or does not exist, provided f itself is defined there."}]}]},
+  "definitions": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "A differentiable function is increasing where f' > 0 and decreasing where f' < 0. It is convex (concave up) on an interval when its secant slopes increase; f'' >= 0 is a common sufficient criterion when f'' exists."}]}
+  ]},
+  "results": {"blocks": [
+    {"type": "displayMath", "tex": "f'(c)=0,\\ f''(c)>0\\Rightarrow\\text{strict local minimum};\\qquad f''(c)<0\\Rightarrow\\text{strict local maximum}"},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "For a continuous function on a closed interval, global extrema occur among endpoints and interior critical numbers. The first derivative sign change is often stronger than the second derivative test."}]}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "The second derivative test requires f'(c)=0 and f''(c) to exist; f''(c)=0 is inconclusive."}],
+    [{"type": "text", "text": "A change in concavity is required for an inflection point; f''=0 alone is not enough."}],
+    [{"type": "text", "text": "Endpoints must be checked in closed-interval optimization."}]
+  ]}]},
+  "examples": [{"title": "Classify two critical points", "document": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "For "}, {"type": "inlineMath", "tex": "f(x)=x^3-3x"}, {"type": "text", "text": ", the critical numbers are plus or minus 1 and f''(x)=6x."}]},
+    {"type": "displayMath", "tex": "f''(-1)=-6<0\\Rightarrow\\text{local maximum},\\qquad f''(1)=6>0\\Rightarrow\\text{local minimum}"}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Local and global extrema are different claims."}],
+    [{"type": "text", "text": "Convexity describes bending, not whether the function is increasing."}]
+  ]}]},
+  "relatedReferences": ["math-reference/calculus/derivative-rules-table", "math-reference/algebra-inequalities/jensen-convexity"],
+  "relatedProblems": [],
+  "sources": [{"label": "OpenStax Calculus Volume 1, Derivatives and the Shape of a Graph", "url": "https://openstax.org/books/calculus-volume-1/pages/4-5-derivatives-and-the-shape-of-a-graph"}, {"label": "OpenStax Calculus Volume 1, Maxima and Minima", "url": "https://openstax.org/books/calculus-volume-1/pages/4-3-maxima-and-minima"}],
+  "rights": {"sourceUrl": "https://openstax.org/books/calculus-volume-1/pages/4-5-derivatives-and-the-shape-of-a-graph", "attribution": "Original MyPutnam exposition informed by OpenStax Calculus Volume 1.", "copyrightHolder": "OpenStax", "licenseBasis": "Standard tests are stated in original prose with an original polynomial example.", "redistributionStatus": "cleared"}
+}

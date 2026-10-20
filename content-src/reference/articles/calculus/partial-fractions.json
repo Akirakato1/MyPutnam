@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "calculus",
+  "articleId": "partial-fractions",
+  "title": "Partial fraction decomposition",
+  "displayOrder": 9,
+  "aliases": ["partial fractions", "partial fraction decomposition", "rational function integration", "repeated linear factor"],
+  "keywords": ["irreducible quadratic factor", "proper rational function", "cover-up method", "equating coefficients"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "P(x)/Q(x)"}, {"type": "text", "text": " is proper when deg P < deg Q. Divide first when it is improper."}]}]},
+  "definitions": {"blocks": [{"type": "paragraph", "runs": [{"type": "text", "text": "Factor Q over the reals, then include one numerator term for every power of every factor."}]}]},
+  "results": {"blocks": [
+    {"type": "displayMath", "tex": "(x-a)^m:\\qquad\\sum_{k=1}^m\\frac{A_k}{(x-a)^k}"},
+    {"type": "displayMath", "tex": "q(x)^m:\\qquad\\sum_{k=1}^m\\frac{B_kx+C_k}{q(x)^k},\\quad\\deg q=2"}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Use real irreducible quadratics with linear numerators."}],
+    [{"type": "text", "text": "Repeated factors require all intermediate powers, not only the highest power."}],
+    [{"type": "text", "text": "The decomposition is an algebraic identity away from poles; solve coefficients by substitution or coefficient comparison."}]
+  ]}]},
+  "examples": [{"title": "Decompose a repeated-factor-free denominator", "document": {"blocks": [
+    {"type": "displayMath", "tex": "\\frac{3x+5}{(x+1)(x+2)}=\\frac2{x+1}+\\frac1{x+2}"},
+    {"type": "displayMath", "tex": "\\int\\frac{3x+5}{(x+1)(x+2)}dx=2\\ln|x+1|+\\ln|x+2|+C"}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Long-divide before decomposing when the rational function is improper."}],
+    [{"type": "text", "text": "Do not use a constant numerator over an irreducible quadratic factor."}]
+  ]}]},
+  "relatedReferences": ["math-reference/calculus/antiderivative-table", "math-reference/algebra-inequalities/polynomial-roots-vieta"],
+  "relatedProblems": [],
+  "sources": [{"label": "OpenStax Calculus Volume 2, Partial Fractions", "url": "https://openstax.org/books/calculus-volume-2/pages/3-4-partial-fractions"}],
+  "rights": {"sourceUrl": "https://openstax.org/books/calculus-volume-2/pages/3-4-partial-fractions", "attribution": "Original MyPutnam exposition informed by OpenStax Calculus Volume 2.", "copyrightHolder": "OpenStax", "licenseBasis": "Standard decomposition templates are presented in original prose with an original example.", "redistributionStatus": "cleared"}
+}

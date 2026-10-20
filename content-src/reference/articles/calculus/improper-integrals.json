@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "calculus",
+  "articleId": "improper-integrals",
+  "title": "Improper integrals",
+  "displayOrder": 12,
+  "aliases": ["improper integral", "infinite interval integral", "unbounded integrand", "p-test"],
+  "keywords": ["comparison test for integrals", "absolute convergence", "Cauchy principal value", "singular integral"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "text", "text": "An improper integral is defined by one or more one-sided limits. It converges only when every required limit exists finitely."}]}]},
+  "definitions": {"blocks": [
+    {"type": "displayMath", "tex": "\\int_a^\\infty f(x)\\,dx:=\\lim_{R\\to\\infty}\\int_a^R f(x)\\,dx"},
+    {"type": "displayMath", "tex": "\\int_a^b f(x)\\,dx:=\\lim_{t\\to c^-}\\int_a^t f(x)\\,dx+\\lim_{t\\to c^+}\\int_t^b f(x)\\,dx"}
+  ]},
+  "results": {"blocks": [
+    {"type": "displayMath", "tex": "\\int_1^\\infty x^{-p}\\,dx\\text{ converges iff }p>1"},
+    {"type": "displayMath", "tex": "\\int_0^1 x^{-p}\\,dx\\text{ converges iff }p<1"},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "For nonnegative functions, direct comparison and limit comparison transfer convergence from a larger known convergent integrand or divergence from a smaller known divergent integrand."}]}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Split at every interior singularity and test both one-sided integrals separately."}],
+    [{"type": "text", "text": "On the whole real line, both tails must converge independently."}],
+    [{"type": "text", "text": "A symmetric Cauchy principal value can exist when the improper integral diverges; they are not interchangeable."}]
+  ]}]},
+  "examples": [{"title": "Apply the p-test", "document": {"blocks": [
+    {"type": "displayMath", "tex": "\\int_1^\\infty\\frac{dx}{x^2}=\\lim_{R\\to\\infty}\\left[-\\frac1x\\right]_1^R=1"},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "This converges because p=2>1."}]}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Never write infinity as an endpoint and manipulate it like a number; introduce a limit."}],
+    [{"type": "text", "text": "Cancellation across a singularity does not establish ordinary improper convergence."}]
+  ]}]},
+  "relatedReferences": ["math-reference/sequences-series-recurrences/infinite-series-tests", "math-reference/calculus/limits-continuity"],
+  "relatedProblems": [],
+  "sources": [{"label": "OpenStax Calculus Volume 2, Improper Integrals", "url": "https://openstax.org/books/calculus-volume-2/pages/3-7-improper-integrals"}],
+  "rights": {"sourceUrl": "https://openstax.org/books/calculus-volume-2/pages/3-7-improper-integrals", "attribution": "Original MyPutnam exposition informed by OpenStax Calculus Volume 2.", "copyrightHolder": "OpenStax", "licenseBasis": "Standard definitions and tests are presented in original prose with an original example.", "redistributionStatus": "cleared"}
+}

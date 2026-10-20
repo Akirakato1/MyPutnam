@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "calculus",
+  "articleId": "reduction-formulas",
+  "title": "Integration reduction formulas",
+  "displayOrder": 11,
+  "aliases": ["integration reduction formula", "reduction formula", "recursive integration", "Wallis reduction"],
+  "keywords": ["sine power integral", "cosine power integral", "integration recurrence", "base cases"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "I_n=\\int\\sin^n x\\,dx"}, {"type": "text", "text": " denotes a family of indefinite integrals indexed by the nonnegative integer n."}]}]},
+  "definitions": {"blocks": [{"type": "paragraph", "runs": [{"type": "text", "text": "A reduction formula expresses an indexed integral in terms of a lower-index member, so repeated application must terminate at stated base cases."}]}]},
+  "results": {"blocks": [
+    {"type": "displayMath", "tex": "I_n=-\\frac{\\sin^{n-1}x\\cos x}{n}+\\frac{n-1}{n}I_{n-2}\\qquad(n\\ge2)"},
+    {"type": "displayMath", "tex": "I_0=x+C,\\qquad I_1=-\\cos x+C"},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "This recurrence follows from integration by parts and the Pythagorean identity. For definite integrals, derive or use the corresponding recurrence with boundary terms evaluated before iterating."}]}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Here n is an integer at least 2; the parity of n determines which base case is reached."}],
+    [{"type": "text", "text": "Constants of integration need not be carried at every recursive step; add one constant to the final antiderivative."}],
+    [{"type": "text", "text": "Different integral families have different boundary terms and recurrences, so derive rather than transplant a formula."}]
+  ]}]},
+  "examples": [{"title": "Reduce the fourth power", "document": {"blocks": [
+    {"type": "displayMath", "tex": "I_4=-\\frac{\\sin^3x\\cos x}{4}+\\frac34I_2"},
+    {"type": "displayMath", "tex": "=-\\frac{\\sin^3x\\cos x}{4}-\\frac{3\\sin x\\cos x}{8}+\\frac{3x}{8}+C"}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "A recurrence without base cases does not finish the computation."}],
+    [{"type": "text", "text": "Check whether the formula is for an indefinite integral or a particular definite interval."}]
+  ]}]},
+  "relatedReferences": ["math-reference/calculus/integration-by-parts", "math-reference/calculus/trig-integrals-substitutions"],
+  "relatedProblems": [],
+  "sources": [{"label": "MIT 18.01, Integration by Parts and Reduction Formulae", "url": "https://math.mit.edu/~djk/18_01/chapter24/contents.html"}, {"label": "OpenStax Calculus Volume 2, Integration by Parts", "url": "https://openstax.org/books/calculus-volume-2/pages/3-1-integration-by-parts"}],
+  "rights": {"sourceUrl": "https://math.mit.edu/~djk/18_01/chapter24/contents.html", "attribution": "Original MyPutnam exposition informed by MIT and OpenStax calculus references.", "copyrightHolder": "MIT course authors and OpenStax", "licenseBasis": "A standard recurrence is derived and presented in original prose with an original worked reduction.", "redistributionStatus": "cleared"}
+}

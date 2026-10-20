@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "calculus",
+  "articleId": "taylor-maclaurin",
+  "title": "Taylor and Maclaurin expansions",
+  "displayOrder": 3,
+  "aliases": ["Taylor series", "Maclaurin series", "Taylor theorem", "Taylor polynomial"],
+  "keywords": ["Lagrange remainder", "power series expansion", "remainder bound", "radius of convergence"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "T_n(x)"}, {"type": "text", "text": " denotes the degree-n Taylor polynomial about a; Maclaurin means a=0."}]}]},
+  "definitions": {"blocks": [
+    {"type": "displayMath", "tex": "T_n(x)=\\sum_{k=0}^n\\frac{f^{(k)}(a)}{k!}(x-a)^k"},
+    {"type": "displayMath", "tex": "f(x)=T_n(x)+R_n(x)"}
+  ]},
+  "results": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "If f has n+1 derivatives on the interval joining a and x, with the needed continuity hypotheses, then for some point c between a and x,"}]},
+    {"type": "displayMath", "tex": "R_n(x)=\\frac{f^{(n+1)}(c)}{(n+1)!}(x-a)^{n+1}"},
+    {"type": "displayMath", "tex": "e^x=\\sum_{n\\ge0}\\frac{x^n}{n!}"},
+    {"type": "displayMath", "tex": "\\sin x=\\sum_{n\\ge0}(-1)^n\\frac{x^{2n+1}}{(2n+1)!}"},
+    {"type": "displayMath", "tex": "\\cos x=\\sum_{n\\ge0}(-1)^n\\frac{x^{2n}}{(2n)!}"},
+    {"type": "displayMath", "tex": "\\frac1{1-x}=\\sum_{n\\ge0}x^n\\quad(|x|<1)"},
+    {"type": "displayMath", "tex": "\\log(1+x)=\\sum_{n\\ge1}(-1)^{n+1}\\frac{x^n}{n}\\quad(-1<x\\le1)"}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "A function can have derivatives of every order at a yet fail to equal its Taylor series away from a; prove the remainder tends to zero."}],
+    [{"type": "text", "text": "Check the interval and endpoints of convergence before substituting into a memorized series."}],
+    [{"type": "text", "text": "A bound |f^(n+1)| <= M gives |R_n(x)| <= M|x-a|^(n+1)/(n+1)! on the relevant interval."}]
+  ]}]},
+  "examples": [{"title": "Approximate the exponential", "document": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "For 0 <= x <= 0.1, use degree two at zero. Since the third derivative is e^x,"}]},
+    {"type": "displayMath", "tex": "e^{0.1}\\approx1+0.1+\\frac{0.1^2}{2}=1.105"},
+    {"type": "displayMath", "tex": "|R_2(0.1)|\\le\\frac{e^{0.1}(0.1)^3}{6}<0.000185"}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "A Taylor polynomial is always finite; a Taylor series requires a convergence argument."}],
+    [{"type": "text", "text": "Do not use an alternating-series error estimate unless its hypotheses hold."}]
+  ]}]},
+  "relatedReferences": ["math-reference/sequences-series-recurrences/infinite-series-tests", "math-reference/calculus/limits-continuity"],
+  "relatedProblems": [],
+  "sources": [{"label": "NIST DLMF 1.4, Taylor's Theorem", "url": "https://dlmf.nist.gov/1.4"}, {"label": "OpenStax Calculus Volume 2, Taylor and Maclaurin Series", "url": "https://openstax.org/books/calculus-volume-2/pages/6-3-taylor-and-maclaurin-series"}],
+  "rights": {"sourceUrl": "https://dlmf.nist.gov/1.4", "attribution": "Original MyPutnam exposition informed by NIST DLMF and OpenStax.", "copyrightHolder": "National Institute of Standards and Technology and OpenStax", "licenseBasis": "Standard formulas are presented in original prose with an original numerical example.", "redistributionStatus": "cleared"}
+}

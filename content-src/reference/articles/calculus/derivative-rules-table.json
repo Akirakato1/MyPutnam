@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "calculus",
+  "articleId": "derivative-rules-table",
+  "title": "Derivative rules table",
+  "displayOrder": 2,
+  "aliases": ["derivative table", "differentiation rules", "chain rule"],
+  "keywords": ["product rule", "quotient rule", "implicit differentiation", "standard derivatives"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "D_x f=f'(x)=\\frac{df}{dx}"}, {"type": "text", "text": " denotes differentiation with respect to x."}]}]},
+  "definitions": {"blocks": [{"type": "displayMath", "tex": "f'(x)=\\lim_{h\\to0}\\frac{f(x+h)-f(x)}h"}]},
+  "results": {"blocks": [
+    {"type": "table", "caption": [{"type": "text", "text": "Core differentiation rules"}], "headers": [[{"type": "text", "text": "Function or operation"}], [{"type": "text", "text": "Derivative"}]], "rows": [
+      [{"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "x^n"}]}]}, {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "nx^{n-1}"}]}]}],
+      [{"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "e^x,\\ a^x"}]}]}, {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "e^x,\\ a^x\\ln a"}]}]}],
+      [{"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "\\ln|x|"}]}]}, {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "1/x"}]}]}],
+      [{"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "\\sin x,\\ \\cos x,\\ \\tan x"}]}]}, {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "\\cos x,\\ -\\sin x,\\ \\sec^2x"}]}]}],
+      [{"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "uv"}]}]}, {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "u'v+uv'"}]}]}],
+      [{"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "u/v"}]}]}, {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "(u'v-uv')/v^2"}]}]}],
+      [{"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "f(g(x))"}]}]}, {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "f'(g(x))g'(x)"}]}]}]
+    ]},
+    {"type": "displayMath", "tex": "(\\arcsin x)'=\\frac1{\\sqrt{1-x^2}},\\quad(\\arctan x)'=\\frac1{1+x^2}"}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Each rule applies where the displayed expression and derivative are defined; the quotient rule requires v not equal to zero."}],
+    [{"type": "text", "text": "For noninteger powers, domain restrictions matter. The power rule is safe wherever the chosen real-valued power is differentiable."}],
+    [{"type": "text", "text": "Inverse-trigonometric derivatives shown use principal real branches."}]
+  ]}]},
+  "examples": [{"title": "Use product and chain rules", "document": {"blocks": [
+    {"type": "displayMath", "tex": "\\frac d{dx}\\left(x^2e^{3x}\\right)=2xe^{3x}+3x^2e^{3x}=xe^{3x}(2+3x)"}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "The derivative of a product is not the product of the derivatives."}],
+    [{"type": "text", "text": "Always multiply by the inner derivative in a composition."}]
+  ]}]},
+  "relatedReferences": ["math-reference/calculus/limits-continuity", "math-reference/calculus/extrema-convexity", "math-reference/calculus/antiderivative-table"],
+  "relatedProblems": [],
+  "sources": [{"label": "OpenStax Calculus Volume 1, Rules of Differentiation", "url": "https://openstax.org/books/calculus-volume-1/pages/3-3-differentiation-rules"}, {"label": "OpenStax Calculus Volume 1, Chain Rule", "url": "https://openstax.org/books/calculus-volume-1/pages/3-6-the-chain-rule"}],
+  "rights": {"sourceUrl": "https://openstax.org/books/calculus-volume-1/pages/3-3-differentiation-rules", "attribution": "Original MyPutnam table and exposition informed by OpenStax Calculus Volume 1.", "copyrightHolder": "OpenStax", "licenseBasis": "Standard rules are arranged in an original compact table with an original example.", "redistributionStatus": "cleared"}
+}

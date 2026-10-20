@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "calculus",
+  "articleId": "antiderivative-table",
+  "title": "Antiderivative table",
+  "displayOrder": 6,
+  "aliases": ["integral table", "antiderivative table", "basic integrals", "integration formulas"],
+  "keywords": ["indefinite integral", "standard antiderivatives", "constant of integration", "elementary integrals"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "\\int f(x)\\,dx=F(x)+C"}, {"type": "text", "text": " means F'=f on an interval; C is an arbitrary constant."}]}]},
+  "definitions": {"blocks": [{"type": "paragraph", "runs": [{"type": "text", "text": "An antiderivative reverses differentiation locally. A table gives patterns, not a guarantee that every elementary-looking integrand has an elementary antiderivative."}]}]},
+  "results": {"blocks": [
+    {"type": "table", "caption": [{"type": "text", "text": "Core antiderivatives"}], "headers": [[{"type": "text", "text": "Integrand"}], [{"type": "text", "text": "Antiderivative (plus C)"}]], "rows": [
+      [{"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "x^n,\\ n\\ne-1"}]}]}, {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "x^{n+1}/(n+1)"}]}]}],
+      [{"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "1/x"}]}]}, {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "\\ln|x|"}]}]}],
+      [{"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "e^x,\\ a^x"}]}]}, {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "e^x,\\ a^x/\\ln a"}]}]}],
+      [{"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "\\sin x,\\ \\cos x"}]}]}, {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "-\\cos x,\\ \\sin x"}]}]}],
+      [{"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "\\sec^2x,\\ \\sec x\\tan x"}]}]}, {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "\\tan x,\\ \\sec x"}]}]}],
+      [{"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "1/(1+x^2)"}]}]}, {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "\\arctan x"}]}]}],
+      [{"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "1/\\sqrt{1-x^2}"}]}]}, {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "\\arcsin x"}]}]}]
+    ]},
+    {"type": "displayMath", "tex": "\\int(af+bg)\\,dx=a\\int f\\,dx+b\\int g\\,dx"}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "The logarithm formula uses ln|x| on intervals that do not cross zero."}],
+    [{"type": "text", "text": "For a^x, assume a>0 and a not equal to 1."}],
+    [{"type": "text", "text": "Include one arbitrary constant after combining indefinite-integral terms."}]
+  ]}]},
+  "examples": [{"title": "Integrate term by term", "document": {"blocks": [
+    {"type": "displayMath", "tex": "\\int\\left(3x^2-\\frac4x+2\\cos x\\right)dx=x^3-4\\ln|x|+2\\sin x+C"}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "The power formula excludes n=-1."}],
+    [{"type": "text", "text": "Differentiate the proposed answer to catch missing chain-rule factors."}]
+  ]}]},
+  "relatedReferences": ["math-reference/calculus/derivative-rules-table", "math-reference/calculus/substitution", "math-reference/calculus/fundamental-theorem-calculus"],
+  "relatedProblems": [],
+  "sources": [{"label": "OpenStax Calculus Volume 1, Integration Formulas", "url": "https://openstax.org/books/calculus-volume-1/pages/5-4-integration-formulas-and-the-net-change-theorem"}],
+  "rights": {"sourceUrl": "https://openstax.org/books/calculus-volume-1/pages/5-4-integration-formulas-and-the-net-change-theorem", "attribution": "Original MyPutnam table and exposition informed by OpenStax Calculus Volume 1.", "copyrightHolder": "OpenStax", "licenseBasis": "Standard formulas are arranged in an original compact table with an original example.", "redistributionStatus": "cleared"}
+}

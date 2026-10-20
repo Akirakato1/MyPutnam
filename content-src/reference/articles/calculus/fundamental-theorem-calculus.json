@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "richDocumentVersion": 2,
+  "categoryId": "calculus",
+  "articleId": "fundamental-theorem-calculus",
+  "title": "Fundamental theorem of calculus",
+  "displayOrder": 5,
+  "aliases": ["FTC", "fundamental theorem of calculus", "net change theorem", "differentiating an integral"],
+  "keywords": ["definite integral", "accumulation function", "antiderivative evaluation", "variable upper limit"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "\\int_a^b f(x)\\,dx"}, {"type": "text", "text": " is the definite integral; the integration variable is a dummy variable."}]}]},
+  "definitions": {"blocks": [{"type": "paragraph", "runs": [{"type": "text", "text": "For continuous f on [a,b], define its accumulation function by "}, {"type": "inlineMath", "tex": "F(x)=\\int_a^x f(t)\\,dt"}, {"type": "text", "text": "."}]}]},
+  "results": {"blocks": [
+    {"type": "displayMath", "tex": "\\frac d{dx}\\int_a^x f(t)\\,dt=f(x)"},
+    {"type": "displayMath", "tex": "G'=f\\text{ on }[a,b]\\quad\\Longrightarrow\\quad\\int_a^b f(x)\\,dx=G(b)-G(a)"},
+    {"type": "displayMath", "tex": "\\frac d{dx}\\int_{u(x)}^{v(x)}f(t)\\,dt=f(v(x))v'(x)-f(u(x))u'(x)"}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "The standard FTC statements above assume continuity on the relevant interval; more general versions need more advanced hypotheses."}],
+    [{"type": "text", "text": "For moving endpoints, apply the chain rule to both endpoint contributions."}],
+    [{"type": "text", "text": "An antiderivative is determined only up to a constant, but the endpoint difference is not."}]
+  ]}]},
+  "examples": [{"title": "Differentiate an accumulation function", "document": {"blocks": [
+    {"type": "displayMath", "tex": "\\frac d{dx}\\int_1^{x^2}\\cos(t^3)\\,dt=2x\\cos(x^6)"},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "The FTC supplies the integrand at x squared, and the chain rule supplies 2x."}]}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Do not confuse the variable endpoint x with the dummy variable t."}],
+    [{"type": "text", "text": "Reversing the limits changes the sign."}]
+  ]}]},
+  "relatedReferences": ["math-reference/calculus/antiderivative-table", "math-reference/calculus/substitution", "math-reference/calculus/limits-continuity"],
+  "relatedProblems": [],
+  "sources": [{"label": "OpenStax Calculus Volume 1, Fundamental Theorem of Calculus", "url": "https://openstax.org/books/calculus-volume-1/pages/5-3-the-fundamental-theorem-of-calculus"}],
+  "rights": {"sourceUrl": "https://openstax.org/books/calculus-volume-1/pages/5-3-the-fundamental-theorem-of-calculus", "attribution": "Original MyPutnam exposition informed by OpenStax Calculus Volume 1.", "copyrightHolder": "OpenStax", "licenseBasis": "Standard theorem statements are presented in original prose with an original chain-rule example.", "redistributionStatus": "cleared"}
+}
