@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "probability", "articleId": "variance-covariance", "title": "Variance, covariance, and conditioning", "displayOrder": 6,
+  "aliases": ["law of total variance", "covariance", "variance", "conditional variance"],
+  "keywords": ["standard deviation", "correlation", "variance of a sum", "total expectation", "uncorrelated"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "\\mu_X=\\mathbf E[X]"}, {"type": "text", "text": " and "}, {"type": "inlineMath", "tex": "\\sigma_X^2=\\operatorname{Var}(X)"}, {"type": "text", "text": "."}]}]},
+  "definitions": {"blocks": [
+    {"type": "displayMath", "tex": "\\operatorname{Var}(X)=\\mathbf E[(X-\\mu_X)^2]=\\mathbf E[X^2]-\\mu_X^2"},
+    {"type": "displayMath", "tex": "\\operatorname{Cov}(X,Y)=\\mathbf E[(X-\\mu_X)(Y-\\mu_Y)]"}
+  ]},
+  "results": {"blocks": [
+    {"type": "displayMath", "tex": "\\operatorname{Var}(aX+b)=a^2\\operatorname{Var}(X)"},
+    {"type": "displayMath", "tex": "\\operatorname{Var}(X+Y)=\\operatorname{Var}X+\\operatorname{Var}Y+2\\operatorname{Cov}(X,Y)"},
+    {"type": "displayMath", "tex": "\\operatorname{Var}(X)=\\mathbf E[\\operatorname{Var}(X\\mid Y)]+\\operatorname{Var}(\\mathbf E[X\\mid Y])"},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Independence implies zero covariance when the relevant moments exist, but zero covariance does not generally imply independence."}]}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Variance and covariance formulas require the relevant variables to have finite second moment."}],
+    [{"type": "text", "text": "Correlation divides covariance by "}, {"type": "inlineMath", "tex": "\\sigma_X\\sigma_Y"}, {"type": "text", "text": " and is undefined if either standard deviation is zero."}],
+    [{"type": "text", "text": "For pairwise independent finite-variance variables, covariance cross-terms vanish in the variance of a sum."}]
+  ]}]},
+  "examples": [{"title": "Variance of a binomial count", "document": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Write a Binomial(n,p) count as the sum of n independent Bernoulli indicators. Then"}]},
+    {"type": "displayMath", "tex": "\\operatorname{Var}(X)=\\sum_{i=1}^n\\operatorname{Var}(I_i)=np(1-p)"}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Variances add without covariance terms only under zero covariance, including independence as a sufficient condition."}],
+    [{"type": "text", "text": "Standard deviation scales by |a|, whereas variance scales by a squared."}]
+  ]}]},
+  "relatedReferences": ["math-reference/probability/expectation", "math-reference/probability/probability-inequalities", "math-reference/probability/discrete-distributions"],
+  "relatedProblems": [],
+  "sources": [{"label": "MIT OpenCourseWare, Introduction to Probability and Statistics", "url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014/"}],
+  "rights": {"sourceUrl": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014/", "attribution": "Original MyPutnam exposition informed by MIT probability course materials.", "copyrightHolder": "Massachusetts Institute of Technology and course authors", "licenseBasis": "Standard moment identities are presented in original prose with an original indicator derivation.", "redistributionStatus": "cleared"}
+}

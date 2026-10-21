@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "probability", "articleId": "probability-counting", "title": "Finite probability and counting", "displayOrder": 1,
+  "aliases": ["sample space", "equally likely outcomes", "classical probability", "finite probability model"],
+  "keywords": ["counting probability", "complement rule", "inclusion-exclusion probability", "uniform sample space"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "\\Omega"}, {"type": "text", "text": " is the sample space and events are subsets of it. The complement of A is "}, {"type": "inlineMath", "tex": "A^c=\\Omega\\setminus A"}, {"type": "text", "text": "."}]}]},
+  "definitions": {"blocks": [
+    {"type": "displayMath", "tex": "P(A)=\\frac{|A|}{|\\Omega|}"}
+  ]},
+  "results": {"blocks": [
+    {"type": "displayMath", "tex": "P(A^c)=1-P(A)"},
+    {"type": "displayMath", "tex": "P(A\\cup B)=P(A)+P(B)-P(A\\cap B)"},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Use permutations when order matters, combinations when only the selected subset matters, and multiplication only after specifying the sequential choices."}]}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "The ratio "}, {"type": "inlineMath", "tex": "|A|/|\\Omega|"}, {"type": "text", "text": " is valid only for a finite sample space whose elementary outcomes are equally likely."}],
+    [{"type": "text", "text": "Disjoint events have additive probabilities; arbitrary events require overlap corrections."}],
+    [{"type": "text", "text": "A counting argument must count the event and the sample space under the same labeling and ordering convention."}]
+  ]}]},
+  "examples": [{"title": "Count a card event", "document": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "A uniformly shuffled five-card hand from a standard deck contains exactly two aces with probability"}]},
+    {"type": "displayMath", "tex": "\\frac{\\binom42\\binom{48}3}{\\binom{52}5}"}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Do not infer equal probability merely because outcomes have short names."}],
+    [{"type": "text", "text": "Avoid double counting by assigning every outcome one unique construction."}]
+  ]}]},
+  "relatedReferences": ["math-reference/combinatorics-generating-functions/permutations-combinations", "math-reference/combinatorics-generating-functions/inclusion-exclusion", "math-reference/probability/conditional-probability-bayes"],
+  "relatedProblems": [],
+  "sources": [{"label": "MIT OpenCourseWare, Introduction to Probability and Statistics", "url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014/"}],
+  "rights": {"sourceUrl": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014/", "attribution": "Original MyPutnam exposition informed by MIT probability course materials.", "copyrightHolder": "Massachusetts Institute of Technology and course authors", "licenseBasis": "Standard finite probability rules are presented in original prose with an original example.", "redistributionStatus": "cleared"}
+}

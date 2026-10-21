@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "probability", "articleId": "conditional-probability-bayes", "title": "Conditional probability, independence, and Bayes' theorem", "displayOrder": 2,
+  "aliases": ["Bayes theorem", "independence", "conditional probability", "law of total probability"],
+  "keywords": ["Bayes rule", "partition", "posterior probability", "mutual independence", "pairwise independence"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "P(A\\mid B)"}, {"type": "text", "text": " is the probability of A after conditioning on B."}]}]},
+  "definitions": {"blocks": [
+    {"type": "displayMath", "tex": "P(A\\mid B)=\\frac{P(A\\cap B)}{P(B)}"},
+    {"type": "displayMath", "tex": "A\\perp B\\iff P(A\\cap B)=P(A)P(B)"}
+  ]},
+  "results": {"blocks": [
+    {"type": "displayMath", "tex": "P(B)=\\sum_iP(B\\mid A_i)P(A_i)"},
+    {"type": "displayMath", "tex": "P(A_j\\mid B)=\\frac{P(B\\mid A_j)P(A_j)}{\\sum_iP(B\\mid A_i)P(A_i)}"},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Here the A_i form a disjoint exhaustive partition. The chain rule factors a joint event into successive conditional probabilities."}]}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Conditional probability "}, {"type": "inlineMath", "tex": "P(A\\mid B)"}, {"type": "text", "text": " requires a nonzero denominator "}, {"type": "inlineMath", "tex": "P(B)"}, {"type": "text", "text": "."}],
+    [{"type": "text", "text": "Bayes' denominator sums over a disjoint exhaustive partition and must be positive."}],
+    [{"type": "text", "text": "Pairwise independence does not in general imply mutual independence."}]
+  ]}]},
+  "examples": [{"title": "Update after a positive test", "document": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "If prevalence is 0.01, sensitivity 0.9, and false-positive probability 0.05, then"}]},
+    {"type": "displayMath", "tex": "P(D\\mid +)=\\frac{0.9(0.01)}{0.9(0.01)+0.05(0.99)}\\approx0.154"}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "inlineMath", "tex": "P(A\\mid B)"}, {"type": "text", "text": " and "}, {"type": "inlineMath", "tex": "P(B\\mid A)"}, {"type": "text", "text": " are generally different."}],
+    [{"type": "text", "text": "Disjoint nonempty events are not independent."}]
+  ]}]},
+  "relatedReferences": ["math-reference/probability/probability-counting", "math-reference/probability/expectation"],
+  "relatedProblems": [],
+  "sources": [{"label": "NIST/SEMATECH e-Handbook, Bayes formula", "url": "https://www.itl.nist.gov/div898/handbook/apr/section1/apr1a.htm"}, {"label": "MIT OpenCourseWare, Introduction to Probability and Statistics", "url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014/"}],
+  "rights": {"sourceUrl": "https://www.itl.nist.gov/div898/handbook/apr/section1/apr1a.htm", "attribution": "Original MyPutnam exposition informed by NIST and MIT references.", "copyrightHolder": "National Institute of Standards and Technology and Massachusetts Institute of Technology", "licenseBasis": "Standard conditional probability identities are presented in original prose with an original numerical example.", "redistributionStatus": "cleared"}
+}

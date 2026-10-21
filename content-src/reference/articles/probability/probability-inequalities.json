@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "probability", "articleId": "probability-inequalities", "title": "Core probability inequalities", "displayOrder": 8,
+  "aliases": ["Markov inequality", "Chebyshev inequality", "union bound", "Boole inequality"],
+  "keywords": ["tail bound", "first moment bound", "second moment bound", "concentration inequality"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "text", "text": "Tail bounds control the probability that a random variable lies far from a threshold or its mean."}]}]},
+  "definitions": {"blocks": [
+    {"type": "displayMath", "tex": "P\\!\\left(\\bigcup_{i=1}^nA_i\\right)\\le\\sum_{i=1}^nP(A_i)"}
+  ]},
+  "results": {"blocks": [
+    {"type": "displayMath", "tex": "X\\ge0,\\ a>0:\\qquad P(X\\ge a)\\le\\frac{\\mathbf E[X]}a"},
+    {"type": "displayMath", "tex": "P(|X-\\mu|\\ge t)\\le\\frac{\\operatorname{Var}(X)}{t^2}\\qquad(t>0)"},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Chebyshev follows by applying Markov to the nonnegative variable (X-mu)^2. The union bound needs no independence."}]}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Markov requires a nonnegative random variable, a positive threshold, and a finite expectation for a finite bound."}],
+    [{"type": "text", "text": "Chebyshev requires a finite mean and variance and a positive deviation "}, {"type": "inlineMath", "tex": "t>0"}, {"type": "text", "text": "."}],
+    [{"type": "text", "text": "These bounds are distribution-free and can be loose; a value above 1 may be replaced by the trivial bound 1."}]
+  ]}]},
+  "examples": [{"title": "Bound a deviation from the mean", "document": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "If E[X]=10 and Var(X)=4, then"}]},
+    {"type": "displayMath", "tex": "P(|X-10|\\ge5)\\le\\frac4{25}=0.16"}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Do not apply Markov directly to a variable that can be negative."}],
+    [{"type": "text", "text": "The union bound is an upper bound, not generally an equality."}]
+  ]}]},
+  "relatedReferences": ["math-reference/probability/expectation", "math-reference/probability/variance-covariance", "math-reference/algebra-inequalities/jensen-convexity"],
+  "relatedProblems": [],
+  "sources": [{"label": "MIT OpenCourseWare, Introduction to Probability and Statistics", "url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014/"}],
+  "rights": {"sourceUrl": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014/", "attribution": "Original MyPutnam exposition informed by MIT probability course materials.", "copyrightHolder": "Massachusetts Institute of Technology and course authors", "licenseBasis": "Standard inequalities are presented in original prose with an original numerical example.", "redistributionStatus": "cleared"}
+}

@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "probability", "articleId": "discrete-distributions", "title": "Common discrete distributions", "displayOrder": 3,
+  "aliases": ["Bernoulli distribution", "binomial distribution", "geometric distribution", "Poisson distribution"],
+  "keywords": ["probability mass function", "discrete uniform distribution", "number of successes", "waiting time"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "X\\sim\\operatorname{Dist}(\\cdot)"}, {"type": "text", "text": " names a distribution. This article uses p for success probability and lambda for a Poisson mean."}]}]},
+  "definitions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "inlineMath", "tex": "\\operatorname{Bernoulli}(p)"}, {"type": "text", "text": ": "}, {"type": "inlineMath", "tex": "P(X=1)=p"}, {"type": "text", "text": " and "}, {"type": "inlineMath", "tex": "P(X=0)=1-p"}, {"type": "text", "text": "."}],
+    [{"type": "inlineMath", "tex": "\\operatorname{Binomial}(n,p)"}, {"type": "text", "text": ": number of successes in n independent Bernoulli(p) trials."}],
+    [{"type": "inlineMath", "tex": "\\operatorname{Geometric}(p)"}, {"type": "text", "text": ": trial number of the first success, so support starts at 1."}],
+    [{"type": "inlineMath", "tex": "\\operatorname{Poisson}(\\lambda)"}, {"type": "text", "text": ": count with rate/mean parameter lambda."}]
+  ]}]},
+  "results": {"blocks": [
+    {"type": "displayMath", "tex": "P(\\operatorname{Bin}(n,p)=k)=\\binom nkp^k(1-p)^{n-k}"},
+    {"type": "displayMath", "tex": "P(\\operatorname{Geom}(p)=k)=(1-p)^{k-1}p"},
+    {"type": "displayMath", "tex": "P(\\operatorname{Pois}(\\lambda)=k)=e^{-\\lambda}\\frac{\\lambda^k}{k!}"},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Means and variances are p and p(1-p) for Bernoulli; np and np(1-p) for Binomial; 1/p and (1-p)/p^2 for this Geometric convention; lambda and lambda for Poisson."}]}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Supports: Bernoulli "}, {"type": "inlineMath", "tex": "\\{0,1\\}"}, {"type": "text", "text": "; Binomial "}, {"type": "inlineMath", "tex": "\\{0,\\ldots,n\\}"}, {"type": "text", "text": "; Geometric "}, {"type": "inlineMath", "tex": "\\{1,2,\\ldots\\}"}, {"type": "text", "text": "; Poisson "}, {"type": "inlineMath", "tex": "\\{0,1,2,\\ldots\\}"}, {"type": "text", "text": "."}],
+    [{"type": "text", "text": "Parameters satisfy n a nonnegative integer, "}, {"type": "inlineMath", "tex": "0\\le p\\le1"}, {"type": "text", "text": ", and "}, {"type": "inlineMath", "tex": "\\lambda>0"}, {"type": "text", "text": "; the geometric mean formula requires "}, {"type": "inlineMath", "tex": "p>0"}, {"type": "text", "text": "."}],
+    [{"type": "text", "text": "The binomial model requires a fixed success probability and independent trials."}]
+  ]}]},
+  "examples": [{"title": "Count exactly three successes", "document": {"blocks": [
+    {"type": "displayMath", "tex": "X\\sim\\operatorname{Bin}(10,0.2)\\quad\\Longrightarrow\\quad P(X=3)=\\binom{10}3(0.2)^3(0.8)^7"}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Some sources define the geometric variable as failures before the first success, shifting support and mean by one."}],
+    [{"type": "text", "text": "A Poisson parameter is both its mean and variance, not its standard deviation."}]
+  ]}]},
+  "relatedReferences": ["math-reference/probability/expectation", "math-reference/probability/variance-covariance", "math-reference/probability/generating-functions-probability"],
+  "relatedProblems": [],
+  "sources": [{"label": "NIST/SEMATECH e-Handbook, Binomial Distribution", "url": "https://www.itl.nist.gov/div898/handbook/eda/section3/eda366i.htm"}, {"label": "NIST/SEMATECH e-Handbook, Gallery of Distributions", "url": "https://www.itl.nist.gov/div898/handbook/eda/section3/eda366.htm"}],
+  "rights": {"sourceUrl": "https://www.itl.nist.gov/div898/handbook/eda/section3/eda366.htm", "attribution": "Original MyPutnam exposition informed by the NIST/SEMATECH e-Handbook.", "copyrightHolder": "National Institute of Standards and Technology", "licenseBasis": "Standard distribution formulas and conventions are presented in original prose with an original example.", "redistributionStatus": "cleared"}
+}

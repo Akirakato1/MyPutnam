@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "probability", "articleId": "generating-functions-probability", "title": "Probability and moment generating functions", "displayOrder": 7,
+  "aliases": ["probability generating function", "moment generating function", "PGF", "MGF"],
+  "keywords": ["generating function of a distribution", "factorial moments", "independent sums", "moment existence"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "G_X(s)"}, {"type": "text", "text": " denotes a PGF and "}, {"type": "inlineMath", "tex": "M_X(t)"}, {"type": "text", "text": " an MGF. Their variables and domains are different."}]}]},
+  "definitions": {"blocks": [
+    {"type": "displayMath", "tex": "G_X(s)=\\mathbf E[s^X]=\\sum_{k\\ge0}P(X=k)s^k"},
+    {"type": "displayMath", "tex": "M_X(t)=\\mathbf E[e^{tX}]"}
+  ]},
+  "results": {"blocks": [
+    {"type": "displayMath", "tex": "G_X'(1)=\\mathbf E[X],\\qquad G_X''(1)=\\mathbf E[X(X-1)]"},
+    {"type": "displayMath", "tex": "M_X^{(n)}(0)=\\mathbf E[X^n]"},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "If X and Y are independent, then the PGF or MGF of X+Y is the product of the respective transforms wherever both sides are finite."}]},
+    {"type": "displayMath", "tex": "X\\sim\\operatorname{Pois}(\\lambda):\\quad G_X(s)=e^{\\lambda(s-1)},\\quad M_X(t)=e^{\\lambda(e^t-1)}"}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "A PGF in this convention requires X to be nonnegative integer-valued; it converges at least for "}, {"type": "inlineMath", "tex": "|s|\\le1"}, {"type": "text", "text": "."}],
+    [{"type": "text", "text": "Moment derivatives require the corresponding moments and justified differentiation under expectation."}],
+    [{"type": "text", "text": "An MGF need not be finite away from zero; standard uniqueness and moment-recovery results assume finiteness on an open neighborhood of zero."}]
+  ]}]},
+  "examples": [{"title": "Recover a Poisson mean", "document": {"blocks": [
+    {"type": "displayMath", "tex": "G_X'(s)=\\lambda e^{\\lambda(s-1)}\\quad\\Longrightarrow\\quad\\mathbf E[X]=G_X'(1)=\\lambda"}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "A formal power series identity does not automatically establish analytic convergence of an MGF."}],
+    [{"type": "text", "text": "Products represent sums only with independence."}]
+  ]}]},
+  "relatedReferences": ["math-reference/combinatorics-generating-functions/ordinary-generating-functions-combinatorics", "math-reference/probability/expectation", "math-reference/probability/discrete-distributions"],
+  "relatedProblems": [],
+  "sources": [{"label": "MIT OpenCourseWare, Introduction to Probability and Statistics", "url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014/"}],
+  "rights": {"sourceUrl": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014/", "attribution": "Original MyPutnam exposition informed by MIT probability course materials.", "copyrightHolder": "Massachusetts Institute of Technology and course authors", "licenseBasis": "Standard transform conventions are presented in original prose with an original Poisson calculation.", "redistributionStatus": "cleared"}
+}

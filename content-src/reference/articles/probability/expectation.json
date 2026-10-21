@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "probability", "articleId": "expectation", "title": "Expectation and indicator variables", "displayOrder": 5,
+  "aliases": ["expected value", "indicator variables", "linearity of expectation", "LOTUS"],
+  "keywords": ["law of the unconscious statistician", "tail sum formula", "total expectation", "random variable mean"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "\\mathbf E[X]"}, {"type": "text", "text": " denotes expected value. The indicator "}, {"type": "inlineMath", "tex": "\\mathbf1_A"}, {"type": "text", "text": " equals 1 on A and 0 otherwise."}]}]},
+  "definitions": {"blocks": [
+    {"type": "displayMath", "tex": "\\mathbf E[X]=\\sum_xxP(X=x)"},
+    {"type": "displayMath", "tex": "\\mathbf E[X]=\\int_{-\\infty}^{\\infty}xf_X(x)\\,dx"}
+  ]},
+  "results": {"blocks": [
+    {"type": "displayMath", "tex": "\\mathbf E\\left[\\sum_i a_iX_i\\right]=\\sum_i a_i\\mathbf E[X_i]"},
+    {"type": "displayMath", "tex": "\\mathbf E[\\mathbf1_A]=P(A)"},
+    {"type": "displayMath", "tex": "\\mathbf E[g(X)]=\\sum_xg(x)P(X=x)\\quad\\text{or}\\quad\\int g(x)f_X(x)\\,dx"},
+    {"type": "displayMath", "tex": "\\mathbf E[X]=\\mathbf E\\!\\left[\\mathbf E[X\\mid Y]\\right]"}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "A finite expectation exists when "}, {"type": "inlineMath", "tex": "\\mathbf E[|X|]<\\infty"}, {"type": "text", "text": "; otherwise positive and negative parts must not both be infinite."}],
+    [{"type": "text", "text": "Linearity does not require independence, but each finite sum term must have the needed expectation."}],
+    [{"type": "text", "text": "For a nonnegative integer-valued X, the tail sum identity "}, {"type": "inlineMath", "tex": "\\mathbf E[X]=\\sum_{k=1}^{\\infty}P(X\\ge k)"}, {"type": "text", "text": " may equal infinity."}]
+  ]}]},
+  "examples": [{"title": "Count fixed points by indicators", "document": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "For a uniformly random permutation of n objects, let I_i indicate that i is fixed. Then"}]},
+    {"type": "displayMath", "tex": "\\mathbf E\\left[\\sum_{i=1}^n I_i\\right]=\\sum_{i=1}^nP(I_i=1)=n\\cdot\\frac1n=1"}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Expectation is not generally obtained by applying a nonlinear function to the mean."}],
+    [{"type": "text", "text": "Independence is unnecessary for sums but generally needed to factor expectations of products."}]
+  ]}]},
+  "relatedReferences": ["math-reference/probability/variance-covariance", "math-reference/probability/conditional-probability-bayes", "math-reference/probability/probability-counting"],
+  "relatedProblems": [],
+  "sources": [{"label": "MIT OpenCourseWare, Introduction to Probability and Statistics", "url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014/"}],
+  "rights": {"sourceUrl": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014/", "attribution": "Original MyPutnam exposition informed by MIT probability course materials.", "copyrightHolder": "Massachusetts Institute of Technology and course authors", "licenseBasis": "Standard expectation identities are presented in original prose with an original indicator example.", "redistributionStatus": "cleared"}
+}

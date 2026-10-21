@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "probability", "articleId": "continuous-distributions", "title": "Common continuous distributions", "displayOrder": 4,
+  "aliases": ["normal distribution", "exponential distribution", "uniform distribution", "continuous random variable"],
+  "keywords": ["probability density function", "CDF", "Gaussian distribution", "memoryless distribution", "rate parameter"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "inlineMath", "tex": "f_X"}, {"type": "text", "text": " is a probability density and "}, {"type": "inlineMath", "tex": "F_X(x)=P(X\\le x)"}, {"type": "text", "text": " is the cumulative distribution function."}]}]},
+  "definitions": {"blocks": [
+    {"type": "displayMath", "tex": "P(a<X\\le b)=\\int_a^b f_X(x)\\,dx,\\qquad F_X(x)=\\int_{-\\infty}^x f_X(t)\\,dt"}
+  ]},
+  "results": {"blocks": [
+    {"type": "displayMath", "tex": "X\\sim U(a,b):\\quad f(x)=\\frac1{b-a}\\quad(a\\le x\\le b)"},
+    {"type": "displayMath", "tex": "X\\sim\\operatorname{Exp}(\\lambda):\\quad f(x)=\\lambda e^{-\\lambda x}\\quad(x\\ge0)"},
+    {"type": "displayMath", "tex": "X\\sim N(\\mu,\\sigma^2):\\quad f(x)=\\frac1{\\sigma\\sqrt{2\\pi}}e^{-(x-\\mu)^2/(2\\sigma^2)}"},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Means/variances are (a+b)/2 and (b-a)^2/12 for uniform; 1/lambda and 1/lambda^2 for exponential; mu and sigma^2 for normal."}]}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "A density must be nonnegative and integrate to 1; point probabilities are zero for a continuous distribution."}],
+    [{"type": "text", "text": "Parameters: "}, {"type": "inlineMath", "tex": "a<b"}, {"type": "text", "text": ", exponential rate "}, {"type": "inlineMath", "tex": "\\lambda>0"}, {"type": "text", "text": ", and normal standard deviation "}, {"type": "inlineMath", "tex": "\\sigma>0"}, {"type": "text", "text": "."}],
+    [{"type": "text", "text": "This article uses the exponential rate parameterization; scale is 1/lambda."}]
+  ]}]},
+  "examples": [{"title": "Use exponential memorylessness", "document": {"blocks": [
+    {"type": "displayMath", "tex": "X\\sim\\operatorname{Exp}(2)\\quad\\Longrightarrow\\quad P(X>3\\mid X>1)=P(X>2)=e^{-4}"}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "A density value can exceed 1; only integrated probabilities must lie between 0 and 1."}],
+    [{"type": "text", "text": "Check whether a source parameterizes the exponential by rate or scale."}]
+  ]}]},
+  "relatedReferences": ["math-reference/probability/expectation", "math-reference/probability/variance-covariance", "math-reference/calculus/improper-integrals"],
+  "relatedProblems": [],
+  "sources": [{"label": "NIST/SEMATECH e-Handbook, Gallery of Distributions", "url": "https://www.itl.nist.gov/div898/handbook/eda/section3/eda366.htm"}, {"label": "NIST/SEMATECH e-Handbook, Normal Data", "url": "https://itl.nist.gov/div898/handbook/pmc/section5/pmc51.htm"}],
+  "rights": {"sourceUrl": "https://www.itl.nist.gov/div898/handbook/eda/section3/eda366.htm", "attribution": "Original MyPutnam exposition informed by the NIST/SEMATECH e-Handbook.", "copyrightHolder": "National Institute of Standards and Technology", "licenseBasis": "Standard density formulas and conventions are presented in original prose with an original example.", "redistributionStatus": "cleared"}
+}
