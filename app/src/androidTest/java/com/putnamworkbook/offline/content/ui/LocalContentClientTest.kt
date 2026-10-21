@@ -77,16 +77,16 @@ class LocalContentClientTest {
     }
 
     @Test
-    fun generatedHintAndItsKatexStylesAndFontResolveOffline() {
+    fun packagedRendererStylesAndFontResolveOffline() {
         val client = LocalContentClient(appContext)
-        val generatedPaths = listOf(
-            "content/putnam/2025/problems/A1/hint-1.html",
-            "content/shared/content.css",
-            "content/shared/katex/katex.min.css",
-            "content/shared/katex/fonts/KaTeX_Main-Regular.woff2",
+        val rendererPaths = listOf(
+            "content-library/renderer/document.html",
+            "content-library/renderer/content.css",
+            "content-library/renderer/katex/katex.min.css",
+            "content-library/renderer/katex/fonts/KaTeX_Main-Regular.woff2",
         )
 
-        generatedPaths.forEach { path ->
+        rendererPaths.forEach { path ->
             val response = client.interceptForTest(Uri.parse("${LocalContentClient.ASSET_BASE_URL}$path"))
             assertEquals("Expected bundled response for $path", 200, response?.statusCode)
         }

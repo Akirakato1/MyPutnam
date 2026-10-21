@@ -3,15 +3,11 @@ package com.putnamworkbook.offline.di
 import android.content.Context
 import com.putnamworkbook.offline.backup.BackupCoordinator
 import com.putnamworkbook.offline.backup.InstalledContentLibraryStateBackupPort
-import com.putnamworkbook.offline.data.content.ContentDatabase
-import com.putnamworkbook.offline.data.content.ContentInitializer
-import com.putnamworkbook.offline.data.content.ContentIntegrityValidator
 import com.putnamworkbook.offline.data.content.ContentRepository
 import com.putnamworkbook.offline.data.content.CatalogProblemRepository
-import com.putnamworkbook.offline.data.content.CompositeContentRepository
 import com.putnamworkbook.offline.data.content.CompositeReferenceRepository
 import com.putnamworkbook.offline.data.content.FileInstalledPackageReader
-import com.putnamworkbook.offline.data.content.RoomContentRepository
+import com.putnamworkbook.offline.data.content.LegacyContentCleanup
 import com.putnamworkbook.offline.data.library.catalog.CatalogClient
 import com.putnamworkbook.offline.data.library.catalog.CatalogCodec
 import com.putnamworkbook.offline.data.library.catalog.CatalogOriginPolicy
@@ -63,16 +59,13 @@ import kotlinx.coroutines.withContext
 
 class AppContainer(
     context: Context,
-    initializer: ContentInitializer? = null,
+    initializer: (suspend () -> ContentRepository)? = null,
     catalogStoreOverride: CatalogStore? = null,
     catalogClientOverride: CatalogClient? = null,
 ) {
     val applicationContext: Context = context.applicationContext
-    private val contentDatabase: ContentDatabase by lazy { ContentDatabase.create(applicationContext) }
-    internal val contentInitializer: ContentInitializer = initializer ?: ContentInitializer {
-        ContentIntegrityValidator(contentDatabase).validate()
-        RoomContentRepository(contentDatabase)
-    }
+    internal val contentInitializer = initializer
+    internal val legacyContentCleanup = LegacyContentCleanup.forContext(applicationContext)
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val catalogRefreshStarted = AtomicBoolean(false)
     val currentVersionCode: Int by lazy {
@@ -108,7 +101,9 @@ class AppContainer(
         FilePackageStore(
             root = applicationContext.filesDir.toPath().resolve("content-library/packages"),
             verifier = PackageArchiveValidator(currentVersionCode),
-            bundledPackageOpener = { path -> applicationContext.assets.open("content-library/$path") },
+            bundledPackageOpener = { path ->
+                applicationContext.assets.open("content-library/packages/${path.substringAfterLast('/')}")
+            },
         )
     }
     val packageInstaller: PackageInstaller by lazy {
@@ -216,6 +211,8 @@ suspend fun AppContainer.initializeContent(): ContentRepository = withContext(Di
     packageDownloader.recoverInterruptedState()
     packageStore.recoverInterruptedState()
     packageOperationStore.recoverInterruptedOperations(System.currentTimeMillis())
-    val legacy = contentInitializer.initialize()
-    CompositeContentRepository(packagedContentRepository, legacy)
+    contentInitializer?.let { return@withContext it() }
+    val repository = packagedContentRepository
+    legacyContentCleanup.cleanupAfterPackageInitialization(packageInitializationSucceeded = true)
+    repository
 }

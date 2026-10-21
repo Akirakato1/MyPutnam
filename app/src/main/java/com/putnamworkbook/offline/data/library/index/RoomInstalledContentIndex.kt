@@ -188,7 +188,7 @@ class RoomInstalledContentIndex(
         val bundled = StoredPackage(
             source = ContentSource.BUNDLED,
             descriptor = descriptor,
-            location = "asset://content-library/${descriptor.path}",
+            location = "asset://content-library/packages/${descriptor.sha256}.zip",
         )
         val next = if (previous == null) {
             ContentIndexRecord(metadata, bundled, null, false, true, null, null, null)

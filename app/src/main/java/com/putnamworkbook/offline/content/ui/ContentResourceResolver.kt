@@ -92,7 +92,7 @@ class FileContentResourceResolver(
     private fun serveRendererStatic(pathSegments: List<String>): WebResourceResponse? {
         val path = pathSegments.joinToString("/")
         if (!isSafeMemberPath(path)) return null
-        val bytes = try { context.assets.open("content/shared/$path").use { it.readBytes() } } catch (_: Exception) { return null }
+        val bytes = try { context.assets.open("content-library/renderer/$path").use { it.readBytes() } } catch (_: Exception) { return null }
         return response(mediaType(path), bytes, mapOf("Cache-Control" to "no-store"))
     }
 

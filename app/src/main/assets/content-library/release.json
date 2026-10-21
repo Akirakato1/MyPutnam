@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "releaseId": "myputnam-v0.5.0-development",
+  "distributionScope": "local-development",
+  "appVersionName": "0.5.0-dev",
+  "appVersionCode": 5,
+  "catalogId": "myputnam-content-v1",
+  "catalogRevision": "edaf95a88341db7ac4a4066681c9a1691f42f623a9a3cb0c8d5996d579ff30e1",
+  "catalogSha256": "4e7c7ca8f76c52deda70a517c95465f312afa69c9d9fccde3da4800751792e89",
+  "generatedAt": "2026-10-20T00:00:00.000Z",
+  "feedRoot": "https://akirakato1.github.io/MyPutnam/content/v1/",
+  "minAppVersionCode": 1,
+  "supportedSchemaVersions": {
+    "catalog": [
+      1
+    ],
+    "package": [
+      1
+    ],
+    "problem": [
+      3
+    ],
+    "reference": [
+      1
+    ],
+    "richDocument": [
+      1,
+      2
+    ]
+  },
+  "includedSets": [
+    {
+      "collectionId": "putnam",
+      "setId": "2020"
+    },
+    {
+      "collectionId": "putnam",
+      "setId": "2021"
+    },
+    {
+      "collectionId": "putnam",
+      "setId": "2022"
+    },
+    {
+      "collectionId": "putnam",
+      "setId": "2023"
+    },
+    {
+      "collectionId": "putnam",
+      "setId": "2024"
+    },
+    {
+      "collectionId": "putnam",
+      "setId": "2025"
+    }
+  ],
+  "includedReferenceCategories": [
+    "algebra-inequalities",
+    "sequences-series-recurrences",
+    "trigonometry",
+    "geometry-vectors",
+    "complex-numbers",
+    "number-theory",
+    "combinatorics-generating-functions",
+    "calculus",
+    "linear-algebra",
+    "probability",
+    "differential-equations",
+    "laplace-fourier-transforms"
+  ],
+  "expectedProblemCount": 72,
+  "expectedReferenceCount": 97,
+  "expectedPackageCount": 169,
+  "allowedUnresolvedContentKeys": [
+    "putnam/2020/A1",
+    "putnam/2020/A2",
+    "putnam/2020/A3",
+    "putnam/2020/A4",
+    "putnam/2020/A5",
+    "putnam/2020/A6",
+    "putnam/2020/B1",
+    "putnam/2020/B2",
+    "putnam/2020/B3",
+    "putnam/2020/B4",
+    "putnam/2020/B5",
+    "putnam/2020/B6",
+    "putnam/2021/A1",
+    "putnam/2021/A2",
+    "putnam/2021/A3",
+    "putnam/2021/A4",
+    "putnam/2021/A5",
+    "putnam/2021/A6",
+    "putnam/2021/B1",
+    "putnam/2021/B2",
+    "putnam/2021/B3",
+    "putnam/2021/B4",
+    "putnam/2021/B5",
+    "putnam/2021/B6",
+    "putnam/2022/A1",
+    "putnam/2022/A2",
+    "putnam/2022/A3",
+    "putnam/2022/A4",
+    "putnam/2022/A5",
+    "putnam/2022/A6",
+    "putnam/2022/B1",
+    "putnam/2022/B2",
+    "putnam/2022/B3",
+    "putnam/2022/B4",
+    "putnam/2022/B5",
+    "putnam/2022/B6",
+    "putnam/2023/A1",
+    "putnam/2023/A2",
+    "putnam/2023/A3",
+    "putnam/2023/A4",
+    "putnam/2023/A5",
+    "putnam/2023/A6",
+    "putnam/2023/B1",
+    "putnam/2023/B2",
+    "putnam/2023/B3",
+    "putnam/2023/B4",
+    "putnam/2023/B5",
+    "putnam/2023/B6",
+    "putnam/2024/A1",
+    "putnam/2024/A2",
+    "putnam/2024/A3",
+    "putnam/2024/A4",
+    "putnam/2024/A5",
+    "putnam/2024/A6",
+    "putnam/2024/B1",
+    "putnam/2024/B2",
+    "putnam/2024/B3",
+    "putnam/2024/B4",
+    "putnam/2024/B5",
+    "putnam/2024/B6",
+    "putnam/2025/A1",
+    "putnam/2025/A2",
+    "putnam/2025/A3",
+    "putnam/2025/A4",
+    "putnam/2025/A5",
+    "putnam/2025/A6",
+    "putnam/2025/B1",
+    "putnam/2025/B2",
+    "putnam/2025/B3",
+    "putnam/2025/B4",
+    "putnam/2025/B5",
+    "putnam/2025/B6"
+  ]
+}

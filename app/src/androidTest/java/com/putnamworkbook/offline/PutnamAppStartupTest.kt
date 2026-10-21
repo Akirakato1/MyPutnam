@@ -6,7 +6,6 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.putnamworkbook.offline.data.content.ContentInitializer
 import com.putnamworkbook.offline.data.content.ContentRepository
 import com.putnamworkbook.offline.data.content.LibraryCollection
 import com.putnamworkbook.offline.data.content.ProblemContent
@@ -37,7 +36,7 @@ class PutnamAppStartupTest {
     @Test
     fun blockedInitializerKeepsAVisibleLoadingSurface() {
         val pending = CompletableDeferred<ContentRepository>()
-        showApp(ContentInitializer { pending.await() })
+        showApp { pending.await() }
 
         composeRule.onNodeWithTag("content-startup-loading").assertIsDisplayed()
     }
@@ -45,10 +44,10 @@ class PutnamAppStartupTest {
     @Test
     fun successfulInitializerRunsOffMainAndShowsTheReadyApp() {
         val ranOnMain = AtomicBoolean(true)
-        showApp(ContentInitializer {
+        showApp {
             ranOnMain.set(Thread.currentThread() === Looper.getMainLooper().thread)
             EmptyContentRepository
-        })
+        }
 
         composeRule.onNodeWithTag("home-screen").assertIsDisplayed()
         assertFalse("Content initialization must not run on the main thread", ranOnMain.get())
@@ -60,7 +59,7 @@ class PutnamAppStartupTest {
         val neverCompletes = CompletableDeferred<com.putnamworkbook.offline.data.library.catalog.CatalogFetchResult>()
         val container = AppContainer(
             context = composeRule.activity,
-            initializer = ContentInitializer { EmptyContentRepository },
+            initializer = { EmptyContentRepository },
             catalogStoreOverride = ReadyCatalogStore(),
             catalogClientOverride = CatalogClient {
                 refreshStarted.complete(Unit)
@@ -82,7 +81,7 @@ class PutnamAppStartupTest {
 
     @Test
     fun missingDatabaseFailureShowsTheRecoverySurface() {
-        assertStartupFailure(java.io.FileNotFoundException("databases/content.db"))
+        assertStartupFailure(java.io.FileNotFoundException("content-library/catalog.json"))
     }
 
     @Test
@@ -91,11 +90,11 @@ class PutnamAppStartupTest {
     }
 
     private fun assertStartupFailure(failure: Exception) {
-        showApp(ContentInitializer { throw failure })
+        showApp { throw failure }
         composeRule.onNodeWithTag("content-startup-error").assertIsDisplayed()
     }
 
-    private fun showApp(initializer: ContentInitializer) {
+    private fun showApp(initializer: suspend () -> ContentRepository) {
         val container = AppContainer(composeRule.activity, initializer)
         composeRule.setContent { PutnamApp(container) }
     }
