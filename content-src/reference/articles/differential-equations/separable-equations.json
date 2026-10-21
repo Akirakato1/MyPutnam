@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "differential-equations", "articleId": "separable-equations", "title": "Separable equations and lost solutions", "displayOrder": 1,
+  "aliases": ["separable differential equation", "lost solutions", "separation of variables", "equilibrium solution"],
+  "keywords": ["first-order ODE", "implicit solution", "interval of validity", "singular solution"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "text", "text": "Write a separable equation as "}, {"type": "inlineMath", "tex": "y'=g(x)h(y)"}, {"type": "text", "text": ", with independent variable "}, {"type": "inlineMath", "tex": "x"}, {"type": "text", "text": "."}]}]},
+  "definitions": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "On a region where "}, {"type": "inlineMath", "tex": "h(y)\\ne0"}, {"type": "text", "text": ", separate and integrate:"}]},
+    {"type": "displayMath", "tex": "\\int\\frac{dy}{h(y)}=\\int g(x)\\,dx,\\qquad H(y)=G(x)+C."}
+  ]},
+  "results": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Before dividing by "}, {"type": "inlineMath", "tex": "h(y)"}, {"type": "text", "text": ", solve "}, {"type": "inlineMath", "tex": "h(c)=0"}, {"type": "text", "text": ". Every such constant "}, {"type": "inlineMath", "tex": "y=c"}, {"type": "text", "text": " is an equilibrium solution when the original equation is defined there."}]},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Differentiate an implicit answer to verify it. Then choose the maximal interval containing the initial point on which the explicit branch is defined and satisfies the original equation."}]}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Dividing by "}, {"type": "inlineMath", "tex": "h(y)"}, {"type": "text", "text": " can discard a lost solution, so equilibrium values must be checked separately."}],
+    [{"type": "text", "text": "Antiderivatives and any algebraic inversion are interpreted on one interval where the required functions are defined."}],
+    [{"type": "text", "text": "A formula stops at a pole, branch boundary, or other point where it or the differential equation ceases to be defined."}]
+  ]}]},
+  "examples": [{"title": "Solve an initial-value problem and find its interval", "document": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "For "}, {"type": "inlineMath", "tex": "y'=xy^2"}, {"type": "text", "text": " with "}, {"type": "inlineMath", "tex": "y(0)=1"}, {"type": "text", "text": ", separation gives"}]},
+    {"type": "displayMath", "tex": "-\\frac1y=\\frac{x^2}{2}+C,\\qquad y(x)=\\frac{1}{1-x^2/2}."},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "The maximal interval containing zero is "}, {"type": "inlineMath", "tex": "(-\\sqrt2,\\sqrt2)"}, {"type": "text", "text": ". Direct differentiation gives "}, {"type": "inlineMath", "tex": "y'=x(1-x^2/2)^{-2}=xy^2"}, {"type": "text", "text": ". The division also omitted the separate solution "}, {"type": "inlineMath", "tex": "y=0"}, {"type": "text", "text": "."}]}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Do not absorb a variable-dependent sign or absolute value into the integration constant."}],
+    [{"type": "text", "text": "An implicit family can describe several branches; an initial condition selects one branch and interval."}]
+  ]}]},
+  "relatedReferences": ["math-reference/calculus/antiderivative-table", "math-reference/calculus/substitution", "math-reference/differential-equations/first-order-linear"],
+  "relatedProblems": [],
+  "sources": [{"label": "MIT 18.03 Differential Equations lecture notes", "url": "https://math.mit.edu/~poonen/notes03.pdf"}],
+  "rights": {"sourceUrl": "https://math.mit.edu/~poonen/notes03.pdf", "attribution": "Original MyPutnam exposition informed by MIT 18.03 course notes.", "copyrightHolder": "Bjorn Poonen", "licenseBasis": "Standard separation rules and an original worked example are stated in original prose.", "redistributionStatus": "cleared"}
+}

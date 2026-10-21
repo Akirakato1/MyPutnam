@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "differential-equations", "articleId": "second-order-homogeneous", "title": "Second-order constant-coefficient homogeneous equations", "displayOrder": 4,
+  "aliases": ["characteristic equation", "repeated root", "homogeneous second-order ODE", "complex characteristic roots"],
+  "keywords": ["constant coefficient equation", "auxiliary equation", "fundamental solutions", "damped oscillation"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "text", "text": "For "}, {"type": "inlineMath", "tex": "ay''+by'+cy=0"}, {"type": "text", "text": ", use the characteristic polynomial "}, {"type": "inlineMath", "tex": "p(r)=ar^2+br+c"}, {"type": "text", "text": "."}]}]},
+  "definitions": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "The exponential trial "}, {"type": "inlineMath", "tex": "y=e^{rx}"}, {"type": "text", "text": " converts the differential equation into "}, {"type": "inlineMath", "tex": "p(r)=0"}, {"type": "text", "text": "."}]}
+  ]},
+  "results": {"blocks": [
+    {"type": "list", "ordered": false, "items": [
+      [{"type": "text", "text": "Distinct real roots "}, {"type": "inlineMath", "tex": "r_1,r_2"}, {"type": "text", "text": ": "}, {"type": "inlineMath", "tex": "y=C_1e^{r_1x}+C_2e^{r_2x}"}, {"type": "text", "text": "."}],
+      [{"type": "text", "text": "A repeated real root "}, {"type": "inlineMath", "tex": "r"}, {"type": "text", "text": ": "}, {"type": "inlineMath", "tex": "y=(C_1+C_2x)e^{rx}"}, {"type": "text", "text": "."}],
+      [{"type": "text", "text": "Complex roots "}, {"type": "inlineMath", "tex": "\\alpha\\pm i\\beta"}, {"type": "text", "text": " with "}, {"type": "inlineMath", "tex": "\\beta>0"}, {"type": "text", "text": ": "}, {"type": "inlineMath", "tex": "y=e^{\\alpha x}(C_1\\cos\\beta x+C_2\\sin\\beta x)"}, {"type": "text", "text": "."}]
+    ]}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "These three forms assume real constant coefficients and "}, {"type": "inlineMath", "tex": "a\\ne0"}, {"type": "text", "text": "."}],
+    [{"type": "text", "text": "For continuous coefficients more generally, two initial values determine a unique local solution, but the characteristic-polynomial recipe need not apply."}],
+    [{"type": "text", "text": "With constant coefficients, the displayed solutions are defined on every real interval."}]
+  ]}]},
+  "examples": [{"title": "Repeated-root solution and substitution check", "document": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "For "}, {"type": "inlineMath", "tex": "y''-2y'+y=0"}, {"type": "text", "text": ", the characteristic polynomial is "}, {"type": "inlineMath", "tex": "(r-1)^2"}, {"type": "text", "text": ", hence"}]},
+    {"type": "displayMath", "tex": "y=(C_1+C_2x)e^x."},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Writing "}, {"type": "inlineMath", "tex": "y=ve^x"}, {"type": "text", "text": " reduces the left side to "}, {"type": "inlineMath", "tex": "v''e^x"}, {"type": "text", "text": ", which vanishes for "}, {"type": "inlineMath", "tex": "v=C_1+C_2x"}, {"type": "text", "text": "."}]}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "A repeated root needs the second solution "}, {"type": "inlineMath", "tex": "xe^{rx}"}, {"type": "text", "text": "; duplicating "}, {"type": "inlineMath", "tex": "e^{rx}"}, {"type": "text", "text": " does not create independence."}],
+    [{"type": "text", "text": "For real solutions, combine conjugate complex exponentials into sine and cosine."}]
+  ]}]},
+  "relatedReferences": ["math-reference/complex-numbers/complex-roots", "math-reference/linear-algebra/vector-spaces-basis", "math-reference/differential-equations/forced-second-order"],
+  "relatedProblems": [],
+  "sources": [{"label": "MIT 18.03 Differential Equations lecture notes", "url": "https://math.mit.edu/~poonen/notes03.pdf"}],
+  "rights": {"sourceUrl": "https://math.mit.edu/~poonen/notes03.pdf", "attribution": "Original MyPutnam exposition informed by MIT 18.03 course notes.", "copyrightHolder": "Bjorn Poonen", "licenseBasis": "Standard characteristic-root cases and an original verification are stated in original prose.", "redistributionStatus": "cleared"}
+}

@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "differential-equations", "articleId": "forced-second-order", "title": "Forced second-order equations and resonance", "displayOrder": 5,
+  "aliases": ["undetermined coefficients", "resonance", "forced second-order ODE", "particular solution"],
+  "keywords": ["nonhomogeneous equation", "method of coefficients", "complementary solution", "resonant forcing"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "text", "text": "Write "}, {"type": "inlineMath", "tex": "L[y]=ay''+by'+cy=f(x)"}, {"type": "text", "text": " with characteristic polynomial "}, {"type": "inlineMath", "tex": "p(r)=ar^2+br+c"}, {"type": "text", "text": "."}]}]},
+  "definitions": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "The general solution is "}, {"type": "inlineMath", "tex": "y=y_h+y_p"}, {"type": "text", "text": ", where "}, {"type": "inlineMath", "tex": "L[y_h]=0"}, {"type": "text", "text": " and one particular solution satisfies "}, {"type": "inlineMath", "tex": "L[y_p]=f"}, {"type": "text", "text": "."}]}
+  ]},
+  "results": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Undetermined coefficients applies when the forcing is a finite sum of polynomial, exponential, sine, and cosine terms, including their products."}]},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Choose a trial family closed under differentiation. If that family overlaps the homogeneous solution, multiply the entire trial by the smallest power "}, {"type": "inlineMath", "tex": "x^s"}, {"type": "text", "text": " that removes the overlap; "}, {"type": "inlineMath", "tex": "s"}, {"type": "text", "text": " is the relevant characteristic-root multiplicity."}]},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Linearity permits separate particular solutions for separate forcing terms and then adds them."}]}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "The trial-table method assumes constant coefficients and forcing of the supported polynomial-exponential-trigonometric type."}],
+    [{"type": "text", "text": "At resonance, an unmodified trial lies in the homogeneous kernel and cannot match the forcing."}],
+    [{"type": "text", "text": "Initial conditions are imposed only after adding the full homogeneous solution to a particular solution."}]
+  ]}]},
+  "examples": [{"title": "Resonant sinusoidal forcing", "document": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "For "}, {"type": "inlineMath", "tex": "y''+y=\\cos x"}, {"type": "text", "text": ", both "}, {"type": "inlineMath", "tex": "\\cos x"}, {"type": "text", "text": " and "}, {"type": "inlineMath", "tex": "\\sin x"}, {"type": "text", "text": " are homogeneous, so multiply the usual trial by "}, {"type": "inlineMath", "tex": "x"}, {"type": "text", "text": ". One particular solution is"}]},
+    {"type": "displayMath", "tex": "y_p=\\frac{x}{2}\\sin x."},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Direct calculation gives "}, {"type": "inlineMath", "tex": "y_p''+y_p=\\cos x"}, {"type": "text", "text": ", and therefore"}]},
+    {"type": "displayMath", "tex": "y=C_1\\cos x+C_2\\sin x+\\frac{x}{2}\\sin x."}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Include every derivative companion in the trial, such as both sine and cosine even when only one appears in the forcing."}],
+    [{"type": "text", "text": "Multiply the whole trial by the resonance factor, not just one term."}]
+  ]}]},
+  "relatedReferences": ["math-reference/differential-equations/second-order-homogeneous", "math-reference/differential-equations/variation-of-parameters", "math-reference/trigonometry/harmonic-linear-combination"],
+  "relatedProblems": [],
+  "sources": [
+    {"label": "MIT 18.03 Differential Equations lecture notes", "url": "https://math.mit.edu/~poonen/notes03.pdf"},
+    {"label": "MIT 18.03 supplementary notes", "url": "https://math.mit.edu/classes/18.03/sup/sup0.pdf"}
+  ],
+  "rights": {"sourceUrl": "https://math.mit.edu/~poonen/notes03.pdf", "attribution": "Original MyPutnam exposition informed by MIT 18.03 course materials.", "copyrightHolder": "Massachusetts Institute of Technology and course authors", "licenseBasis": "Standard forcing and resonance rules are presented in original prose with an original verification.", "redistributionStatus": "cleared"}
+}

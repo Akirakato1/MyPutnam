@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "differential-equations", "articleId": "variation-of-parameters", "title": "Variation of parameters", "displayOrder": 6,
+  "aliases": ["variation of parameters", "Wronskian", "variation of constants second order", "fundamental pair"],
+  "keywords": ["particular solution", "nonhomogeneous ODE", "Wronskian formula", "linear independence"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "text", "text": "Normalize to "}, {"type": "inlineMath", "tex": "y''+p(x)y'+q(x)y=g(x)"}, {"type": "text", "text": " and let "}, {"type": "inlineMath", "tex": "y_1,y_2"}, {"type": "text", "text": " be homogeneous solutions with Wronskian "}, {"type": "inlineMath", "tex": "W=y_1y_2'-y_1'y_2"}, {"type": "text", "text": "."}]}]},
+  "definitions": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Seek "}, {"type": "inlineMath", "tex": "y_p=u_1y_1+u_2y_2"}, {"type": "text", "text": " with"}]},
+    {"type": "displayMath", "tex": "u_1'=-\\frac{y_2g}{W},\\qquad u_2'=\\frac{y_1g}{W}."}
+  ]},
+  "results": {"blocks": [
+    {"type": "displayMath", "tex": "y_p=-y_1\\int\\frac{y_2g}{W}\\,dx+y_2\\int\\frac{y_1g}{W}\\,dx."},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Arbitrary constants in these antiderivatives only add a homogeneous solution, so they may be set to zero when constructing one particular solution."}]}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "The coefficients and forcing should be continuous on an interval, and the original leading coefficient must be nonzero there before normalization."}],
+    [{"type": "text", "text": "The pair "}, {"type": "inlineMath", "tex": "y_1,y_2"}, {"type": "text", "text": " must be linearly independent; equivalently its Wronskian is nonzero throughout the interval for a fundamental pair."}],
+    [{"type": "text", "text": "Use one common interval on which the coefficients, forcing, basis, Wronskian, and integrals are all defined."}]
+  ]}]},
+  "examples": [{"title": "Construct and check a particular solution", "document": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "For "}, {"type": "inlineMath", "tex": "y''+y=e^x"}, {"type": "text", "text": ", take "}, {"type": "inlineMath", "tex": "y_1=\\cos x"}, {"type": "text", "text": ", "}, {"type": "inlineMath", "tex": "y_2=\\sin x"}, {"type": "text", "text": ", and "}, {"type": "inlineMath", "tex": "W=1"}, {"type": "text", "text": ". The formula simplifies to"}]},
+    {"type": "displayMath", "tex": "y_p=-\\cos x\\int e^x\\sin x\\,dx+\\sin x\\int e^x\\cos x\\,dx=\\frac12e^x."},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Indeed, "}, {"type": "inlineMath", "tex": "y_p''+y_p=e^x"}, {"type": "text", "text": "."}]}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "If the leading coefficient is not one, divide the forcing by it as well as the other coefficients."}],
+    [{"type": "text", "text": "A zero Wronskian denominator signals that the selected functions do not form the required fundamental pair on that interval."}]
+  ]}]},
+  "relatedReferences": ["math-reference/calculus/integration-by-parts", "math-reference/differential-equations/second-order-homogeneous", "math-reference/differential-equations/forced-second-order"],
+  "relatedProblems": [],
+  "sources": [{"label": "MIT 18.03 Differential Equations lecture notes", "url": "https://math.mit.edu/~poonen/notes03.pdf"}],
+  "rights": {"sourceUrl": "https://math.mit.edu/~poonen/notes03.pdf", "attribution": "Original MyPutnam exposition informed by MIT 18.03 course notes.", "copyrightHolder": "Bjorn Poonen", "licenseBasis": "The standard Wronskian formula and original worked check are expressed in original prose.", "redistributionStatus": "cleared"}
+}

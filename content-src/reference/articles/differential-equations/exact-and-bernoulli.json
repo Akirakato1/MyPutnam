@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "differential-equations", "articleId": "exact-and-bernoulli", "title": "Exact equations and Bernoulli substitution", "displayOrder": 3,
+  "aliases": ["exact differential equation", "Bernoulli equation", "potential function method", "Bernoulli substitution"],
+  "keywords": ["exactness test", "implicit solution", "nonlinear first-order ODE", "change of dependent variable"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "text", "text": "An exact equation is "}, {"type": "inlineMath", "tex": "M(x,y)\\,dx+N(x,y)\\,dy=0"}, {"type": "text", "text": ". A Bernoulli equation is "}, {"type": "inlineMath", "tex": "y'+p(x)y=q(x)y^n"}, {"type": "text", "text": "."}]}]},
+  "definitions": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Exactness means there is a potential "}, {"type": "inlineMath", "tex": "F"}, {"type": "text", "text": " with "}, {"type": "inlineMath", "tex": "F_x=M"}, {"type": "text", "text": " and "}, {"type": "inlineMath", "tex": "F_y=N"}, {"type": "text", "text": "; solutions satisfy "}, {"type": "inlineMath", "tex": "F(x,y)=C"}, {"type": "text", "text": "."}]},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "For "}, {"type": "inlineMath", "tex": "n\\ne0,1"}, {"type": "text", "text": " and a nonzero solution branch, the Bernoulli substitution "}, {"type": "inlineMath", "tex": "u=y^{1-n}"}, {"type": "text", "text": " gives"}]},
+    {"type": "displayMath", "tex": "u'+(1-n)p(x)u=(1-n)q(x)."}
+  ]},
+  "results": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "On a simply connected domain with continuous first partial derivatives, the test "}, {"type": "inlineMath", "tex": "M_y=N_x"}, {"type": "text", "text": " is sufficient for exactness."}]},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Recover a potential by integrating one component and determining the missing one-variable term from the other component."}]}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "The derivative test requires the stated smoothness and domain condition; a punctured domain may have matching partial derivatives without a global potential."}],
+    [{"type": "text", "text": "Bernoulli's substitution divides by a power of "}, {"type": "inlineMath", "tex": "y"}, {"type": "text", "text": ", so nonzero branches are transformed and "}, {"type": "inlineMath", "tex": "y=0"}, {"type": "text", "text": " must be checked separately when it is defined."}],
+    [{"type": "text", "text": "For noninteger powers, choose a real or complex branch on an interval where the substitution is meaningful."}]
+  ]}]},
+  "examples": [
+    {"title": "Recover an exact potential", "document": {"blocks": [
+      {"type": "paragraph", "runs": [{"type": "text", "text": "For "}, {"type": "inlineMath", "tex": "(2x+y)\\,dx+(x+2y)\\,dy=0"}, {"type": "text", "text": ", both cross-partials equal one, and"}]},
+      {"type": "displayMath", "tex": "F(x,y)=x^2+xy+y^2,\\qquad F(x,y)=C."},
+      {"type": "paragraph", "runs": [{"type": "text", "text": "Differentiating "}, {"type": "inlineMath", "tex": "F"}, {"type": "text", "text": " reproduces both coefficients."}]}
+    ]}},
+    {"title": "Linearize a Bernoulli equation", "document": {"blocks": [
+      {"type": "paragraph", "runs": [{"type": "text", "text": "For "}, {"type": "inlineMath", "tex": "y'-y=xy^2"}, {"type": "text", "text": ", let "}, {"type": "inlineMath", "tex": "u=y^{-1}"}, {"type": "text", "text": ". Then "}, {"type": "inlineMath", "tex": "u'+u=-x"}, {"type": "text", "text": ", so"}]},
+      {"type": "displayMath", "tex": "u=1-x+Ce^{-x},\\qquad y=\\frac{1}{1-x+Ce^{-x}}."}
+    ]}}
+  ],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Matching cross-partials is a test, not the potential itself."}],
+    [{"type": "text", "text": "After solving for "}, {"type": "inlineMath", "tex": "u"}, {"type": "text", "text": ", restore "}, {"type": "inlineMath", "tex": "y"}, {"type": "text", "text": " and state the branch and interval."}]
+  ]}]},
+  "relatedReferences": ["math-reference/calculus/partial-fractions", "math-reference/differential-equations/first-order-linear", "math-reference/differential-equations/separable-equations"],
+  "relatedProblems": [],
+  "sources": [
+    {"label": "MIT OpenCourseWare 3.016 lecture 20", "url": "https://ocw.mit.edu/courses/3-016-mathematics-for-materials-scientists-and-engineers-fall-2005/resources/lecture_20/"},
+    {"label": "MIT 18.03 Differential Equations notes and exercises", "url": "https://ocw.mit.edu/courses/18-03-differential-equations-spring-2010/pages/notes-and-exercises/"}
+  ],
+  "rights": {"sourceUrl": "https://ocw.mit.edu/courses/3-016-mathematics-for-materials-scientists-and-engineers-fall-2005/resources/lecture_20/", "attribution": "Original MyPutnam exposition informed by MIT OpenCourseWare differential-equations materials.", "copyrightHolder": "Massachusetts Institute of Technology and course authors", "licenseBasis": "Standard exactness and Bernoulli methods are presented in original prose with original checks.", "redistributionStatus": "cleared"}
+}

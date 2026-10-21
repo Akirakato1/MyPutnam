@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "differential-equations", "articleId": "linear-systems", "title": "First-order linear systems", "displayOrder": 7,
+  "aliases": ["matrix exponential", "linear system", "first-order linear system", "fundamental matrix"],
+  "keywords": ["eigenvalue method", "constant coefficient system", "state vector", "variation of constants"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "text", "text": "A linear system has the form "}, {"type": "inlineMath", "tex": "\\mathbf{x}'=A(t)\\mathbf{x}+\\mathbf{b}(t)"}, {"type": "text", "text": ". A fundamental matrix "}, {"type": "inlineMath", "tex": "\\Phi"}, {"type": "text", "text": " satisfies "}, {"type": "inlineMath", "tex": "\\Phi'=A\\Phi"}, {"type": "text", "text": " and is invertible."}]}]},
+  "definitions": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "For constant "}, {"type": "inlineMath", "tex": "A"}, {"type": "text", "text": ", the matrix exponential is"}]},
+    {"type": "displayMath", "tex": "e^{At}=I+At+\\frac{A^2t^2}{2!}+\\cdots,"},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "and the homogeneous initial-value solution is "}, {"type": "inlineMath", "tex": "\\mathbf{x}(t)=e^{A(t-t_0)}\\mathbf{x}_0"}, {"type": "text", "text": "."}]}
+  ]},
+  "results": {"blocks": [
+    {"type": "displayMath", "tex": "\\mathbf{x}(t)=\\Phi(t)\\left(\\mathbf{c}+\\int \\Phi(t)^{-1}\\mathbf{b}(t)\\,dt\\right)."},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "If a constant matrix is diagonalizable as "}, {"type": "inlineMath", "tex": "A=V\\Lambda V^{-1}"}, {"type": "text", "text": ", then "}, {"type": "inlineMath", "tex": "e^{At}=Ve^{\\Lambda t}V^{-1}"}, {"type": "text", "text": ". Each eigenpair "}, {"type": "inlineMath", "tex": "A\\mathbf{v}=\\lambda\\mathbf{v}"}, {"type": "text", "text": " yields the mode "}, {"type": "inlineMath", "tex": "e^{\\lambda t}\\mathbf{v}"}, {"type": "text", "text": "."}]},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Defective matrices require generalized eigenvectors or another method for computing the matrix exponential; Jordan blocks produce polynomial factors multiplying exponentials."}]}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "Continuous entries of "}, {"type": "inlineMath", "tex": "A(t)"}, {"type": "text", "text": " and "}, {"type": "inlineMath", "tex": "\\mathbf{b}(t)"}, {"type": "text", "text": " give existence and uniqueness for an initial value on the interval."}],
+    [{"type": "text", "text": "The matrix exponential is defined for every finite square constant matrix, whether or not the matrix is diagonalizable."}],
+    [{"type": "text", "text": "The simple eigenvector expansion needs a complete eigenbasis; complex-conjugate modes may be recombined into real-valued solutions for real systems."}]
+  ]}]},
+  "examples": [{"title": "Diagonal system and derivative check", "document": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Let "}, {"type": "inlineMath", "tex": "A=\\operatorname{diag}(2,-1)"}, {"type": "text", "text": " and "}, {"type": "inlineMath", "tex": "\\mathbf{x}(0)=(3,4)^T"}, {"type": "text", "text": ". Then"}]},
+    {"type": "displayMath", "tex": "e^{At}=\\begin{pmatrix}e^{2t}&0\\\\0&e^{-t}\\end{pmatrix},\\qquad \\mathbf{x}(t)=\\begin{pmatrix}3e^{2t}\\\\4e^{-t}\\end{pmatrix}."},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Differentiating componentwise gives "}, {"type": "inlineMath", "tex": "\\mathbf{x}'=A\\mathbf{x}"}, {"type": "text", "text": " and the initial vector is recovered at zero."}]}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "In general, "}, {"type": "inlineMath", "tex": "e^{(A+B)t}=e^{At}e^{Bt}"}, {"type": "text", "text": " requires commuting matrices."}],
+    [{"type": "text", "text": "A repeated eigenvalue does not guarantee enough independent eigenvectors to diagonalize."}]
+  ]}]},
+  "relatedReferences": ["math-reference/linear-algebra/matrices-linear-systems", "math-reference/linear-algebra/eigenvalues-diagonalization", "math-reference/differential-equations/variation-of-parameters"],
+  "relatedProblems": [],
+  "sources": [{"label": "MIT 18.03 Differential Equations lecture notes", "url": "https://math.mit.edu/~poonen/notes03.pdf"}],
+  "rights": {"sourceUrl": "https://math.mit.edu/~poonen/notes03.pdf", "attribution": "Original MyPutnam exposition informed by MIT 18.03 course notes.", "copyrightHolder": "Bjorn Poonen", "licenseBasis": "Standard matrix-exponential methods and an original example are stated in original prose.", "redistributionStatus": "cleared"}
+}

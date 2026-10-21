@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1, "richDocumentVersion": 2, "categoryId": "differential-equations", "articleId": "first-order-linear", "title": "First-order linear equations", "displayOrder": 2,
+  "aliases": ["integrating factor", "first-order linear ODE", "linear first-order equation", "variation of constants"],
+  "keywords": ["standard linear form", "initial value problem", "integrating factor formula", "homogeneous solution"],
+  "notation": {"blocks": [{"type": "paragraph", "runs": [{"type": "text", "text": "The standard form is "}, {"type": "inlineMath", "tex": "y'+p(x)y=q(x)"}, {"type": "text", "text": " on a chosen interval."}]}]},
+  "definitions": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Choose an antiderivative "}, {"type": "inlineMath", "tex": "P'=p"}, {"type": "text", "text": " and the nonzero integrating factor "}, {"type": "inlineMath", "tex": "\\mu=e^P"}, {"type": "text", "text": ". Then"}]},
+    {"type": "displayMath", "tex": "(\\mu y)'=\\mu q."}
+  ]},
+  "results": {"blocks": [
+    {"type": "displayMath", "tex": "y(x)=\\mu(x)^{-1}\\left(C+\\int \\mu(x)q(x)\\,dx\\right)."},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "For an initial value at "}, {"type": "inlineMath", "tex": "x_0"}, {"type": "text", "text": ", the definite-integral form avoids bookkeeping constants:"}]},
+    {"type": "displayMath", "tex": "y(x)=\\mu(x)^{-1}\\left(\\mu(x_0)y(x_0)+\\int_{x_0}^{x}\\mu(t)q(t)\\,dt\\right)."}
+  ]},
+  "conditions": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "After division into standard form, "}, {"type": "inlineMath", "tex": "p"}, {"type": "text", "text": " and "}, {"type": "inlineMath", "tex": "q"}, {"type": "text", "text": " should be continuous on the interval under study."}],
+    [{"type": "text", "text": "If the original coefficient of "}, {"type": "inlineMath", "tex": "y'"}, {"type": "text", "text": " vanishes, do not divide across that point; solve on separate intervals."}],
+    [{"type": "text", "text": "Under these continuity assumptions, one initial value determines a unique solution on that interval."}]
+  ]}]},
+  "examples": [{"title": "Integrating-factor check", "document": {"blocks": [
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Solve "}, {"type": "inlineMath", "tex": "y'+2y=e^{-x}"}, {"type": "text", "text": ". With "}, {"type": "inlineMath", "tex": "\\mu=e^{2x}"}, {"type": "text", "text": ","}]},
+    {"type": "displayMath", "tex": "(e^{2x}y)'=e^x,\\qquad y=e^{-x}+Ce^{-2x}."},
+    {"type": "paragraph", "runs": [{"type": "text", "text": "Substitution gives "}, {"type": "inlineMath", "tex": "y'+2y=e^{-x}"}, {"type": "text", "text": ", so both the particular and homogeneous parts check."}]}
+  ]}}],
+  "pitfalls": {"blocks": [{"type": "list", "ordered": false, "items": [
+    [{"type": "text", "text": "The integrating factor multiplies every term of the equation."}],
+    [{"type": "text", "text": "Use one consistent antiderivative in "}, {"type": "inlineMath", "tex": "\\mu"}, {"type": "text", "text": "; a different additive constant only rescales it."}]
+  ]}]},
+  "relatedReferences": ["math-reference/calculus/fundamental-theorem-calculus", "math-reference/differential-equations/separable-equations", "math-reference/differential-equations/exact-and-bernoulli"],
+  "relatedProblems": [],
+  "sources": [{"label": "MIT 18.03 Differential Equations lecture notes", "url": "https://math.mit.edu/~poonen/notes03.pdf"}],
+  "rights": {"sourceUrl": "https://math.mit.edu/~poonen/notes03.pdf", "attribution": "Original MyPutnam exposition informed by MIT 18.03 course notes.", "copyrightHolder": "Bjorn Poonen", "licenseBasis": "The standard integrating-factor method and original example are expressed in original prose.", "redistributionStatus": "cleared"}
+}
