@@ -51,6 +51,69 @@ test('core handbook freezes exactly 12 ordered categories and 97 ordered article
   assert.ok(aliasesByKey.get('math-reference/laplace-fourier-transforms/fourier-transform-conventions').includes('Fourier transform'));
 });
 
+test('the complete handbook closes aliases, relations, reviews, and cleared rights', async () => {
+  const sourceRoot = join(repositoryRoot, 'content-src');
+  assert.deepEqual(await auditReferenceInventory({
+    sourceRoot,
+    inventoryPath: join(referenceRoot, 'core-handbook-v1.json'),
+  }), []);
+
+  const articles = await loadFrozenArticles();
+  const aliases = new Map();
+  for (const [key, record] of articles) {
+    for (const alias of record.aliases) {
+      const normalized = alias.trim().toLocaleLowerCase('en-US');
+      if (!aliases.has(normalized)) aliases.set(normalized, []);
+      aliases.get(normalized).push(key);
+    }
+    assert.equal(record.rights.redistributionStatus, 'cleared', key);
+  }
+  const allowedCollisions = new Map(Object.entries({
+    'binomial theorem': ['math-reference/algebra-inequalities/binomial-multinomial-theorems', 'math-reference/combinatorics-generating-functions/binomial-identities'],
+    'characteristic polynomial': ['math-reference/sequences-series-recurrences/linear-recurrences-homogeneous', 'math-reference/linear-algebra/eigenvalues-diagonalization'],
+    'particular solution': ['math-reference/sequences-series-recurrences/linear-recurrences-nonhomogeneous', 'math-reference/differential-equations/forced-second-order'],
+    'ordinary generating function': ['math-reference/sequences-series-recurrences/ordinary-generating-functions', 'math-reference/combinatorics-generating-functions/ordinary-generating-functions-combinatorics'],
+    'coefficient extraction': ['math-reference/sequences-series-recurrences/ordinary-generating-functions', 'math-reference/combinatorics-generating-functions/ordinary-generating-functions-combinatorics'],
+    'orthogonal projection': ['math-reference/geometry-vectors/dot-product-projections', 'math-reference/linear-algebra/inner-products-orthogonality'],
+  }));
+  const collisions = new Map([...aliases].filter(([, keys]) => keys.length > 1));
+  assert.deepEqual([...collisions.keys()].sort(), [...allowedCollisions.keys()].sort());
+  for (const [alias, keys] of allowedCollisions) assert.deepEqual(collisions.get(alias), keys, alias);
+
+  const searchable = new Map();
+  for (const [key, record] of articles) {
+    for (const term of [record.title, ...record.aliases, ...record.keywords]) {
+      const normalized = term.trim().toLocaleLowerCase('en-US');
+      if (!searchable.has(normalized)) searchable.set(normalized, []);
+      searchable.get(normalized).push(key);
+    }
+  }
+  for (const family of [
+    'euler phi', 'laplace transform table', 'fourier table', 'integration by parts',
+    'tangent half-angle substitution', 'homogeneous linear recurrence', 'derivative table',
+    'expected value', 'matrix exponential', 'bayes theorem',
+  ]) assert.ok(searchable.has(family), 'missing high-value lookup family: ' + family);
+});
+
+test('global notation and parameter conventions remain pinned across categories', async () => {
+  const articles = await loadFrozenArticles();
+  const text = (key) => JSON.stringify(articles.get(key));
+  assert.ok(text('math-reference/algebra-inequalities/exponent-logarithm-laws').includes('\\\\ln x'));
+  assert.ok(text('math-reference/algebra-inequalities/exponent-logarithm-laws').includes('\\\\log_e x'));
+  assert.ok(text('math-reference/complex-numbers/modulus-argument').includes('(-\\\\pi,\\\\pi]'));
+  assert.match(text('math-reference/sequences-series-recurrences/linear-recurrences-homogeneous'), /F_0=0,F_1=1/);
+  assert.match(text('math-reference/probability/discrete-distributions'), /support starts at 1/i);
+  assert.match(text('math-reference/probability/continuous-distributions'), /rate parameter/i);
+  assert.ok(text('math-reference/trigonometry/weierstrass-substitution').includes('t=\\\\tan\\\\frac{x}{2}'));
+  assert.match(text('math-reference/laplace-fourier-transforms/laplace-definition-convergence'), /laplace-one-sided-v1/);
+  assert.match(text('math-reference/laplace-fourier-transforms/fourier-transform-properties'), /fourier-angular-v1/);
+  const registry = JSON.parse(await readFile(join(referenceRoot, 'laplace-fourier-conventions.json'), 'utf8'));
+  assert.deepEqual(registry.conventions.map(({ id }) => id), [
+    'laplace-one-sided-v1', 'fourier-series-period-2L-v1', 'fourier-angular-v1',
+    'fourier-unitary-angular-v1', 'fourier-cycles-v1',
+  ]);
+});
+
 test('inventory audit accepts a complete approved rights-cleared article and review', async (t) => {
   const fixture = await fixtureTree(t);
   assert.deepEqual(await auditReferenceInventory(fixture), []);
@@ -130,6 +193,19 @@ async function fixtureTree(t) {
   await writeFile(join(root, 'articles', 'number-theory', 'euler-totient.json'), JSON.stringify(article));
   await writeFile(join(root, 'review', 'number-theory', 'euler-totient.md'), approvedReview());
   return { sourceRoot, inventoryPath };
+}
+
+async function loadFrozenArticles() {
+  const inventory = JSON.parse(await readFile(join(referenceRoot, 'core-handbook-v1.json'), 'utf8'));
+  const articles = new Map();
+  for (const category of inventory.categories) {
+    for (const article of category.articles) {
+      const key = 'math-reference/' + category.id + '/' + article.id;
+      const record = JSON.parse(await readFile(join(referenceRoot, 'articles', category.id, article.id + '.json'), 'utf8'));
+      articles.set(key, record);
+    }
+  }
+  return articles;
 }
 
 function approvedReview() {

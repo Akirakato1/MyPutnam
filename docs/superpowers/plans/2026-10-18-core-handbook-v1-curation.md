@@ -416,7 +416,7 @@ git commit -m "content: curate laplace and fourier batch"
 
 **Interfaces:**
 - Consumes: all twelve approved category batches and the deterministic publication pipeline.
-- Produces: a closed, reviewed, rights-cleared 97-article handbook catalog/package set ready for final Android/feed integration.
+- Produces: a closed, reviewed, rights-cleared 97-article handbook catalog/package set ready for final Android integration. The combined public feed remains blocked by the Putnam corpus's intentionally unresolved redistribution status.
 
 - [ ] **Step 1: Add failing global inventory/alias/relation tests**
 
@@ -446,7 +446,7 @@ Assign reviewers by mathematical area and one cross-category editor. Resolve eve
 node tools/content/src/audit-publication.mjs --root build/content-publication --require-cleared-rights
 ```
 
-Expected: PASS only when every bundled/public article has legitimate cleared rights. A failure is a release blocker, not a reason to weaken the gate.
+Expected: the 97-article handbook-only publication passes. The combined 72-problem/97-article publication fails only for the 72 Putnam records whose redistribution status is intentionally unresolved. That failure remains a public-feed release blocker, not a reason to weaken the gate or falsify rights metadata; the ordinary local/offline audit must still pass.
 
 - [ ] **Step 6: Commit integrated curation metadata/tests**
 

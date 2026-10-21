@@ -20,6 +20,7 @@ test('publication builder emits one deterministic catalog and 72 referenced immu
   const [libraryCatalog, publicationManifest] = await Promise.all([
     loadLibraryCatalog(libraryUrl), readJson(publicationUrl),
   ]);
+  publicationManifest.includedReferenceCategories = [];
   const options = { sourceRoot, libraryCatalog, publicationManifest };
   const first = await buildPublication({ ...options, outputRoot: firstRoot });
   const second = await buildPublication({ ...options, outputRoot: secondRoot });
