@@ -11,6 +11,7 @@
     "audit:publication": "node src/audit-publication.mjs --root ../../build/content-publication",
     "audit:reference-inventory": "node src/audit-reference-inventory.mjs ../../content-src",
     "build": "node src/build-year.mjs",
+    "build:android-starter": "node src/build-android-starter-bundle.mjs --publication ../../build/content-publication --release ../../content-src/releases/myputnam-v0.5.0-development.json --output ../../build/android-starter-content",
     "build:publication": "node src/build-publication.mjs --source ../../content-src --library ../../content-src/library.json --publication ../../content-src/publications/content-v1.json --output ../../build/content-publication",
     "review": "node src/render-review.mjs",
     "review-year": "node src/review-year.mjs",
