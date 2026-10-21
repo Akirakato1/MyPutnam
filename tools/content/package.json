@@ -8,6 +8,7 @@
   },
   "scripts": {
     "audit-year": "node src/audit-year.mjs",
+    "audit:deployment": "node src/audit-deployment.mjs --root ../../build/content-publication",
     "audit:publication": "node src/audit-publication.mjs --root ../../build/content-publication",
     "audit:reference-inventory": "node src/audit-reference-inventory.mjs ../../content-src",
     "build": "node src/build-year.mjs",

@@ -53,13 +53,23 @@ The Android app includes the Download Problems library UI, catalog refresh, veri
 
 The intended catalog URL is `https://akirakato1.github.io/MyPutnam/content/v1/catalog.json`. Catalog package paths are relative to that file, while every ZIP filename is its outer SHA-256 digest and every package has a separate canonical content revision. Changing source content creates new immutable URLs rather than overwriting old package bytes.
 
-That production feed is not deployed yet. Normal validation permits explicit unresolved rights so the package system can be reviewed privately, but public deployment uses the stricter command below and is intentionally blocked by unresolved Putnam redistribution rights:
+That production feed is not deployed yet. Normal validation permits explicit unresolved rights so the package system can be reviewed privately. The default deployment audit remains blocked by unresolved Putnam redistribution rights:
 
 ```text
-npm --prefix tools/content run audit:publication -- --require-cleared-rights
+npm --prefix tools/content run audit:deployment
 ```
 
-`.github/workflows/validate-content.yml` validates pull requests and pushes without uploading content. `.github/workflows/publish-content.yml` remains manual-only and applies the cleared-rights gate before artifact upload; its presence is not evidence that a public feed exists. Until rights are cleared and that workflow succeeds, the embedded 2020–2025 problems and handbook work offline, while online catalog refresh can legitimately report that no feed is available.
+`.github/workflows/validate-content.yml` validates pull requests and pushes without uploading content. `.github/workflows/publish-content.yml` remains manual-only; its presence is not evidence that a public feed exists. Its normal `rights-cleared` mode applies the cleared-rights gate before artifact upload. For the owner's temporary personal feed only, the browser workflow also offers `temporary-personal-public`, which still runs the complete tests and integrity/security audit but requires the exact acknowledgement `I understand this temporary feed is public`. This mode does not make the feed private: while GitHub Pages is published from a public repository, anyone with the URL can access it.
+
+Personal-device browser workflow:
+
+1. Make the repository public on GitHub.
+2. Open **Actions → Publish content feed → Run workflow** in any browser.
+3. Choose `temporary-personal-public`, enter the exact acknowledgement above, and run it.
+4. After the workflow succeeds, refresh Download Problems in MyPutnam and download the desired content.
+5. Make the repository private again when finished; already downloaded packages continue to work offline.
+
+Important: making the repository private unpublishes GitHub Pages. Every time it is later made public again, rerun **Publish content feed** from the browser before expecting the app endpoint to work. No push, visibility change, or other event deploys content automatically.
 
 ## Historical archive development
 
