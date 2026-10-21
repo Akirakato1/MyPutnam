@@ -67,7 +67,22 @@ $manifestTree = & $aapt2 dump xmltree --file AndroidManifest.xml $apk.FullName 2
 if ($LASTEXITCODE -ne 0) {
     throw "APK compiled-manifest inspection failed:`n$manifestTree"
 }
-$networkTree = & $aapt2 dump xmltree --file res/xml/network_security_config.xml $apk.FullName 2>&1 | Out-String
+$resourceTable = & $aapt2 dump resources $apk.FullName 2>&1 | Out-String
+if ($LASTEXITCODE -ne 0) {
+    throw "APK resource-table inspection failed:`n$resourceTable"
+}
+$networkResource = [regex]::Match(
+    $resourceTable,
+    '(?ms)resource\s+0x[0-9a-f]+\s+xml/network_security_config\s+.*?\(file\)\s+(\S+)\s+type=XML'
+)
+if (-not $networkResource.Success) {
+    throw "APK network-security resource was not found in the compiled resource table."
+}
+$networkResourcePath = $networkResource.Groups[1].Value
+if ($networkResourcePath -notmatch '^res/[A-Za-z0-9._/-]+\.xml$' -or $networkResourcePath.Contains('..')) {
+    throw "APK network-security resource resolved to an unsafe archive path."
+}
+$networkTree = & $aapt2 dump xmltree --file $networkResourcePath $apk.FullName 2>&1 | Out-String
 if ($LASTEXITCODE -ne 0) {
     throw "APK network-security inspection failed:`n$networkTree"
 }

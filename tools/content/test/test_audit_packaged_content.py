@@ -164,6 +164,9 @@ class PackagedContentAuditTest(unittest.TestCase):
         self.assertIn("ACCESS_NETWORK_STATE", verifier)
         self.assertIn("INTERNET", verifier)
         self.assertIn("networkSecurityConfig", verifier)
+        self.assertIn("dump resources", verifier)
+        self.assertIn("xml/network_security_config", verifier)
+        self.assertNotIn("dump xmltree --file res/xml/network_security_config.xml", verifier)
         self.assertNotIn("no INTERNET permission", verifier)
 
     def reset_bundle(self):
