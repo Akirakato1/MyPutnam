@@ -768,7 +768,7 @@ private fun SettingsDestination(
         settings = settings,
         onBack = onBack,
         onSettingsChanged = { next -> viewModel.update { next } },
-        onBackup = { createBackup.launch("putnam-workbook-backup.pwb.zip") },
+        onBackup = { createBackup.launch("myputnam-backup.pwb.zip") },
         onRestore = { restoreBackup.launch(arrayOf("application/zip", "application/octet-stream")) },
         appVersion = dependencies.appVersion,
         contentVersion = dependencies.contentVersion,
