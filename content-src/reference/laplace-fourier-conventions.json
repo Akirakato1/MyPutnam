@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "conventions": [
+    {
+      "id": "laplace-one-sided-v1",
+      "family": "laplace",
+      "forward": "\\mathcal L\\{f\\}(s)=\\int_0^\\infty e^{-st}f(t)\\,dt",
+      "inverse": "f(t)=\\frac{1}{2\\pi i}\\int_{\\gamma-i\\infty}^{\\gamma+i\\infty}e^{st}F(s)\\,ds",
+      "domainNote": "One-sided transform for t at least zero; the region of convergence is part of the transform."
+    },
+    {
+      "id": "fourier-series-period-2L-v1",
+      "family": "fourier-series",
+      "forward": "f(x)\\sim\\frac{a_0}{2}+\\sum_{n=1}^\\infty\\left(a_n\\cos\\frac{n\\pi x}{L}+b_n\\sin\\frac{n\\pi x}{L}\\right)",
+      "inverse": "a_n=\\frac1L\\int_{-L}^{L}f(x)\\cos\\frac{n\\pi x}{L}\\,dx,\\quad b_n=\\frac1L\\int_{-L}^{L}f(x)\\sin\\frac{n\\pi x}{L}\\,dx",
+      "domainNote": "Real Fourier series on a period-2L interval with L positive."
+    },
+    {
+      "id": "fourier-angular-v1",
+      "family": "fourier-transform",
+      "forward": "\\widehat f(\\omega)=\\int_{-\\infty}^{\\infty}f(x)e^{-i\\omega x}\\,dx",
+      "inverse": "f(x)=\\frac1{2\\pi}\\int_{-\\infty}^{\\infty}\\widehat f(\\omega)e^{i\\omega x}\\,d\\omega",
+      "domainNote": "Angular-frequency convention; hypotheses or a distributional interpretation must be stated."
+    },
+    {
+      "id": "fourier-unitary-angular-v1",
+      "family": "fourier-transform",
+      "forward": "\\widehat f(\\omega)=\\frac1{\\sqrt{2\\pi}}\\int_{-\\infty}^{\\infty}f(x)e^{-i\\omega x}\\,dx",
+      "inverse": "f(x)=\\frac1{\\sqrt{2\\pi}}\\int_{-\\infty}^{\\infty}\\widehat f(\\omega)e^{i\\omega x}\\,d\\omega",
+      "domainNote": "Unitary angular-frequency convention."
+    },
+    {
+      "id": "fourier-cycles-v1",
+      "family": "fourier-transform",
+      "forward": "\\widehat f(\\xi)=\\int_{-\\infty}^{\\infty}f(x)e^{-2\\pi i\\xi x}\\,dx",
+      "inverse": "f(x)=\\int_{-\\infty}^{\\infty}\\widehat f(\\xi)e^{2\\pi i\\xi x}\\,d\\xi",
+      "domainNote": "Cycles-per-unit convention."
+    }
+  ]
+}
