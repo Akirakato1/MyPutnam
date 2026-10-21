@@ -1,0 +1,218 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2019",
+  "problemId": "B3",
+  "label": "B3",
+  "ordinal": 9,
+  "topics": ["geometry", "linear-algebra"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B3" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "Q" },
+        { "type": "text", "text": " be an " },
+        { "type": "inlineMath", "tex": "n\\times n" },
+        { "type": "text", "text": " real orthogonal matrix, and let " },
+        { "type": "inlineMath", "tex": "u\\in\\mathbb R^n" },
+        { "type": "text", "text": " be a unit column vector, so " },
+        { "type": "inlineMath", "tex": "u^Tu=1" },
+        { "type": "text", "text": ". Let " },
+        { "type": "inlineMath", "tex": "P=I-2uu^T" },
+        { "type": "text", "text": ", where " },
+        { "type": "inlineMath", "tex": "I" },
+        { "type": "text", "text": " is the " },
+        { "type": "inlineMath", "tex": "n\\times n" },
+        { "type": "text", "text": " identity matrix. Show that if " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": " is not an eigenvalue of " },
+        { "type": "inlineMath", "tex": "Q" },
+        { "type": "text", "text": ", then " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": " is an eigenvalue of " },
+        { "type": "inlineMath", "tex": "PQ" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Interpret P geometrically",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Compute " },
+        { "type": "inlineMath", "tex": "Pu" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "Pv" },
+        { "type": "text", "text": " when " },
+        { "type": "inlineMath", "tex": "u^Tv=0" },
+        { "type": "text", "text": ". This identifies " },
+        { "type": "inlineMath", "tex": "P" },
+        { "type": "text", "text": " as a reflection and determines its determinant." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Prove a determinant lemma",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Show that every real " },
+        { "type": "inlineMath", "tex": "n\\times n" },
+        { "type": "text", "text": " orthogonal matrix " },
+        { "type": "inlineMath", "tex": "R" },
+        { "type": "text", "text": " with no eigenvalue " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": " must satisfy " },
+        { "type": "inlineMath", "tex": "\\det R=(-1)^n" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Pair the nonreal eigenvalues",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The eigenvalues of a real orthogonal matrix lie on the unit circle. Nonreal eigenvalues occur in conjugate pairs with product " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": ", and the only real possibilities are " },
+        { "type": "inlineMath", "tex": "\\pm1" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Compare Q and PQ",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Verify that " }, { "type": "inlineMath", "tex": "P" }, { "type": "text", "text": " is orthogonal and " }, { "type": "inlineMath", "tex": "\\det P=-1" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Assume for contradiction that neither " }, { "type": "inlineMath", "tex": "Q" }, { "type": "text", "text": " nor " }, { "type": "inlineMath", "tex": "PQ" }, { "type": "text", "text": " has eigenvalue " }, { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Apply the determinant lemma to both matrices." }],
+        [{ "type": "text", "text": "Contradict " }, { "type": "inlineMath", "tex": "\\det(PQ)=\\det P\\det Q=-\\det Q" }, { "type": "text", "text": "." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Householder reflection",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For a unit vector " },
+        { "type": "inlineMath", "tex": "u" },
+        { "type": "text", "text": ", the matrix " },
+        { "type": "inlineMath", "tex": "I-2uu^T" },
+        { "type": "text", "text": " sends " },
+        { "type": "inlineMath", "tex": "u" },
+        { "type": "text", "text": " to " },
+        { "type": "inlineMath", "tex": "-u" },
+        { "type": "text", "text": " and fixes every vector perpendicular to " },
+        { "type": "inlineMath", "tex": "u" },
+        { "type": "text", "text": ". It is an orthogonal reflection with determinant " },
+        { "type": "inlineMath", "tex": "-1" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "title": "Spectrum of a real orthogonal matrix",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "All complex eigenvalues of an orthogonal matrix have modulus " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": ". Because the characteristic polynomial is real, every nonreal eigenvalue appears with its complex conjugate." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "title": "Determinant as eigenvalue product",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Over " },
+        { "type": "inlineMath", "tex": "\\mathbb C" },
+        { "type": "text", "text": ", the determinant of a matrix is the product of its eigenvalues counted with algebraic multiplicity, and determinants multiply under matrix products." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "First, " },
+        { "type": "inlineMath", "tex": "Pu=u-2u(u^Tu)=-u" },
+        { "type": "text", "text": ". If " },
+        { "type": "inlineMath", "tex": "v\\perp u" },
+        { "type": "text", "text": ", then " },
+        { "type": "inlineMath", "tex": "Pv=v" },
+        { "type": "text", "text": ". Thus " },
+        { "type": "inlineMath", "tex": "P" },
+        { "type": "text", "text": " is reflection across the hyperplane " },
+        { "type": "inlineMath", "tex": "u^\\perp" },
+        { "type": "text", "text": ". In particular, " },
+        { "type": "inlineMath", "tex": "P" },
+        { "type": "text", "text": " is orthogonal and" }
+      ] },
+      { "type": "displayMath", "tex": "\\det P=-1." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "We need the following fact. If a real orthogonal " },
+        { "type": "inlineMath", "tex": "n\\times n" },
+        { "type": "text", "text": " matrix " },
+        { "type": "inlineMath", "tex": "R" },
+        { "type": "text", "text": " has no eigenvalue " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": ", then" }
+      ] },
+      { "type": "displayMath", "tex": "\\det R=(-1)^n." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Indeed, the nonreal eigenvalues of " },
+        { "type": "inlineMath", "tex": "R" },
+        { "type": "text", "text": " lie on the unit circle and occur in conjugate pairs " },
+        { "type": "inlineMath", "tex": "\\lambda,\\overline\\lambda" },
+        { "type": "text", "text": ", each with product " },
+        { "type": "inlineMath", "tex": "|\\lambda|^2=1" },
+        { "type": "text", "text": ". Its only possible real eigenvalues are " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "-1" },
+        { "type": "text", "text": ". By assumption, only " },
+        { "type": "inlineMath", "tex": "-1" },
+        { "type": "text", "text": " may occur. If its multiplicity is " },
+        { "type": "inlineMath", "tex": "m" },
+        { "type": "text", "text": ", then " },
+        { "type": "inlineMath", "tex": "n-m" },
+        { "type": "text", "text": " is even, so " },
+        { "type": "inlineMath", "tex": "m\\equiv n\\pmod2" },
+        { "type": "text", "text": ". Multiplying all eigenvalues gives " },
+        { "type": "inlineMath", "tex": "\\det R=(-1)^m=(-1)^n" },
+        { "type": "text", "text": ", proving the fact." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Now suppose, for contradiction, that " },
+        { "type": "inlineMath", "tex": "PQ" },
+        { "type": "text", "text": " also has no eigenvalue " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": ". Both " },
+        { "type": "inlineMath", "tex": "Q" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "PQ" },
+        { "type": "text", "text": " are orthogonal, so the fact just proved gives" }
+      ] },
+      { "type": "displayMath", "tex": "\\det Q=(-1)^n=\\det(PQ)." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "But multiplicativity of the determinant and " },
+        { "type": "inlineMath", "tex": "\\det P=-1" },
+        { "type": "text", "text": " give" }
+      ] },
+      { "type": "displayMath", "tex": "\\det(PQ)=\\det P\\det Q=-\\det Q," },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "a contradiction. Therefore " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": " is an eigenvalue of " },
+        { "type": "inlineMath", "tex": "PQ" },
+        { "type": "text", "text": ", as required." }
+      ] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2019 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2019PutnamProblems.pdf" },
+    { "kind": "solution", "label": "MAA official 2019 problems and solutions", "url": "https://maa.org/wp-content/uploads/2025/02/2019-Putnam-Problem-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2019 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2019s.tex" }
+  ]
+}

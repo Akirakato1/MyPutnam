@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2019",
+  "problemId": "B1",
+  "label": "B1",
+  "ordinal": 7,
+  "topics": ["combinatorics", "geometry", "number-theory"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B1" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Denote by " },
+        { "type": "inlineMath", "tex": "\\mathbb Z^2" },
+        { "type": "text", "text": " the set of all points " },
+        { "type": "inlineMath", "tex": "(x,y)" },
+        { "type": "text", "text": " in the plane with integer coordinates. For each integer " },
+        { "type": "inlineMath", "tex": "n\\ge0" },
+        { "type": "text", "text": ", let " },
+        { "type": "inlineMath", "tex": "P_n" },
+        { "type": "text", "text": " be the subset of " },
+        { "type": "inlineMath", "tex": "\\mathbb Z^2" },
+        { "type": "text", "text": " consisting of the point " },
+        { "type": "inlineMath", "tex": "(0,0)" },
+        { "type": "text", "text": " together with all points " },
+        { "type": "inlineMath", "tex": "(x,y)" },
+        { "type": "text", "text": " such that " },
+        { "type": "inlineMath", "tex": "x^2+y^2=2^k" },
+        { "type": "text", "text": " for some integer " },
+        { "type": "inlineMath", "tex": "k\\le n" },
+        { "type": "text", "text": ". Determine, as a function of " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": ", the number of four-point subsets of " },
+        { "type": "inlineMath", "tex": "P_n" },
+        { "type": "text", "text": " whose elements are the vertices of a square." }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Classify one radius at a time",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "First determine all integer solutions of " },
+        { "type": "inlineMath", "tex": "x^2+y^2=2^k" },
+        { "type": "text", "text": ". For " },
+        { "type": "inlineMath", "tex": "k\\ge2" },
+        { "type": "text", "text": ", reduction modulo " },
+        { "type": "inlineMath", "tex": "4" },
+        { "type": "text", "text": " forces both coordinates to be even." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Look at the four new outer points",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The points first appearing at level " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " are four vertices of a square. They are axial when " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " is even and diagonal when " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " is odd. Compare the squares in " },
+        { "type": "inlineMath", "tex": "P_n" },
+        { "type": "text", "text": " with those already in " },
+        { "type": "inlineMath", "tex": "P_{n-1}" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Use the nested convex-hull squares",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The convex hull of " },
+        { "type": "inlineMath", "tex": "P_n" },
+        { "type": "text", "text": " is the square whose vertices are the four new level-" },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " points. A square contained in this hull and using one of its corners must have its two sides at that corner aligned with the hull sides." }
+      ] }] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Count the five new squares",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Show that each exact-radius layer has four points and that all lower layers lie in the corresponding nested square." }],
+        [{ "type": "text", "text": "On each side of the outer hull, the only points of " }, { "type": "inlineMath", "tex": "P_n" }, { "type": "text", "text": " are its endpoints and midpoint." }],
+        [{ "type": "text", "text": "A new square is therefore either the outer hull itself or one of four squares having the origin and one outer vertex as opposite corners." }],
+        [{ "type": "text", "text": "Start with the single square in " }, { "type": "inlineMath", "tex": "P_0" }, { "type": "text", "text": " and add five at each new level." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Squares modulo 4",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Every integer square is congruent to " },
+        { "type": "inlineMath", "tex": "0" },
+        { "type": "text", "text": " or " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": " modulo " },
+        { "type": "inlineMath", "tex": "4" },
+        { "type": "text", "text": ". Hence if " },
+        { "type": "inlineMath", "tex": "x^2+y^2\\equiv0\\pmod4" },
+        { "type": "text", "text": ", then both " },
+        { "type": "inlineMath", "tex": "x" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "y" },
+        { "type": "text", "text": " are even." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "title": "A square from one corner",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Two equal perpendicular side vectors from one vertex determine a square. If that vertex is a corner of a containing square and all four new vertices must remain inside it, both vectors must point along the two boundary sides." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "title": "Counting by new layers",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For nested finite sets, every configuration has a unique first level at which all its points appear. The total count at level " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " is the initial count plus the numbers of genuinely new configurations added at levels " },
+        { "type": "inlineMath", "tex": "1,\\ldots,n" },
+        { "type": "text", "text": "." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "L_k" },
+        { "type": "text", "text": " be the set of integer points satisfying " },
+        { "type": "inlineMath", "tex": "x^2+y^2=2^k" },
+        { "type": "text", "text": ". Directly," }
+      ] },
+      { "type": "displayMath", "tex": "L_0=\\{(\\pm1,0),(0,\\pm1)\\}," },
+      { "type": "displayMath", "tex": "L_1=\\{(\\pm1,\\pm1)\\}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For " },
+        { "type": "inlineMath", "tex": "k\\ge2" },
+        { "type": "text", "text": ", reduction modulo " },
+        { "type": "inlineMath", "tex": "4" },
+        { "type": "text", "text": " shows that both coordinates are even. Dividing them by " },
+        { "type": "inlineMath", "tex": "2" },
+        { "type": "text", "text": " gives a bijection from " },
+        { "type": "inlineMath", "tex": "L_k" },
+        { "type": "text", "text": " to " },
+        { "type": "inlineMath", "tex": "L_{k-2}" },
+        { "type": "text", "text": ". Therefore, for " },
+        { "type": "inlineMath", "tex": "j\\ge0" },
+        { "type": "text", "text": "," }
+      ] },
+      { "type": "displayMath", "tex": "L_{2j}=\\{(\\pm2^j,0),(0,\\pm2^j)\\}," },
+      { "type": "displayMath", "tex": "L_{2j+1}=\\{(\\pm2^j,\\pm2^j)\\}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Thus " },
+        { "type": "inlineMath", "tex": "P_n=\\{(0,0)\\}\\cup L_0\\cup\\cdots\\cup L_n" },
+        { "type": "text", "text": ", and exactly four points are added at each level." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The convex hull " },
+        { "type": "inlineMath", "tex": "S_n" },
+        { "type": "text", "text": " of " },
+        { "type": "inlineMath", "tex": "P_n" },
+        { "type": "text", "text": " is the square whose vertices are " },
+        { "type": "inlineMath", "tex": "L_n" },
+        { "type": "text", "text": ". The preceding formula also shows that each side of " },
+        { "type": "inlineMath", "tex": "S_n" },
+        { "type": "text", "text": " contains, among points of " },
+        { "type": "inlineMath", "tex": "P_n" },
+        { "type": "text", "text": ", only its two endpoints and its midpoint; the four midpoints are precisely " },
+        { "type": "inlineMath", "tex": "L_{n-1}" },
+        { "type": "text", "text": ". All still lower layers lie strictly inside " },
+        { "type": "inlineMath", "tex": "S_n" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Consider a square whose vertices lie in " },
+        { "type": "inlineMath", "tex": "P_n" },
+        { "type": "text", "text": " but not all in " },
+        { "type": "inlineMath", "tex": "P_{n-1}" },
+        { "type": "text", "text": ". It uses some corner " },
+        { "type": "inlineMath", "tex": "v" },
+        { "type": "text", "text": " of " },
+        { "type": "inlineMath", "tex": "S_n" },
+        { "type": "text", "text": ". Since the whole square lies inside " },
+        { "type": "inlineMath", "tex": "S_n" },
+        { "type": "text", "text": ", its two sides from " },
+        { "type": "inlineMath", "tex": "v" },
+        { "type": "text", "text": " must run along the two boundary sides. Their other endpoints must therefore be either the adjacent corners or the two side midpoints." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The first choice gives the outer square " },
+        { "type": "inlineMath", "tex": "S_n" },
+        { "type": "text", "text": ". The midpoint choice gives a square whose corner opposite " },
+        { "type": "inlineMath", "tex": "v" },
+        { "type": "text", "text": " is the origin. Hence each of the four outer corners gives one origin-opposite square, while the outer square itself is counted only once. Exactly " },
+        { "type": "inlineMath", "tex": "5" },
+        { "type": "text", "text": " new squares appear at every level after level " },
+        { "type": "inlineMath", "tex": "0" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Finally, " },
+        { "type": "inlineMath", "tex": "P_0" },
+        { "type": "text", "text": " contains exactly one square, the diamond with vertices " },
+        { "type": "inlineMath", "tex": "L_0" },
+        { "type": "text", "text": ". Therefore the requested number is" }
+      ] },
+      { "type": "displayMath", "tex": "1+5n=\\boxed{5n+1}." }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2019 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2019PutnamProblems.pdf" },
+    { "kind": "solution", "label": "MAA official 2019 problems and solutions", "url": "https://maa.org/wp-content/uploads/2025/02/2019-Putnam-Problem-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2019 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2019s.tex" }
+  ]
+}

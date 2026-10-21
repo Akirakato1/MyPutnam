@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2019",
+  "problemId": "B2",
+  "label": "B2",
+  "ordinal": 8,
+  "topics": ["calculus", "sequences-series"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B2" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For all " },
+        { "type": "inlineMath", "tex": "n\\ge1" },
+        { "type": "text", "text": ", let" }
+      ] },
+      { "type": "displayMath", "tex": "a_n=\\sum_{k=1}^{n-1}\\frac{\\sin\\left(\\frac{(2k-1)\\pi}{2n}\\right)}{\\cos^2\\left(\\frac{(k-1)\\pi}{2n}\\right)\\cos^2\\left(\\frac{k\\pi}{2n}\\right)}." },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Determine" }] },
+      { "type": "displayMath", "tex": "\\lim_{n\\to\\infty}\\frac{a_n}{n^3}." }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Search for consecutive differences",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The two cosine factors use consecutive angles. Try rewriting the numerator as a difference of their squared cosines." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Introduce one small angle",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "Let " },
+          { "type": "inlineMath", "tex": "\\theta=\\pi/(2n)" },
+          { "type": "text", "text": ". Use" }
+        ] },
+        { "type": "displayMath", "tex": "\\begin{aligned}&\\cos^2((k-1)\\theta)-\\cos^2(k\\theta)\\\\&\\qquad=\\sin((2k-1)\\theta)\\sin\\theta.\\end{aligned}" }
+      ] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Make the sum telescope",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "After division by the two squared cosines, the " },
+        { "type": "inlineMath", "tex": "k" },
+        { "type": "text", "text": "th summand becomes" }
+      ] }, { "type": "displayMath", "tex": "\\frac{\\sec^2(k\\theta)-\\sec^2((k-1)\\theta)}{\\sin\\theta}." }] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Evaluate the endpoints and scale",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Telescope from " }, { "type": "inlineMath", "tex": "k=1" }, { "type": "text", "text": " to " }, { "type": "inlineMath", "tex": "n-1" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Use " }, { "type": "inlineMath", "tex": "\\cos((n-1)\\theta)=\\sin\\theta" }, { "type": "text", "text": " to obtain " }, { "type": "inlineMath", "tex": "a_n=\\csc^3\\theta-\\csc\\theta" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Divide by " }, { "type": "inlineMath", "tex": "n^3" }, { "type": "text", "text": " and use " }, { "type": "inlineMath", "tex": "n\\sin(\\pi/(2n))\\to\\pi/2" }, { "type": "text", "text": "." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Difference of squared cosines",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The sum-to-product identities imply" }
+      ] }, { "type": "displayMath", "tex": "\\cos^2A-\\cos^2B=\\sin(A+B)\\sin(B-A)." }] }
+    },
+    {
+      "order": 2,
+      "title": "Telescoping sums",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Consecutive differences cancel:" }
+      ] }, { "type": "displayMath", "tex": "\\sum_{k=1}^{m}(u_k-u_{k-1})=u_m-u_0." }] }
+    },
+    {
+      "order": 3,
+      "title": "The fundamental small-angle limit",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "inlineMath", "tex": "\\sin x/x\\to1" },
+        { "type": "text", "text": " as " },
+        { "type": "inlineMath", "tex": "x\\to0" },
+        { "type": "text", "text": ". Consequently, if " },
+        { "type": "inlineMath", "tex": "\\theta_n=\\pi/(2n)" },
+        { "type": "text", "text": ", then " },
+        { "type": "inlineMath", "tex": "n\\sin\\theta_n\\to\\pi/2" },
+        { "type": "text", "text": "." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Set " },
+        { "type": "inlineMath", "tex": "\\theta=\\pi/(2n)" },
+        { "type": "text", "text": ". The identity" }
+      ] },
+      { "type": "displayMath", "tex": "\\cos^2A-\\cos^2B=\\sin(A+B)\\sin(B-A)" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "with " },
+        { "type": "inlineMath", "tex": "A=(k-1)\\theta" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "B=k\\theta" },
+        { "type": "text", "text": " gives" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned}&\\cos^2((k-1)\\theta)-\\cos^2(k\\theta)\\\\&\\qquad=\\sin((2k-1)\\theta)\\sin\\theta.\\end{aligned}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Therefore the " },
+        { "type": "inlineMath", "tex": "k" },
+        { "type": "text", "text": "th summand in " },
+        { "type": "inlineMath", "tex": "a_n" },
+        { "type": "text", "text": " equals" }
+      ] },
+      { "type": "displayMath", "tex": "\\frac{\\sec^2(k\\theta)-\\sec^2((k-1)\\theta)}{\\sin\\theta}." },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "The sum telescopes, so" }] },
+      { "type": "displayMath", "tex": "a_n=\\frac{\\sec^2((n-1)\\theta)-1}{\\sin\\theta}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Since " },
+        { "type": "inlineMath", "tex": "(n-1)\\theta=\\pi/2-\\theta" },
+        { "type": "text", "text": ", we have " },
+        { "type": "inlineMath", "tex": "\\cos((n-1)\\theta)=\\sin\\theta" },
+        { "type": "text", "text": ". Hence" }
+      ] },
+      { "type": "displayMath", "tex": "a_n=\\frac{1}{\\sin^3\\theta}-\\frac{1}{\\sin\\theta}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "After division by " },
+        { "type": "inlineMath", "tex": "n^3" },
+        { "type": "text", "text": "," }
+      ] },
+      { "type": "displayMath", "tex": "\\frac{a_n}{n^3}=\\frac{1}{(n\\sin\\theta)^3}-\\frac{1}{n^3\\sin\\theta}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The small-angle limit gives " },
+        { "type": "inlineMath", "tex": "n\\sin\\theta\\to\\pi/2" },
+        { "type": "text", "text": ". The first term therefore tends to " },
+        { "type": "inlineMath", "tex": "8/\\pi^3" },
+        { "type": "text", "text": ", while the second equals " },
+        { "type": "inlineMath", "tex": "1/(n^2(n\\sin\\theta))" },
+        { "type": "text", "text": " and tends to zero. Thus" }
+      ] },
+      { "type": "displayMath", "tex": "\\boxed{\\displaystyle\\lim_{n\\to\\infty}\\frac{a_n}{n^3}=\\frac{8}{\\pi^3}}." }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2019 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2019PutnamProblems.pdf" },
+    { "kind": "solution", "label": "MAA official 2019 problems and solutions", "url": "https://maa.org/wp-content/uploads/2025/02/2019-Putnam-Problem-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2019 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2019s.tex" }
+  ]
+}
