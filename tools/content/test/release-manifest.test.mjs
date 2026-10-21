@@ -104,8 +104,8 @@ test('a completed Putnam target outside the library catalog is still rejected', 
   requireContract();
   const archive = await loadArchiveCatalog(archiveUrl);
   const library = await loadLibraryCatalog(libraryUrl);
-  archive.completedYears = [2019, ...archive.completedYears];
-  const release = { ...validRelease(), includedSets: ['putnam/2019'] };
+  archive.completedYears = [1962, ...archive.completedYears];
+  const release = { ...validRelease(), includedSets: ['putnam/1962'] };
 
   const errors = validateReleaseManifest(release, archive, library);
   assert.ok(errors.some((error) => error.includes('includedSets[0]') && error.includes('library catalog')));

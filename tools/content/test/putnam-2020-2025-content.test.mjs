@@ -60,7 +60,10 @@ test('the completed Putnam 2020-2025 source corpus has the exact reviewed shape'
   const validTopics = new Set(library.topics.map(({ id }) => id));
 
   assert.deepEqual(archive.completedYears, years);
-  assert.deepEqual(putnam.sets.map(({ id }) => Number(id)).sort((a, b) => a - b), years);
+  const catalogYears = new Set(putnam.sets.map(({ id }) => Number(id)));
+  for (const year of years) {
+    assert.ok(catalogYears.has(year), `${year}: missing completed catalog set`);
+  }
   assert.equal(archive.targetYears[0], 1962);
   assert.equal(archive.targetYears.at(-1), 2025);
   assert.equal(archive.targetYears.length, 64);

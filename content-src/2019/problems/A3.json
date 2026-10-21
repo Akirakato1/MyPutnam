@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2019",
+  "problemId": "A3",
+  "label": "A3",
+  "ordinal": 3,
+  "topics": ["algebra", "inequalities", "polynomials"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A3" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Given real numbers " },
+        { "type": "inlineMath", "tex": "b_0,b_1,\\ldots,b_{2019}" },
+        { "type": "text", "text": " with " },
+        { "type": "inlineMath", "tex": "b_{2019}\\ne0" },
+        { "type": "text", "text": ", let " },
+        { "type": "inlineMath", "tex": "z_1,z_2,\\ldots,z_{2019}" },
+        { "type": "text", "text": " be the roots in the complex plane of the polynomial" }
+      ] },
+      { "type": "displayMath", "tex": "P(z)=\\sum_{k=0}^{2019}b_kz^k." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "\\mu=(|z_1|+\\cdots+|z_{2019}|)/2019" },
+        { "type": "text", "text": " be the average of the distances from the roots to the origin. Determine the largest constant " },
+        { "type": "inlineMath", "tex": "M" },
+        { "type": "text", "text": " such that " },
+        { "type": "inlineMath", "tex": "\\mu\\ge M" },
+        { "type": "text", "text": " for all choices of the coefficients that satisfy" }
+      ] },
+      { "type": "displayMath", "tex": "1\\le b_0<b_1<b_2<\\cdots<b_{2019}\\le2019." }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Control the geometric mean first",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The arithmetic mean of the root moduli is at least their geometric mean. Find the product " },
+        { "type": "inlineMath", "tex": "|z_1z_2\\cdots z_{2019}|" },
+        { "type": "text", "text": " from the first and last coefficients." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Combine Vieta with AM-GM",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "\\prod_{j=1}^{2019}|z_j|=\\frac{b_0}{b_{2019}}\\ge\\frac1{2019}." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "This immediately gives a universal lower bound for " },
+          { "type": "inlineMath", "tex": "\\mu" },
+          { "type": "text", "text": ". To prove it is the largest possible constant, look for coefficients that make every root have the same modulus." }
+        ] }
+      ] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Recognize a scaled geometric sum",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "c=2019^{1/2019}" },
+        { "type": "text", "text": " and try " },
+        { "type": "inlineMath", "tex": "b_k=c^k" },
+        { "type": "text", "text": ". Then relate " },
+        { "type": "inlineMath", "tex": "P(z/c)" },
+        { "type": "text", "text": " to " },
+        { "type": "inlineMath", "tex": "1+z+\\cdots+z^{2019}" },
+        { "type": "text", "text": ", whose roots are nontrivial roots of unity." }
+      ] }] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Prove the bound and attain it",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Use Vieta's formula and the coefficient bounds to show the product of root moduli is at least " }, { "type": "inlineMath", "tex": "1/2019" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Apply AM-GM to obtain " }, { "type": "inlineMath", "tex": "\\mu\\ge2019^{-1/2019}" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Choose " }, { "type": "inlineMath", "tex": "b_k=2019^{k/2019}" }, { "type": "text", "text": " and verify both the strict coefficient inequalities and that every root has modulus " }, { "type": "inlineMath", "tex": "2019^{-1/2019}" }, { "type": "text", "text": "." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Vieta's product formula",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For " },
+        { "type": "inlineMath", "tex": "a_nz^n+\\cdots+a_0=a_n\\prod_{j=1}^n(z-z_j)" },
+        { "type": "text", "text": ", comparison of constant terms gives " },
+        { "type": "inlineMath", "tex": "z_1\\cdots z_n=(-1)^na_0/a_n" },
+        { "type": "text", "text": ". Taking absolute values removes the sign." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "title": "Arithmetic mean-geometric mean inequality",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For nonnegative real numbers " },
+        { "type": "inlineMath", "tex": "x_1,\\ldots,x_n" },
+        { "type": "text", "text": "," }
+      ] }, { "type": "displayMath", "tex": "\\frac{x_1+\\cdots+x_n}{n}\\ge(x_1\\cdots x_n)^{1/n}," }, { "type": "paragraph", "runs": [
+        { "type": "text", "text": "with equality exactly when all the numbers are equal." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "title": "Geometric sums and roots of unity",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "1+w+\\cdots+w^{n-1}=\\frac{w^n-1}{w-1}." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "Its zeros are precisely the " },
+          { "type": "inlineMath", "tex": "n" },
+          { "type": "text", "text": "th roots of unity other than " },
+          { "type": "inlineMath", "tex": "1" },
+          { "type": "text", "text": ", so each zero has modulus " },
+          { "type": "inlineMath", "tex": "1" },
+          { "type": "text", "text": "." }
+        ] }
+      ] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "By Vieta's formula," }
+      ] },
+      { "type": "displayMath", "tex": "\\prod_{j=1}^{2019}|z_j|=\\left|\\frac{b_0}{b_{2019}}\\right|=\\frac{b_0}{b_{2019}}\\ge\\frac1{2019}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Applying AM-GM to the nonnegative numbers " },
+        { "type": "inlineMath", "tex": "|z_1|,\\ldots,|z_{2019}|" },
+        { "type": "text", "text": " therefore gives" }
+      ] },
+      { "type": "displayMath", "tex": "\\mu\\ge\\left(\\prod_{j=1}^{2019}|z_j|\\right)^{1/2019}\\ge2019^{-1/2019}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "It remains to show this bound can be attained. Set " },
+        { "type": "inlineMath", "tex": "c=2019^{1/2019}" },
+        { "type": "text", "text": " and choose " },
+        { "type": "inlineMath", "tex": "b_k=c^k=2019^{k/2019}" },
+        { "type": "text", "text": " for " },
+        { "type": "inlineMath", "tex": "0\\le k\\le2019" },
+        { "type": "text", "text": ". Since " },
+        { "type": "inlineMath", "tex": "c>1" },
+        { "type": "text", "text": ", these coefficients are strictly increasing, with " },
+        { "type": "inlineMath", "tex": "b_0=1" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "b_{2019}=2019" },
+        { "type": "text", "text": ", so they satisfy every condition." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For this choice," }
+      ] },
+      { "type": "displayMath", "tex": "P(z/c)=\\sum_{k=0}^{2019}c^k(z/c)^k=\\sum_{k=0}^{2019}z^k=\\frac{z^{2020}-1}{z-1}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Thus the roots of " },
+        { "type": "inlineMath", "tex": "P(z/c)" },
+        { "type": "text", "text": " are the nontrivial " },
+        { "type": "inlineMath", "tex": "2020" },
+        { "type": "text", "text": "th roots of unity. Equivalently, the roots of " },
+        { "type": "inlineMath", "tex": "P" },
+        { "type": "text", "text": " are those roots divided by " },
+        { "type": "inlineMath", "tex": "c" },
+        { "type": "text", "text": ", so all " },
+        { "type": "inlineMath", "tex": "2019" },
+        { "type": "text", "text": " root moduli equal " },
+        { "type": "inlineMath", "tex": "c^{-1}=2019^{-1/2019}" },
+        { "type": "text", "text": ". Consequently equality holds in the universal bound, and the largest possible constant is" }
+      ] },
+      { "type": "displayMath", "tex": "\\boxed{M=2019^{-1/2019}}." }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2019 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2019PutnamProblems.pdf" },
+    { "kind": "solution", "label": "MAA official 2019 problems and solutions", "url": "https://maa.org/wp-content/uploads/2025/02/2019-Putnam-Problem-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2019 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2019s.tex" }
+  ]
+}

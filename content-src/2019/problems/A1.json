@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2019",
+  "problemId": "A1",
+  "label": "A1",
+  "ordinal": 1,
+  "topics": ["algebra", "number-theory", "inequalities"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A1" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Determine all possible values of the expression" }
+      ] },
+      { "type": "displayMath", "tex": "A^3+B^3+C^3-3ABC" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "where " },
+        { "type": "inlineMath", "tex": "A,B,C" },
+        { "type": "text", "text": " are nonnegative integers." }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Look for a symmetric factorization",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The expression is homogeneous and vanishes when " },
+        { "type": "inlineMath", "tex": "A=B=C" },
+        { "type": "text", "text": ". Try factoring it into a linear symmetric factor and a quadratic one." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Separate necessity from construction",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "X=(A+B+C)Q," },
+        { "type": "displayMath", "tex": "Q=A^2+B^2+C^2-AB-BC-CA." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "Use the factorization and congruences to restrict possible values. Then choose triples with entries differing by at most two to realize every allowed residue class." }
+        ] }
+      ] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Recall the two key arithmetic facts",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "X=(A+B+C)Q," },
+        { "type": "displayMath", "tex": "\\begin{aligned}Q=\\frac12\\bigl(&(A-B)^2+(B-C)^2\\\\&+(C-A)^2\\bigr).\\end{aligned}" },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "so the expression is nonnegative. Also " },
+          { "type": "inlineMath", "tex": "x^3\\equiv x\\pmod 3" },
+          { "type": "text", "text": ". If the expression is divisible by " },
+          { "type": "inlineMath", "tex": "3" },
+          { "type": "text", "text": ", first show " },
+          { "type": "inlineMath", "tex": "A+B+C\\equiv0\\pmod3" },
+          { "type": "text", "text": ", then substitute " },
+          { "type": "inlineMath", "tex": "C=3k-A-B" },
+          { "type": "text", "text": "." }
+        ] }
+      ] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Classify and realize the values",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Prove nonnegativity from the sum-of-squares factorization." }],
+        [{ "type": "text", "text": "Show that divisibility by " }, { "type": "inlineMath", "tex": "3" }, { "type": "text", "text": " forces divisibility by " }, { "type": "inlineMath", "tex": "9" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Evaluate the expression at " }, { "type": "inlineMath", "tex": "(t,t,t)" }, { "type": "text", "text": ", " }, { "type": "inlineMath", "tex": "(t,t,t+1)" }, { "type": "text", "text": ", " }, { "type": "inlineMath", "tex": "(t,t+1,t+1)" }, { "type": "text", "text": ", and " }, { "type": "inlineMath", "tex": "(t,t+1,t+2)" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Check that these families give zero, all positive multiples of " }, { "type": "inlineMath", "tex": "9" }, { "type": "text", "text": ", and every nonnegative integer not divisible by " }, { "type": "inlineMath", "tex": "3" }, { "type": "text", "text": "." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "The cubic three-variable factorization",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "x^3+y^3+z^3-3xyz=(x+y+z)Q," },
+        { "type": "displayMath", "tex": "Q=x^2+y^2+z^2-xy-yz-zx," },
+        { "type": "displayMath", "tex": "\\begin{aligned}Q=\\frac12\\bigl(&(x-y)^2+(y-z)^2\\\\&+(z-x)^2\\bigr).\\end{aligned}" },
+        { "type": "paragraph", "runs": [{ "type": "text", "text": "For nonnegative inputs, the linear factor is nonnegative and the quadratic factor is a sum of squares." }] }
+      ] }
+    },
+    {
+      "order": 2,
+      "title": "Cubes modulo 3",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Every integer satisfies " },
+        { "type": "inlineMath", "tex": "x^3\\equiv x\\pmod3" },
+        { "type": "text", "text": ". Thus a sum of cubes can often be reduced to a sum of the original integers modulo " },
+        { "type": "inlineMath", "tex": "3" },
+        { "type": "text", "text": "." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "X=A^3+B^3+C^3-3ABC" },
+        { "type": "text", "text": ". The identity" }
+      ] },
+      { "type": "displayMath", "tex": "X=(A+B+C)Q," },
+      { "type": "displayMath", "tex": "\\begin{aligned}Q=\\frac12\\bigl(&(A-B)^2+(B-C)^2\\\\&+(C-A)^2\\bigr).\\end{aligned}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "shows that " },
+        { "type": "inlineMath", "tex": "X" },
+        { "type": "text", "text": " is a nonnegative integer." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Modulo " },
+        { "type": "inlineMath", "tex": "3" },
+        { "type": "text", "text": ", the congruence " },
+        { "type": "inlineMath", "tex": "u^3\\equiv u" },
+        { "type": "text", "text": " gives " },
+        { "type": "inlineMath", "tex": "X\\equiv A+B+C\\pmod3" },
+        { "type": "text", "text": ". Hence, if " },
+        { "type": "inlineMath", "tex": "3\\mid X" },
+        { "type": "text", "text": ", write " },
+        { "type": "inlineMath", "tex": "A+B+C=3k" },
+        { "type": "text", "text": " and substitute " },
+        { "type": "inlineMath", "tex": "C=3k-A-B" },
+        { "type": "text", "text": ". Direct expansion yields" }
+      ] },
+      { "type": "displayMath", "tex": "X=9k\\bigl(A^2+AB+B^2-3k(A+B)+3k^2\\bigr)," },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "so every value divisible by " },
+        { "type": "inlineMath", "tex": "3" },
+        { "type": "text", "text": " is actually divisible by " },
+        { "type": "inlineMath", "tex": "9" },
+        { "type": "text", "text": ". Therefore the only candidates are zero, positive multiples of " },
+        { "type": "inlineMath", "tex": "9" },
+        { "type": "text", "text": ", and positive integers not divisible by " },
+        { "type": "inlineMath", "tex": "3" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "All of these candidates occur. For every nonnegative integer t," }] },
+      { "type": "displayMath", "tex": "\\begin{aligned}X(t,t,t)&=0,\\\\X(t,t,t+1)&=3t+1,\\\\X(t,t+1,t+1)&=3t+2,\\\\X(t,t+1,t+2)&=9(t+1).\\end{aligned}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The middle two families give every nonnegative integer congruent to " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": " or " },
+        { "type": "inlineMath", "tex": "2" },
+        { "type": "text", "text": " modulo " },
+        { "type": "inlineMath", "tex": "3" },
+        { "type": "text", "text": ", while the last gives every positive multiple of " },
+        { "type": "inlineMath", "tex": "9" },
+        { "type": "text", "text": ". Thus the possible values are exactly the nonnegative integers that are either divisible by " },
+        { "type": "inlineMath", "tex": "9" },
+        { "type": "text", "text": " or not divisible by " },
+        { "type": "inlineMath", "tex": "3" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2019 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2019PutnamProblems.pdf" },
+    { "kind": "solution", "label": "MAA official 2019 problems and solutions", "url": "https://maa.org/wp-content/uploads/2025/02/2019-Putnam-Problem-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2019 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2019s.tex" }
+  ]
+}

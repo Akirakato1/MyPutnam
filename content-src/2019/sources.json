@@ -1,0 +1,57 @@
+{
+  "year": 2019,
+  "publisher": "Mathematical Association of America",
+  "usage": "Personal, noncommercial offline study only.",
+  "sources": [
+    {
+      "id": "problems",
+      "title": "2019 William Lowell Putnam Mathematical Competition — Problems for Sessions A and B",
+      "publisher": "Mathematical Association of America",
+      "requestUrl": "https://maa.org/wp-content/uploads/2024/10/2019PutnamProblems.pdf",
+      "url": "https://maa.org/wp-content/uploads/2024/10/2019PutnamProblems.pdf",
+      "mediaType": "application/pdf",
+      "retrievedOn": "2026-10-21",
+      "file": "original/2019-problems.pdf",
+      "byteLength": 133626,
+      "pageCount": 2,
+      "sha256": "9f59d3b0ff43d03db491a0bbea9c56d25fab0e224f06765ccb3cfd82de1f4765"
+    },
+    {
+      "id": "solutions",
+      "title": "2019 William Lowell Putnam Mathematical Competition — Official Problems and Solutions",
+      "publisher": "Mathematical Association of America",
+      "requestUrl": "https://maa.org/wp-content/uploads/2025/02/2019-Putnam-Problem-Solutions.pdf",
+      "url": "https://maa.org/wp-content/uploads/2025/02/2019-Putnam-Problem-Solutions.pdf",
+      "mediaType": "application/pdf",
+      "retrievedOn": "2026-10-21",
+      "file": "original/2019-solutions.pdf",
+      "byteLength": 280391,
+      "pageCount": 14,
+      "sha256": "4d70e81237ca3475c5c0b3c001b8d851cc7d737f011ade3235d38d2c74ff0a39"
+    },
+    {
+      "id": "kedlaya-statements",
+      "title": "Putnam 2019 problem statements — TeX cross-check",
+      "publisher": "Kiran S. Kedlaya",
+      "requestUrl": "https://kskedlaya.org/putnam-archive/2019.tex",
+      "url": "https://kskedlaya.org/putnam-archive/2019.tex",
+      "mediaType": "application/x-tex",
+      "retrievedOn": "2026-10-21",
+      "file": "original/2019.tex",
+      "byteLength": 4493,
+      "sha256": "ecaae3200c378b8af6bf7d0fe16d2b8f738ce44aa01725c842ab43eb31d18643"
+    },
+    {
+      "id": "kedlaya-solutions",
+      "title": "Putnam 2019 solutions — TeX cross-check",
+      "publisher": "Kiran S. Kedlaya",
+      "requestUrl": "https://kskedlaya.org/putnam-archive/2019s.tex",
+      "url": "https://kskedlaya.org/putnam-archive/2019s.tex",
+      "mediaType": "application/x-tex",
+      "retrievedOn": "2026-10-21",
+      "file": "original/2019s.tex",
+      "byteLength": 31372,
+      "sha256": "ddfb24f6dcb1a1bb3a8fa34091cc967db45111f0202d860fd29a6b1764406d4e"
+    }
+  ]
+}

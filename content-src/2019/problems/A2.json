@@ -1,0 +1,247 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2019",
+  "problemId": "A2",
+  "label": "A2",
+  "ordinal": 2,
+  "topics": ["geometry"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A2" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "In the triangle " },
+        { "type": "inlineMath", "tex": "\\triangle ABC" },
+        { "type": "text", "text": ", let " },
+        { "type": "inlineMath", "tex": "G" },
+        { "type": "text", "text": " be the centroid, and let " },
+        { "type": "inlineMath", "tex": "I" },
+        { "type": "text", "text": " be the center of the inscribed circle. Let " },
+        { "type": "inlineMath", "tex": "\\alpha" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "\\beta" },
+        { "type": "text", "text": " be the angles at the vertices " },
+        { "type": "inlineMath", "tex": "A" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "B" },
+        { "type": "text", "text": ", respectively. Suppose that the segment " },
+        { "type": "inlineMath", "tex": "IG" },
+        { "type": "text", "text": " is parallel to " },
+        { "type": "inlineMath", "tex": "AB" },
+        { "type": "text", "text": " and that " },
+        { "type": "inlineMath", "tex": "\\beta=2\\tan^{-1}(1/3)" },
+        { "type": "text", "text": ". Find " },
+        { "type": "inlineMath", "tex": "\\alpha" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Compare heights above the base",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Because " },
+        { "type": "inlineMath", "tex": "IG\\parallel AB" },
+        { "type": "text", "text": ", the points " },
+        { "type": "inlineMath", "tex": "I" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "G" },
+        { "type": "text", "text": " lie at the same perpendicular distance from " },
+        { "type": "inlineMath", "tex": "AB" },
+        { "type": "text", "text": ". Express those two distances using the inradius and the altitude from " },
+        { "type": "inlineMath", "tex": "C" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Turn the height relation into a side relation",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " },
+        { "type": "inlineMath", "tex": "h" },
+        { "type": "text", "text": " is the altitude to " },
+        { "type": "inlineMath", "tex": "AB" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "r" },
+        { "type": "text", "text": " is the inradius, the parallelism gives " },
+        { "type": "inlineMath", "tex": "h=3r" },
+        { "type": "text", "text": ". Equate the two area formulas " },
+        { "type": "inlineMath", "tex": "K=ch/2" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "K=rs" },
+        { "type": "text", "text": ", where " },
+        { "type": "inlineMath", "tex": "c=AB" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "s" },
+        { "type": "text", "text": " is the semiperimeter." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Use the sine law and the half-angle value",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "The area comparison gives " },
+          { "type": "inlineMath", "tex": "a+b=2c" },
+          { "type": "text", "text": ". The sine law turns this into" }
+        ] },
+        { "type": "displayMath", "tex": "\\sin\\alpha+\\sin\\beta=2\\sin(\\alpha+\\beta)." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "From " },
+          { "type": "inlineMath", "tex": "\\tan(\\beta/2)=1/3" },
+          { "type": "text", "text": ", compute " },
+          { "type": "inlineMath", "tex": "\\sin\\beta" },
+          { "type": "text", "text": " and " },
+          { "type": "inlineMath", "tex": "\\cos\\beta" },
+          { "type": "text", "text": "." }
+        ] }
+      ] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Solve the final trigonometric equation",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Derive " }, { "type": "inlineMath", "tex": "h=3r" }, { "type": "text", "text": " and then " }, { "type": "inlineMath", "tex": "a+b=2c" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Substitute " }, { "type": "inlineMath", "tex": "\\sin\\beta=3/5" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "\\cos\\beta=4/5" }, { "type": "text", "text": " into the sine-law relation." }],
+        [{ "type": "text", "text": "Reduce to " }, { "type": "inlineMath", "tex": "\\sin\\alpha+2\\cos\\alpha=1" }, { "type": "text", "text": ", solve it, and reject any root incompatible with the unsquared equation." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Centroid distance from a side",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "A centroid divides every median in the ratio " },
+        { "type": "inlineMath", "tex": "2:1" },
+        { "type": "text", "text": " measured from the vertex. Consequently, if the altitude from a vertex to the opposite side is " },
+        { "type": "inlineMath", "tex": "h" },
+        { "type": "text", "text": ", the centroid is at perpendicular distance " },
+        { "type": "inlineMath", "tex": "h/3" },
+        { "type": "text", "text": " from that side." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "title": "Two triangle area formulas",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For a triangle with base " },
+        { "type": "inlineMath", "tex": "c" },
+        { "type": "text", "text": ", corresponding altitude " },
+        { "type": "inlineMath", "tex": "h" },
+        { "type": "text", "text": ", inradius " },
+        { "type": "inlineMath", "tex": "r" },
+        { "type": "text", "text": ", and semiperimeter " },
+        { "type": "inlineMath", "tex": "s" },
+        { "type": "text", "text": ", its area satisfies " },
+        { "type": "inlineMath", "tex": "K=ch/2=rs" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "title": "Half-angle reconstruction",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "If " },
+          { "type": "inlineMath", "tex": "t=\\tan(\\theta/2)" },
+          { "type": "text", "text": ", then" }
+        ] },
+        { "type": "displayMath", "tex": "\\sin\\theta=\\frac{2t}{1+t^2},\\qquad \\cos\\theta=\\frac{1-t^2}{1+t^2}." }
+      ] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "h" },
+        { "type": "text", "text": " be the altitude from " },
+        { "type": "inlineMath", "tex": "C" },
+        { "type": "text", "text": " to " },
+        { "type": "inlineMath", "tex": "AB" },
+        { "type": "text", "text": ", and let " },
+        { "type": "inlineMath", "tex": "r" },
+        { "type": "text", "text": " be the inradius. The perpendicular distances from " },
+        { "type": "inlineMath", "tex": "G" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "I" },
+        { "type": "text", "text": " to " },
+        { "type": "inlineMath", "tex": "AB" },
+        { "type": "text", "text": " are " },
+        { "type": "inlineMath", "tex": "h/3" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "r" },
+        { "type": "text", "text": ", respectively. Since " },
+        { "type": "inlineMath", "tex": "IG\\parallel AB" },
+        { "type": "text", "text": ", these distances are equal, so " },
+        { "type": "inlineMath", "tex": "h=3r" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Use the standard notation " },
+        { "type": "inlineMath", "tex": "a=BC" },
+        { "type": "text", "text": ", " },
+        { "type": "inlineMath", "tex": "b=CA" },
+        { "type": "text", "text": ", and " },
+        { "type": "inlineMath", "tex": "c=AB" },
+        { "type": "text", "text": ". If " },
+        { "type": "inlineMath", "tex": "s" },
+        { "type": "text", "text": " is the semiperimeter and " },
+        { "type": "inlineMath", "tex": "K" },
+        { "type": "text", "text": " the area, then" }
+      ] },
+      { "type": "displayMath", "tex": "K=\\frac{ch}{2}=\\frac{3cr}{2}=rs." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Thus " },
+        { "type": "inlineMath", "tex": "s=3c/2" },
+        { "type": "text", "text": ", and hence " },
+        { "type": "inlineMath", "tex": "a+b=2c" },
+        { "type": "text", "text": ". By the sine law and " },
+        { "type": "inlineMath", "tex": "\\gamma=\\pi-\\alpha-\\beta" },
+        { "type": "text", "text": ", this is equivalent to" }
+      ] },
+      { "type": "displayMath", "tex": "\\sin\\alpha+\\sin\\beta=2\\sin\\gamma=2\\sin(\\alpha+\\beta)." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The given half-angle value yields" }
+      ] },
+      { "type": "displayMath", "tex": "\\sin\\beta=\\frac{2(1/3)}{1+(1/3)^2}=\\frac35,\\qquad \\cos\\beta=\\frac{1-(1/3)^2}{1+(1/3)^2}=\\frac45." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Substitution into the preceding equation gives" }
+      ] },
+      { "type": "displayMath", "tex": "\\sin\\alpha+\\frac35=\\frac85\\sin\\alpha+\\frac65\\cos\\alpha," },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "or " },
+        { "type": "inlineMath", "tex": "\\sin\\alpha+2\\cos\\alpha=1" },
+        { "type": "text", "text": ". Put " },
+        { "type": "inlineMath", "tex": "x=\\cos\\alpha" },
+        { "type": "text", "text": ". Then " },
+        { "type": "inlineMath", "tex": "\\sin\\alpha=1-2x" },
+        { "type": "text", "text": ", so squaring gives " },
+        { "type": "inlineMath", "tex": "1-x^2=(1-2x)^2" },
+        { "type": "text", "text": ". Therefore " },
+        { "type": "inlineMath", "tex": "x=0" },
+        { "type": "text", "text": " or " },
+        { "type": "inlineMath", "tex": "x=4/5" },
+        { "type": "text", "text": ". The latter would make " },
+        { "type": "inlineMath", "tex": "1-2x<0" },
+        { "type": "text", "text": ", impossible because " },
+        { "type": "inlineMath", "tex": "\\sin\\alpha>0" },
+        { "type": "text", "text": " for an angle of a triangle. Hence " },
+        { "type": "inlineMath", "tex": "\\cos\\alpha=0" },
+        { "type": "text", "text": ", and" }
+      ] },
+      { "type": "displayMath", "tex": "\\boxed{\\alpha=\\frac{\\pi}{2}}." }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2019 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2019PutnamProblems.pdf" },
+    { "kind": "solution", "label": "MAA official 2019 problems and solutions", "url": "https://maa.org/wp-content/uploads/2025/02/2019-Putnam-Problem-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2019 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2019s.tex" }
+  ]
+}
