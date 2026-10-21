@@ -1,0 +1,181 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2019",
+  "problemId": "A4",
+  "label": "A4",
+  "ordinal": 4,
+  "topics": ["analysis", "integrals"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A4" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "f" },
+        { "type": "text", "text": " be a continuous real-valued function on " },
+        { "type": "inlineMath", "tex": "\\mathbb R^3" },
+        { "type": "text", "text": ". Suppose that for every sphere " },
+        { "type": "inlineMath", "tex": "S" },
+        { "type": "text", "text": " of radius " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": ", the integral of " },
+        { "type": "inlineMath", "tex": "f(x,y,z)" },
+        { "type": "text", "text": " over the surface of " },
+        { "type": "inlineMath", "tex": "S" },
+        { "type": "text", "text": " equals " },
+        { "type": "inlineMath", "tex": "0" },
+        { "type": "text", "text": ". Must " },
+        { "type": "inlineMath", "tex": "f(x,y,z)" },
+        { "type": "text", "text": " be identically " },
+        { "type": "inlineMath", "tex": "0" },
+        { "type": "text", "text": "?" }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Search for a counterexample",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "A negative answer needs only one nonzero continuous function. Try a function that depends on just the vertical coordinate, " },
+        { "type": "inlineMath", "tex": "f(x,y,z)=g(z)" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Reduce the surface integral to one dimension",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Parametrize a unit sphere centered at " },
+        { "type": "inlineMath", "tex": "(x_0,y_0,z_0)" },
+        { "type": "text", "text": " using polar angle " },
+        { "type": "inlineMath", "tex": "\\phi" },
+        { "type": "text", "text": " and azimuth " },
+        { "type": "inlineMath", "tex": "\\theta" },
+        { "type": "text", "text": ". After integrating in " },
+        { "type": "inlineMath", "tex": "\\theta" },
+        { "type": "text", "text": ", substitute " },
+        { "type": "inlineMath", "tex": "t=\\cos\\phi" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Use the unit-sphere surface element",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "dS=\\sin\\phi\\,d\\theta\\,d\\phi" },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "for a unit sphere. Consequently, when " },
+          { "type": "inlineMath", "tex": "f(x,y,z)=g(z)" },
+          { "type": "text", "text": ", its integral over any such sphere is" }
+        ] },
+        { "type": "displayMath", "tex": "2\\pi\\int_{-1}^{1}g(z_0+t)\\,dt." }
+      ] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Choose a zero-mean periodic profile",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Choose a nonzero continuous function " }, { "type": "inlineMath", "tex": "g" }, { "type": "text", "text": " of period " }, { "type": "inlineMath", "tex": "2" }, { "type": "text", "text": " whose integral over one period is zero." }],
+        [{ "type": "text", "text": "Set " }, { "type": "inlineMath", "tex": "f(x,y,z)=g(z)" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Show that the spherical surface integral is a constant multiple of the integral of " }, { "type": "inlineMath", "tex": "g" }, { "type": "text", "text": " over an interval of length " }, { "type": "inlineMath", "tex": "2" }, { "type": "text", "text": "." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Counterexamples to universal conclusions",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "To answer a question of the form “must every object with property A have property B?” negatively, it is enough to construct one object having A but not B and verify both claims." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "title": "Spherical coordinates on a translated unit sphere",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "\\begin{aligned}(x,y,z)=(x_0,y_0,z_0)+(&\\sin\\phi\\cos\\theta,\\\\&\\sin\\phi\\sin\\theta,\\cos\\phi),\\end{aligned}" },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "with " },
+          { "type": "inlineMath", "tex": "0\\le\\phi\\le\\pi" },
+          { "type": "text", "text": " and " },
+          { "type": "inlineMath", "tex": "0\\le\\theta\\le2\\pi" },
+          { "type": "text", "text": ", has surface element " },
+          { "type": "inlineMath", "tex": "dS=\\sin\\phi\\,d\\theta\\,d\\phi" },
+          { "type": "text", "text": "." }
+        ] }
+      ] }
+    },
+    {
+      "order": 3,
+      "title": "Integrating a periodic function over one period",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If a continuous function has period " },
+        { "type": "inlineMath", "tex": "T" },
+        { "type": "text", "text": ", then its integral over any interval of length " },
+        { "type": "inlineMath", "tex": "T" },
+        { "type": "text", "text": " is the same. In particular, zero integral over one period implies zero integral over every full period." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "No. Choose a nonzero continuous function " },
+        { "type": "inlineMath", "tex": "g:\\mathbb R\\to\\mathbb R" },
+        { "type": "text", "text": " with period " },
+        { "type": "inlineMath", "tex": "2" },
+        { "type": "text", "text": " and zero integral over one period; for example, " },
+        { "type": "inlineMath", "tex": "g(t)=\\sin(\\pi t)" },
+        { "type": "text", "text": ". Define " },
+        { "type": "inlineMath", "tex": "f(x,y,z)=g(z)" },
+        { "type": "text", "text": ". This " },
+        { "type": "inlineMath", "tex": "f" },
+        { "type": "text", "text": " is continuous and not identically zero." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "S" },
+        { "type": "text", "text": " be the unit sphere centered at " },
+        { "type": "inlineMath", "tex": "(x_0,y_0,z_0)" },
+        { "type": "text", "text": ". Parametrize it by" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned}(x,y,z)=(x_0,y_0,z_0)+(&\\sin\\phi\\cos\\theta,\\\\&\\sin\\phi\\sin\\theta,\\cos\\phi),\\end{aligned}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "where " },
+        { "type": "inlineMath", "tex": "0\\le\\phi\\le\\pi" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "0\\le\\theta\\le2\\pi" },
+        { "type": "text", "text": ". Since " },
+        { "type": "inlineMath", "tex": "dS=\\sin\\phi\\,d\\theta\\,d\\phi" },
+        { "type": "text", "text": "," }
+      ] },
+      { "type": "displayMath", "tex": "\\iint_S f\\,dS=2\\pi\\int_0^\\pi g(z_0+\\cos\\phi)\\sin\\phi\\,d\\phi." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "With " },
+        { "type": "inlineMath", "tex": "t=\\cos\\phi" },
+        { "type": "text", "text": ", this becomes" }
+      ] },
+      { "type": "displayMath", "tex": "\\iint_S f\\,dS=2\\pi\\int_{-1}^{1}g(z_0+t)\\,dt," },
+      { "type": "displayMath", "tex": "=2\\pi\\int_{z_0-1}^{z_0+1}g(u)\\,du." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The last interval has length " },
+        { "type": "inlineMath", "tex": "2" },
+        { "type": "text", "text": ", exactly one period of " },
+        { "type": "inlineMath", "tex": "g" },
+        { "type": "text", "text": ", so the final integral is zero for every center. Hence all the required unit-sphere integrals vanish even though " },
+        { "type": "inlineMath", "tex": "f" },
+        { "type": "text", "text": " is not identically zero." }
+      ] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2019 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2019PutnamProblems.pdf" },
+    { "kind": "solution", "label": "MAA official 2019 problems and solutions", "url": "https://maa.org/wp-content/uploads/2025/02/2019-Putnam-Problem-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2019 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2019s.tex" }
+  ]
+}

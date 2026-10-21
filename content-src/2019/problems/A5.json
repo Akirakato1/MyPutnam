@@ -1,0 +1,230 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2019",
+  "problemId": "A5",
+  "label": "A5",
+  "ordinal": 5,
+  "topics": ["algebra", "number-theory", "polynomials"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A5" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "p" },
+        { "type": "text", "text": " be an odd prime number, and let " },
+        { "type": "inlineMath", "tex": "\\mathbb F_p" },
+        { "type": "text", "text": " denote the field of integers modulo " },
+        { "type": "inlineMath", "tex": "p" },
+        { "type": "text", "text": ". Let " },
+        { "type": "inlineMath", "tex": "\\mathbb F_p[x]" },
+        { "type": "text", "text": " be the ring of polynomials over " },
+        { "type": "inlineMath", "tex": "\\mathbb F_p" },
+        { "type": "text", "text": ", and let" }
+      ] },
+      { "type": "displayMath", "tex": "q(x)=\\sum_{k=1}^{p-1}a_kx^k," },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "where " },
+        { "type": "inlineMath", "tex": "a_k=k^{(p-1)/2}\\pmod p" },
+        { "type": "text", "text": ". Find the greatest nonnegative integer " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " such that " },
+        { "type": "inlineMath", "tex": "(x-1)^n" },
+        { "type": "text", "text": " divides " },
+        { "type": "inlineMath", "tex": "q(x)" },
+        { "type": "text", "text": " in " },
+        { "type": "inlineMath", "tex": "\\mathbb F_p[x]" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Build the coefficients with an operator",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The operator " },
+        { "type": "inlineMath", "tex": "D=x\\,d/dx" },
+        { "type": "text", "text": " satisfies " },
+        { "type": "inlineMath", "tex": "D(x^k)=kx^k" },
+        { "type": "text", "text": ". Think about applying a power of " },
+        { "type": "inlineMath", "tex": "D" },
+        { "type": "text", "text": " to a geometric sum." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Express q as a differentiated geometric sum",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "Put " },
+          { "type": "inlineMath", "tex": "m=(p-1)/2" },
+          { "type": "text", "text": " and " },
+          { "type": "inlineMath", "tex": "s(x)=1+x+\\cdots+x^{p-1}" },
+          { "type": "text", "text": ". Then" }
+        ] },
+        { "type": "displayMath", "tex": "q=D^m s." }
+      ] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Factor the geometric sum in characteristic p",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "s(x)=\\frac{x^p-1}{x-1}=(x-1)^{p-1}" },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "in " },
+          { "type": "inlineMath", "tex": "\\mathbb F_p[x]" },
+          { "type": "text", "text": ", because " },
+          { "type": "inlineMath", "tex": "x^p-1=(x-1)^p" },
+          { "type": "text", "text": ". Determine exactly how " },
+          { "type": "inlineMath", "tex": "D" },
+          { "type": "text", "text": " changes the multiplicity at " },
+          { "type": "inlineMath", "tex": "x=1" },
+          { "type": "text", "text": "." }
+        ] }
+      ] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Track the multiplicity exactly",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Show that if " }, { "type": "inlineMath", "tex": "h=(x-1)^er" }, { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "r(1)\\ne0" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "1\\le e<p" }, { "type": "text", "text": ", then " }, { "type": "inlineMath", "tex": "Dh" }, { "type": "text", "text": " has multiplicity exactly " }, { "type": "inlineMath", "tex": "e-1" }, { "type": "text", "text": " at " }, { "type": "inlineMath", "tex": "1" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Start from the multiplicity " }, { "type": "inlineMath", "tex": "p-1" }, { "type": "text", "text": " of " }, { "type": "inlineMath", "tex": "s" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Apply " }, { "type": "inlineMath", "tex": "D" }, { "type": "text", "text": " exactly " }, { "type": "inlineMath", "tex": "m=(p-1)/2" }, { "type": "text", "text": " times." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Formal differentiation over a finite field",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Polynomial differentiation and the product rule remain valid over " },
+        { "type": "inlineMath", "tex": "\\mathbb F_p" },
+        { "type": "text", "text": ". Integer coefficients such as exponents are interpreted modulo " },
+        { "type": "inlineMath", "tex": "p" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "title": "Freshman's dream in characteristic p",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For prime " },
+        { "type": "inlineMath", "tex": "p" },
+        { "type": "text", "text": ", all intermediate binomial coefficients in " },
+        { "type": "inlineMath", "tex": "(u+v)^p" },
+        { "type": "text", "text": " vanish modulo " },
+        { "type": "inlineMath", "tex": "p" },
+        { "type": "text", "text": ", so " },
+        { "type": "inlineMath", "tex": "(u+v)^p=u^p+v^p" },
+        { "type": "text", "text": " in characteristic " },
+        { "type": "inlineMath", "tex": "p" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "title": "Multiplicity of a polynomial root",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The multiplicity of " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": " as a root of " },
+        { "type": "inlineMath", "tex": "h" },
+        { "type": "text", "text": " is the greatest " },
+        { "type": "inlineMath", "tex": "e" },
+        { "type": "text", "text": " for which " },
+        { "type": "inlineMath", "tex": "h=(x-1)^er" },
+        { "type": "text", "text": " with " },
+        { "type": "inlineMath", "tex": "r(1)\\ne0" },
+        { "type": "text", "text": "." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Set " },
+        { "type": "inlineMath", "tex": "m=(p-1)/2" },
+        { "type": "text", "text": " and define the linear operator " },
+        { "type": "inlineMath", "tex": "D=x\\,d/dx" },
+        { "type": "text", "text": " on " },
+        { "type": "inlineMath", "tex": "\\mathbb F_p[x]" },
+        { "type": "text", "text": ". Since " },
+        { "type": "inlineMath", "tex": "D^m(x^k)=k^mx^k" },
+        { "type": "text", "text": ", if" }
+      ] },
+      { "type": "displayMath", "tex": "s(x)=1+x+\\cdots+x^{p-1}," },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "then " },
+        { "type": "inlineMath", "tex": "q=D^ms" },
+        { "type": "text", "text": ". The constant term contributes zero because " },
+        { "type": "inlineMath", "tex": "m>0" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "In " },
+        { "type": "inlineMath", "tex": "\\mathbb F_p[x]" },
+        { "type": "text", "text": ", the characteristic-" },
+        { "type": "inlineMath", "tex": "p" },
+        { "type": "text", "text": " binomial identity gives" }
+      ] },
+      { "type": "displayMath", "tex": "s(x)=\\frac{x^p-1}{x-1}=\\frac{(x-1)^p}{x-1}=(x-1)^{p-1}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "We now track the root multiplicity under " },
+        { "type": "inlineMath", "tex": "D" },
+        { "type": "text", "text": ". Suppose " },
+        { "type": "inlineMath", "tex": "h=(x-1)^er" },
+        { "type": "text", "text": ", where " },
+        { "type": "inlineMath", "tex": "r(1)\\ne0" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "1\\le e<p" },
+        { "type": "text", "text": ". Then" }
+      ] },
+      { "type": "displayMath", "tex": "Dh=(x-1)^{e-1}x\\bigl(er+(x-1)r'\\bigr)." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The remaining factor has value " },
+        { "type": "inlineMath", "tex": "er(1)\\ne0" },
+        { "type": "text", "text": " at " },
+        { "type": "inlineMath", "tex": "x=1" },
+        { "type": "text", "text": ", because " },
+        { "type": "inlineMath", "tex": "e" },
+        { "type": "text", "text": " is nonzero in " },
+        { "type": "inlineMath", "tex": "\\mathbb F_p" },
+        { "type": "text", "text": ". Thus each application of " },
+        { "type": "inlineMath", "tex": "D" },
+        { "type": "text", "text": " lowers the multiplicity at " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": " by exactly one as long as the multiplicity is positive." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Starting with multiplicity " },
+        { "type": "inlineMath", "tex": "p-1" },
+        { "type": "text", "text": " for " },
+        { "type": "inlineMath", "tex": "s" },
+        { "type": "text", "text": " and applying " },
+        { "type": "inlineMath", "tex": "D" },
+        { "type": "text", "text": " exactly " },
+        { "type": "inlineMath", "tex": "m" },
+        { "type": "text", "text": " times, the multiplicity for " },
+        { "type": "inlineMath", "tex": "q" },
+        { "type": "text", "text": " is" }
+      ] },
+      { "type": "displayMath", "tex": "p-1-m=\\frac{p-1}{2}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Therefore the greatest requested integer is " },
+        { "type": "inlineMath", "tex": "\\boxed{n=(p-1)/2}" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2019 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2019PutnamProblems.pdf" },
+    { "kind": "solution", "label": "MAA official 2019 problems and solutions", "url": "https://maa.org/wp-content/uploads/2025/02/2019-Putnam-Problem-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2019 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2019s.tex" }
+  ]
+}

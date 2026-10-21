@@ -1,0 +1,233 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2019",
+  "problemId": "A6",
+  "label": "A6",
+  "ordinal": 6,
+  "topics": ["analysis", "calculus", "inequalities"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A6" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "g" },
+        { "type": "text", "text": " be a real-valued function that is continuous on the closed interval " },
+        { "type": "inlineMath", "tex": "[0,1]" },
+        { "type": "text", "text": " and twice differentiable on the open interval " },
+        { "type": "inlineMath", "tex": "(0,1)" },
+        { "type": "text", "text": ". Suppose that for some real number " },
+        { "type": "inlineMath", "tex": "r>1" },
+        { "type": "text", "text": "," }
+      ] },
+      { "type": "displayMath", "tex": "\\lim_{x\\to0^+}\\frac{g(x)}{x^r}=0." },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Prove that either" }] },
+      { "type": "displayMath", "tex": "\\lim_{x\\to0^+}g'(x)=0" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "or" }] },
+      { "type": "displayMath", "tex": "\\limsup_{x\\to0^+}x^r|g''(x)|=\\infty." }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Prove the contrapositive",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Assume " },
+        { "type": "inlineMath", "tex": "\\limsup_{x\\to0^+}x^r|g''(x)|<\\infty" },
+        { "type": "text", "text": ". Your goal is then to prove that " },
+        { "type": "inlineMath", "tex": "g'(x)\\to0" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "A large derivative persists briefly",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " },
+        { "type": "inlineMath", "tex": "|g'(x_n)|\\ge\\varepsilon_0" },
+        { "type": "text", "text": " along a sequence tending to zero, the bound " },
+        { "type": "inlineMath", "tex": "|g''(x)|\\le Mx^{-r}" },
+        { "type": "text", "text": " prevents " },
+        { "type": "inlineMath", "tex": "g'" },
+        { "type": "text", "text": " from changing by much on a short interval whose length is proportional to " },
+        { "type": "inlineMath", "tex": "x_n^r" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Match the interval to the little-o scale",
+      "document": { "blocks": [
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "Take" }
+        ] },
+        { "type": "displayMath", "tex": "h_n=\\frac{\\varepsilon_0x_n^r}{2M}." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "Because " },
+          { "type": "inlineMath", "tex": "r>1" },
+          { "type": "text", "text": ", we have " },
+          { "type": "inlineMath", "tex": "h_n=o(x_n)" },
+          { "type": "text", "text": ". Compare the resulting lower bound for " },
+          { "type": "inlineMath", "tex": "|g(x_n+h_n)-g(x_n)|" },
+          { "type": "text", "text": " with " },
+          { "type": "inlineMath", "tex": "g(x)=o(x^r)" },
+          { "type": "text", "text": "." }
+        ] }
+      ] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Force the contradiction",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Choose " }, { "type": "inlineMath", "tex": "x_n\\to0" }, { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "|g'(x_n)|\\ge\\varepsilon_0" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Use the mean value theorem and the bound on " }, { "type": "inlineMath", "tex": "g''" }, { "type": "text", "text": " to keep " }, { "type": "inlineMath", "tex": "|g'|\\ge\\varepsilon_0/2" }, { "type": "text", "text": " throughout " }, { "type": "inlineMath", "tex": "[x_n,x_n+h_n]" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Integrate this lower bound, then use " }, { "type": "inlineMath", "tex": "|g(x)|\\le\\varepsilon x^r" }, { "type": "text", "text": " at both endpoints." }],
+        [{ "type": "text", "text": "Let the arbitrary constant " }, { "type": "inlineMath", "tex": "\\varepsilon" }, { "type": "text", "text": " tend to zero." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Finite limsup gives an eventual bound",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " },
+        { "type": "inlineMath", "tex": "\\limsup_{x\\to0^+}H(x)<\\infty" },
+        { "type": "text", "text": " for a nonnegative function " },
+        { "type": "inlineMath", "tex": "H" },
+        { "type": "text", "text": ", then there are constants " },
+        { "type": "inlineMath", "tex": "M,\\delta>0" },
+        { "type": "text", "text": " such that " },
+        { "type": "inlineMath", "tex": "H(x)\\le M" },
+        { "type": "text", "text": " whenever " },
+        { "type": "inlineMath", "tex": "0<x<\\delta" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "title": "Derivative control from the mean value theorem",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " },
+        { "type": "inlineMath", "tex": "|g''(x)|\\le L" },
+        { "type": "text", "text": " on an interval, then the mean value theorem applied to " },
+        { "type": "inlineMath", "tex": "g'" },
+        { "type": "text", "text": " gives " },
+        { "type": "inlineMath", "tex": "|g'(u)-g'(v)|\\le L|u-v|" },
+        { "type": "text", "text": " there." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "title": "Quantitative meaning of little-o",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The relation " },
+        { "type": "inlineMath", "tex": "g(x)=o(x^r)" },
+        { "type": "text", "text": " as " },
+        { "type": "inlineMath", "tex": "x\\to0^+" },
+        { "type": "text", "text": " means that for every " },
+        { "type": "inlineMath", "tex": "\\varepsilon>0" },
+        { "type": "text", "text": ", one has " },
+        { "type": "inlineMath", "tex": "|g(x)|\\le\\varepsilon x^r" },
+        { "type": "text", "text": " for all sufficiently small positive " },
+        { "type": "inlineMath", "tex": "x" },
+        { "type": "text", "text": "." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "We prove the contrapositive. Assume" }
+      ] },
+      { "type": "displayMath", "tex": "\\limsup_{x\\to0^+}x^r|g''(x)|<\\infty." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Then for some " },
+        { "type": "inlineMath", "tex": "M>0" },
+        { "type": "text", "text": " and all sufficiently small positive " },
+        { "type": "inlineMath", "tex": "x" },
+        { "type": "text", "text": "," }
+      ] },
+      { "type": "displayMath", "tex": "|g''(x)|\\le Mx^{-r}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Suppose, toward a contradiction, that " },
+        { "type": "inlineMath", "tex": "g'(x)" },
+        { "type": "text", "text": " does not tend to zero. There are then " },
+        { "type": "inlineMath", "tex": "\\varepsilon_0>0" },
+        { "type": "text", "text": " and a sequence " },
+        { "type": "inlineMath", "tex": "x_n\\to0^+" },
+        { "type": "text", "text": " such that " },
+        { "type": "inlineMath", "tex": "|g'(x_n)|\\ge\\varepsilon_0" },
+        { "type": "text", "text": ". Define" }
+      ] },
+      { "type": "displayMath", "tex": "h_n=\\frac{\\varepsilon_0x_n^r}{2M}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Since " },
+        { "type": "inlineMath", "tex": "r>1" },
+        { "type": "text", "text": ", we have " },
+        { "type": "inlineMath", "tex": "h_n/x_n\\to0" },
+        { "type": "text", "text": ". For all sufficiently large " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": ", the interval " },
+        { "type": "inlineMath", "tex": "[x_n,x_n+h_n]" },
+        { "type": "text", "text": " lies where the second-derivative bound holds and satisfies " },
+        { "type": "inlineMath", "tex": "x_n+h_n<2x_n" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For " },
+        { "type": "inlineMath", "tex": "x\\in[x_n,x_n+h_n]" },
+        { "type": "text", "text": ", the mean value theorem applied to " },
+        { "type": "inlineMath", "tex": "g'" },
+        { "type": "text", "text": " gives" }
+      ] },
+      { "type": "displayMath", "tex": "|g'(x)-g'(x_n)|\\le Mx_n^{-r}h_n=\\frac{\\varepsilon_0}{2}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Thus " },
+        { "type": "inlineMath", "tex": "g'(x)" },
+        { "type": "text", "text": " keeps the sign of " },
+        { "type": "inlineMath", "tex": "g'(x_n)" },
+        { "type": "text", "text": " and has magnitude at least " },
+        { "type": "inlineMath", "tex": "\\varepsilon_0/2" },
+        { "type": "text", "text": " throughout the interval. Therefore" }
+      ] },
+      { "type": "displayMath", "tex": "|g(x_n+h_n)-g(x_n)|\\ge\\frac{\\varepsilon_0h_n}{2}=\\frac{\\varepsilon_0^2x_n^r}{4M}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "On the other hand, let " },
+        { "type": "inlineMath", "tex": "\\varepsilon>0" },
+        { "type": "text", "text": " be arbitrary. The hypothesis " },
+        { "type": "inlineMath", "tex": "g(x)=o(x^r)" },
+        { "type": "text", "text": " implies " },
+        { "type": "inlineMath", "tex": "|g(x)|\\le\\varepsilon x^r" },
+        { "type": "text", "text": " for all sufficiently small " },
+        { "type": "inlineMath", "tex": "x" },
+        { "type": "text", "text": ". Hence, for large " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": "," }
+      ] },
+      { "type": "displayMath", "tex": "|g(x_n+h_n)-g(x_n)|<\\varepsilon(2^r+1)x_n^r." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Combining the two estimates and canceling " },
+        { "type": "inlineMath", "tex": "x_n^r" },
+        { "type": "text", "text": " yields" }
+      ] },
+      { "type": "displayMath", "tex": "\\frac{\\varepsilon_0^2}{4M}<\\varepsilon(2^r+1)." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "This is impossible because " },
+        { "type": "inlineMath", "tex": "\\varepsilon" },
+        { "type": "text", "text": " was arbitrary. Therefore " },
+        { "type": "inlineMath", "tex": "g'(x)\\to0" },
+        { "type": "text", "text": " whenever the limsup is finite, which proves the required alternative." }
+      ] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2019 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2019PutnamProblems.pdf" },
+    { "kind": "solution", "label": "MAA official 2019 problems and solutions", "url": "https://maa.org/wp-content/uploads/2025/02/2019-Putnam-Problem-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2019 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2019s.tex" }
+  ]
+}

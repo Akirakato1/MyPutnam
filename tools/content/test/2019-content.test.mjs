@@ -16,9 +16,9 @@ test('the catalog reserves the complete 2015–2019 curation batch', async () =>
   }
 });
 
-test('the curated 2019 A1–A3 checkpoint passes the reusable year audit', async () => {
+test('the curated 2019 A1–A6 checkpoint passes the reusable year audit', async () => {
   assert.deepEqual(await auditYear(yearRoot, 2019, {
-    problems: ['A1', 'A2', 'A3'],
+    problems: ['A1', 'A2', 'A3', 'A4', 'A5', 'A6'],
     requireCompleteYear: false,
   }), []);
 });
