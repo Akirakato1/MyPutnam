@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "releaseId": "myputnam-v0.5.0-development",
   "distributionScope": "local-development",
-  "appVersionName": "0.5.0-dev",
+  "appVersionName": "0.5.0",
   "appVersionCode": 5,
   "catalogId": "myputnam-content-v1",
   "catalogRevision": "edaf95a88341db7ac4a4066681c9a1691f42f623a9a3cb0c8d5996d579ff30e1",

@@ -1,12 +1,19 @@
 # MyPutnam device smoke test
 
-Release candidate: `putnam-workbook-2020-2025-v0.4.0.apk` (content `putnam-2020-2025.1`, version code 4)
+Release candidate: `myputnam-v0.5.0.apk` (catalog revision `edaf95a88341db7ac4a4066681c9a1691f42f623a9a3cb0c8d5996d579ff30e1`, version code 5)
 
-This candidate intentionally has no notebook migration contract. Uninstalling the development build erases its local notebooks and progress.
+Use `adb install -r` for the signed in-place upgrade check; uninstalling erases local notebooks, progress, Free Notebooks, and library choices. Create and verify a backup before any clean-install test on a device containing work you want to keep.
+
+## In-place upgrade preservation
+
+- [ ] On the prior signed build, create problem progress, multiple notebook pages with ink, a named Free Notebook, a backup, and a logically removed bundled item.
+- [ ] Record the prior version and signer, then run `adb install -r <absolute-myputnam-v0.5.0-apk-path>` without clearing app data.
+- [ ] Launch offline and confirm progress, ink, page order/current page, Free Notebook name/content, recent problem, settings, and the logical removal all remain intact.
+- [ ] Confirm 72 bundled problems and 97 Core Handbook articles are available, and that the obsolete immutable `content.db` is not required for startup.
 
 ## Clean installation on Galaxy Tab A11+ SM-X230
 
-- [ ] Enable airplane mode and uninstall the old development build: `adb uninstall com.putnamworkbook.offline`.
+- [ ] After preserving any desired backup, enable airplane mode and uninstall the old development build: `adb uninstall com.putnamworkbook.offline`.
 - [ ] Install with `adb install <absolute-apk-path>` and launch while still offline.
 - [ ] Confirm Home offers Continue Most Recent, Browse Problems, Free Notebook, Problem Library, and Settings; Continue is initially empty.
 - [ ] Open Browse Problems and confirm All shows exactly 72 installed problems across 2020–2025 in A1–A6, B1–B6 order.
@@ -30,6 +37,6 @@ This candidate intentionally has no notebook migration contract. Uninstalling th
 - [ ] Force-stop and relaunch the app; confirm notebook pages, ink, page position, progress, and recent-problem state persist.
 - [ ] Exercise Android Back from the workspace and library, then restart the tablet and use Continue again.
 - [ ] Confirm there is no Original Paper tab and that the app remains fully usable throughout the test in airplane mode.
-- [ ] Confirm Android reports only Internet and network-state permissions and that cleartext traffic is disabled.
+- [ ] Confirm Android reports only Internet and network-state permissions, cleartext traffic is disabled, and the network security config trusts system roots without adding user roots.
 
 The SM-X230 does not advertise Samsung S Pen digitizer support. Finger and passive rubber-tip stylus input are equivalent capacitive touch. A universal active-capacitive pen normally behaves as a more precise touch point; pressure and hover are optional and are used only if Android reports them.

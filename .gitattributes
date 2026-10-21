@@ -1,2 +1,6 @@
 *.pdf binary
 *.woff2 binary
+app/src/main/assets/content-library/catalog.json binary
+app/src/main/assets/content-library/release.json binary
+app/src/main/assets/content-library/packages/*.zip binary
+app/src/main/assets/content-library/renderer/** binary

@@ -150,8 +150,10 @@ class OfflineWorkbookAcceptanceTest {
         }
         composeRule.onNodeWithTag("help-hint-1").performClick()
         waitForTag("math-content-ready")
-        val hintHtml = targetContext.assets.open("content/putnam/2025/problems/A1/hint-1.html")
-            .bufferedReader().use { it.readText() }
+        val hintHtml = runBlocking {
+            val problem = requireNotNull(application.container.initializeContent().problem(key))
+            application.container.contentResourceResolver.readDocument(problem.hints.first().resource)
+        }
         assertTrue("Hint HTML should contain pre-rendered KaTeX", hintHtml.contains("class=\"katex\""))
         composeRule.onNodeWithTag("reference-tab-solution").assertIsEnabled()
 

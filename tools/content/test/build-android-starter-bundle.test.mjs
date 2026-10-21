@@ -200,7 +200,7 @@ function releaseManifestFor(value, bytes) {
     schemaVersion: 1,
     releaseId: 'myputnam-v0.5.0-development',
     distributionScope: 'local-development',
-    appVersionName: '0.5.0-dev',
+    appVersionName: '0.5.0',
     appVersionCode: 5,
     catalogId: value.catalogId,
     catalogRevision: value.catalogRevision,
