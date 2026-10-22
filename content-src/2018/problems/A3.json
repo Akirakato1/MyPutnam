@@ -1,0 +1,207 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2018",
+  "problemId": "A3",
+  "label": "A3",
+  "ordinal": 3,
+  "topics": ["algebra", "inequalities", "analysis"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A3" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Determine the greatest possible value of " },
+        { "type": "inlineMath", "tex": "\\sum_{i=1}^{10}\\cos(3x_i)" },
+        { "type": "text", "text": " for real numbers " },
+        { "type": "inlineMath", "tex": "x_1,x_2,\\ldots,x_{10}" },
+        { "type": "text", "text": " satisfying" }
+      ] },
+      { "type": "displayMath", "tex": "\\sum_{i=1}^{10}\\cos(x_i)=0." }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Replace the angles by bounded variables",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Set " },
+        { "type": "inlineMath", "tex": "y_i=\\cos x_i" },
+        { "type": "text", "text": " and use the triple-angle identity. The constraint removes the linear term, leaving a cubic optimization on " },
+        { "type": "inlineMath", "tex": "[-1,1]" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Vary two coordinates with fixed sum",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For a fixed pair sum " },
+        { "type": "inlineMath", "tex": "s" },
+        { "type": "text", "text": ", study " },
+        { "type": "inlineMath", "tex": "g(t)=t^3+(s-t)^3" },
+        { "type": "text", "text": ". Its second derivative is " },
+        { "type": "inlineMath", "tex": "6s" },
+        { "type": "text", "text": ", so a maximizing pair of non-endpoint coordinates is heavily constrained." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Describe the shape of a maximizer",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Choose a maximizer with as many endpoint coordinates as possible. After deleting any cancelling pair " },
+        { "type": "inlineMath", "tex": "(1,-1)" },
+        { "type": "text", "text": ", the remaining coordinates must be " },
+        { "type": "inlineMath", "tex": "a" },
+        { "type": "text", "text": " copies of " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "b" },
+        { "type": "text", "text": " copies of one common value " },
+        { "type": "inlineMath", "tex": "y=-a/b" },
+        { "type": "text", "text": " in " },
+        { "type": "inlineMath", "tex": "(-1,0)" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Reduce to four multiplicity choices",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "The objective becomes " }, { "type": "inlineMath", "tex": "4a(1-a^2/b^2)" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "For fixed " }, { "type": "inlineMath", "tex": "a" }, { "type": "text", "text": ", increase " }, { "type": "inlineMath", "tex": "b" }, { "type": "text", "text": " until " }, { "type": "inlineMath", "tex": "a+b=10" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Check " }, { "type": "inlineMath", "tex": "(a,b)=(1,9),(2,8),(3,7),(4,6)" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Exhibit equality using three values " }, { "type": "inlineMath", "tex": "y_i=1" }, { "type": "text", "text": " and seven values " }, { "type": "inlineMath", "tex": "y_i=-3/7" }, { "type": "text", "text": "." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Triple-angle identity",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "\\cos(3x)=4\\cos^3x-3\\cos x." },
+        { "type": "paragraph", "runs": [{ "type": "text", "text": "Thus a zero sum of cosines makes the sum of triple-angle cosines equal four times a sum of cubes." }] }
+      ] }
+    },
+    {
+      "order": 2,
+      "title": "Compactness guarantees a maximizer",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "A continuous function on a closed and bounded subset of Euclidean space attains a maximum. The set of " },
+        { "type": "inlineMath", "tex": "(y_1,\\ldots,y_{10})\\in[-1,1]^{10}" },
+        { "type": "text", "text": " with zero sum is compact." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "title": "Two-variable smoothing",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "When two variables have fixed sum " },
+        { "type": "inlineMath", "tex": "s" },
+        { "type": "text", "text": ", their cubic contribution is a quadratic function of either variable. Convexity pushes a maximum to an endpoint; concavity gives a unique interior maximum at equal variables." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "y_i=\\cos x_i" },
+        { "type": "text", "text": ". Then " },
+        { "type": "inlineMath", "tex": "-1\\le y_i\\le1" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "\\sum y_i=0" },
+        { "type": "text", "text": ". The triple-angle identity gives" }
+      ] },
+      { "type": "displayMath", "tex": "\\sum_{i=1}^{10}\\cos(3x_i)=4\\sum_{i=1}^{10}y_i^3." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The feasible set is compact, so a maximum exists. The choice of three coordinates equal to " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": " and seven equal to " },
+        { "type": "inlineMath", "tex": "-3/7" },
+        { "type": "text", "text": " is feasible and gives a positive objective, so a maximizer is not made entirely of endpoints. Among all maximizers, choose one having as many coordinates as possible at the endpoints " },
+        { "type": "inlineMath", "tex": "\\pm1" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Consider two non-endpoint coordinates whose sum is " },
+        { "type": "inlineMath", "tex": "s" },
+        { "type": "text", "text": ". Holding their sum fixed, their contribution is" }
+      ] },
+      { "type": "displayMath", "tex": "g(t)=t^3+(s-t)^3,\\qquad g''(t)=6s." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " },
+        { "type": "inlineMath", "tex": "s>0" },
+        { "type": "text", "text": ", convexity moves a maximizing pair to the boundary, contradicting the choice of maximizer. If " },
+        { "type": "inlineMath", "tex": "s<0" },
+        { "type": "text", "text": ", strict concavity forces the two coordinates to be equal. If " },
+        { "type": "inlineMath", "tex": "s=0" },
+        { "type": "text", "text": ", the contribution is always zero, so replacing the pair by " },
+        { "type": "inlineMath", "tex": "(1,-1)" },
+        { "type": "text", "text": " would increase the number of endpoint coordinates. There cannot be exactly one non-endpoint coordinate: the other nine endpoints have an odd integer sum, whose negative cannot lie strictly between " },
+        { "type": "inlineMath", "tex": "-1" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": ". Consequently, there are at least two non-endpoint coordinates, and the pairwise conclusions force all of them to equal one common negative value." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Any endpoint pair " },
+        { "type": "inlineMath", "tex": "(1,-1)" },
+        { "type": "text", "text": " contributes zero both to the sum and to the objective, so remove all such pairs temporarily. The remaining coordinates cannot consist only of nonpositive values, and they cannot include " },
+        { "type": "inlineMath", "tex": "-1" },
+        { "type": "text", "text": ". They therefore consist of " },
+        { "type": "inlineMath", "tex": "a" },
+        { "type": "text", "text": " copies of " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "b" },
+        { "type": "text", "text": " copies of a common " },
+        { "type": "inlineMath", "tex": "y\\in(-1,0)" },
+        { "type": "text", "text": ". The zero-sum condition gives " },
+        { "type": "inlineMath", "tex": "y=-a/b" },
+        { "type": "text", "text": " and hence " },
+        { "type": "inlineMath", "tex": "a<b" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "displayMath", "tex": "4\\sum y_i^3=4\\left(a-b\\left(\\frac ab\\right)^3\\right)=4a\\left(1-\\frac{a^2}{b^2}\\right)." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For fixed " },
+        { "type": "inlineMath", "tex": "a" },
+        { "type": "text", "text": ", this expression increases with " },
+        { "type": "inlineMath", "tex": "b" },
+        { "type": "text", "text": ". Because removed pairs account for an even number of coordinates, " },
+        { "type": "inlineMath", "tex": "a+b" },
+        { "type": "text", "text": " is even; increasing " },
+        { "type": "inlineMath", "tex": "b" },
+        { "type": "text", "text": " by two as needed shows that an optimum has " },
+        { "type": "inlineMath", "tex": "a+b=10" },
+        { "type": "text", "text": ". Since " },
+        { "type": "inlineMath", "tex": "a<b" },
+        { "type": "text", "text": ", only four cases remain:" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{array}{c|c|c}(a,b)&y&4a(1-a^2/b^2)\\\\\\hline(1,9)&-1/9&320/81\\\\(2,8)&-1/4&15/2\\\\(3,7)&-3/7&480/49\\\\(4,6)&-2/3&80/9\\end{array}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The largest value is " },
+        { "type": "inlineMath", "tex": "480/49" },
+        { "type": "text", "text": ". It is attained by taking three of the " },
+        { "type": "inlineMath", "tex": "y_i" },
+        { "type": "text", "text": " equal to " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": " and the other seven equal to " },
+        { "type": "inlineMath", "tex": "-3/7" },
+        { "type": "text", "text": ". Such values are cosines of real angles and have sum zero. Therefore the greatest possible value is " },
+        { "type": "inlineMath", "tex": "\\boxed{480/49}" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2018 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2018PutnamProblems.pdf" },
+    { "kind": "solution", "label": "MAA official 2018 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2018PutnamProblemsSolutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2018 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2018s.tex" }
+  ]
+}

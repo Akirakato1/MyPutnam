@@ -1,0 +1,210 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2018",
+  "problemId": "A2",
+  "label": "A2",
+  "ordinal": 2,
+  "topics": ["combinatorics", "linear-algebra"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A2" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "S_1,S_2,\\ldots,S_{2^n-1}" },
+        { "type": "text", "text": " be the nonempty subsets of " },
+        { "type": "inlineMath", "tex": "\\{1,2,\\ldots,n\\}" },
+        { "type": "text", "text": " in some order, and let " },
+        { "type": "inlineMath", "tex": "M" },
+        { "type": "text", "text": " be the " },
+        { "type": "inlineMath", "tex": "(2^n-1)\\times(2^n-1)" },
+        { "type": "text", "text": " matrix whose " },
+        { "type": "inlineMath", "tex": "(i,j)" },
+        { "type": "text", "text": " entry is" }
+      ] },
+      { "type": "displayMath", "tex": "m_{ij}=\\begin{cases}0,&S_i\\cap S_j=\\varnothing,\\\\1,&\\text{otherwise.}\\end{cases}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Calculate the determinant of " }, { "type": "inlineMath", "tex": "M" }, { "type": "text", "text": "." }] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Compare consecutive ground-set sizes",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Call the matrix " },
+        { "type": "inlineMath", "tex": "M_n" },
+        { "type": "text", "text": ". Order the subsets according to whether they omit or contain the element " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " so that copies of " },
+        { "type": "inlineMath", "tex": "M_{n-1}" },
+        { "type": "text", "text": " appear as blocks." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Isolate the singleton subset",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Use the order: nonempty subsets of " },
+        { "type": "inlineMath", "tex": "\\{1,\\ldots,n-1\\}" },
+        { "type": "text", "text": ", then " },
+        { "type": "inlineMath", "tex": "\\{n\\}" },
+        { "type": "text", "text": ", then those old subsets with " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " adjoined. Subtract the singleton row from every row in the last block." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Track the block-swap sign",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "After expanding along the singleton column, interchange two row blocks of size " },
+        { "type": "inlineMath", "tex": "N=2^{n-1}-1" },
+        { "type": "text", "text": ". This contributes " },
+        { "type": "inlineMath", "tex": "(-1)^{N^2}=-1" },
+        { "type": "text", "text": " because " },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": " is odd for " },
+        { "type": "inlineMath", "tex": "n>1" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Derive and solve the determinant recurrence",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Show that reordering the subsets conjugates " }, { "type": "inlineMath", "tex": "M_n" }, { "type": "text", "text": " by a permutation matrix, so the determinant is unchanged." }],
+        [{ "type": "text", "text": "Use the three-block ordering and row subtraction to expose two diagonal copies of " }, { "type": "inlineMath", "tex": "M_{n-1}" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Obtain " }, { "type": "inlineMath", "tex": "\\det M_n=-(\\det M_{n-1})^2" }, { "type": "text", "text": " for " }, { "type": "inlineMath", "tex": "n>1" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Start from " }, { "type": "inlineMath", "tex": "M_1=(1)" }, { "type": "text", "text": " and finish the induction." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Simultaneous row and column permutations",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Reordering the indexing subsets replaces a matrix " },
+        { "type": "inlineMath", "tex": "M" },
+        { "type": "text", "text": " by " },
+        { "type": "inlineMath", "tex": "PMP^{-1}" },
+        { "type": "text", "text": " for a permutation matrix " },
+        { "type": "inlineMath", "tex": "P" },
+        { "type": "text", "text": ". Similar matrices have the same determinant." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "title": "Determinant-preserving row operations",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Adding a multiple of one row to another leaves the determinant unchanged. Expanding along a column with one nonzero entry reduces the determinant to the corresponding cofactor, with its position determining the sign." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "title": "Block triangular determinants and block swaps",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "A block triangular matrix with square diagonal blocks " },
+        { "type": "inlineMath", "tex": "A,D" },
+        { "type": "text", "text": " has determinant " },
+        { "type": "inlineMath", "tex": "\\det(A)\\det(D)" },
+        { "type": "text", "text": ". Interchanging two row blocks of size " },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": " performs " },
+        { "type": "inlineMath", "tex": "N^2" },
+        { "type": "text", "text": " ordinary row swaps." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Write the matrix as " },
+        { "type": "inlineMath", "tex": "M_n" },
+        { "type": "text", "text": ". Its determinant does not depend on the order of the subsets, because a reordering replaces " },
+        { "type": "inlineMath", "tex": "M_n" },
+        { "type": "text", "text": " by " },
+        { "type": "inlineMath", "tex": "PM_nP^{-1}" },
+        { "type": "text", "text": " for a permutation matrix " },
+        { "type": "inlineMath", "tex": "P" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For " },
+        { "type": "inlineMath", "tex": "n>1" },
+        { "type": "text", "text": ", put " },
+        { "type": "inlineMath", "tex": "N=2^{n-1}-1" },
+        { "type": "text", "text": ". Order the subsets first as the " },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": " nonempty subsets omitting " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": ", then " },
+        { "type": "inlineMath", "tex": "\\{n\\}" },
+        { "type": "text", "text": ", then the " },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": " old nonempty subsets with " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " adjoined. If " },
+        { "type": "inlineMath", "tex": "\\mathbf0,\\mathbf1" },
+        { "type": "text", "text": " are zero and one column vectors of length " },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": ", and " },
+        { "type": "inlineMath", "tex": "E" },
+        { "type": "text", "text": " is the all-ones " },
+        { "type": "inlineMath", "tex": "N\\times N" },
+        { "type": "text", "text": " matrix, then" }
+      ] },
+      { "type": "displayMath", "tex": "M_n=\\begin{pmatrix}M_{n-1}&\\mathbf0&M_{n-1}\\\\\\mathbf0^T&1&\\mathbf1^T\\\\M_{n-1}&\\mathbf1&E\\end{pmatrix}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Subtract the middle row from each of the final " },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": " rows. The lower middle block and lower right block become zero, so the matrix becomes" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{pmatrix}M_{n-1}&\\mathbf0&M_{n-1}\\\\\\mathbf0^T&1&\\mathbf1^T\\\\M_{n-1}&\\mathbf0&0\\end{pmatrix}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Expanding along the middle column removes the middle row and column without a sign change. Hence" }
+      ] },
+      { "type": "displayMath", "tex": "\\det M_n=\\det\\begin{pmatrix}M_{n-1}&M_{n-1}\\\\M_{n-1}&0\\end{pmatrix}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Interchanging the two row blocks uses " },
+        { "type": "inlineMath", "tex": "N^2" },
+        { "type": "text", "text": " row swaps. Since " },
+        { "type": "inlineMath", "tex": "N=2^{n-1}-1" },
+        { "type": "text", "text": " is odd, this changes the sign and yields a block triangular matrix. Therefore" }
+      ] },
+      { "type": "displayMath", "tex": "\\det M_n=-\\det\\begin{pmatrix}M_{n-1}&0\\\\M_{n-1}&M_{n-1}\\end{pmatrix}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The determinant of this block triangular matrix is the product of the two diagonal-block determinants, so" }
+      ] },
+      { "type": "displayMath", "tex": "\\det M_n=-(\\det M_{n-1})^2." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Finally, " },
+        { "type": "inlineMath", "tex": "M_1=(1)" },
+        { "type": "text", "text": ", so " },
+        { "type": "inlineMath", "tex": "\\det M_1=1" },
+        { "type": "text", "text": ". The recurrence then gives " },
+        { "type": "inlineMath", "tex": "\\det M_n=-1" },
+        { "type": "text", "text": " for every " },
+        { "type": "inlineMath", "tex": "n>1" },
+        { "type": "text", "text": ". Thus the answer is " },
+        { "type": "inlineMath", "tex": "\\boxed{1}" },
+        { "type": "text", "text": " when " },
+        { "type": "inlineMath", "tex": "n=1" },
+        { "type": "text", "text": ", and " },
+        { "type": "inlineMath", "tex": "\\boxed{-1}" },
+        { "type": "text", "text": " when " },
+        { "type": "inlineMath", "tex": "n>1" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2018 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2018PutnamProblems.pdf" },
+    { "kind": "solution", "label": "MAA official 2018 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2018PutnamProblemsSolutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2018 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2018s.tex" }
+  ]
+}

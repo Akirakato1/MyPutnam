@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2018",
+  "problemId": "A1",
+  "label": "A1",
+  "ordinal": 1,
+  "topics": ["algebra", "number-theory"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A1" }] },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Find all ordered pairs " }, { "type": "inlineMath", "tex": "(a,b)" }, { "type": "text", "text": " of positive integers for which" }] },
+      { "type": "displayMath", "tex": "\\frac1a+\\frac1b=\\frac3{2018}." }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Turn the reciprocal equation into a product",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Clear denominators, move all terms to one side, and add a constant so the expression factors as a product of one linear term in " },
+        { "type": "inlineMath", "tex": "a" },
+        { "type": "text", "text": " and one in " },
+        { "type": "inlineMath", "tex": "b" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Enumerate a constrained divisor pair",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "(3a-2018)(3b-2018)=2018^2." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "Both factors are congruent to " },
+          { "type": "inlineMath", "tex": "1\\pmod3" },
+          { "type": "text", "text": ". Factor " },
+          { "type": "inlineMath", "tex": "2018^2=2^2\\cdot1009^2" },
+          { "type": "text", "text": " and list the divisors with that congruence." }
+        ] }
+      ] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Control the signs before listing cases",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The two factors have the same sign. If both were negative, positivity of " },
+        { "type": "inlineMath", "tex": "a,b" },
+        { "type": "text", "text": " would force both absolute values to be strictly less than " },
+        { "type": "inlineMath", "tex": "2018" },
+        { "type": "text", "text": ", which is impossible because their product is " },
+        { "type": "inlineMath", "tex": "2018^2" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Recover the ordered pairs",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Write a positive divisor as " }, { "type": "inlineMath", "tex": "u=2^i1009^j" }, { "type": "text", "text": " with " }, { "type": "inlineMath", "tex": "0\\le i,j\\le2" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Use " }, { "type": "inlineMath", "tex": "u\\equiv1\\pmod3" }, { "type": "text", "text": " to show that " }, { "type": "inlineMath", "tex": "i" }, { "type": "text", "text": " is even." }],
+        [{ "type": "text", "text": "For each of the six possible " }, { "type": "inlineMath", "tex": "u" }, { "type": "text", "text": ", set " }, { "type": "inlineMath", "tex": "v=2018^2/u" }, { "type": "text", "text": " and compute " }, { "type": "inlineMath", "tex": "a=(u+2018)/3" }, { "type": "text", "text": ", " }, { "type": "inlineMath", "tex": "b=(v+2018)/3" }, { "type": "text", "text": "." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Factoring a reciprocal Diophantine equation",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "An equation of the form " },
+        { "type": "inlineMath", "tex": "1/a+1/b=r/s" },
+        { "type": "text", "text": " can often be rearranged into a fixed product by clearing denominators and completing a rectangular product. Here that produces " },
+        { "type": "inlineMath", "tex": "(3a-2018)(3b-2018)=2018^2" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "title": "Divisors and congruence filters",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Since " },
+        { "type": "inlineMath", "tex": "2018=2\\cdot1009" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "1009" },
+        { "type": "text", "text": " is prime, every positive divisor of " },
+        { "type": "inlineMath", "tex": "2018^2" },
+        { "type": "text", "text": " is uniquely " },
+        { "type": "inlineMath", "tex": "2^i1009^j" },
+        { "type": "text", "text": " for " },
+        { "type": "inlineMath", "tex": "0\\le i,j\\le2" },
+        { "type": "text", "text": ". Congruences can then discard exponent choices without trial division." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Clearing denominators and completing a product gives" }] },
+      { "type": "displayMath", "tex": "3ab=2018(a+b)" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "and hence" }] },
+      { "type": "displayMath", "tex": "(3a-2018)(3b-2018)=2018^2." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Put " },
+        { "type": "inlineMath", "tex": "u=3a-2018" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "v=3b-2018" },
+        { "type": "text", "text": ". Then " },
+        { "type": "inlineMath", "tex": "uv=2018^2" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "u\\equiv v\\equiv1\\pmod3" },
+        { "type": "text", "text": ". The factors have the same sign. They cannot both be negative: positivity of " },
+        { "type": "inlineMath", "tex": "a,b" },
+        { "type": "text", "text": " would give " },
+        { "type": "inlineMath", "tex": "|u|,|v|<2018" },
+        { "type": "text", "text": ", contradicting " },
+        { "type": "inlineMath", "tex": "|uv|=2018^2" },
+        { "type": "text", "text": ". Thus " },
+        { "type": "inlineMath", "tex": "u,v>0" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Because " },
+        { "type": "inlineMath", "tex": "2018^2=2^2\\cdot1009^2" },
+        { "type": "text", "text": ", write " },
+        { "type": "inlineMath", "tex": "u=2^i1009^j" },
+        { "type": "text", "text": " with " },
+        { "type": "inlineMath", "tex": "0\\le i,j\\le2" },
+        { "type": "text", "text": ". Modulo " },
+        { "type": "inlineMath", "tex": "3" },
+        { "type": "text", "text": ", we have " },
+        { "type": "inlineMath", "tex": "2\\equiv-1" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "1009\\equiv1" },
+        { "type": "text", "text": ", so " },
+        { "type": "inlineMath", "tex": "u\\equiv1" },
+        { "type": "text", "text": " exactly when " },
+        { "type": "inlineMath", "tex": "i" },
+        { "type": "text", "text": " is even. Therefore" }
+      ] },
+      { "type": "displayMath", "tex": "u\\in\\{1,4,1009,4036,1009^2,4\\cdot1009^2\\}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For each choice, " },
+        { "type": "inlineMath", "tex": "v=2018^2/u" },
+        { "type": "text", "text": ", and " },
+        { "type": "inlineMath", "tex": "a=(u+2018)/3" },
+        { "type": "text", "text": ", " },
+        { "type": "inlineMath", "tex": "b=(v+2018)/3" },
+        { "type": "text", "text": ". This yields the six ordered pairs" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{gathered}(673,1358114),\\quad(674,340033),\\\\(1009,2018),\\quad(2018,1009),\\\\(340033,674),\\quad(1358114,673).\\end{gathered}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Each pair comes from the equivalent product equation, so all six satisfy the original equation and the list is complete." }] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2018 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2018PutnamProblems.pdf" },
+    { "kind": "solution", "label": "MAA official 2018 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2018PutnamProblemsSolutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2018 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2018s.tex" }
+  ]
+}
