@@ -1,0 +1,200 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2018",
+  "problemId": "A5",
+  "label": "A5",
+  "ordinal": 5,
+  "topics": ["analysis", "calculus", "inequalities"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A5" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "f:\\mathbb R\\to\\mathbb R" },
+        { "type": "text", "text": " be an infinitely differentiable function satisfying " },
+        { "type": "inlineMath", "tex": "f(0)=0" },
+        { "type": "text", "text": ", " },
+        { "type": "inlineMath", "tex": "f(1)=1" },
+        { "type": "text", "text": ", and " },
+        { "type": "inlineMath", "tex": "f(x)\\ge0" },
+        { "type": "text", "text": " for all " },
+        { "type": "inlineMath", "tex": "x\\in\\mathbb R" },
+        { "type": "text", "text": ". Show that there exist a positive integer " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " and a real number " },
+        { "type": "inlineMath", "tex": "x" },
+        { "type": "text", "text": " such that " },
+        { "type": "inlineMath", "tex": "f^{(n)}(x)<0" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Assume every derivative is nonnegative",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Argue by contradiction. Suppose " },
+        { "type": "inlineMath", "tex": "f^{(n)}(x)\\ge0" },
+        { "type": "text", "text": " for every positive integer " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " and every real " },
+        { "type": "inlineMath", "tex": "x" },
+        { "type": "text", "text": ". Focus only on " },
+        { "type": "inlineMath", "tex": "[0,1]" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Force every derivative to vanish at zero",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Since " },
+        { "type": "inlineMath", "tex": "f\\ge0" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "f(0)=0" },
+        { "type": "text", "text": ", zero is a minimum and " },
+        { "type": "inlineMath", "tex": "f'(0)=0" },
+        { "type": "text", "text": ". Apply the same argument inductively to " },
+        { "type": "inlineMath", "tex": "f',f'',\\ldots" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Use repeated integration",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The vanishing initial derivatives give, for every " },
+        { "type": "inlineMath", "tex": "n\\ge1" },
+        { "type": "text", "text": "," }
+      ] }, { "type": "displayMath", "tex": "f(x)=\\frac1{(n-1)!}\\int_0^x(x-t)^{n-1}f^{(n)}(t)\\,dt." }] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Squeeze the area under the graph",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "I=\\int_0^1 f(x)\\,dx" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Reverse the order of integration to express " }, { "type": "inlineMath", "tex": "I" }, { "type": "text", "text": " with the weight " }, { "type": "inlineMath", "tex": "(1-t)^n/n!" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Compare this weight with the formula for " }, { "type": "inlineMath", "tex": "f(1)" }, { "type": "text", "text": " to obtain " }, { "type": "inlineMath", "tex": "0\\le I\\le1/n" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "n\\to\\infty" }, { "type": "text", "text": " and use continuity and nonnegativity." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Derivative at an interior minimum",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If a differentiable function has a local minimum at an interior point " },
+        { "type": "inlineMath", "tex": "c" },
+        { "type": "text", "text": ", then its derivative at " },
+        { "type": "inlineMath", "tex": "c" },
+        { "type": "text", "text": " is zero." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "title": "Taylor's formula with integral remainder",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If the first " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " initial derivatives vanish, repeated use of the fundamental theorem of calculus gives" }
+      ] }, { "type": "displayMath", "tex": "f(x)=\\frac1{(n-1)!}\\int_0^x(x-t)^{n-1}f^{(n)}(t)\\,dt." }] }
+    },
+    {
+      "order": 3,
+      "title": "Changing the order of integration",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For a continuous integrand on the triangle " },
+        { "type": "inlineMath", "tex": "0\\le t\\le x\\le1" },
+        { "type": "text", "text": ", one may integrate first in " },
+        { "type": "inlineMath", "tex": "x" },
+        { "type": "text", "text": " or first in " },
+        { "type": "inlineMath", "tex": "t" },
+        { "type": "text", "text": "." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Suppose, for contradiction, that " },
+        { "type": "inlineMath", "tex": "f^{(n)}(x)\\ge0" },
+        { "type": "text", "text": " for every positive integer " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " and every real " },
+        { "type": "inlineMath", "tex": "x" },
+        { "type": "text", "text": ". We claim that" }
+      ] },
+      { "type": "displayMath", "tex": "f^{(r)}(0)=0\\qquad(r=0,1,2,\\ldots)." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The case " },
+        { "type": "inlineMath", "tex": "r=0" },
+        { "type": "text", "text": " is given. Because " },
+        { "type": "inlineMath", "tex": "f\\ge0" },
+        { "type": "text", "text": ", the point zero is a minimum of " },
+        { "type": "inlineMath", "tex": "f" },
+        { "type": "text", "text": ", so " },
+        { "type": "inlineMath", "tex": "f'(0)=0" },
+        { "type": "text", "text": ". Inductively, if " },
+        { "type": "inlineMath", "tex": "f^{(r)}(0)=0" },
+        { "type": "text", "text": ", then the assumed nonnegativity of " },
+        { "type": "inlineMath", "tex": "f^{(r)}" },
+        { "type": "text", "text": " makes zero a minimum of that function, and therefore " },
+        { "type": "inlineMath", "tex": "f^{(r+1)}(0)=0" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Repeated integration now gives, for each positive integer " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "0\\le x\\le1" },
+        { "type": "text", "text": "," }
+      ] },
+      { "type": "displayMath", "tex": "f(x)=\\frac1{(n-1)!}\\int_0^x(x-t)^{n-1}f^{(n)}(t)\\,dt." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Set " },
+        { "type": "inlineMath", "tex": "I=\\int_0^1 f(x)\\,dx" },
+        { "type": "text", "text": ". Integrating the preceding identity and reversing the order over " },
+        { "type": "inlineMath", "tex": "0\\le t\\le x\\le1" },
+        { "type": "text", "text": " yields" }
+      ] },
+      { "type": "displayMath", "tex": "I=\\frac1{n!}\\int_0^1(1-t)^n f^{(n)}(t)\\,dt." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "On the other hand, the same repeated-integration formula at " },
+        { "type": "inlineMath", "tex": "x=1" },
+        { "type": "text", "text": " gives" }
+      ] },
+      { "type": "displayMath", "tex": "f(1)=\\frac1{(n-1)!}\\int_0^1(1-t)^{n-1}f^{(n)}(t)\\,dt=1." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Since " },
+        { "type": "inlineMath", "tex": "0\\le1-t\\le1" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "f^{(n)}(t)\\ge0" },
+        { "type": "text", "text": ", comparison of the two formulas gives" }
+      ] },
+      { "type": "displayMath", "tex": "0\\le I\\le\\frac1n f(1)=\\frac1n." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "This holds for every positive integer " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": ", so " },
+        { "type": "inlineMath", "tex": "I=0" },
+        { "type": "text", "text": ". A continuous nonnegative function with zero integral on " },
+        { "type": "inlineMath", "tex": "[0,1]" },
+        { "type": "text", "text": " is identically zero there. This contradicts " },
+        { "type": "inlineMath", "tex": "f(1)=1" },
+        { "type": "text", "text": ". Therefore some positive-order derivative is negative at some real point, as required." }
+      ] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2018 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2018PutnamProblems.pdf" },
+    { "kind": "solution", "label": "MAA official 2018 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2018PutnamProblemsSolutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2018 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2018s.tex" }
+  ]
+}

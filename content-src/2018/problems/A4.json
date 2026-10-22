@@ -1,0 +1,242 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2018",
+  "problemId": "A4",
+  "label": "A4",
+  "ordinal": 4,
+  "topics": ["algebra", "number-theory"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A4" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "m" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": " be positive integers with " },
+        { "type": "inlineMath", "tex": "\\gcd(m,n)=1" },
+        { "type": "text", "text": ", and let" }
+      ] },
+      { "type": "displayMath", "tex": "a_k=\\left\\lfloor\\frac{mk}{n}\\right\\rfloor-\\left\\lfloor\\frac{m(k-1)}{n}\\right\\rfloor" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "for " },
+        { "type": "inlineMath", "tex": "k=1,2,\\ldots,n" },
+        { "type": "text", "text": ". Suppose that " },
+        { "type": "inlineMath", "tex": "g" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "h" },
+        { "type": "text", "text": " are elements in a group " },
+        { "type": "inlineMath", "tex": "G" },
+        { "type": "text", "text": " and that" }
+      ] },
+      { "type": "displayMath", "tex": "gh^{a_1}gh^{a_2}\\cdots gh^{a_n}=e," },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "where " },
+        { "type": "inlineMath", "tex": "e" },
+        { "type": "text", "text": " is the identity element. Show that " },
+        { "type": "inlineMath", "tex": "gh=hg" },
+        { "type": "text", "text": ". As usual, " },
+        { "type": "inlineMath", "tex": "\\lfloor x\\rfloor" },
+        { "type": "text", "text": " denotes the greatest integer less than or equal to " },
+        { "type": "inlineMath", "tex": "x" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Shift by a modular inverse",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For " },
+        { "type": "inlineMath", "tex": "n>1" },
+        { "type": "text", "text": ", choose " },
+        { "type": "inlineMath", "tex": "x" },
+        { "type": "text", "text": " with " },
+        { "type": "inlineMath", "tex": "mx\\equiv1\\pmod n" },
+        { "type": "text", "text": ". Compare the cyclically indexed terms " },
+        { "type": "inlineMath", "tex": "a_{k-x}" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "a_k" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Track when a floor drops",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Write " },
+        { "type": "inlineMath", "tex": "mx+ny=1" },
+        { "type": "text", "text": ". Substitution rewrites " },
+        { "type": "inlineMath", "tex": "a_{k-x}" },
+        { "type": "text", "text": " using the numerators " },
+        { "type": "inlineMath", "tex": "mk-1" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "m(k-1)-1" },
+        { "type": "text", "text": ". A floor changes only when the unshifted numerator is divisible by " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Only the first and last exponents change",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For " },
+        { "type": "inlineMath", "tex": "1\\le k\\le n" },
+        { "type": "text", "text": ", the comparison gives " },
+        { "type": "inlineMath", "tex": "a_{1-x}=a_1+1" },
+        { "type": "text", "text": ", " },
+        { "type": "inlineMath", "tex": "a_{n-x}=a_n-1" },
+        { "type": "text", "text": ", and " },
+        { "type": "inlineMath", "tex": "a_{k-x}=a_k" },
+        { "type": "text", "text": " otherwise. The entire shifted exponent list is nevertheless a cyclic rotation of the original list." }
+      ] }] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Recognize the commutator",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Use the given word to replace " }, { "type": "inlineMath", "tex": "g^{-1}" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Rewrite " }, { "type": "inlineMath", "tex": "ghg^{-1}h^{-1}" }, { "type": "text", "text": " with endpoint exponents " }, { "type": "inlineMath", "tex": "a_1+1" }, { "type": "text", "text": " and " }, { "type": "inlineMath", "tex": "a_n-1" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Replace those exponents by " }, { "type": "inlineMath", "tex": "a_{1-x},\\ldots,a_{n-x}" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "A cyclic shift of a product equal to " }, { "type": "inlineMath", "tex": "e" }, { "type": "text", "text": " also equals " }, { "type": "inlineMath", "tex": "e" }, { "type": "text", "text": "." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Bézout and modular inverses",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " },
+        { "type": "inlineMath", "tex": "\\gcd(m,n)=1" },
+        { "type": "text", "text": ", then there are integers " },
+        { "type": "inlineMath", "tex": "x,y" },
+        { "type": "text", "text": " satisfying " },
+        { "type": "inlineMath", "tex": "mx+ny=1" },
+        { "type": "text", "text": ". Thus multiplication by " },
+        { "type": "inlineMath", "tex": "m" },
+        { "type": "text", "text": " has an inverse modulo " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "title": "Subtracting one inside a floor",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For integers " },
+        { "type": "inlineMath", "tex": "r" },
+        { "type": "text", "text": " and positive " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": ", the difference " },
+        { "type": "inlineMath", "tex": "\\lfloor(r-1)/n\\rfloor-\\lfloor r/n\\rfloor" },
+        { "type": "text", "text": " is " },
+        { "type": "inlineMath", "tex": "-1" },
+        { "type": "text", "text": " exactly when " },
+        { "type": "inlineMath", "tex": "n\\mid r" },
+        { "type": "text", "text": ", and is zero otherwise." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "title": "Cyclic shifts of an identity product",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "In any group, if " },
+        { "type": "inlineMath", "tex": "UV=e" },
+        { "type": "text", "text": ", then " },
+        { "type": "inlineMath", "tex": "V=U^{-1}" },
+        { "type": "text", "text": " and hence " },
+        { "type": "inlineMath", "tex": "VU=e" },
+        { "type": "text", "text": ". Repeating this observation shows that any cyclic shift of a product equal to the identity also equals the identity." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " },
+        { "type": "inlineMath", "tex": "n=1" },
+        { "type": "text", "text": ", then " },
+        { "type": "inlineMath", "tex": "a_1=m" },
+        { "type": "text", "text": " and the hypothesis is " },
+        { "type": "inlineMath", "tex": "gh^m=e" },
+        { "type": "text", "text": ". Thus " },
+        { "type": "inlineMath", "tex": "g=h^{-m}" },
+        { "type": "text", "text": ", so " },
+        { "type": "inlineMath", "tex": "g" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "h" },
+        { "type": "text", "text": " commute. Assume henceforth that " },
+        { "type": "inlineMath", "tex": "n>1" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Choose " },
+        { "type": "inlineMath", "tex": "x\\in\\{1,\\ldots,n\\}" },
+        { "type": "text", "text": " and an integer " },
+        { "type": "inlineMath", "tex": "y" },
+        { "type": "text", "text": " such that " },
+        { "type": "inlineMath", "tex": "mx+ny=1" },
+        { "type": "text", "text": ". Extend the sequence periodically by " },
+        { "type": "inlineMath", "tex": "a_{j+n}=a_j" },
+        { "type": "text", "text": ", which follows directly from the floor definition. Since " },
+        { "type": "inlineMath", "tex": "-mx=ny-1" },
+        { "type": "text", "text": ", we have" }
+      ] },
+      { "type": "displayMath", "tex": "a_{k-x}=\\left\\lfloor\\frac{mk-1}{n}\\right\\rfloor-\\left\\lfloor\\frac{m(k-1)-1}{n}\\right\\rfloor." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For an integer " },
+        { "type": "inlineMath", "tex": "r" },
+        { "type": "text", "text": ", lowering " },
+        { "type": "inlineMath", "tex": "r" },
+        { "type": "text", "text": " by one lowers " },
+        { "type": "inlineMath", "tex": "\\lfloor r/n\\rfloor" },
+        { "type": "text", "text": " exactly when " },
+        { "type": "inlineMath", "tex": "n\\mid r" },
+        { "type": "text", "text": ". Also " },
+        { "type": "inlineMath", "tex": "n\\mid mk" },
+        { "type": "text", "text": " exactly when " },
+        { "type": "inlineMath", "tex": "n\\mid k" },
+        { "type": "text", "text": ". Therefore, for " },
+        { "type": "inlineMath", "tex": "1\\le k\\le n" },
+        { "type": "text", "text": "," }
+      ] },
+      { "type": "displayMath", "tex": "a_{k-x}=\\begin{cases}a_k+1,&k=1,\\\\a_k-1,&k=n,\\\\a_k,&1<k<n.\\end{cases}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "W=gh^{a_1}gh^{a_2}\\cdots gh^{a_n}" },
+        { "type": "text", "text": ". From " },
+        { "type": "inlineMath", "tex": "W=e" },
+        { "type": "text", "text": ", multiplying on the left by " },
+        { "type": "inlineMath", "tex": "g^{-1}" },
+        { "type": "text", "text": " gives" }
+      ] },
+      { "type": "displayMath", "tex": "g^{-1}=h^{a_1}gh^{a_2}\\cdots gh^{a_n}." },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Substituting this expression into the commutator gives" }] },
+      { "type": "displayMath", "tex": "\\begin{gathered}ghg^{-1}h^{-1}\\\\=gh^{a_1+1}gh^{a_2}\\cdots gh^{a_{n-1}}gh^{a_n-1}\\\\=gh^{a_{1-x}}gh^{a_{2-x}}\\cdots gh^{a_{n-x}}.\\end{gathered}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Because the subscripts are read modulo " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": ", the last product is a cyclic shift of " },
+        { "type": "inlineMath", "tex": "W" },
+        { "type": "text", "text": ". A cyclic shift of a product equal to the identity also equals the identity. Hence " },
+        { "type": "inlineMath", "tex": "ghg^{-1}h^{-1}=e" },
+        { "type": "text", "text": ", which is equivalent to " },
+        { "type": "inlineMath", "tex": "gh=hg" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2018 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2018PutnamProblems.pdf" },
+    { "kind": "solution", "label": "MAA official 2018 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2018PutnamProblemsSolutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2018 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2018s.tex" }
+  ]
+}

@@ -14,9 +14,9 @@ test('the catalog reserves 2018 in the historical curation batch', async () => {
   assert.equal(problemSet.metadata.competitionYear, 2018);
 });
 
-test('the curated 2018 A1–A3 checkpoint passes the reusable year audit', async () => {
+test('the curated 2018 A1–A6 checkpoint passes the reusable year audit', async () => {
   assert.deepEqual(await auditYear(yearRoot, 2018, {
-    problems: ['A1', 'A2', 'A3'],
+    problems: ['A1', 'A2', 'A3', 'A4', 'A5', 'A6'],
     requireCompleteYear: false,
   }), []);
 });

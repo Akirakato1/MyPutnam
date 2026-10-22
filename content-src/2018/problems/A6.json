@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2018",
+  "problemId": "A6",
+  "label": "A6",
+  "ordinal": 6,
+  "topics": ["geometry", "linear-algebra"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem A6" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Suppose that " },
+        { "type": "inlineMath", "tex": "A,B,C" },
+        { "type": "text", "text": ", and " },
+        { "type": "inlineMath", "tex": "D" },
+        { "type": "text", "text": " are distinct points, no three of which lie on a line, in the Euclidean plane. Show that if the squares of the lengths of the line segments " },
+        { "type": "inlineMath", "tex": "AB,AC,AD,BC,BD" },
+        { "type": "text", "text": ", and " },
+        { "type": "inlineMath", "tex": "CD" },
+        { "type": "text", "text": " are rational numbers, then the quotient" }
+      ] },
+      { "type": "displayMath", "tex": "\\frac{\\operatorname{area}(\\triangle ABC)}{\\operatorname{area}(\\triangle ABD)}" },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "is a rational number." }] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Translate the geometry into vectors",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Put the origin at " },
+        { "type": "inlineMath", "tex": "A" },
+        { "type": "text", "text": " and set " },
+        { "type": "inlineMath", "tex": "\\mathbf b=\\overrightarrow{AB},\\mathbf c=\\overrightarrow{AC},\\mathbf d=\\overrightarrow{AD}" },
+        { "type": "text", "text": ". Areas are absolute values of two-dimensional determinants, up to the same factor " },
+        { "type": "inlineMath", "tex": "1/2" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Recover every dot product",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Use " },
+        { "type": "inlineMath", "tex": "2\\mathbf u\\cdot\\mathbf v=\\lVert\\mathbf u\\rVert^2+\\lVert\\mathbf v\\rVert^2-\\lVert\\mathbf u-\\mathbf v\\rVert^2" },
+        { "type": "text", "text": ". The six squared distances imply that every dot product among " },
+        { "type": "inlineMath", "tex": "\\mathbf b,\\mathbf c,\\mathbf d" },
+        { "type": "text", "text": " is rational." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "Use a mixed Gram determinant",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " },
+        { "type": "inlineMath", "tex": "p=\\det(\\mathbf b,\\mathbf c)" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "q=\\det(\\mathbf b,\\mathbf d)" },
+        { "type": "text", "text": ", then a Gram determinant gives both " },
+        { "type": "inlineMath", "tex": "p^2" },
+        { "type": "text", "text": " and the mixed product " },
+        { "type": "inlineMath", "tex": "pq" },
+        { "type": "text", "text": " as determinants of matrices with rational entries." }
+      ] }] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Recover the ratio, not just its square",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Show " }, { "type": "inlineMath", "tex": "p^2\\in\\mathbb Q" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Show " }, { "type": "inlineMath", "tex": "pq\\in\\mathbb Q" }, { "type": "text", "text": " using the mixed Gram matrix." }],
+        [{ "type": "text", "text": "No three points are collinear, so " }, { "type": "inlineMath", "tex": "p,q\\ne0" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Use " }, { "type": "inlineMath", "tex": "p/q=p^2/(pq)" }, { "type": "text", "text": " and take absolute values." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Polarization from squared lengths",
+      "document": { "blocks": [{ "type": "displayMath", "tex": "2\\mathbf u\\cdot\\mathbf v=\\lVert\\mathbf u\\rVert^2+\\lVert\\mathbf v\\rVert^2-\\lVert\\mathbf u-\\mathbf v\\rVert^2." }, { "type": "paragraph", "runs": [{ "type": "text", "text": "Thus three rational squared lengths determine a rational dot product." }] }] }
+    },
+    {
+      "order": 2,
+      "title": "Determinants and oriented area",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For planar vectors " },
+        { "type": "inlineMath", "tex": "\\mathbf u,\\mathbf v" },
+        { "type": "text", "text": ", the triangle they span has area " },
+        { "type": "inlineMath", "tex": "|\\det(\\mathbf u,\\mathbf v)|/2" },
+        { "type": "text", "text": ". The determinant is nonzero exactly when the vectors are not collinear." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "title": "The mixed Gram identity",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [{ "type": "text", "text": "For two-by-two column matrices, multiplicativity of determinants gives" }] }, { "type": "displayMath", "tex": "\\det(U^TV)=\\det(U)\\det(V)." }, { "type": "paragraph", "runs": [{ "type": "text", "text": "The entries of " }, { "type": "inlineMath", "tex": "U^TV" }, { "type": "text", "text": " are pairwise dot products." }] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Translate the origin to " },
+        { "type": "inlineMath", "tex": "A" },
+        { "type": "text", "text": " and write" }
+      ] },
+      { "type": "displayMath", "tex": "\\mathbf b=\\overrightarrow{AB},\\qquad\\mathbf c=\\overrightarrow{AC},\\qquad\\mathbf d=\\overrightarrow{AD}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The hypotheses say that " },
+        { "type": "inlineMath", "tex": "\\lVert\\mathbf b\\rVert^2,\\lVert\\mathbf c\\rVert^2,\\lVert\\mathbf d\\rVert^2" },
+        { "type": "text", "text": " and the squared norms of " },
+        { "type": "inlineMath", "tex": "\\mathbf b-\\mathbf c,\\mathbf b-\\mathbf d,\\mathbf c-\\mathbf d" },
+        { "type": "text", "text": " are rational. The polarization identity" }
+      ] },
+      { "type": "displayMath", "tex": "2\\mathbf u\\cdot\\mathbf v=\\lVert\\mathbf u\\rVert^2+\\lVert\\mathbf v\\rVert^2-\\lVert\\mathbf u-\\mathbf v\\rVert^2" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "therefore shows that all six dot products among " },
+        { "type": "inlineMath", "tex": "\\mathbf b,\\mathbf c,\\mathbf d" },
+        { "type": "text", "text": " are rational." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "p=\\det(\\mathbf b,\\mathbf c)" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "q=\\det(\\mathbf b,\\mathbf d)" },
+        { "type": "text", "text": ". The ordinary Gram identity gives" }
+      ] },
+      { "type": "displayMath", "tex": "p^2=\\det\\begin{pmatrix}\\mathbf b\\cdot\\mathbf b&\\mathbf b\\cdot\\mathbf c\\\\\\mathbf c\\cdot\\mathbf b&\\mathbf c\\cdot\\mathbf c\\end{pmatrix}\\in\\mathbb Q." },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "Using one column pair from each triangle instead gives the mixed identity" }] },
+      { "type": "displayMath", "tex": "pq=\\det\\begin{pmatrix}\\mathbf b\\cdot\\mathbf b&\\mathbf b\\cdot\\mathbf d\\\\\\mathbf c\\cdot\\mathbf b&\\mathbf c\\cdot\\mathbf d\\end{pmatrix}\\in\\mathbb Q." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Indeed, this matrix is " },
+        { "type": "inlineMath", "tex": "U^TV" },
+        { "type": "text", "text": " for " },
+        { "type": "inlineMath", "tex": "U=(\\mathbf b,\\mathbf c)" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "V=(\\mathbf b,\\mathbf d)" },
+        { "type": "text", "text": ", so its determinant is " },
+        { "type": "inlineMath", "tex": "\\det(U)\\det(V)=pq" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "No three of the four points are collinear, so " },
+        { "type": "inlineMath", "tex": "p" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "q" },
+        { "type": "text", "text": " are nonzero. Hence" }
+      ] },
+      { "type": "displayMath", "tex": "\\frac pq=\\frac{p^2}{pq}\\in\\mathbb Q." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Finally," }
+      ] },
+      { "type": "displayMath", "tex": "\\frac{\\operatorname{area}(\\triangle ABC)}{\\operatorname{area}(\\triangle ABD)}=\\left|\\frac pq\\right|," },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "which is rational." }] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2018 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2018PutnamProblems.pdf" },
+    { "kind": "solution", "label": "MAA official 2018 problems and solutions", "url": "https://maa.org/wp-content/uploads/2024/10/2018PutnamProblemsSolutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2018 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2018s.tex" }
+  ]
+}
