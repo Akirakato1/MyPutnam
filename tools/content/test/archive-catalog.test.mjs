@@ -10,7 +10,8 @@ import { assertReleaseComplete } from '../src/release-manifest.mjs';
 
 const catalogUrl = new URL('../../../content-src/archive.json', import.meta.url);
 const targetYears = Array.from({ length: 2025 - 1962 + 1 }, (_, index) => 1962 + index);
-const completedBatchYears = [2020, 2021, 2022, 2023, 2024, 2025];
+const completedYears = [2019, 2020, 2021, 2022, 2023, 2024, 2025];
+const releaseBatchYears = [2020, 2021, 2022, 2023, 2024, 2025];
 
 test('the canonical archive catalog targets every year from 1962 through 2025', async () => {
   const catalog = await loadArchiveCatalog(catalogUrl);
@@ -19,7 +20,7 @@ test('the canonical archive catalog targets every year from 1962 through 2025', 
   assert.equal(catalog.contentSchemaVersion, 3);
   assert.equal(catalog.contentVersion, 'archive-1962-2025.1');
   assert.deepEqual(catalog.targetYears, targetYears);
-  assert.deepEqual(catalog.completedYears, completedBatchYears);
+  assert.deepEqual(catalog.completedYears, completedYears);
   assert.deepEqual(validateArchiveCatalog(catalog), []);
 });
 
@@ -54,7 +55,7 @@ test('final archive validation rejects incomplete catalogs without an escape hat
 
   assert.throws(
     () => assertFinalArchiveComplete(incomplete),
-    /incomplete.*58.*year/i,
+    /incomplete.*57.*year/i,
   );
 
   const complete = validCatalog();
@@ -71,7 +72,7 @@ test('release completion is independent from final archive completion', () => {
     contentVersion: 'putnam-2020-2025.1',
     appVersionName: '0.4.0',
     appVersionCode: 4,
-    includedSets: completedBatchYears.map((year) => `putnam/${year}`),
+    includedSets: releaseBatchYears.map((year) => `putnam/${year}`),
   };
 
   assert.throws(() => assertFinalArchiveComplete(archive), /incomplete/i);
@@ -90,6 +91,6 @@ function validCatalog() {
     contentSchemaVersion: 3,
     contentVersion: 'archive-1962-2025.1',
     targetYears: [...targetYears],
-    completedYears: [...completedBatchYears],
+    completedYears: [...completedYears],
   };
 }

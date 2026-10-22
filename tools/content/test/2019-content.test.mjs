@@ -2,9 +2,11 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import { auditYear } from '../src/audit-year.mjs';
+import { loadArchiveCatalog } from '../src/archive-catalog.mjs';
 import { findCatalogSet, loadLibraryCatalog } from '../src/library-catalog.mjs';
 
 const yearRoot = new URL('../../../content-src/2019/', import.meta.url);
+const archiveUrl = new URL('../../../content-src/archive.json', import.meta.url);
 const catalogUrl = new URL('../../../content-src/library.json', import.meta.url);
 
 test('the catalog reserves the complete 2015–2019 curation batch', async () => {
@@ -16,9 +18,12 @@ test('the catalog reserves the complete 2015–2019 curation batch', async () =>
   }
 });
 
-test('the curated 2019 A1–A6 and B1–B3 checkpoint passes the reusable year audit', async () => {
-  assert.deepEqual(await auditYear(yearRoot, 2019, {
-    problems: ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'B1', 'B2', 'B3'],
-    requireCompleteYear: false,
-  }), []);
+test('the complete 2019 corpus passes the strict reusable year audit', async () => {
+  const catalog = await loadLibraryCatalog(catalogUrl);
+  assert.deepEqual(await auditYear(yearRoot, 2019, { catalog }), []);
+});
+
+test('the archive records 2019 as a completed year', async () => {
+  const archive = await loadArchiveCatalog(archiveUrl);
+  assert.ok(archive.completedYears.includes(2019));
 });

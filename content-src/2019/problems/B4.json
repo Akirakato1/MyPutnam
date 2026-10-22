@@ -1,0 +1,190 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2019",
+  "problemId": "B4",
+  "label": "B4",
+  "ordinal": 10,
+  "topics": ["analysis", "calculus", "integrals"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B4" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "\\mathcal F" },
+        { "type": "text", "text": " be the set of functions " },
+        { "type": "inlineMath", "tex": "f(x,y)" },
+        { "type": "text", "text": " that are twice continuously differentiable for " },
+        { "type": "inlineMath", "tex": "x\\ge1" },
+        { "type": "text", "text": ", " },
+        { "type": "inlineMath", "tex": "y\\ge1" },
+        { "type": "text", "text": " and satisfy" }
+      ] },
+      { "type": "displayMath", "tex": "xf_x+yf_y=xy\\ln(xy)," },
+      { "type": "displayMath", "tex": "x^2f_{xx}+y^2f_{yy}=xy." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For each " },
+        { "type": "inlineMath", "tex": "f\\in\\mathcal F" },
+        { "type": "text", "text": ", let" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned}m(f)=\\min_{s\\ge1}\\bigl(&f(s+1,s+1)-f(s+1,s)\\\\&-f(s,s+1)+f(s,s)\\bigr).\\end{aligned}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Determine " },
+        { "type": "inlineMath", "tex": "m(f)" },
+        { "type": "text", "text": ", and show that it is independent of the choice of " },
+        { "type": "inlineMath", "tex": "f" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Find the mixed partial",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Differentiate the first differential equation once with respect to " },
+        { "type": "inlineMath", "tex": "x" },
+        { "type": "text", "text": " and once with respect to " },
+        { "type": "inlineMath", "tex": "y" },
+        { "type": "text", "text": ". Combine the results with both original equations so that only " },
+        { "type": "inlineMath", "tex": "f_{xy}" },
+        { "type": "text", "text": " remains." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Convert the four-corner difference",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The alternating values at the four corners of " },
+        { "type": "inlineMath", "tex": "[s,s+1]^2" },
+        { "type": "text", "text": " equal the double integral of " },
+        { "type": "inlineMath", "tex": "f_{xy}" },
+        { "type": "text", "text": " over that square." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "The equations determine the relevant derivative",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "f_{xy}(x,y)=\\frac12\\bigl(\\ln x+\\ln y+1\\bigr)." },
+        { "type": "paragraph", "runs": [
+          { "type": "text", "text": "This formula no longer depends on which member of " },
+          { "type": "inlineMath", "tex": "\\mathcal F" },
+          { "type": "text", "text": " was chosen." }
+        ] }
+      ] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Reduce the minimization to one variable",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Integrate the formula for " }, { "type": "inlineMath", "tex": "f_{xy}" }, { "type": "text", "text": " over " }, { "type": "inlineMath", "tex": "[s,s+1]^2" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Obtain " }, { "type": "inlineMath", "tex": "1/2+\\int_s^{s+1}\\ln x\\,dx" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Use the monotonicity of " }, { "type": "inlineMath", "tex": "\\ln x" }, { "type": "text", "text": " to locate the minimum for " }, { "type": "inlineMath", "tex": "s\\ge1" }, { "type": "text", "text": "." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Product rules for partial derivatives",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For example, " },
+        { "type": "inlineMath", "tex": "\\partial_x(xf_x)=f_x+xf_{xx}" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "\\partial_x(yf_y)=yf_{xy}" },
+        { "type": "text", "text": ". Twice continuous differentiability permits interchange of the mixed partials." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "title": "Rectangular form of the fundamental theorem",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "\\begin{aligned}\\int_a^b\\int_c^d f_{xy}(x,y)\\,dy\\,dx={}&f(b,d)-f(b,c)\\\\&-f(a,d)+f(a,c).\\end{aligned}" }
+      ] }
+    },
+    {
+      "order": 3,
+      "title": "Sliding integrals of increasing functions",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " },
+        { "type": "inlineMath", "tex": "h" },
+        { "type": "text", "text": " is increasing, then " },
+        { "type": "inlineMath", "tex": "\\int_s^{s+1}h(x)\\,dx" },
+        { "type": "text", "text": " is increasing in " },
+        { "type": "inlineMath", "tex": "s" },
+        { "type": "text", "text": ". This follows by translating the interval or by differentiating the integral to obtain " },
+        { "type": "inlineMath", "tex": "h(s+1)-h(s)" },
+        { "type": "text", "text": "." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "First note that the class is nonempty: " },
+        { "type": "inlineMath", "tex": "f_0(x,y)=\\tfrac12(xy\\ln(xy)-xy)" },
+        { "type": "text", "text": " satisfies both equations by direct differentiation." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Now let " },
+        { "type": "inlineMath", "tex": "f\\in\\mathcal F" },
+        { "type": "text", "text": ". Differentiate the first equation with respect to " },
+        { "type": "inlineMath", "tex": "x" },
+        { "type": "text", "text": " and multiply by " },
+        { "type": "inlineMath", "tex": "x" },
+        { "type": "text", "text": ", then do the analogous operation in " },
+        { "type": "inlineMath", "tex": "y" },
+        { "type": "text", "text": ". Adding gives" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned}&xf_x+yf_y+x^2f_{xx}+y^2f_{yy}\\\\&\\qquad+2xyf_{xy}=2xy\\bigl(\\ln(xy)+1\\bigr).\\end{aligned}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Subtracting the two original equations leaves" }
+      ] },
+      { "type": "displayMath", "tex": "2xyf_{xy}=xy\\ln(xy)+xy," },
+      { "type": "paragraph", "runs": [{ "type": "text", "text": "and hence" }] },
+      { "type": "displayMath", "tex": "f_{xy}(x,y)=\\frac12(\\ln x+\\ln y+1)." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For " },
+        { "type": "inlineMath", "tex": "s\\ge1" },
+        { "type": "text", "text": ", let " },
+        { "type": "inlineMath", "tex": "D_f(s)" },
+        { "type": "text", "text": " denote the four-corner expression in the definition of " },
+        { "type": "inlineMath", "tex": "m(f)" },
+        { "type": "text", "text": ". Applying the fundamental theorem of calculus twice," }
+      ] },
+      { "type": "displayMath", "tex": "D_f(s)=\\int_s^{s+1}\\int_s^{s+1}f_{xy}(x,y)\\,dy\\,dx." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Substituting the forced mixed partial and using symmetry between " },
+        { "type": "inlineMath", "tex": "x" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "y" },
+        { "type": "text", "text": " yields" }
+      ] },
+      { "type": "displayMath", "tex": "D_f(s)=\\frac12+\\int_s^{s+1}\\ln x\\,dx." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "This expression is independent of " },
+        { "type": "inlineMath", "tex": "f" },
+        { "type": "text", "text": ". It is increasing in " },
+        { "type": "inlineMath", "tex": "s" },
+        { "type": "text", "text": " because " },
+        { "type": "inlineMath", "tex": "\\ln x" },
+        { "type": "text", "text": " is increasing. Its minimum over " },
+        { "type": "inlineMath", "tex": "s\\ge1" },
+        { "type": "text", "text": " is therefore attained at " },
+        { "type": "inlineMath", "tex": "s=1" },
+        { "type": "text", "text": ", and" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned}m(f)&=\\frac12+\\int_1^2\\ln x\\,dx\\\\&=\\frac12+2\\ln2-1=\\boxed{2\\ln2-\\frac12}.\\end{aligned}" }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2019 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2019PutnamProblems.pdf" },
+    { "kind": "solution", "label": "MAA official 2019 problems and solutions", "url": "https://maa.org/wp-content/uploads/2025/02/2019-Putnam-Problem-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2019 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2019s.tex" }
+  ]
+}

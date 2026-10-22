@@ -1,0 +1,221 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2019",
+  "problemId": "B5",
+  "label": "B5",
+  "ordinal": 11,
+  "topics": ["algebra", "polynomials", "sequences-series"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B5" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "F_m" },
+        { "type": "text", "text": " be the " },
+        { "type": "inlineMath", "tex": "m" },
+        { "type": "text", "text": "th Fibonacci number, defined by " },
+        { "type": "inlineMath", "tex": "F_1=F_2=1" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "F_m=F_{m-1}+F_{m-2}" },
+        { "type": "text", "text": " for all " },
+        { "type": "inlineMath", "tex": "m\\ge3" },
+        { "type": "text", "text": ". Let " },
+        { "type": "inlineMath", "tex": "p(x)" },
+        { "type": "text", "text": " be the polynomial of degree " },
+        { "type": "inlineMath", "tex": "1008" },
+        { "type": "text", "text": " such that " },
+        { "type": "inlineMath", "tex": "p(2n+1)=F_{2n+1}" },
+        { "type": "text", "text": " for " },
+        { "type": "inlineMath", "tex": "n=0,1,2,\\ldots,1008" },
+        { "type": "text", "text": ". Find integers " },
+        { "type": "inlineMath", "tex": "j" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "k" },
+        { "type": "text", "text": " such that " },
+        { "type": "inlineMath", "tex": "p(2019)=F_j-F_k" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Use step-two finite differences",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For a polynomial " },
+        { "type": "inlineMath", "tex": "h" },
+        { "type": "text", "text": ", define " },
+        { "type": "inlineMath", "tex": "\\Delta h(x)=h(x+2)-h(x)" },
+        { "type": "text", "text": ". This lowers degree while matching the spacing of the interpolation nodes." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Differences shift the Fibonacci index",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "The identity " },
+        { "type": "inlineMath", "tex": "F_{r+2}-F_r=F_{r+1}" },
+        { "type": "text", "text": " implies that the " },
+        { "type": "inlineMath", "tex": "t" },
+        { "type": "text", "text": "th forward difference of " },
+        { "type": "inlineMath", "tex": "p" },
+        { "type": "text", "text": " takes the value " },
+        { "type": "inlineMath", "tex": "F_{2n+1+t}" },
+        { "type": "text", "text": " at every node where that value is determined." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "The top difference is constant",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "For a degree-" },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": " interpolation problem, " },
+        { "type": "inlineMath", "tex": "\\Delta^Np" },
+        { "type": "text", "text": " is constant. Its value at the first node is " },
+        { "type": "inlineMath", "tex": "F_{N+1}" },
+        { "type": "text", "text": ". Unwind the differences one step beyond the last interpolation node." }
+      ] }] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Accumulate a Fibonacci block",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Generalize to degree " }, { "type": "inlineMath", "tex": "N" }, { "type": "text", "text": " and define " }, { "type": "inlineMath", "tex": "p_t=\\Delta^tp" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Prove by induction that " }, { "type": "inlineMath", "tex": "p_{N-r}(2r+3)=\\sum_{i=0}^rF_{N+1+i}" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Set " }, { "type": "inlineMath", "tex": "r=N" }, { "type": "text", "text": " and use " }, { "type": "inlineMath", "tex": "\\sum_{i=1}^mF_i=F_{m+2}-1" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "Finally substitute " }, { "type": "inlineMath", "tex": "N=1008" }, { "type": "text", "text": "." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Finite differences lower degree",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " },
+        { "type": "inlineMath", "tex": "h" },
+        { "type": "text", "text": " has degree at most " },
+        { "type": "inlineMath", "tex": "d" },
+        { "type": "text", "text": ", then " },
+        { "type": "inlineMath", "tex": "h(x+c)-h(x)" },
+        { "type": "text", "text": " has degree at most " },
+        { "type": "inlineMath", "tex": "d-1" },
+        { "type": "text", "text": ". Therefore the " },
+        { "type": "inlineMath", "tex": "d" },
+        { "type": "text", "text": "th finite difference is constant." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "title": "Two Fibonacci identities",
+      "document": { "blocks": [
+        { "type": "displayMath", "tex": "F_{r+2}-F_r=F_{r+1}," },
+        { "type": "displayMath", "tex": "\\sum_{i=1}^mF_i=F_{m+2}-1." },
+        { "type": "paragraph", "runs": [{ "type": "text", "text": "Both follow immediately by induction from the Fibonacci recurrence." }] }
+      ] }
+    },
+    {
+      "order": 3,
+      "title": "Polynomial interpolation uniqueness",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "A polynomial of degree at most " },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": " is uniquely determined by its values at " },
+        { "type": "inlineMath", "tex": "N+1" },
+        { "type": "text", "text": " distinct points. The problem supplies exactly that many odd interpolation nodes." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "We prove a general statement. Let " },
+        { "type": "inlineMath", "tex": "p" },
+        { "type": "text", "text": " have degree at most " },
+        { "type": "inlineMath", "tex": "N" },
+        { "type": "text", "text": " and satisfy " },
+        { "type": "inlineMath", "tex": "p(2n+1)=F_{2n+1}" },
+        { "type": "text", "text": " for " },
+        { "type": "inlineMath", "tex": "0\\le n\\le N" },
+        { "type": "text", "text": ". Define " },
+        { "type": "inlineMath", "tex": "p_0=p" },
+        { "type": "text", "text": " and" }
+      ] },
+      { "type": "displayMath", "tex": "p_{t+1}(x)=p_t(x+2)-p_t(x)." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Finite differences show that " },
+        { "type": "inlineMath", "tex": "\\deg p_t\\le N-t" },
+        { "type": "text", "text": ". We also claim that" }
+      ] },
+      { "type": "displayMath", "tex": "p_t(2n+1)=F_{2n+1+t}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "whenever " },
+        { "type": "inlineMath", "tex": "0\\le n\\le N-t" },
+        { "type": "text", "text": ". This follows by induction on " },
+        { "type": "inlineMath", "tex": "t" },
+        { "type": "text", "text": ", since" }
+      ] },
+      { "type": "displayMath", "tex": "F_{2n+t+3}-F_{2n+t+1}=F_{2n+t+2}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "In particular, " },
+        { "type": "inlineMath", "tex": "p_N" },
+        { "type": "text", "text": " is constant and " },
+        { "type": "inlineMath", "tex": "p_N(1)=F_{N+1}" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "We next prove, for " },
+        { "type": "inlineMath", "tex": "0\\le r\\le N" },
+        { "type": "text", "text": ", that" }
+      ] },
+      { "type": "displayMath", "tex": "p_{N-r}(2r+3)=\\sum_{i=0}^rF_{N+1+i}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For " },
+        { "type": "inlineMath", "tex": "r=0" },
+        { "type": "text", "text": ", this is the constant value of " },
+        { "type": "inlineMath", "tex": "p_N" },
+        { "type": "text", "text": ". For the induction step, the difference recurrence gives" }
+      ] },
+      { "type": "displayMath", "tex": "\\begin{aligned}p_{N-r}(2r+3)={}&p_{N-r}(2r+1)\\\\&+p_{N-r+1}(2r+1).\\end{aligned}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "The first term is " },
+        { "type": "inlineMath", "tex": "F_{N+1+r}" },
+        { "type": "text", "text": " by the sampled-value formula, while the second is " },
+        { "type": "inlineMath", "tex": "\\sum_{i=0}^{r-1}F_{N+1+i}" },
+        { "type": "text", "text": " by the induction hypothesis. This proves the claim." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Taking " },
+        { "type": "inlineMath", "tex": "r=N" },
+        { "type": "text", "text": " gives" }
+      ] },
+      { "type": "displayMath", "tex": "p(2N+3)=\\sum_{i=0}^NF_{N+1+i}=F_{2N+3}-F_{N+2}." },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "For " },
+        { "type": "inlineMath", "tex": "N=1008" },
+        { "type": "text", "text": ", the argument " },
+        { "type": "inlineMath", "tex": "2N+3" },
+        { "type": "text", "text": " is " },
+        { "type": "inlineMath", "tex": "2019" },
+        { "type": "text", "text": ". Therefore" }
+      ] },
+      { "type": "displayMath", "tex": "p(2019)=F_{2019}-F_{1010}," },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "so one valid answer is " },
+        { "type": "inlineMath", "tex": "\\boxed{(j,k)=(2019,1010)}" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2019 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2019PutnamProblems.pdf" },
+    { "kind": "solution", "label": "MAA official 2019 problems and solutions", "url": "https://maa.org/wp-content/uploads/2025/02/2019-Putnam-Problem-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2019 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2019s.tex" }
+  ]
+}

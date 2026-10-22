@@ -8,11 +8,11 @@ Do not silently replace a locked file. If a publisher updates one, inspect the c
 
 The authored problem records in `problems/` use schema version 3 with canonical keys `putnam/2019/{A1..B6}` and reviewed controlled topics. The canonical schema, field semantics, fixed four-stage hint progression, and reusable starter file are documented in `../../tools/content/SCHEMA.md` and `../../tools/content/templates/problem.template.json`.
 
-The current checked-in curation checkpoint covers A1–A6 and B1–B3. Validate it from the repository root with:
+The complete checked-in 2019 curation covers A1–A6 and B1–B6. Validate it from the repository root with:
 
 ```text
 node --test tools/content/test/2019-content.test.mjs tools/content/test/2019-sources.test.mjs
-node tools/content/src/review-year.mjs --year 2019 --source content-src/2019 --catalog content-src/library.json --problems A1,A2,A3,A4,A5,A6,B1,B2,B3 --widths 480,720 --preview
+node tools/content/src/review-year.mjs --year 2019 --source content-src/2019 --catalog content-src/library.json --widths 480,720 --preview
 ```
 
-Inspect every generated page at both 480 and 720 CSS pixels before accepting new problems into the checkpoint. Once all twelve records are complete, replace the subset audit with the strict whole-year audit.
+Every generated statement, hint, prerequisite, and solution page has been inspected at both 480 and 720 CSS pixels. The year now uses the strict whole-year audit and is recorded in `../archive.json` as complete. It remains outside the explicit 2020–2025 travel release until a later historical batch is packaged and published.

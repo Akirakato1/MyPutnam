@@ -41,7 +41,7 @@ test('manifest validation rejects malformed identities, versions, and set select
     ['malformed set key', { includedSets: ['putnam/2020/extra'] }, 'includedSets[0]'],
     ['duplicate set key', { includedSets: ['putnam/2020', 'putnam/2020'] }, 'includedSets[1]'],
     ['unsorted set keys', { includedSets: ['putnam/2021', 'putnam/2020'] }, 'includedSets[1]'],
-    ['unknown set key', { includedSets: ['putnam/2019'] }, 'includedSets[0]'],
+    ['unknown set key', { includedSets: ['putnam/1962'] }, 'includedSets[0]'],
   ];
 
   for (const [label, change, expectedPath] of cases) {
@@ -86,7 +86,7 @@ test('extra completed archive years neither enter nor block an explicit release'
   requireContract();
   const archive = await loadArchiveCatalog(archiveUrl);
   const library = await loadLibraryCatalog(libraryUrl);
-  archive.completedYears = [2019, ...archive.completedYears];
+  archive.completedYears = [2018, ...archive.completedYears];
 
   assert.deepEqual(validateReleaseManifest(validRelease(), archive, library), []);
   assert.doesNotThrow(() => assertReleaseComplete(validRelease(), archive));

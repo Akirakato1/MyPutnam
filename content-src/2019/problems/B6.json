@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 3,
+  "collectionId": "putnam",
+  "setId": "2019",
+  "problemId": "B6",
+  "label": "B6",
+  "ordinal": 12,
+  "topics": ["combinatorics", "number-theory"],
+  "statement": {
+    "blocks": [
+      { "type": "heading", "level": 1, "runs": [{ "type": "text", "text": "Problem B6" }] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "\\mathbb Z^n" },
+        { "type": "text", "text": " be the integer lattice in " },
+        { "type": "inlineMath", "tex": "\\mathbb R^n" },
+        { "type": "text", "text": ". Two points in " },
+        { "type": "inlineMath", "tex": "\\mathbb Z^n" },
+        { "type": "text", "text": " are called neighbors if they differ by exactly " },
+        { "type": "inlineMath", "tex": "1" },
+        { "type": "text", "text": " in one coordinate and are equal in all other coordinates. For which integers " },
+        { "type": "inlineMath", "tex": "n\\ge1" },
+        { "type": "text", "text": " does there exist a set of points " },
+        { "type": "inlineMath", "tex": "S\\subset\\mathbb Z^n" },
+        { "type": "text", "text": " satisfying the following two conditions?" }
+      ] },
+      { "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "p" }, { "type": "text", "text": " is in " }, { "type": "inlineMath", "tex": "S" }, { "type": "text", "text": ", then none of the neighbors of " }, { "type": "inlineMath", "tex": "p" }, { "type": "text", "text": " is in " }, { "type": "inlineMath", "tex": "S" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "If " }, { "type": "inlineMath", "tex": "p\\in\\mathbb Z^n" }, { "type": "text", "text": " is not in " }, { "type": "inlineMath", "tex": "S" }, { "type": "text", "text": ", then exactly one of the neighbors of " }, { "type": "inlineMath", "tex": "p" }, { "type": "text", "text": " is in " }, { "type": "inlineMath", "tex": "S" }, { "type": "text", "text": "." }]
+      ] }
+    ]
+  },
+  "hints": [
+    {
+      "order": 1,
+      "stage": "nudge",
+      "title": "Color the lattice periodically",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Try assigning every lattice point a residue modulo " },
+        { "type": "inlineMath", "tex": "2n+1" },
+        { "type": "text", "text": ". A move to one of the " },
+        { "type": "inlineMath", "tex": "2n" },
+        { "type": "text", "text": " neighbors should produce each nonzero residue exactly once." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "stage": "strategy",
+      "title": "Give each coordinate a distinct weight",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Use the following linear residue map modulo " },
+        { "type": "inlineMath", "tex": "2n+1" },
+        { "type": "text", "text": ":" }
+      ] }, { "type": "displayMath", "tex": "c(x_1,\\ldots,x_n)=\\sum_{i=1}^n i x_i." }] }
+    },
+    {
+      "order": 3,
+      "stage": "knowledge",
+      "title": "The signed weights exhaust the nonzero classes",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Modulo " },
+        { "type": "inlineMath", "tex": "2n+1" },
+        { "type": "text", "text": ", the " },
+        { "type": "inlineMath", "tex": "2n" },
+        { "type": "text", "text": " values " },
+        { "type": "inlineMath", "tex": "\\pm1,\\pm2,\\ldots,\\pm n" },
+        { "type": "text", "text": " are precisely the distinct nonzero residue classes." }
+      ] }] }
+    },
+    {
+      "order": 4,
+      "stage": "outline",
+      "title": "Take the zero color class",
+      "document": { "blocks": [{ "type": "list", "ordered": true, "items": [
+        [{ "type": "text", "text": "Let " }, { "type": "inlineMath", "tex": "S" }, { "type": "text", "text": " be the set of points with " }, { "type": "inlineMath", "tex": "c(x)=0" }, { "type": "text", "text": "." }],
+        [{ "type": "text", "text": "A neighbor changes the color by exactly one of " }, { "type": "inlineMath", "tex": "\\pm1,\\ldots,\\pm n" }, { "type": "text", "text": ", proving the first condition." }],
+        [{ "type": "text", "text": "For a nonzero color, choose the unique signed weight that cancels it; the corresponding coordinate move gives the unique neighbor in " }, { "type": "inlineMath", "tex": "S" }, { "type": "text", "text": "." }]
+      ] }] }
+    }
+  ],
+  "prerequisites": [
+    {
+      "order": 1,
+      "title": "Standard neighbor vectors",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "If " },
+        { "type": "inlineMath", "tex": "e_i" },
+        { "type": "text", "text": " is the " },
+        { "type": "inlineMath", "tex": "i" },
+        { "type": "text", "text": "th standard basis vector, the neighbors of " },
+        { "type": "inlineMath", "tex": "p" },
+        { "type": "text", "text": " are exactly " },
+        { "type": "inlineMath", "tex": "p\\pm e_i" },
+        { "type": "text", "text": " for " },
+        { "type": "inlineMath", "tex": "1\\le i\\le n" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 2,
+      "title": "Signed representatives modulo an odd number",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "Every nonzero residue modulo " },
+        { "type": "inlineMath", "tex": "2n+1" },
+        { "type": "text", "text": " has a unique representative among " },
+        { "type": "inlineMath", "tex": "1,2,\\ldots,n,-1,-2,\\ldots,-n" },
+        { "type": "text", "text": "." }
+      ] }] }
+    },
+    {
+      "order": 3,
+      "title": "Fibers of a modular linear map",
+      "document": { "blocks": [{ "type": "paragraph", "runs": [
+        { "type": "text", "text": "A linear expression with integer coefficients defines a map from " },
+        { "type": "inlineMath", "tex": "\\mathbb Z^n" },
+        { "type": "text", "text": " to a residue ring. Moving by a basis vector changes its value by the corresponding coefficient." }
+      ] }] }
+    }
+  ],
+  "solution": {
+    "blocks": [
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Such a set exists for every positive integer " },
+        { "type": "inlineMath", "tex": "n" },
+        { "type": "text", "text": ". Define, modulo " },
+        { "type": "inlineMath", "tex": "2n+1" },
+        { "type": "text", "text": "," }
+      ] },
+      { "type": "displayMath", "tex": "c(x_1,\\ldots,x_n)=\\sum_{i=1}^n i x_i," },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "and let " },
+        { "type": "inlineMath", "tex": "S" },
+        { "type": "text", "text": " be the fiber " },
+        { "type": "inlineMath", "tex": "c^{-1}(0)" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Let " },
+        { "type": "inlineMath", "tex": "e_i" },
+        { "type": "text", "text": " be the " },
+        { "type": "inlineMath", "tex": "i" },
+        { "type": "text", "text": "th standard basis vector. A move from " },
+        { "type": "inlineMath", "tex": "p" },
+        { "type": "text", "text": " to a neighbor " },
+        { "type": "inlineMath", "tex": "p\\pm e_i" },
+        { "type": "text", "text": " changes its color by " },
+        { "type": "inlineMath", "tex": "\\pm i" },
+        { "type": "text", "text": ". If " },
+        { "type": "inlineMath", "tex": "p\\in S" },
+        { "type": "text", "text": ", then" }
+      ] },
+      { "type": "displayMath", "tex": "c(p\\pm e_i)=\\pm i\\not\\equiv0\\pmod{2n+1}" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "for every " },
+        { "type": "inlineMath", "tex": "1\\le i\\le n" },
+        { "type": "text", "text": ". Thus no neighbor of a point in " },
+        { "type": "inlineMath", "tex": "S" },
+        { "type": "text", "text": " is also in " },
+        { "type": "inlineMath", "tex": "S" },
+        { "type": "text", "text": "." }
+      ] },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "Conversely, suppose " },
+        { "type": "inlineMath", "tex": "p\\notin S" },
+        { "type": "text", "text": ". The nonzero residue " },
+        { "type": "inlineMath", "tex": "c(p)" },
+        { "type": "text", "text": " has a unique representation " },
+        { "type": "inlineMath", "tex": "c(p)\\equiv\\sigma i" },
+        { "type": "text", "text": ", where " },
+        { "type": "inlineMath", "tex": "1\\le i\\le n" },
+        { "type": "text", "text": " and " },
+        { "type": "inlineMath", "tex": "\\sigma\\in\\{1,-1\\}" },
+        { "type": "text", "text": ". Then the neighbor" }
+      ] },
+      { "type": "displayMath", "tex": "q=p-\\sigma e_i" },
+      { "type": "paragraph", "runs": [
+        { "type": "text", "text": "satisfies " },
+        { "type": "inlineMath", "tex": "c(q)=c(p)-\\sigma i=0" },
+        { "type": "text", "text": ", so " },
+        { "type": "inlineMath", "tex": "q\\in S" },
+        { "type": "text", "text": ". Uniqueness of the signed representative shows that no other coordinate move reaches color zero. Thus every point outside " },
+        { "type": "inlineMath", "tex": "S" },
+        { "type": "text", "text": " has exactly one neighbor in " },
+        { "type": "inlineMath", "tex": "S" },
+        { "type": "text", "text": ". Both conditions hold for every " },
+        { "type": "inlineMath", "tex": "\\boxed{n\\ge1}" },
+        { "type": "text", "text": "." }
+      ] }
+    ]
+  },
+  "sources": [
+    { "kind": "problem", "label": "MAA official 2019 problems", "url": "https://maa.org/wp-content/uploads/2024/10/2019PutnamProblems.pdf" },
+    { "kind": "solution", "label": "MAA official 2019 problems and solutions", "url": "https://maa.org/wp-content/uploads/2025/02/2019-Putnam-Problem-Solutions.pdf" },
+    { "kind": "reference", "label": "Kedlaya 2019 TeX cross-check", "url": "https://kskedlaya.org/putnam-archive/2019s.tex" }
+  ]
+}
